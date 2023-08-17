@@ -39,35 +39,36 @@ CREATE TABLE ringo_tagstorage_member (
 );
 
 CREATE TABLE ringo_member_profile (
-	user_id				number		NOT NULL	DEFAULT on delete cascade	COMMENT '유저 키',
+	user_id				number			primary key,				--유저 키, 멤버로부터 받아온 외래키이자 기본키
 	original_profile	varchar2(50)	NULL,
-	saved_profile		varchar2(50)	NULL
+	saved_profile		varchar2(50)	NULL,
+	foreign key (user_id) references ringo_member(user_id) on delete cascade
 );
 
 --공지관련
 CREATE TABLE ringo_notification (
-	noti_id					number	NOT NULL	DEFAULT 1,
-	admin_id				number	NOT NULL	DEFAULT 1	COMMENT '유저 키',
-	noti_title				varchar2(500)	NOT NULL,
-	noti_contents			varchar2(4000)	NOT NULL,
-	noti_views				number	NULL	DEFAULT default 0,
-	noti_inputdate		date	NULL	DEFAULT default sysdate,
-	noti_modifiedate	date	NULL	DEFAULT default sysdate
+	noti_id					number					primary key,		--공지글 번호
+	admin_id				number					references ringo_member(user_id) on delete cascade,
+	noti_title				varchar2(500)		not null,				--제목
+	noti_contents			varchar2(4000)		NOT NULL,		--내용
+	noti_views				number					default 0,			--조회수
+	noti_inputdate		date					default sysdate,		--작성일
+	noti_modifiedate	date					default sysdate		--수정일
 );
 
 --피드 관련
 CREATE TABLE ringo_feed (
-	feed_id			number				primary key,
-	user_id			number				references ringo_member(user_id) on delete cascade,		--'유저 키',
-	contents		varchar2(4000)	NOT NULL,
-	inputdate		date					default sysdate,
+	feed_id			number				primary key,			--피드 글번호
+	user_id			number				references ringo_member(user_id) on delete cascade,		--유저 키, 피드 작성자
+	contents		varchar2(4000)	NOT NULL,			--내용
+	inputdate		date					default sysdate,		--작성일
 );
 
 CREATE TABLE ringo_feed_photo (
-	feedphoto_id		number			primary key,
-	feed_id				number			references ringo_feed(feed_id) on delete cascade,
-	origin_file			varchar2(50) not null,
-	saved_file			varchar2(300) not null
+	feedphoto_id		number			primary key,			--피드 사진 번호
+	feed_id				number			references ringo_feed(feed_id) on delete cascade,		--사진이 입력된 글번호를 불러오는 외래키
+	origin_file			varchar2(50) not null,					--실제 파일명
+	saved_file			varchar2(300) not null				--저장된 경로에서의 파일명
 );
 
 CREATE TABLE ringo_feed_like (
