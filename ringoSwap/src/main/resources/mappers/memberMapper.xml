@@ -1,0 +1,48 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.ringo.ringoSwap.dao.MemberDAO">
+	<insert id="insertMember" parameterType="Member">
+		insert into ringo_member
+			(user_num
+			, username
+			, password
+			, nickname
+			, first_name
+			, last_name
+			, gender
+			, birth_date
+			, email
+			, native_language
+			, target_language
+			, introduction
+			, hobbies
+			, mbti
+			, ranking_open
+			, email_open
+			, follow_open
+			, gps_open
+			, trans_lang)
+			values
+			(ringo_member_seq.nextval
+			, #{username}
+			, #{password}
+			, #{nickname}
+			, #{first_name}
+			, #{last_name}
+			, #{gender}
+			, #{birth_date}
+			, #{email}
+			, #{native_language}
+			, #{target_language}
+			, #{introduction}
+			, #{hobbies}
+			, #{mbti}
+			, #{ranking_open}
+			, #{email_open}
+			, #{follow_open}
+			, #{gps_open}
+			, #{trans_lang})
+	</insert>
+</mapper>
