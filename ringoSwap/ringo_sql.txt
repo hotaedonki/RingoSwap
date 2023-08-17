@@ -1,3 +1,4 @@
+--회원관련
 CREATE TABLE ringo_member (
 	user_id 				number	primary key,
 	username				varchar2(50)	NOT NULL,
@@ -24,6 +25,37 @@ CREATE TABLE ringo_member (
 	trans_lang				varchar2(10)			default 'kor' check(trans_lang in ('kor', 'jap', 'eng'))
 );
 
+CREATE TABLE lingo_taglink_member (
+	user_id				number,		--멤버 테이블 외래키
+	tag_id				number,		--태그저장소 테이블 외래키
+	primary key(user_id, tag_id),
+	foreign key	(tag_id) references ringo_feed(feed_id) on delete cascade,
+	foreign key	(user_id) references ringo_member(user_id) on delete cascade
+);
+
+CREATE TABLE ringo_tagstorage_member (
+	tag_id		number				primary key,
+	tag			varchar2(200)	not null
+);
+
+CREATE TABLE ringo_member_profile (
+	user_id				number		NOT NULL	DEFAULT on delete cascade	COMMENT '유저 키',
+	original_profile	varchar2(50)	NULL,
+	saved_profile		varchar2(50)	NULL
+);
+
+--공지관련
+CREATE TABLE ringo_notification (
+	noti_id					number	NOT NULL	DEFAULT 1,
+	admin_id				number	NOT NULL	DEFAULT 1	COMMENT '유저 키',
+	noti_title				varchar2(500)	NOT NULL,
+	noti_contents			varchar2(4000)	NOT NULL,
+	noti_views				number	NULL	DEFAULT default 0,
+	noti_inputdate		date	NULL	DEFAULT default sysdate,
+	noti_modifiedate	date	NULL	DEFAULT default sysdate
+);
+
+--피드 관련
 CREATE TABLE ringo_feed (
 	feed_id			number				primary key,
 	user_id			number				references ringo_member(user_id) on delete cascade,		--'유저 키',
@@ -64,6 +96,23 @@ CREATE TABLE ringo_Reply_like (
 	foreign key	(user_id) references ringo_member(user_id) on delete cascade
 );
 
+CREATE TABLE ringo_taglink (
+	feed_id		number,
+	tag_id		number,
+	foreign key (feed_id) references ringo_feed(feed_id) on delete cascade,
+	foreign key (feed_id) references ringo_feed(feed_id) on delete cascade,
+);
+
+CREATE TABLE ringo_taglink (
+	feed_id		number	NOT NULL	DEFAULT 1,
+	tag_id		number	NOT NULL	DEFAULT default 0
+);
+
+CREATE TABLE `ringo_tag_storage` (
+	`tag_id`	number	NOT NULL	DEFAULT default 0,
+	`tag_name`	varchar2(50)	NOT NULL
+);
+
 --채팅 관련
 CREATE TABLE ringo_chatroom (
 	chatroom_id			number	primary key,
@@ -91,6 +140,11 @@ CREATE TABLE ringo_voice_permission (
 	FOREIGN KEY (User_id1) REFERENCES ringo_member(user_id) on delete cascade,
 	FOREIGN KEY (User_id2) REFERENCES ringo_member(user_id) on delete cascade
 );
+CREATE TABLE `chat_link` (
+	`chat`	VARCHAR(255)	NOT NULL,
+	`user`	VARCHAR(255)	NULL,
+	`bangjang`	VARCHAR(255)	NULL
+);
 
 CREATE TABLE ringo_dmroom (
 	dm_id	number	primary key,
@@ -117,6 +171,7 @@ CREATE TABLE ringo_chatPhoto (
 	saved_file		varchar2(300)
 );
 
+--노트관련
 CREATE TABLE ringo_directory (
 	dir_id				number				primary key,
 	user_id				number				references ringo_member(user_id) on delete cascade,
@@ -135,69 +190,56 @@ CREATE TABLE ringo_file (
 	file_type		varchar2(20)
 );
 
-CREATE TABLE ringo_member_profile (
-	user_id				number		NOT NULL	DEFAULT on delete cascade	COMMENT '유저 키',
-	original_profile	varchar2(50)	NULL,
-	saved_profile		varchar2(50)	NULL
+CREATE TABLE `ringo_Word` (
+	`File_id`	number	NOT NULL,
+	`directory_id`	number	NOT NULL,
+	`users_id`	number	NOT NULL	DEFAULT 1	COMMENT '유저 키',
+	`pron`	varchar2(200)	NULL,
+	`word`	varchar2(200)	NOT NULL,
+	`mean`	varchar2(200)	NOT NULL
 );
 
-CREATE TABLE `ringo_buy_cash` (
-	cash_id			number			primary key,
-	user_id			number			references ringo_member(user_id) on delete cascade,
-	purchase_category	varchar2(100)	NOT NULL,
-	cash_buy		number	NOT NULL	DEFAULT default 0,
-	buytext			varchar2(2000)	NULL,
-	inputdate		date	NULL	DEFAULT default sysdate
+--라이브 관련
+CREATE TABLE ringo_liveroom (
+	live_id					number			primary key,	--라이브룸 번호(프라이머리 키로 사용)
+	live_host_id			number			references ringo_member(user_id) on delete cascade		--'members의 users_id를 reference',
+	live_mark				number			default 0,	--즐겨찾기
+	live_title					varchar2(50)	NOT NULL,	--제목
+	live_cam				number			default 0 check(live_cam in ('0', '1')),	-- 0 cam off 1 cam on
+	live_lang				varchar2(20)	NOT NULL,
+	live_viewer_num	number	NOT NULL	DEFAULT default 0
 );
 
-CREATE TABLE `ringo_taglink` (
-	`feed_id`	number	NOT NULL	DEFAULT 1,
-	`tag_id`	number	NOT NULL	DEFAULT default 0
+CREATE TABLE ringo_liveroom_donation (
+	live_donation_id		number		primary key,
+	live_id						number,				--후원보낸 방번호
+	live_host_id				varchar2(20),		-- '후원받는 사람'
+	live_inputdate			date			default sysdate,		--후원보낸 날짜
+	live_donation_cash	number		default 1,	--후원 금액, '단위 뭘로 할지?'
+	live_guest_id				varchar2(20),			--'후원하는 사람'
+	foreign key (live_id) 			references		ringo_liveroom(live_id) on delete null,				--라이브 방이 삭제되면 방번호를 null로 변경(삭제되지 않음)
+	foreign key (live_host_id) references		ringo_member(user_id) on delete cascade,		--후원받은 호스트게정이 삭제되면 같이 삭제
+	foreign key (live_guest_id) references	ringo_member(user_id) on delete null		--후원자 계정이 삭제되면 이름없음으로 표시
 );
 
-CREATE TABLE `ringo_person_tag` (
-	`tag_id`	number	NOT NULL	DEFAULT 1,
-	`tag`	varchar2(200)	NOT NULL
+CREATE TABLE `ringo_live_chat` (
+	`live_chat_id`	number	NOT NULL	DEFAULT 1,
+	`liveroom_num`	number	NOT NULL	DEFAULT 1,
+	`users_id`	number	NOT NULL	DEFAULT 1	COMMENT '유저 키',
+	`message`	varchar2(4000)	NOT NULL	DEFAULT TimeStamp TIMESTAMP
 );
 
-CREATE TABLE `ringo_notification` (
-	`noti_id`	number	NOT NULL	DEFAULT 1,
-	`admin_id`	number	NOT NULL	DEFAULT 1	COMMENT '유저 키',
-	`noti_title`	varchar2(500)	NOT NULL,
-	`noti_contents`	varchar2(4000)	NOT NULL,
-	`noti_views`	number	NULL	DEFAULT default 0,
-	`noti_inputdate`	date	NULL	DEFAULT default sysdate,
-	`noti_modifiedate`	date	NULL	DEFAULT default sysdate
-);
-
-CREATE TABLE `ringo_liveroom` (
-	`liveroom_num`	number	NOT NULL,
+CREATE TABLE `ringo_liveroom_viewers_trend` (
+	`liveroom_viewers_num_id`	number	NOT NULL,
+	`liveroom_num`	number	NOT NULL	COMMENT '라이브방번호',
 	`liveroom_host_id`	number	NOT NULL	COMMENT 'members의 users_id를 reference',
-	`liveroom_mark`	number	NOT NULL	DEFAULT default 0,
-	`liveroom_donation_num`	number	NULL,
-	`liveroom_title`	varchar2(50)	NOT NULL,
-	`liveroom_cam`	number	NOT NULL	DEFAULT default 0	COMMENT '0 cam off
-1 cam on',
-	`liveroom_lang`	varchar2(20)	NOT NULL,
-	`liveroom_number_of_viewers`	number	NOT NULL	DEFAULT default 0
+	`liveroom_viewers_num`	number	NOT NULL	DEFAULT default 0,
+	`inputdate`	default sysdate	NOT NULL	DEFAULT default sysdate
 );
 
-CREATE TABLE `ringo_liveroom_link` (
-	`liveroom_guest_id`	number	NOT NULL	COMMENT 'FOREIGN KEY (liveroom_guest_id) REFERENCES Member(users_id)',
-	`liveroom_id`	varchar2(20)	NOT NULL
-);
-
-CREATE TABLE `ringo_liveroom_donation` (
-	`liveroom_donation_num`	number	NOT NULL,
-	`liveroom_num`	number	NOT NULL,
-	`liveroom_host_id`	varchar2(20)	NOT NULL	COMMENT '후원받는 사람',
-	`liveroom_donation_date`	default sysdate	NOT NULL	DEFAULT default sysdate,
-	`liveroom_donation_amount`	number	NOT NULL	DEFAULT default 1	COMMENT '단위 뭘로 할지?',
-	`liveroom_guest_id`	varchar2(20)	NOT NULL	COMMENT '후원하는 사람'
-);
-
-CREATE TABLE `ringo_alert` (
-	`alert_type_id`	number	NOT NULL,
+--알림 관련
+CREATE TABLE ringo_alert (
+	alert_type_id`	number	NOT NULL,
 	`alert_receiver_id`	number	NOT NULL	COMMENT 'members의 users_id',
 	`alert_message_id`	number	NOT NULL,
 	`alert_sender_id`	number	NOT NULL	COMMENT 'members의 users_id',
@@ -212,6 +254,7 @@ CREATE TABLE `ringo_alert_message` (
 	`alert_category`	varchar2(50)	NOT NULL	COMMENT '피드/라이브/팔로워/코멘트/라이크 등'
 );
 
+--스토어 관련
 CREATE TABLE `ringo_store` (
 	`store_item_id`	number	NOT NULL,
 	`store_item_price`	number	NOT NULL	DEFAULT default 0,
@@ -230,40 +273,28 @@ CREATE TABLE `ringo_store_purchase` (
 1 jam'
 );
 
-CREATE TABLE `chat_link` (
-	`chat`	VARCHAR(255)	NOT NULL,
-	`user`	VARCHAR(255)	NULL,
-	`bangjang`	VARCHAR(255)	NULL
+CREATE TABLE `ringo_store_cart` (
+	`users_id`	number	NOT NULL	DEFAULT 1	COMMENT '유저 키',
+	`store_item_id`	number	NOT NULL
 );
 
-CREATE TABLE `ringo_multigameroom` (
+CREATE TABLE ringo_buy_cash (
+	cash_id			number			primary key,
+	user_id			number			references ringo_member(user_id) on delete cascade,
+	purchase_category	varchar2(100)	NOT NULL,
+	cash_buy		number			NOT NULL	DEFAULT default 0,
+	buytext			varchar2(2000),
+	inputdate		date			DEFAULT default sysdate
+);
+
+--게임관련
+CREATE TABLE ringo_multiroom (
 	`gameroom_id`	number	NOT NULL,
 	`gamename`	varchar2(255)	NULL,
 	`opendate`	default sysdate	NULL,
 	`capacity`	number	NOT NULL	DEFAULT 1,
 	`category`	varchar2(30)	NOT NULL,
 	`host_id`	varchar2(255)	NOT NULL
-);
-
-CREATE TABLE `ringo_store_cart` (
-	`users_id`	number	NOT NULL	DEFAULT 1	COMMENT '유저 키',
-	`store_item_id`	number	NOT NULL
-);
-
-CREATE TABLE `ringo_Word` (
-	`File_id`	number	NOT NULL,
-	`directory_id`	number	NOT NULL,
-	`users_id`	number	NOT NULL	DEFAULT 1	COMMENT '유저 키',
-	`pron`	varchar2(200)	NULL,
-	`word`	varchar2(200)	NOT NULL,
-	`mean`	varchar2(200)	NOT NULL
-);
-
-CREATE TABLE `ringo_live_chat` (
-	`live_chat_id`	number	NOT NULL	DEFAULT 1,
-	`liveroom_num`	number	NOT NULL	DEFAULT 1,
-	`users_id`	number	NOT NULL	DEFAULT 1	COMMENT '유저 키',
-	`message`	varchar2(4000)	NOT NULL	DEFAULT TimeStamp TIMESTAMP
 );
 
 CREATE TABLE `ringo_multigamechat` (
@@ -273,11 +304,7 @@ CREATE TABLE `ringo_multigamechat` (
 	`inputdate`	default sysdate	NOT NULL	DEFAULT default sysdate
 );
 
-CREATE TABLE `lingo_emoji` (
-	`emoji_id`	varchar2(100)	NOT NULL	DEFAULT 1,
-	`origin_filename`	varchar2(200)	NULL,
-	`saved_filename`	varchar2(500)	NULL	DEFAULT TimeStamp TIMESTAMP
-);
+
 
 CREATE TABLE `ringo_tempwriting` (
 	`File_id`	number	NOT NULL,
@@ -298,23 +325,6 @@ CREATE TABLE `ringo_multigameresultlink` (
 	`gameroom_id`	number	NOT NULL
 );
 
-CREATE TABLE `ringo_tagStorage` (
-	`tag_id`	number	NOT NULL	DEFAULT default 0,
-	`tag_name`	varchar2(50)	NOT NULL
-);
-
-CREATE TABLE `lingo_member_tag_link` (
-	`users_id`	number	NOT NULL	DEFAULT 1	COMMENT '유저 키',
-	`persontag_id`	number	NOT NULL	DEFAULT 1
-);
-
-CREATE TABLE `ringo_liveroom_viewers_trend` (
-	`liveroom_viewers_num_id`	number	NOT NULL,
-	`liveroom_num`	number	NOT NULL	COMMENT '라이브방번호',
-	`liveroom_host_id`	number	NOT NULL	COMMENT 'members의 users_id를 reference',
-	`liveroom_viewers_num`	number	NOT NULL	DEFAULT default 0,
-	`inputdate`	default sysdate	NOT NULL	DEFAULT default sysdate
-);
 
 CREATE TABLE `ringo_ranking` (
 	`ranking_id`	number	NOT NULL,
@@ -348,658 +358,5 @@ CREATE TABLE `ringo_commonchatphoto` (
 	`origin_file`	varchar2(50)	NULL,
 	`saved_file`	varchar2(200)	NULL,
 	`size`	number	NULL	DEFAULT default 10000000
-);
-
-ALTER TABLE `ringo_Members` ADD CONSTRAINT `PK_RINGO_MEMBERS` PRIMARY KEY (
-	`users_id`
-);
-
-ALTER TABLE `ringo_Feed` ADD CONSTRAINT `PK_RINGO_FEED` PRIMARY KEY (
-	`feed_id`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_feedPhoto` ADD CONSTRAINT `PK_RINGO_FEEDPHOTO` PRIMARY KEY (
-	`feedPhoto_id`,
-	`feed_id`
-);
-
-ALTER TABLE `ringo_Feed_like` ADD CONSTRAINT `PK_RINGO_FEED_LIKE` PRIMARY KEY (
-	`복합키로함`,
-	`feed_id`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_Reply` ADD CONSTRAINT `PK_RINGO_REPLY` PRIMARY KEY (
-	`reply_id`,
-	`users_id`,
-	`feed_id`
-);
-
-ALTER TABLE `ringo_Reply_like` ADD CONSTRAINT `PK_RINGO_REPLY_LIKE` PRIMARY KEY (
-	`복합키로함`,
-	`users_id`,
-	`reply_id`
-);
-
-ALTER TABLE `ringo_Chatroom` ADD CONSTRAINT `PK_RINGO_CHATROOM` PRIMARY KEY (
-	`chatroon_id`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_Chat` ADD CONSTRAINT `PK_RINGO_CHAT` PRIMARY KEY (
-	`chat_id`,
-	`users_id`,
-	`chatroon_id`,
-	`chatPhoto_id`
-);
-
-ALTER TABLE `ringo_VoicePermission` ADD CONSTRAINT `PK_RINGO_VOICEPERMISSION` PRIMARY KEY (
-	`users_id`,
-	`chatroon_id`,
-	`users_id2`
-);
-
-ALTER TABLE `ringo_DMroom` ADD CONSTRAINT `PK_RINGO_DMROOM` PRIMARY KEY (
-	`DM_id`,
-	`user1_id`
-);
-
-ALTER TABLE `ringo_DMmessage` ADD CONSTRAINT `PK_RINGO_DMMESSAGE` PRIMARY KEY (
-	`message_id`,
-	`DM_id`,
-	`sender_id`,
-	`chatPhoto_id`
-);
-
-ALTER TABLE `ringo_chatPhoto` ADD CONSTRAINT `PK_RINGO_CHATPHOTO` PRIMARY KEY (
-	`chatPhoto_id`
-);
-
-ALTER TABLE `ringo_Directories` ADD CONSTRAINT `PK_RINGO_DIRECTORIES` PRIMARY KEY (
-	`directory_id`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_Files` ADD CONSTRAINT `PK_RINGO_FILES` PRIMARY KEY (
-	`File_id`,
-	`directory_id`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_multigameroomlink` ADD CONSTRAINT `PK_RINGO_MULTIGAMEROOMLINK` PRIMARY KEY (
-	`users_id`,
-	`gameroom_id`
-);
-
-ALTER TABLE `ringo_Members_profile` ADD CONSTRAINT `PK_RINGO_MEMBERS_PROFILE` PRIMARY KEY (
-	`users_id`
-);
-
-ALTER TABLE `ringo_buy_cash` ADD CONSTRAINT `PK_RINGO_BUY_CASH` PRIMARY KEY (
-	`cash_id`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_taglink` ADD CONSTRAINT `PK_RINGO_TAGLINK` PRIMARY KEY (
-	`feed_id`,
-	`tag_id`
-);
-
-ALTER TABLE `ringo_person_tag` ADD CONSTRAINT `PK_RINGO_PERSON_TAG` PRIMARY KEY (
-	`tag_id`
-);
-
-ALTER TABLE `ringo_notification` ADD CONSTRAINT `PK_RINGO_NOTIFICATION` PRIMARY KEY (
-	`noti_id`,
-	`admin_id`
-);
-
-ALTER TABLE `ringo_liveroom` ADD CONSTRAINT `PK_RINGO_LIVEROOM` PRIMARY KEY (
-	`liveroom_num`,
-	`liveroom_host_id`
-);
-
-ALTER TABLE `ringo_liveroom_link` ADD CONSTRAINT `PK_RINGO_LIVEROOM_LINK` PRIMARY KEY (
-	`liveroom_guest_id`,
-	`liveroom_id`
-);
-
-ALTER TABLE `ringo_liveroom_donation` ADD CONSTRAINT `PK_RINGO_LIVEROOM_DONATION` PRIMARY KEY (
-	`liveroom_donation_num`,
-	`liveroom_num`,
-	`liveroom_host_id`
-);
-
-ALTER TABLE `ringo_alert` ADD CONSTRAINT `PK_RINGO_ALERT` PRIMARY KEY (
-	`alert_type_id`,
-	`alert_receiver_id`,
-	`alert_message_id`
-);
-
-ALTER TABLE `ringo_alert_message` ADD CONSTRAINT `PK_RINGO_ALERT_MESSAGE` PRIMARY KEY (
-	`alert_message_id`
-);
-
-ALTER TABLE `ringo_store` ADD CONSTRAINT `PK_RINGO_STORE` PRIMARY KEY (
-	`store_item_id`
-);
-
-ALTER TABLE `ringo_store_purchase` ADD CONSTRAINT `PK_RINGO_STORE_PURCHASE` PRIMARY KEY (
-	`store_purchase_id`,
-	`store_item_id`,
-	`users_id`
-);
-
-ALTER TABLE `chat_link` ADD CONSTRAINT `PK_CHAT_LINK` PRIMARY KEY (
-	`chat`
-);
-
-ALTER TABLE `ringo_multigameroom` ADD CONSTRAINT `PK_RINGO_MULTIGAMEROOM` PRIMARY KEY (
-	`gameroom_id`
-);
-
-ALTER TABLE `ringo_store_cart` ADD CONSTRAINT `PK_RINGO_STORE_CART` PRIMARY KEY (
-	`users_id`,
-	`store_item_id`
-);
-
-ALTER TABLE `ringo_Word` ADD CONSTRAINT `PK_RINGO_WORD` PRIMARY KEY (
-	`File_id`,
-	`directory_id`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_live_chat` ADD CONSTRAINT `PK_RINGO_LIVE_CHAT` PRIMARY KEY (
-	`live_chat_id`,
-	`liveroom_num`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_multigamechat` ADD CONSTRAINT `PK_RINGO_MULTIGAMECHAT` PRIMARY KEY (
-	`gameroom_id`,
-	`users_id`
-);
-
-ALTER TABLE `lingo_emoji` ADD CONSTRAINT `PK_LINGO_EMOJI` PRIMARY KEY (
-	`emoji_id`
-);
-
-ALTER TABLE `ringo_tempwriting` ADD CONSTRAINT `PK_RINGO_TEMPWRITING` PRIMARY KEY (
-	`File_id`,
-	`directory_id`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_multigamescore` ADD CONSTRAINT `PK_RINGO_MULTIGAMESCORE` PRIMARY KEY (
-	`users_id`
-);
-
-ALTER TABLE `ringo_multigameresultlink` ADD CONSTRAINT `PK_RINGO_MULTIGAMERESULTLINK` PRIMARY KEY (
-	`users_id`,
-	`gameroom_id`
-);
-
-ALTER TABLE `ringo_tagStorage` ADD CONSTRAINT `PK_RINGO_TAGSTORAGE` PRIMARY KEY (
-	`tag_id`
-);
-
-ALTER TABLE `lingo_member_tag_link` ADD CONSTRAINT `PK_LINGO_MEMBER_TAG_LINK` PRIMARY KEY (
-	`users_id`,
-	`persontag_id`
-);
-
-ALTER TABLE `ringo_liveroom_viewers_trend` ADD CONSTRAINT `PK_RINGO_LIVEROOM_VIEWERS_TREND` PRIMARY KEY (
-	`liveroom_viewers_num_id`,
-	`liveroom_num`,
-	`liveroom_host_id`
-);
-
-ALTER TABLE `ringo_ranking` ADD CONSTRAINT `PK_RINGO_RANKING` PRIMARY KEY (
-	`ranking_id`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_commonchatroom` ADD CONSTRAINT `PK_RINGO_COMMONCHATROOM` PRIMARY KEY (
-	`chatroom_id`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_commonchat` ADD CONSTRAINT `PK_RINGO_COMMONCHAT` PRIMARY KEY (
-	`chat_id`,
-	`chatphoto_id`,
-	`chatroom_id`,
-	`users_id`
-);
-
-ALTER TABLE `ringo_commonchatphoto` ADD CONSTRAINT `PK_RINGO_COMMONCHATPHOTO` PRIMARY KEY (
-	`chatphoto_id`
-);
-
-ALTER TABLE `ringo_Feed` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_Feed_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_feedPhoto` ADD CONSTRAINT `FK_ringo_Feed_TO_ringo_feedPhoto_1` FOREIGN KEY (
-	`feed_id`
-)
-REFERENCES `ringo_Feed` (
-	`feed_id`
-);
-
-ALTER TABLE `ringo_Feed_like` ADD CONSTRAINT `FK_ringo_Feed_TO_ringo_Feed_like_1` FOREIGN KEY (
-	`feed_id`
-)
-REFERENCES `ringo_Feed` (
-	`feed_id`
-);
-
-ALTER TABLE `ringo_Feed_like` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_Feed_like_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_Reply` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_Reply_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_Reply` ADD CONSTRAINT `FK_ringo_Feed_TO_ringo_Reply_1` FOREIGN KEY (
-	`feed_id`
-)
-REFERENCES `ringo_Feed` (
-	`feed_id`
-);
-
-ALTER TABLE `ringo_Reply_like` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_Reply_like_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_Reply_like` ADD CONSTRAINT `FK_ringo_Reply_TO_ringo_Reply_like_1` FOREIGN KEY (
-	`reply_id`
-)
-REFERENCES `ringo_Reply` (
-	`reply_id`
-);
-
-ALTER TABLE `ringo_Chatroom` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_Chatroom_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_Chat` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_Chat_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_Chat` ADD CONSTRAINT `FK_ringo_Chatroom_TO_ringo_Chat_1` FOREIGN KEY (
-	`chatroon_id`
-)
-REFERENCES `ringo_Chatroom` (
-	`chatroon_id`
-);
-
-ALTER TABLE `ringo_Chat` ADD CONSTRAINT `FK_ringo_chatPhoto_TO_ringo_Chat_1` FOREIGN KEY (
-	`chatPhoto_id`
-)
-REFERENCES `ringo_chatPhoto` (
-	`chatPhoto_id`
-);
-
-ALTER TABLE `ringo_VoicePermission` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_VoicePermission_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_VoicePermission` ADD CONSTRAINT `FK_ringo_Chatroom_TO_ringo_VoicePermission_1` FOREIGN KEY (
-	`chatroon_id`
-)
-REFERENCES `ringo_Chatroom` (
-	`chatroon_id`
-);
-
-ALTER TABLE `ringo_VoicePermission` ADD CONSTRAINT `FK_ringo_Chatroom_TO_ringo_VoicePermission_2` FOREIGN KEY (
-	`users_id2`
-)
-REFERENCES `ringo_Chatroom` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_DMroom` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_DMroom_1` FOREIGN KEY (
-	`user1_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_DMmessage` ADD CONSTRAINT `FK_ringo_DMroom_TO_ringo_DMmessage_1` FOREIGN KEY (
-	`DM_id`
-)
-REFERENCES `ringo_DMroom` (
-	`DM_id`
-);
-
-ALTER TABLE `ringo_DMmessage` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_DMmessage_1` FOREIGN KEY (
-	`sender_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_DMmessage` ADD CONSTRAINT `FK_ringo_chatPhoto_TO_ringo_DMmessage_1` FOREIGN KEY (
-	`chatPhoto_id`
-)
-REFERENCES `ringo_chatPhoto` (
-	`chatPhoto_id`
-);
-
-ALTER TABLE `ringo_Directories` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_Directories_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_Files` ADD CONSTRAINT `FK_ringo_Directories_TO_ringo_Files_1` FOREIGN KEY (
-	`directory_id`
-)
-REFERENCES `ringo_Directories` (
-	`directory_id`
-);
-
-ALTER TABLE `ringo_Files` ADD CONSTRAINT `FK_ringo_Directories_TO_ringo_Files_2` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Directories` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_multigameroomlink` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_multigameroomlink_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_multigameroomlink` ADD CONSTRAINT `FK_ringo_multigameroom_TO_ringo_multigameroomlink_1` FOREIGN KEY (
-	`gameroom_id`
-)
-REFERENCES `ringo_multigameroom` (
-	`gameroom_id`
-);
-
-ALTER TABLE `ringo_Members_profile` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_Members_profile_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_buy_cash` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_buy_cash_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_taglink` ADD CONSTRAINT `FK_ringo_Feed_TO_ringo_taglink_1` FOREIGN KEY (
-	`feed_id`
-)
-REFERENCES `ringo_Feed` (
-	`feed_id`
-);
-
-ALTER TABLE `ringo_taglink` ADD CONSTRAINT `FK_ringo_tagStorage_TO_ringo_taglink_1` FOREIGN KEY (
-	`tag_id`
-)
-REFERENCES `ringo_tagStorage` (
-	`tag_id`
-);
-
-ALTER TABLE `ringo_notification` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_notification_1` FOREIGN KEY (
-	`admin_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_liveroom_link` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_liveroom_link_1` FOREIGN KEY (
-	`liveroom_guest_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_liveroom_link` ADD CONSTRAINT `FK_ringo_liveroom_TO_ringo_liveroom_link_1` FOREIGN KEY (
-	`liveroom_id`
-)
-REFERENCES `ringo_liveroom` (
-	`liveroom_num`
-);
-
-ALTER TABLE `ringo_liveroom_donation` ADD CONSTRAINT `FK_ringo_liveroom_TO_ringo_liveroom_donation_1` FOREIGN KEY (
-	`liveroom_num`
-)
-REFERENCES `ringo_liveroom` (
-	`liveroom_num`
-);
-
-ALTER TABLE `ringo_liveroom_donation` ADD CONSTRAINT `FK_ringo_liveroom_TO_ringo_liveroom_donation_2` FOREIGN KEY (
-	`liveroom_host_id`
-)
-REFERENCES `ringo_liveroom` (
-	`liveroom_host_id`
-);
-
-ALTER TABLE `ringo_alert` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_alert_1` FOREIGN KEY (
-	`alert_receiver_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_alert` ADD CONSTRAINT `FK_ringo_alert_message_TO_ringo_alert_1` FOREIGN KEY (
-	`alert_message_id`
-)
-REFERENCES `ringo_alert_message` (
-	`alert_message_id`
-);
-
-ALTER TABLE `ringo_store_purchase` ADD CONSTRAINT `FK_ringo_store_TO_ringo_store_purchase_1` FOREIGN KEY (
-	`store_item_id`
-)
-REFERENCES `ringo_store` (
-	`store_item_id`
-);
-
-ALTER TABLE `ringo_store_purchase` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_store_purchase_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_store_cart` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_store_cart_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_store_cart` ADD CONSTRAINT `FK_ringo_store_TO_ringo_store_cart_1` FOREIGN KEY (
-	`store_item_id`
-)
-REFERENCES `ringo_store` (
-	`store_item_id`
-);
-
-ALTER TABLE `ringo_Word` ADD CONSTRAINT `FK_ringo_Files_TO_ringo_Word_1` FOREIGN KEY (
-	`File_id`
-)
-REFERENCES `ringo_Files` (
-	`File_id`
-);
-
-ALTER TABLE `ringo_Word` ADD CONSTRAINT `FK_ringo_Files_TO_ringo_Word_2` FOREIGN KEY (
-	`directory_id`
-)
-REFERENCES `ringo_Files` (
-	`directory_id`
-);
-
-ALTER TABLE `ringo_Word` ADD CONSTRAINT `FK_ringo_Files_TO_ringo_Word_3` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Files` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_live_chat` ADD CONSTRAINT `FK_ringo_liveroom_TO_ringo_live_chat_1` FOREIGN KEY (
-	`liveroom_num`
-)
-REFERENCES `ringo_liveroom` (
-	`liveroom_num`
-);
-
-ALTER TABLE `ringo_live_chat` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_live_chat_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_multigamechat` ADD CONSTRAINT `FK_ringo_multigameroom_TO_ringo_multigamechat_1` FOREIGN KEY (
-	`gameroom_id`
-)
-REFERENCES `ringo_multigameroom` (
-	`gameroom_id`
-);
-
-ALTER TABLE `ringo_multigamechat` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_multigamechat_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_tempwriting` ADD CONSTRAINT `FK_ringo_Files_TO_ringo_tempwriting_1` FOREIGN KEY (
-	`File_id`
-)
-REFERENCES `ringo_Files` (
-	`File_id`
-);
-
-ALTER TABLE `ringo_tempwriting` ADD CONSTRAINT `FK_ringo_Files_TO_ringo_tempwriting_2` FOREIGN KEY (
-	`directory_id`
-)
-REFERENCES `ringo_Files` (
-	`directory_id`
-);
-
-ALTER TABLE `ringo_tempwriting` ADD CONSTRAINT `FK_ringo_Files_TO_ringo_tempwriting_3` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Files` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_multigamescore` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_multigamescore_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_multigameresultlink` ADD CONSTRAINT `FK_ringo_multigamescore_TO_ringo_multigameresultlink_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_multigamescore` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_multigameresultlink` ADD CONSTRAINT `FK_ringo_multigameroomlink_TO_ringo_multigameresultlink_1` FOREIGN KEY (
-	`gameroom_id`
-)
-REFERENCES `ringo_multigameroomlink` (
-	`gameroom_id`
-);
-
-ALTER TABLE `lingo_member_tag_link` ADD CONSTRAINT `FK_ringo_Members_TO_lingo_member_tag_link_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `lingo_member_tag_link` ADD CONSTRAINT `FK_ringo_person_tag_TO_lingo_member_tag_link_1` FOREIGN KEY (
-	`persontag_id`
-)
-REFERENCES `ringo_person_tag` (
-	`tag_id`
-);
-
-ALTER TABLE `ringo_liveroom_viewers_trend` ADD CONSTRAINT `FK_ringo_liveroom_TO_ringo_liveroom_viewers_trend_1` FOREIGN KEY (
-	`liveroom_num`
-)
-REFERENCES `ringo_liveroom` (
-	`liveroom_num`
-);
-
-ALTER TABLE `ringo_liveroom_viewers_trend` ADD CONSTRAINT `FK_ringo_liveroom_TO_ringo_liveroom_viewers_trend_2` FOREIGN KEY (
-	`liveroom_host_id`
-)
-REFERENCES `ringo_liveroom` (
-	`liveroom_host_id`
-);
-
-ALTER TABLE `ringo_ranking` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_ranking_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_commonchatroom` ADD CONSTRAINT `FK_ringo_Members_TO_ringo_commonchatroom_1` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_Members` (
-	`users_id`
-);
-
-ALTER TABLE `ringo_commonchat` ADD CONSTRAINT `FK_ringo_commonchatphoto_TO_ringo_commonchat_1` FOREIGN KEY (
-	`chatphoto_id`
-)
-REFERENCES `ringo_commonchatphoto` (
-	`chatphoto_id`
-);
-
-ALTER TABLE `ringo_commonchat` ADD CONSTRAINT `FK_ringo_commonchatroom_TO_ringo_commonchat_1` FOREIGN KEY (
-	`chatroom_id`
-)
-REFERENCES `ringo_commonchatroom` (
-	`chatroom_id`
-);
-
-ALTER TABLE `ringo_commonchat` ADD CONSTRAINT `FK_ringo_commonchatroom_TO_ringo_commonchat_2` FOREIGN KEY (
-	`users_id`
-)
-REFERENCES `ringo_commonchatroom` (
-	`users_id`
 );
 
