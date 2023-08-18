@@ -32,14 +32,6 @@ CREATE TABLE ringo_member (
 	gps_open				char(1)				default 'y',				--장소(gps) 공개여부
 	trans_lang				varchar2(10)		default 'kor' check(trans_lang in ('kor', 'jap', 'eng'))			--기본 번역언어 설정
 );
---이메일 인증정보를 담는 테이블
-CREATE TABLE ringo_member_auth (
-	auth_num		number				primary key,		--해당 인증정보의 번호, 기본키
-	email				varchar2(100)	not null,				--해당 인증시 요구되는 email값
-	auth_code		varchar2(100)	not null,				--해당 인증시 랜덤으로 작성된 인증코드를 저장하는 속성
-	inputdate		TIMESTAMP		default sysdate,	--해당 인증의 발생시각, 해당 시각으로부터 일정 시간이 지나면 자동으로 해당 인증정보를 삭제합니다.
-	session			number				not null				--회원가입 페이지 세션 번호를 저장하여, 동일한 세션에서 일정횟수 이상의 인증을 할 수 없게 한다.
-);
 --각 회원과 해당 회원이 갖는 태그를 매칭하는 테이블
 CREATE TABLE ringo_taglink_member (
 	user_num				number,			--멤버 테이블 외래키, tag_num과 복합하여 복합 기본키 구성
