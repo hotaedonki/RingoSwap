@@ -34,4 +34,11 @@ public class MemberController
 		
 		return "main";
 	}
+	
+	@GetMapping("login")
+	public String login() {
+		return "memberView/loginForm";
+	}
+	
+	
 }
