@@ -8,12 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-@RequestMapping("chat")
-public class ChatController 
+@RequestMapping("store")
+public class StoreController 
 {
-	@GetMapping("chatMain")
-	public String chatMain()
+	@GetMapping("storeMain")
+	public String storeMain()
 	{
-		return "chat/chatMain";
+		return "store/storeMain";
 	}
 }

@@ -8,12 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-@RequestMapping("chat")
-public class ChatController 
+@RequestMapping("feed")
+public class FeedController 
 {
-	@GetMapping("chatMain")
-	public String chatMain()
+	@GetMapping("feedMain")
+	public String feedMain()
 	{
-		return "chat/chatMain";
+		return "feed/feedMain";
 	}
 }
