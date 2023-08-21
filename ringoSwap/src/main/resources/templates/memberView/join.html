@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="kor"
+	  xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>join.html</title>
+</head>
+<body>
+	<div>
+		<h1>[ 회원가입 ]</h1>
+		
+		<form th:action="@{/member/join}" method="post">
+		<table>
+			<tr>
+				<th>ID</th>
+				<td><input type="text" name="username"></td>
+			</tr>
+			
+			<tr>
+				<th>닉네임</th>
+				<td><input type="text" name="nickname"></td>
+			</tr>
+			
+			<tr>
+				<th>비밀번호</th>
+				<td><input type="password" name="password"></td>
+			</tr>
+			
+			<tr>
+				<th>성</th>
+				<td><input type="text" name="first_name"></td>
+			</tr>
+			
+			<tr>
+				<th>이름</th>
+				<td><input type="text" name="last_name"></td>
+			</tr>
+			
+			<tr>
+				<th>성별</th>
+				<td>
+					<select name="gender">
+						<option value="M" selected>남자</option>
+						<option value="F">여자</option>
+						<option value="X">기타</option>
+					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<th>생일</th>
+				<td><input type="date" name="birth_date"></td>
+			</tr>
+			
+			<tr>
+				<th>이메일</th>
+				<td><input type="text" name="email"></td>
+			</tr>
+			
+			<tr>
+				<th>모국어</th>
+				<td><input type="text" name="native_language"></td>
+			</tr>
+			
+			<tr>
+				<th>학습 희망 언어</th>
+				<td><input type="text" name="target_language"></td>
+			</tr>
+			
+			<tr>
+				<th>자기소개</th>
+				<td><textarea placeholder="자기소개 해봐라" name="introduction"></textarea></td>
+			</tr>
+			
+			<tr>
+				<th>취미</th>
+				<td><textarea placeholder="취미소개 해봐라" name="hobbies"></textarea></td>
+			</tr>
+			
+			<tr>
+				<th>MBTI</th>
+				<td>
+					<select name="mbti">
+						<option value="INTJ" selected>INTJ</option>
+						<option value="INTP">INTP</option>
+					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<th>랭킹 표시 유무</th>
+				<td><input type="radio" name="ranking_open" value="Y" checked>동의</td>
+				<td><input type="radio" name="ranking_open" value="N">비동의</td>
+			</tr>
+			
+			<tr>
+				<th>이메일 표시 유무</th>
+				<td><input type="radio" name="email_open" value="Y" checked>동의</td>
+				<td><input type="radio" name="email_open" value="N">비동의</td>
+			</tr>
+			
+			<tr>
+				<th>팔로우/팔로워 표시 유무</th>
+				<td><input type="radio" name="follow_open" value="Y" checked>동의</td>
+				<td><input type="radio" name="follow_open" value="N">비동의</td>
+			</tr>
+			
+			<tr>
+				<th>gps 위치 표시 유무</th>
+				<td><input type="radio" name="gps_open" value="Y" checked>동의</td>
+				<td><input type="radio" name="gps_open" value="N">비동의</td>
+			</tr>
+			
+			<tr>
+				<th>번역할 언어</th>
+				<td><input type="radio" name="trans_lang" value="kor" checked>한궈</td>
+				<td><input type="radio" name="trans_lang" value="jap">닛뽄</td>
+				<td><input type="radio" name="trans_lang" value="eng">코쟁이</td>
+			</tr>
+			
+			<tr>
+				<td><input type="submit" value="가입"></td>
+			</tr>
+		</table>
+		</form>
+	</div>
+</body>
+</html>
