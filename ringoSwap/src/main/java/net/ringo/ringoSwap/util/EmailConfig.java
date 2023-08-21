@@ -9,15 +9,21 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 @PropertySource(PathHandler.EMAILPROPERTIES)
 public class EmailConfig 
-{
+{    
+    @Value("${mail.smtp.host}")
+    private String host;
+    
+    @Value("${mail.smtp.ssl.protocols}")
+    private String protocols;
+    
 	@Value("${mail.smtp.port}")
     private int port;
-	
-    @Value("${mail.smtp.socketFactory.port}")
-    private int socketPort;
     
     @Value("${mail.smtp.auth}")
     private boolean auth;
@@ -27,9 +33,6 @@ public class EmailConfig
     
     @Value("${mail.smtp.starttls.required}")
     private boolean startlls_required;
-    
-    @Value("${mail.smtp.socketFactory.fallback}")
-    private boolean fallback;
     
     @Value("${AdminMail.id}")
     private String id;
@@ -41,7 +44,7 @@ public class EmailConfig
 	public JavaMailSender javaMailService()
 	{
 		JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-		javaMailSender.setHost("smtp.gmail.com");
+		javaMailSender.setHost(host);
 		javaMailSender.setUsername(id);
 		javaMailSender.setPassword(password);
 		javaMailSender.setPort(port);
@@ -53,11 +56,12 @@ public class EmailConfig
 	private Properties getMailProperties()
 	{
 		Properties pt = new Properties();
-		pt.put("mail.smtp.socketFactory.port", socketPort);
+		pt.put("mail.smtp.host", host);
+		pt.put("mail.smtp.port", port);
 		pt.put("mail.smtp.auth", auth);
         pt.put("mail.smtp.starttls.enable", starttls);
+        pt.put("mail.smtp.ssl.protocols", protocols);
         pt.put("mail.smtp.starttls.required", startlls_required);
-        pt.put("mail.smtp.socketFactory.fallback",fallback);
         pt.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		return pt;
 	}

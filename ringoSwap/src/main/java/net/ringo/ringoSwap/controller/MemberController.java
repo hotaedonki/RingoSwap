@@ -46,6 +46,5 @@ public class MemberController
 	public void emailConfirm(String email) throws Exception
 	{
 		String confirm = emailService.sendSimpleMessage(email);
-		log.debug(confirm);
 	}
 }
