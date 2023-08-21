@@ -58,11 +58,11 @@ CREATE TABLE ringo_member_profile (
 CREATE TABLE ringo_notification (
 	noti_num					number					primary key,		--공지글 번호
 	admin_num				number					references ringo_member(user_num) on delete cascade,
-	noti_title				varchar2(500)		not null,				--제목
-	noti_contents			varchar2(4000)		NOT NULL,		--내용
-	noti_views				number					default 0,			--조회수
-	noti_inputdate		date					default sysdate,		--작성일
-	noti_modifiedate	date					default sysdate		--수정일
+	title				varchar2(500)		not null,				--제목
+	contents			varchar2(4000)		NOT NULL,		--내용
+	views				number					default 0,			--조회수
+	inputdate		date					default sysdate,		--작성일
+	modifie_date	date					default sysdate		--수정일
 );
 
 --피드 관련
@@ -94,7 +94,7 @@ CREATE TABLE ringo_reply (
 	reply_num		number			primary key,
 	user_num		number,					--왜래키, 계정 삭제시 cascade 대신 null로 표기
 	feed_num		number,					--외래키, 글 삭제시 cascade 됨
-	reply_contents	varchar2(4000)	NOT NULL,
+	contents	varchar2(4000)	NOT NULL,
 	inputdate		date		default sysdate,
 	constraint fk_feed_num		foreign key (feed_num) references ringo_feed(feed_num) on delete cascade,
 	constraint fk_user_num		foreign key (user_num) references ringo_member(user_num) on delete set null
@@ -243,22 +243,30 @@ CREATE TABLE ringo_notepad (
 --라이브 관련
 --라이브 방 테이블
 CREATE TABLE ringo_liveroom (
-	live_num					number			primary key,	--라이브룸 번호(프라이머리 키로 사용)
-	live_host_num			number			references ringo_member(user_num) on delete cascade		--'members의 users_num를 reference',
-	live_mark					number			default 0,	--즐겨찾기
-	live_title						varchar2(50)	NOT NULL,	--제목
+	live_num					number			primary key,			--라이브룸 번호(프라이머리 키로 사용)
+	host_num			number			references ringo_member(user_num) on delete cascade		--'members의 users_num를 reference',
+	live_title						varchar2(50)	NOT NULL,			--제목
 	live_cam					number(1)		default 0 check(live_cam in ('0', '1')),	-- 카메라 여부, 0 cam off 1 cam on	
-	live_lang					varchar2(20)	NOT NULL,		--해당 라이브 방의 사용 언어
-	live_viewer_num		number			default 0			--해당 라이브 방의 최대 시청자 수
+	live_lang					varchar2(20)	NOT NULL,			--해당 라이브 방의 사용 언어
+	viewer_max		number			default 0				--해당 라이브 방의 최대 시청자 수
+);
+--라이브 방 각 시청자의 특정 방의 즐겨찾기 여부
+CREATE TABLE ringo_liveroom_link(
+	user_num			number,
+	live_num			number,
+	live_mark			number			default 0 check(live_mark in(0, 1)),				-즐겨찾기, 0=즐겨찾기 안함, 1=즐겨찾기 함
+	primary key(user_key, live_num),
+    constraint fk_user_num FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) on delete cascade,
+    constraint fk_live_num FOREIGN KEY (live_num) REFERENCES ringo_liveroom(live_num) on delete cascade
 );
 --라이브 방 도네이션 테이블
 CREATE TABLE ringo_liveroom_donation (
 	live_donation_num		number		primary key,	--기본키
 	live_num					number,						--후원보낸 방번호
-	live_host_num			number,				-- '후원받는 사람'
-	live_guest_num			number,				--'후원하는 사람'
-	live_donation_cash	number		default 100,	--후원 금액, 유료재화(cash)로만 후원가능
-	live_inputdate			timestamp	default sysdate,		--후원보낸 날짜
+	host_num			number,				-- '후원받는 사람'
+	guest_num			number,				--'후원하는 사람'
+	donation_cash	number		default 100,	--후원 금액, 유료재화(cash)로만 후원가능
+	inputdate			timestamp	default sysdate,		--후원보낸 날짜
 	constraint fk_live_num			foreign key (live_num) 			references		ringo_liveroom(live_num) on delete null,				--라이브 방이 삭제되면 방번호를 null로 변경(삭제되지 않음)
 	constraint fk_live_host_num	foreign key (live_host_num)	references		ringo_member(user_num) on delete cascade,		--후원받은 호스트게정이 삭제되면 같이 삭제
 	constraint fk_live_guest_num	foreign key (live_guest_num) references		ringo_member(user_num) on delete null		--후원자 계정이 삭제되면 이름없음으로 표시
@@ -267,10 +275,8 @@ CREATE TABLE ringo_liveroom_donation (
 CREATE TABLE ringo_liveroom_viewer_trend (
 	live_trend_num		number			primary key,		--라이브 시간당 시청자 수 집계 테이블 기본키
 	live_num				number,								--라이브 방 번호
-	host_num				number,								--'members의 users_num를 reference'
-	live_viewer_num	number			default 0,			--지정된 시간단위마다 서버에서 현재 시청자 수를 받아 저장하는 속성
+	viewer_num	number			default 0,			--지정된 시간단위마다 서버에서 현재 시청자 수를 받아 저장하는 속성
 	inputdate				timestamp		default sysdate,		--시청자 수를 입력받은 시간을 기록하는 속성
-	constraint fk_host_num	foreign key	(host_num) references ringo_member(user_num) on delete cascade,
 	constraint fk_live_num	foregin key	(live_num) references ringo_liveroom(live_num) on delete cascade
 );
 
@@ -280,9 +286,9 @@ CREATE TABLE ringo_alert (
 	alert_num				number			primary key,		--알람 테이블의 기본키
 	alert_type				varchar2(10),						--알림의 분류를 기록하는 속성, dm, live, chat, feed, fallow 등이 존재한다.
 	receiver_num		number			NOT NULL,		-- 알림을 받는 사용자를 기록하는 속성 'members의 users_num'
-	message_num		number			NOT NULL,		--해당 알림의 내용을 기록하는 속성
-	type_num				number			not null,				--해당 알림의 분류에 따라 해당하는 게시글의 번호를 기록하는 속성
 	sender_num			number			NOT NULL,		-- 알림을 보낸 사용자를 기록하는 속성 'members의 users_num'
+	type_num				number			not null,				--해당 알림의 분류에 따라 해당하는 게시글의 번호를 기록하는 속성
+	message_num		number			NOT NULL,		--해당 알림의 내용의 위치를 기록하는 속성
 	alert_checked		number			default 0,			-- 해당 알림이 읽혔는지 안 읽혔는지 확인하는 속성/ '0 unchecked, 1 checked'
 	inputdate				TIMESTAMP	default sysdate,			--해당 알림이 발생한 시각을 기록하는 테이블
 	constraint fk_receiver_num	foreign key (receiver_num)	references ringo_member(user_num) on delete cascade,
@@ -360,9 +366,9 @@ CREATE TABLE ringo_ranking (
 	user_num			number				NOT NULL,			--유저 회원 번호, category와 복합하여 복합 기본키를 구성합니다.
 	category			varchar2(20) 	check(category in('sichuan', 'catch', 'siritory', 'twenty', 'total')),
 	--게임분류, user_num과 복합하여 복합 기본키를 구성합니다./total=전체 랭킹
-	score				number				default 0,				--해당 분류의 게임
-	last_playetime	TIMESTAMP		default sysdate,		--
-	maxscore			number				default 0,				--
+	score				number				default 0,				--해당 분류의 게임 점수 총합
+	maxscore			number				default 0,				--해당 분류의 게임 점수 최대치
+	last_playetime	TIMESTAMP		default sysdate,		--최근 플레이한 시각
 	primary key(user_num, category),			--계정 번호와 게임분류를 복합하여 기본키로 구성합니다
 	constraint fk_user_num	foreign key (user_num)	references ringo_member(user_num) on delete cascade
 );
