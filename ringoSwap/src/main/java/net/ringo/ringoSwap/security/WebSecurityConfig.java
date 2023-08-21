@@ -30,6 +30,9 @@ public class WebSecurityConfig {
         		"/member/idcheck",
         		"/board/main",
         		"/board/read",
+        		"/chat/chatMain",
+        		"/feed/feedMain",
+        		"/game/gameMain",
                 "/image/**",
                 "/css/**",
                 "/js/**").permitAll()
