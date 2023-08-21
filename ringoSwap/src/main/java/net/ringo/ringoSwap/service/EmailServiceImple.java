@@ -20,10 +20,9 @@ public class EmailServiceImple implements EmailService
 	@Autowired
 	JavaMailSender emailSender;
 	
-	public static final String ePw = createKey();
-	
 	private MimeMessage createMessage(String to) throws Exception
 	{
+		String ePw = createKey();
 		log.debug("보내는 사람 : {}", to);
 		log.debug("인증 번호 : {}", ePw);
 		MimeMessage message = emailSender.createMimeMessage();
@@ -33,7 +32,7 @@ public class EmailServiceImple implements EmailService
         
         String msgg = "";
         msgg += "<div style='margin:20px;'>";
-        msgg += "<h1> 안녕하세요 임준호입니다. </h1>";
+        msgg += "<h1> 안녕하세요 H4운영진입니다. </h1>";
         msgg += "<br>";
         msgg += "<p>아래 코드를 복사해 입력해주세요<p>";
         msgg += "<br>";
@@ -46,7 +45,7 @@ public class EmailServiceImple implements EmailService
         msgg += ePw + "</strong><div><br/> ";
         msgg += "</div>";
         message.setText(msgg, "utf-8", "html"); // contents
-        message.setFrom(new InternetAddress("프로퍼티에 입력한 이메일", "HJ" )); // sender
+        message.setFrom(new InternetAddress("h4teamproject@gmail.com", "H4 운영자" )); // sender
         
         return message;
 	}
@@ -63,30 +62,31 @@ public class EmailServiceImple implements EmailService
 			switch (idx)
 			{
 				case 0:	// create a ~ z
-					key.append((char) (int) ((rand.nextInt(26))) + 97);
+					key.append((char) ((int)((rand.nextInt(26))) + 97));
 					break;
 				case 1:	// create A ~ Z
-					key.append((char) (int) ((rand.nextInt(26))) + 65);
+					key.append((char) ((int)((rand.nextInt(26))) + 65));
 					break;
 				case 2:	// create number
 					key.append( (rand.nextInt(10)) );
 					break;
 			}
 		}
+			
 		return key.toString();
 	}
 	
     @Override
     public String sendSimpleMessage(String to) throws Exception 
     {
-        // TODO Auto-generated method stub
         MimeMessage message = createMessage(to);
+        String ePw = null;
         
         try
         {
-            emailSender.send(message);
+        	emailSender.send(message);
         }
-        catch(MailException e)
+        catch (MailException e)
         {
             e.printStackTrace();
             throw new IllegalArgumentException();
