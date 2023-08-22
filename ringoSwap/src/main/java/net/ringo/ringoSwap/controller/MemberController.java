@@ -41,7 +41,7 @@ public class MemberController
 		return "main";
 	}
 	
-	@GetMapping("loginForm")
+	@GetMapping("login")
 	public String login()
 	{
 		return "memberView/loginForm";

@@ -11,11 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("taeho")
 public class taehoController {
 	
-	@GetMapping("sidebar")
-	public String sidebar() {
-		return "taeho/sidebar";
-	}
-	
 	@GetMapping("main")
 	public String main() {
 		return "taeho/main";
@@ -25,5 +20,8 @@ public class taehoController {
 	public String login() {
 		return "taeho/login";
 	}
+
+	
 	
 }
+
