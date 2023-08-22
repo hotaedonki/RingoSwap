@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>로그인</title>
-<script th:src="@{/js/jquery-3.6.0.js}"></script>
+	<script th:src="@{/js/jquery-3.7.0.js}"></script>
 <style>
 	th {
 		text-align: left;
@@ -20,15 +20,15 @@
 			<table>
 				<tr>
 					<th>ID</th>
-					<td><input type="text" name="memberid" id="memberid"></td>
+					<td><input type="text" name="user_id" id="memberid"></td>
 				</tr>
 				<tr>
 					<th>Password</th>
-					<td><input type="password" name="memberpw" id="memberpw"></td>
+					<td><input type="password" name="password" id="memberpw"></td>
 				</tr>
 				<tr>
 					<td></td>
-					<td><input type="submit" id="loginBt" value="Login"></td>
+					<td><input type="submit" id="loginBtn" value="Login"></td>
 				</tr>
 			</table>
 		</form>

@@ -41,6 +41,12 @@ public class MemberController
 		return "main";
 	}
 	
+	@GetMapping("loginForm")
+	public String login()
+	{
+		return "memberView/loginForm";
+	}
+	
 	@ResponseBody
 	@PostMapping(PathHandler.EMAILCONFIRM)
 	public void emailConfirm(String email) throws Exception

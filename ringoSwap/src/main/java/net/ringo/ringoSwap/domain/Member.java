@@ -15,54 +15,53 @@ import lombok.NoArgsConstructor;
 public class Member implements UserDetails
 {	
 	private static final long serialVersionUID = 1L;
-	
-	int user_num;
-	String username;
-	String password;
-	String nickname;
-	String first_name;
-	String last_name;
-	String gender;
-	String birth_date;
-	String email;
-	String native_language;
-	String target_language;
-	String introduction;
-	String hobbies;
-	String rewrite_time;
-	int point;
-	int cash;
-	String role_name;
-	String mbti;
-	String ranking_open;
-	String email_open;
-	String follow_open;
-	String gps_open;
-	String trans_lang;
-	boolean enabled;
+	//not null부
+	int user_num;				//계정의 회원번호
+	String user_id;				//계정의 id값
+	String password;			//계정의 비밀번호
+	String username;			//계정의 닉네임
+	String first_name;			//계정 사용자의 이름
+	String last_name;			//계정 사용자의 성
+	String gender;				//계정 사용자의 성별
+	String birth_date;			//계정 사용자의 생년월일
+	String email;					//계정 사용자의 인증 이메일
+	String native_lang;			//계정 사용자의 모국어
+	String target_lang;			//계정 사용자의 학습언어
+	//null 가능 부
+	String introduction;			//계정의 자기소개문구
+	String mbti;					//계정의 MBTI값
+	int point;						//계정의 무료재화 수치
+	int cash;						//계정의 유료재화 수치
+	String rewrite_time;		//수정일자
+	String role_name;			//계정의 회원권한값
+	String ranking_open;		//계정의 랭킹 공개여부
+	String email_open;			//계정의 이메일 공개여부
+	String follow_open;		//계정의 팔로우/팔로워 공개여부
+	String gps_open;			//계정의 위치주소 공개여부
+	String trans_lang;			//계정의 번역언어 값
+	boolean enabled;			//계정의 인증 허용여부
 	
 	@Override
 	public String toString()
 	{
 		return String.format
 				("{%d} : user_num \n"
-				+ "{%s} : username \n"
+				+ "{%s} : user_id \n"
 				+ "{%s} : password \n"
-				+ "{%s} : nickname \n"
+				+ "{%s} : username \n"
 				+ "{%s} : first_name \n"
 				+ "{%s} : last_name \n"
 				+ "{%s} : gender \n"
 				+ "{%s} : birth_date \n"
 				+ "{%s} : email \n"
-				+ "{%s} : native_language \n"
-				+ "{%s} : target_language \n"
+				+ "{%s} : native_lang \n"
+				+ "{%s} : target_lang \n"
 				+ "{%s} : introduction \n"
-				+ "{%s} : hobbies \n"
-				+ "{%s} : rewrite_time \n"
+				+ "{%s} : mbti \n"
 				+ "{%d} : point \n"
 				+ "{%d} : cash \n"
+				+ "{%s} : rewrite_time \n"
 				+ "{%s} : role_name \n"
-				+ "{%s} : mbti \n"
 				+ "{%s} : ranking_open \n"
 				+ "{%s} : email_open \n"
 				+ "{%s} : follow_open \n"
@@ -70,23 +69,22 @@ public class Member implements UserDetails
 				+ "{%s} : trans_lang \n"
 				+ "{%b} : enabled \n"
 								, user_num
-								, username
+								, user_id
 								, password
-								, nickname
+								, username
 								, first_name
 								, last_name
 								, gender
 								, birth_date
 								, email
-								, native_language
-								, target_language
+								, native_lang
+								, target_lang
 								, introduction
-								, hobbies
-								, rewrite_time
+								, mbti
 								, point
 								, cash
+								, rewrite_time
 								, role_name
-								, mbti
 								, ranking_open
 								, email_open
 								, follow_open
@@ -110,25 +108,25 @@ public class Member implements UserDetails
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return this.username;
+		return this.user_id;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
