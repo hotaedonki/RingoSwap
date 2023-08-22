@@ -104,64 +104,31 @@
     </aside>
     <div class="overlay"></div>
     <!-- ======== sidebar-nav end =========== -->
-
     <!-- ======== main-wrapper start =========== -->
     <main class="main-wrapper">
       <!-- ========== header start ========== -->
-      <header class="header">
-        <div class="container-fluid">
-            <div class="col-lg-5 col-md-5 col-6">
-              <div class="header-left d-flex align-items-center">
-                <div class="menu-toggle-btn mr-15">
-                  <button id="menu-toggle" class="main-btn primary-btn btn-hover">
-                    <i class="lni lni-chevron-left me-2"></i> Menu
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-      </header>
-    </main>
-                <!-- profile end -->
-  <!-- ======== sidebar-nav end =========== -->
-  <div class="loginForm">
-	<div class="container right-panel-active">
-	  <!-- Sign Up -->
-	  <div class="container__form container--signup">
-	    <form action="#" class="form" id="form1">
-	      <h2 class="form__title">Sign Up</h2>
-	      <input type="text" placeholder="User" class="input" />
-	      <input type="email" placeholder="Email" class="input" />
-	      <input type="password" placeholder="Password" class="input" />
-	      <button class="btn">Sign Up</button>
+      <div class="container_login">
+	  <div class="container_login__form container_login--signin">
+	  <div class="form_login">
+	    <form action="#">
+	      <h2 class="form_login__title">Sign In</h2>
+	      <input type="text" placeholder="ID" class="input_login" name="id"/>
+	      <input type="password" placeholder="Password" class="input_login" name="password"/>
+	      <button class="btn_login">Sign In</button>
+	    </form><br>
+	    <form action="#">
+	    <input type="button" class="btn_login" id="sign Up" value="Sign Up">
+	    </form><br>
+	    <form action="#">
+	    <a href="#" class="link">Forgot your password?</a>
 	    </form>
-	  </div>
-	
-	  <!-- Sign In -->
-	  
-	  <div class="container__form container--signin">
-	    <form action="#" class="form" id="form2">
-	      <h2 class="form__title">Sign In</h2>
-	      <input type="email" placeholder="Email" class="input" />
-	      <input type="password" placeholder="Password" class="input" />
-	      <a href="#" class="link">Forgot your password?</a>
-	      <button class="btn">Sign In</button>
-	    </form>
-	  </div>
-	
-	  <!-- Overlay -->
-	  <div class="container__overlay">
-	    <div class="overlay">
-	      <div class="overlay__panel overlay--left">
-	        <button class="btn" id="signIn">Sign In</button>
-	      </div>
-	      <div class="overlay__panel overlay--right">
-	        <button class="btn" id="signUp">Sign Up</button>
-	      </div>
 	    </div>
 	  </div>
 	</div>
-</div>
+    </main>
+                <!-- profile end -->
+  <!-- ======== sidebar-nav end =========== -->
+	
 	<script th:src="@{../bootstrap/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{../bootstrap/js/main.js}"></script>
 	<script th:src="@{../js/main.js}"></script>

@@ -21,4 +21,9 @@ public class taehoController {
 		return "taeho/main";
 	}
 	
+	@GetMapping("login")
+	public String login() {
+		return "taeho/login";
+	}
+	
 }

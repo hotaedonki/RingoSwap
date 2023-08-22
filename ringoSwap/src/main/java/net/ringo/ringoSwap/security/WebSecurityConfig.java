@@ -36,7 +36,7 @@ public class WebSecurityConfig {
         		"/chat/chatMain",
         		"/feed/feedMain",
         		"/game/gameMain",
-                "/image/**",
+                "/img/**",
                 "/css/**",
                 "/js/**").permitAll()
         .anyRequest().authenticated()
