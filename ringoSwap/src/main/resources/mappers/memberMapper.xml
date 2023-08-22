@@ -44,4 +44,11 @@
 			, #{trans_lang}
 		)
 	</insert>
+	<!-- 로그인을 위한 select문 -->
+	<select id="memberLogin" parameterType="Member" resultType="Member">
+	select *
+	from ringo_member
+	where user_id like #{user_id} and
+		password = #{password}
+	</select>
 </mapper>

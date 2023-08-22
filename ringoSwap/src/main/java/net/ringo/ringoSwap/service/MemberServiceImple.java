@@ -1,5 +1,7 @@
 package net.ringo.ringoSwap.service;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,4 +25,14 @@ public class MemberServiceImple implements MemberService
 		return dao.insertMember(m);
 	}
 
+	/*
+	public int emailCheck(HashMap<String, Object> map) {
+		return dao.emailCheck(map);
+	}
+	*/
+	@Override
+	public Member memberLogin(Member m) {
+		m.setPassword(passwordEncoder.encode(m.getPassword()));
+		return dao.memberLogin(m);
+	}
 }
