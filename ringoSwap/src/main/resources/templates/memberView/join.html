@@ -18,12 +18,12 @@
 		<table>
 			<tr>
 				<th>ID</th>
-				<td><input type="text" name="username"></td>
+				<td><input type="text" name="user_id"></td>
 			</tr>
 			
 			<tr>
 				<th>닉네임</th>
-				<td><input type="text" name="nickname"></td>
+				<td><input type="text" name="username"></td>
 			</tr>
 			
 			<tr>
@@ -33,12 +33,12 @@
 			
 			<tr>
 				<th>성</th>
-				<td><input type="text" name="first_name"></td>
+				<td><input type="text" name="last_name"></td>
 			</tr>
 			
 			<tr>
 				<th>이름</th>
-				<td><input type="text" name="last_name"></td>
+				<td><input type="text" name="first_name"></td>
 			</tr>
 			
 			<tr>
@@ -66,17 +66,29 @@
 			<tr>
 				<th>인증코드 확인</th>
 				<td><input type="text" name="emailConfirm" id="emailConfirm" placeholder="인증코드 확인"></td>
-				<td><input type="button" id="checkCode" value="코드 확인"></td>
+				<td><input type="button" id="checkCodeBtn" value="코드 확인"></td>
 			</tr>
 			
 			<tr>
 				<th>모국어</th>
-				<td><input type="text" name="native_language"></td>
+				<td>
+					<select name="native_lang">
+						<option value="kor" selected>한국어</option>
+						<option value="jap">일본어</option>
+						<option value="eng">영어</option>
+					</select>
+				</td>
 			</tr>
 			
 			<tr>
 				<th>학습 희망 언어</th>
-				<td><input type="text" name="target_language"></td>
+				<td>
+					<select name="target_lang">
+						<option value="kor" selected>한국어</option>
+						<option value="jap">일본어</option>
+						<option value="eng">영어</option>
+					</select>
+				</td>
 			</tr>
 			
 			<tr>
@@ -86,7 +98,7 @@
 			
 			<tr>
 				<th>취미</th>
-				<td><textarea placeholder="취미소개 해봐라" name="hobbies"></textarea></td>
+				<td><textarea placeholder="취미소개 해봐라" id="hobbies"></textarea></td>
 			</tr>
 			
 			<tr>
@@ -95,6 +107,20 @@
 					<select name="mbti">
 						<option value="INTJ" selected>INTJ</option>
 						<option value="INTP">INTP</option>
+						<option value="INFJ">INFJ</option>
+						<option value="INFP">INFP</option>
+						<option value="ISTJ">ISTJ</option>
+						<option value="ISTP">ISTP</option>
+						<option value="ISFJ">ISFJ</option>
+						<option value="ISFP">ISFP</option>
+						<option value="ENTJ">ENTJ</option>
+						<option value="ENTP">ENTP</option>
+						<option value="ENFJ">ENFJ</option>
+						<option value="ENFP">ENFP</option>
+						<option value="ESTJ">ESTJ</option>
+						<option value="ESTP">ESTP</option>
+						<option value="ESFJ">ESFJ</option>
+						<option value="ESFP">ESFP</option>
 					</select>
 				</td>
 			</tr>

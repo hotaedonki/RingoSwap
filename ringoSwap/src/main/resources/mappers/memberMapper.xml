@@ -6,43 +6,42 @@
 	<insert id="insertMember" parameterType="Member">
 		insert into ringo_member
 			(user_num
-			, username
+			, user_id
 			, password
-			, nickname
+			, username
 			, first_name
 			, last_name
 			, gender
 			, birth_date
 			, email
-			, native_language
-			, target_language
+			, native_lang
+			, target_lang
 			, introduction
-			, hobbies
 			, mbti
 			, ranking_open
 			, email_open
 			, follow_open
 			, gps_open
 			, trans_lang)
-			values
+		values
 			(ringo_member_seq.nextval
-			, #{username}
+			, #{user_id}
 			, #{password}
-			, #{nickname}
+			, #{username}
 			, #{first_name}
 			, #{last_name}
 			, #{gender}
 			, #{birth_date}
 			, #{email}
-			, #{native_language}
-			, #{target_language}
+			, #{native_lang}
+			, #{target_lang}
 			, #{introduction}
-			, #{hobbies}
 			, #{mbti}
 			, #{ranking_open}
 			, #{email_open}
 			, #{follow_open}
 			, #{gps_open}
-			, #{trans_lang})
+			, #{trans_lang}
+		)
 	</insert>
 </mapper>
