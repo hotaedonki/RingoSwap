@@ -16,4 +16,9 @@ public class taehoController {
 		return "taeho/sidebar";
 	}
 	
+	@GetMapping("main")
+	public String main() {
+		return "taeho/main";
+	}
+	
 }

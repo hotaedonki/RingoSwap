@@ -26,6 +26,8 @@ public class WebSecurityConfig {
         .authorizeRequests()
         .antMatchers(
         		"/",
+        		"/taeho/**",
+        		"/bootstrap/**",
         		"/member/emailConfirm",
         		"/member/join",
         		"/member/idcheck",
