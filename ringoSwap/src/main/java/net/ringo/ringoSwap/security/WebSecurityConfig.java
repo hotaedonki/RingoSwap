@@ -31,21 +31,18 @@ public class WebSecurityConfig {
         		"/member/emailConfirm",
         		"/member/join",
         		"/member/idcheck",
-<<<<<<< HEAD
         		"/board/main",
         		"/board/read",
         		"/chat/chatMain",
         		"/feed/feedMain",
         		"/game/gameMain",
                 "/img/**",
-=======
         		"/chat/**",
         		"/feed/**",
         		"/game/**",
                 "/live/**",
                 "/note/**",
                 "/image/**",
->>>>>>> 0970a4147bc987b2fdf6c2514efb966dab194da1
                 "/css/**",
                 "/js/**").permitAll()
         .anyRequest().authenticated()
