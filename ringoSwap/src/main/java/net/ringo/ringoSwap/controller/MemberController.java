@@ -62,9 +62,12 @@ public class MemberController
 		//service부의 id체크 메서드 실행
 		int n = service.idCheck(user_id);
 		if(n==0) {
-			model.addAttribute("result", user_id+"는 이미 존재하는 ID입니다.");
-		}else {
 			model.addAttribute("result", user_id+"는 사용 가능한 ID입니다.");
+			model.addAttribute("searchid", user_id);
+			model.addAttribute("accept", true);
+		}else {
+			model.addAttribute("result", user_id+"는 이미 존재하는 ID입니다.");
+			model.addAttribute("accept", false);
 		}
 		return "memberView/idCheck";
 	}
