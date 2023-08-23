@@ -44,13 +44,25 @@ public class MemberController
 		return "main";
 	}
 	
+<<<<<<< HEAD
 	@GetMapping("loginForm")
 	public String memberLogin()
+=======
+	@GetMapping("home")
+	public String home()
+	{
+		return "memberView/home";
+	}
+	
+	@GetMapping("login")
+	public String login()
+>>>>>>> main
 	{
 		return "memberView/loginForm";
 	}
 	
 	@GetMapping("idCheck")
+<<<<<<< HEAD
 	public String idCheck(String user_id, Model model)
 	{
 		//service부의 id체크 메서드 실행
@@ -61,6 +73,10 @@ public class MemberController
 			model.addAttribute("result", user_id+"는 사용 가능한 ID입니다.");
 		}
 		
+=======
+	public String idCheck()
+	{
+>>>>>>> main
 		return "memberView/idCheck";
 	}
 	

@@ -14,9 +14,9 @@ section {
 
 #login {
       position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: xx-large;
+      top: 20px;
+      right: 30px;
+      font-size: x-large;
       background: none;
       border: 2px solid white;
       border-radius: 18px;
