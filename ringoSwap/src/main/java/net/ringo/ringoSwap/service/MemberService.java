@@ -8,6 +8,7 @@ public interface MemberService
 {
 	public int insertMember(Member m);
 
-	//로그인을 위해 id와 PW를 DB로 전송하여 해당 계정이 있는지를 select문으로 확인하는 메서드
-	public Member memberLogin(Member m);
+	
+	//입력한 id가 중복되는 값이 있는지 계정DB를 참조하여 확인하는 메서드. 리턴값이 0이면 중복되는 id가 없다.
+	public int idCheck(String user_id);
 }

@@ -11,8 +11,6 @@ public interface MemberDAO
 {
 	//회원가입시 회원정보를 memberDB에 insert하는 메서드
 	public int insertMember(Member m);
-	//회원가입시 email과 인증코드 확인하여 실제로 되었는지 확인하는 코드
-	public int emailCheck(HashMap<String, Object> map);
-	//로그인을 위한 로그인 메서드
-	public Member memberLogin(Member m);
+	//중복되는 id가 있는지 매개변수 id값을 DB로 넘겨서 확인하는 메서드
+	public int idCheck(String user_id);
 }

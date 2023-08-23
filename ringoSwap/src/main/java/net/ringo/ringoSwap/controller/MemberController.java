@@ -45,9 +45,23 @@ public class MemberController
 	}
 	
 	@GetMapping("loginForm")
-	public String login()
+	public String memberLogin()
 	{
 		return "memberView/loginForm";
+	}
+	
+	@GetMapping("idCheck")
+	public String idCheck(String user_id, Model model)
+	{
+		//service부의 id체크 메서드 실행
+		int n = service.idCheck(user_id);
+		if(n==0) {
+			model.addAttribute("result", user_id+"는 이미 존재하는 ID입니다.");
+		}else {
+			model.addAttribute("result", user_id+"는 사용 가능한 ID입니다.");
+		}
+		
+		return "memberView/idCheck";
 	}
 	
 	@ResponseBody

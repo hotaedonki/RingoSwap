@@ -45,10 +45,9 @@
 		)
 	</insert>
 	<!-- 로그인을 위한 select문 -->
-	<select id="memberLogin" parameterType="Member" resultType="Member">
-	select *
+	<select id="idCheck" parameterType="Member">
+	select count(*)
 	from ringo_member
-	where user_id like #{user_id} and
-		password = #{password}
+	where user_id = #{user_id}
 	</select>
 </mapper>

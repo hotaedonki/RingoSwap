@@ -17,22 +17,17 @@ public class MemberServiceImple implements MemberService
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
+	//회원가입 메서드
 	@Override
 	public int insertMember(Member m) 
 	{
 		m.setPassword(passwordEncoder.encode(m.getPassword()));
 		return dao.insertMember(m);
 	}
-
-	/*
-	public int emailCheck(HashMap<String, Object> map) {
-		return dao.emailCheck(map);
-	}
-	*/
+	//id중복체크 메서드
 	@Override
-	public Member memberLogin(Member m) {
-		m.setPassword(passwordEncoder.encode(m.getPassword()));
-		return dao.memberLogin(m);
+	public int idCheck(String user_id) {
+		return dao.idCheck(user_id);
 	}
 }
