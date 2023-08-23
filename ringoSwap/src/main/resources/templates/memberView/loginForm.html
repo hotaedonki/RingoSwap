@@ -1,37 +1,207 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+  <!-- Coding by CodingLab | www.codinglabweb.com -->
+<html xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<meta charset="UTF-8">
-<title>로그인</title>
-	<script th:src="@{/js/jquery-3.7.0.js}"></script>
-<style>
-	th {
-		text-align: left;
-	}
-</style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" th:href="@{../css/sidebar.css}">
+    <link rel="stylesheet" th:href="@{../css/home.css}">
+    <link rel="stylesheet" th:href="@{../css/login.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!----===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    
+    
+    <!-- JS -->
+    <script th:src="@{/js/jquery-3.7.0.js}"></script>
+    
+    <title>Dashboard Sidebar Menu</title> 
 </head>
 <body>
-	<header>
-	<h1>[ 로그인 ]</h1>
-	</header>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img th:src="@{../img/sidebar.png}" alt="">
+                </span>
+				
+                <div class="text logo-text">
+                    <span class="name">LingoSwap</span>
+               </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a th:href="@{/member/home}">
+                            <i class='bx bx-home-alt icon' ></i>
+                            <span class="text nav-text">Hoooome</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a th:href="@{/feed/feedMain}">
+                            <i class='bx bx-detail icon' ></i>
+                            <span class="text nav-text">Feed</span>
+                        </a>
+                    </li>
+					
+                    <li class="nav-link">
+                        <a th:href="@{/note/noteMain}">
+                            <i class='bx bx-edit icon' ></i>
+                            <span class="text nav-text">Note</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a th:href="@{/message/messageMain}">
+                            <i class='bx bx-message-square-dots icon' ></i>
+                            <span class="text nav-text">Message</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a th:href="@{/game/gameMain}">
+                            <i class='bx bx-game icon' ></i>
+                            <span class="text nav-text">Game</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-link">
+                        <a th:href="@{/live/liveMain}">
+                            <i class='bx bx-tv icon' ></i>
+                            <span class="text nav-text">Live</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+            	<ul>
+	                 <li class="">
+	                    <a href="#">
+	                        <i class='bx bx-bell icon'></i>
+	                        <span class="text nav-text">Notifications</span>
+	                    </a>
+	                </li>
+	                <li class="">
+	                    <a th:href="@{/member/logout}">
+	                        <i class='bx bx-log-out icon' ></i>
+	                        <span class="text nav-text">Logout</span>
+	                    </a>
+	                </li>
 	
-	<section>
-		<form th:action="@{/member/login}" method="post">
-			<table>
-				<tr>
-					<th>ID</th>
-					<td><input type="text" name="user_id" id="memberid"></td>
-				</tr>
-				<tr>
-					<th>Password</th>
-					<td><input type="password" name="password" id="memberpw"></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input type="submit" id="loginBtn" value="Login"></td>
-				</tr>
-			</table>
-		</form>
-	</section>
+	                <li class="mode">
+	                    <div class="sun-moon">
+	                        <i class='bx bx-moon icon moon'></i>
+	                        <i class='bx bx-sun icon sun'></i>
+	                    </div>
+	                    <span class="mode-text text">Dark mode</span>
+	                    <div class="toggle-switch">
+	                        <span class="switch"></span>
+	                    </div>
+	                </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home" id="home">
+    <div id="loginForm">
+	   		<div class="container">
+			  <div class="container__form container--signin">
+			    <form action="#" class="form" method="get">
+			      <h2 class="form__title">Welcome</h2>
+			      <input type="text" placeholder="ID" class="input" name="user_id"/>
+			      <input type="password" placeholder="Password" class="input" name="password"/>
+			      <button class="btn">Sign In</button>
+			      <input type="button" class="btn" id="signUp" onclick="joinForm()" value="Sign Up">
+			    </form>
+			  </div>
+			</div>
+	   	</div>
+	   	
+	<div id="signUpForm" class="signInHidden">
+	<div class="container_signup">
+	   	<div class="container_signup__form container--signup" id="signUpForm">
+		    <form th:action="@{/taeho/join}" class="signup_form" method="post">
+		        <h2 class="signup_form__title">Sign Up</h2>
+	
+	        <!-- Basic Information -->
+	        <div class="id-section">
+		        <input type="text" placeholder="ID" class="input" name="user_id" id="user_id"/>
+		        <button type="button" class="E_btn" onclick="idCheck()">중복 확인</button>
+	        </div>
+	        <input type="password" placeholder="Password" class="input" name="password" id="password"/>
+	        <input type="password" placeholder="Confirm Password" class="input" name="confirmPassword" id="confirmPassword"/>
+	        <input type="text" placeholder="First Name" class="input" name="first_name" id="first_name"/>
+	        <input type="text" placeholder="Last Name" class="input" name="last_name" id="last_name"/>
+	
+	        <!-- Gender & Date of Birth -->
+	        <select class="selectGender" name="gender" id="gender">
+	            <option value="male">남자</option>
+	            <option value="female">여자</option>
+	            <option value="other">기타</option>
+	        </select>
+	        <input type="date" class="input" name="birth_date" id="birth_date"/>
+	
+	    <!-- Email & Verification -->
+	        <div class="email-section">
+                <input type="email" placeholder="Email" class="input email-input" name="email" id="email"/>
+                <button type="button" class="E_btn">인증코드 전송</button>
+            </div>
+            <div class="verification-section">
+                <input type="text" placeholder="인증코드" class="input verification-input" name="verificationCode" id="verificationCode"/>
+                <button type="button" class="E_btn">코드 확인</button>
+            </div>
+	
+	    <!-- Language Preferences -->
+	    <label>모국어를 선택해주세요.</label>
+	        <select class="select" name="nativeLanguage" id="nativeLanguage">
+	            <option value="korean">한국어</option>
+	            <option value="japanese">일본어</option>
+	            <option value="english">영어</option>
+	        </select>
+	        
+        <label>배우고 싶은 언어를 선택해주세요.</label>
+	        <select class="select" name="desiredLanguage" id="desiredLanguage">
+	            <option value="korean">한국어</option>
+	            <option value="japanese">일본어</option>
+	            <option value="english">영어</option>
+	        </select>
+	
+	    <!-- Introduction & Hobby -->
+	        <textarea class="introduceBox" placeholder="자기소개" name="introduction" id="introduction" maxlength="500"></textarea>
+	    
+	    <!-- Submit Button -->
+		      <button class="Register_btn" type="submit">Register</button>
+		    </form>
+		</div>
+	</div>
+</div>
+	
+	   	<button id="toDo" onclick="toggleToDo()">ToDo</button>
+	    <div id="todo-container" style="display: none;">
+	        <form id="todo-form">
+	            <input type="text" placeholder="What will you do?">
+	            <button type="submit" id="Add">Add</button>
+	        </form>
+	        <ul id="todo-list"></ul>
+	    </div>
+    </section>
+    <script th:src="@{../js/sidebar.js}"></script>
+    <script th:src="@{../js/background.js}"></script>
+    <script th:src="@{../js/clock.js}"></script>
+    <script th:src="@{../js/toDo.js}"></script>
+    <script th:src="@{../js/login.js}"></script>
+
 </body>
 </html>
