@@ -39,7 +39,7 @@ public class WebSecurityConfig {
         .anyRequest().authenticated()
         .and()
         .formLogin()					
-        .loginPage("/member/loginForm")	
+        .loginPage("/member/login")	
         .loginProcessingUrl("/member/login").permitAll()
         .usernameParameter("user_id")
         .passwordParameter("password")
