@@ -13,13 +13,8 @@ CREATE TABLE ringo_member (
 	native_lang			varchar2(8)		NOT NULL,		--모국어 설정
 	target_lang			varchar2(8)		NOT NULL,		--학습언어 설정
 	--취미 및 기타 선택입력 정보
-<<<<<<< HEAD
-	introduction			varchar2(4000),						--자기소개
-	mbti						varchar2(12)		check(mbti in('ISFJ', 'ISFP', 'ISTJ', 'ISTP', 'INFJ', 'INFP', 'INTJ', 'INTP', 'ESFJ', 'ESFP', 'ESTJ', 'ESTP', 'ENFJ', 'ENFP', 'ENTJ', 'ENTP')),
-=======
 	introduction			varchar2(1500),						--자기소개
 	mbti						varchar2(5)		check(mbti in('ISFJ', 'ISFP', 'ISTJ', 'ISTP', 'INFJ', 'INFP', 'INTJ', 'INTP', 'ESFJ', 'ESFP', 'ESTJ', 'ESTP', 'ENFJ', 'ENFP', 'ENTJ', 'ENTP')),
->>>>>>> main
 	--mbti 성격 지정, 16가지로 선택지를 한정함
 	--해당 계정의 유료, 무료재화 보유량에 관한 정보
 	point						number				default 0,				--포인트, 무료재화

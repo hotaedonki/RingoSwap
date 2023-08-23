@@ -132,7 +132,7 @@
 	<div id="signUpForm" class="signInHidden">
 	<div class="container_signup">
 	   	<div class="container_signup__form container--signup" id="signUpForm">
-		    <form th:action="@{/taeho/join}" class="signup_form" method="post">
+		    <form th:action="@{/member/join}" class="signup_form" method="post">
 		        <h2 class="signup_form__title">Sign Up</h2>
 	
 	        <!-- Basic Information -->
@@ -147,9 +147,9 @@
 	
 	        <!-- Gender & Date of Birth -->
 	        <select class="selectGender" name="gender" id="gender">
-	            <option value="male">남자</option>
-	            <option value="female">여자</option>
-	            <option value="other">기타</option>
+	            <option value="M">남자</option>
+	            <option value="F">여자</option>
+	            <option value="N">기타</option>
 	        </select>
 	        <input type="date" class="input" name="birth_date" id="birth_date"/>
 	
@@ -165,14 +165,14 @@
 	
 	    <!-- Language Preferences -->
 	    <label>모국어를 선택해주세요.</label>
-	        <select class="select" name="nativeLanguage" id="nativeLanguage">
+	        <select class="select" name="native_lang" id="target_lang">
 	            <option value="korean">한국어</option>
 	            <option value="japanese">일본어</option>
 	            <option value="english">영어</option>
 	        </select>
 	        
         <label>배우고 싶은 언어를 선택해주세요.</label>
-	        <select class="select" name="desiredLanguage" id="desiredLanguage">
+	        <select class="select" name="target_lang" id="target_lang">
 	            <option value="korean">한국어</option>
 	            <option value="japanese">일본어</option>
 	            <option value="english">영어</option>
