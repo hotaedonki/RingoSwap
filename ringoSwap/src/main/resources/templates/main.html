@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" th:href="@{../css/test.css}">
+    <link rel="stylesheet" th:href="@{/css/test.css}">
     <script th:src="@{/js/jquery-3.7.0.js}"></script>
     
     <style>
@@ -14,8 +14,8 @@
         {
             width: 100%;
             height: 100%;
-            background-image: url("../img/back.png");
-            background-size: cover;
+            background-image: url("./img/back.png");
+            background-size: 100%;
         }
     </style>
 </head>
@@ -47,7 +47,7 @@
     			<td><a th:href="@{/store/storeMain}">상점</a></td>
     		</tr>
     		<tr>
-    			<td><a th:href="@{/taeho/main}">태호</a></td>
+    			<td><a th:href="@{/taeho/home}">태호</a></td>
     		</tr>
     	</table>
     </div>

@@ -4,17 +4,23 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
 </head>
 <link rel="stylesheet" th:href="@{../css/idCheck.css}">
 <body>	
 
 <div class="id-check-popup">
-	<div class="id-check-popup__header">ID 중복 확인</div>
-		<div class="id-check-popup__body">
-			<p class="id-check-popup__message">입력하신 ID는 사용 가능합니다.</p>
-		<button class="id-check-popup__btn">확인</button>
+	<div class="id-check-popup__header">ID 중복 확인</div>	
+	<div th:text="${result}"></div>
+	<div th:if="${accept}">
+		<button class="id-check-popup__btn" id="idInput">사용확인</button>
+	</div>
+	<div th:if="${!accept}">
+		<button class="id-check-popup__btn" id="notInput">다시입력</button>
 	</div>
 </div>
 
+<input type="hidden" id="searchid" th:value="${searchid}">
+<script th:src="@{/js/idCheck.js}"></script>
 </body>
 </html>

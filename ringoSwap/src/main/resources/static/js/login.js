@@ -20,3 +20,17 @@ function showSearchPW() {
 document.getElementById('searchID').addEventListener('click', showSearchID);
 document.getElementById('searchPW').addEventListener('click', showSearchPW);
 document.getElementById('signUp').addEventListener('click', showSignUpForm);
+
+
+$(document).ready(function(){
+	
+    //id체크 이벤트
+    $('#idCheck_Btn').click(memberIdCheck)
+})
+
+
+function memberIdCheck() {
+	let id = $('#user_id').val();
+	
+	window.open("idCheck?user_id="+id, "ID중복확인", "width=500, height=300, left=150, top=50, scrollbars=no")
+}
