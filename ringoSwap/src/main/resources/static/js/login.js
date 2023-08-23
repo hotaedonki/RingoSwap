@@ -1,22 +1,16 @@
-document.getElementById('login').addEventListener('click', function() {
+document.getElementById('signUp').addEventListener('click', function() {
     // 로그인 폼 표시
-    document.getElementById('loginForm').classList.remove('hidden');
+    document.getElementById('signUpForm').classList.remove('signInHidden');
 
-    // clock, Welcome 문구 및 kiminonawa 숨기기
-    document.getElementById('clock').classList.add('hidden');
-    document.querySelector('h1').classList.add('hidden');
-    document.getElementById('kiminonawa').classList.add('hidden');
+    // 회원가입 폼 표시
+    document.getElementById('loginForm').classList.add('signInHidden');
 });
+
+
 
 
 /*
-document.getElementById('signUp').addEventListener('click', function() {
-    // 로그인 폼 숨기기
-    document.getElementById('loginForm').classList.add('hidden');
-    
-    // 회원가입 폼 표시
-    document.getElementById('signUpForm').classList.remove('hidden');
-});
+
 
 // 회원가입 폼 데이터를 AJAX로 서버에 전송
 document.getElementById('ajaxSignUpForm').addEventListener('submit', function(e) {
