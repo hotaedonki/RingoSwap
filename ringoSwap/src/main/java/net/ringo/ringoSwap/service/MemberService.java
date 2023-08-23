@@ -6,9 +6,17 @@ import net.ringo.ringoSwap.domain.Member;
 
 public interface MemberService 
 {
+	/*
+	 * 회원가입 실행시 join in부문에서 작성한 회원정보를 Member vo객체 형식으로 DAO에 전송하는 메서드입니다.
+	 * DB로 전송이 성공했는지를 int값으로 리턴합니다. 
+	 * 0=전송 실패, 1=전송 성공 
+	 */
 	public int insertMember(Member m);
-
 	
-	//입력한 id가 중복되는 값이 있는지 계정DB를 참조하여 확인하는 메서드. 리턴값이 0이면 중복되는 id가 없다.
+	/*
+	 * 입력한 id가 중복되는 값이 있는지 계정DB를 참조하여 확인하는 메서드입니다
+	 * 리턴값 = 0 : 중복되는 id값이 없습니다.
+	 * 리턴값 = 1 : 중복되는 id값이 존재합니다.
+	 */
 	public int idCheck(String user_id);
 }

@@ -9,8 +9,14 @@ import net.ringo.ringoSwap.domain.Member;
 @Mapper
 public interface MemberDAO 
 {
-	//회원가입시 회원정보를 memberDB에 insert하는 메서드
+	/*
+	 * service에서 인계받은 회원정보를 Member vo객체 형식으로 xml파일을 통해 DB에 전송하는 메서드입니다.
+	 */
 	public int insertMember(Member m);
-	//중복되는 id가 있는지 매개변수 id값을 DB로 넘겨서 확인하는 메서드
+	/*
+	 * 입력한 id가 중복되는 값이 있는지 계정DB를 참조하여 확인하는 메서드입니다
+	 * 리턴값 = 0 : 중복되는 id값이 없습니다.
+	 * 리턴값 = 1 : 중복되는 id값이 존재합니다.
+	 */
 	public int idCheck(String user_id);
 }
