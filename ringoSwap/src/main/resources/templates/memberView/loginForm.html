@@ -123,14 +123,12 @@
 		      <input type="text" placeholder="ID" class="input" name="user_id"/>
 		      <input type="password" placeholder="Password" class="input" name="password"/>
 		      <input type="submit" class="btn" value="Sign In">
-		      <input type="button" class="btn" id="signUp" onclick="joinForm()" value="Sign Up">
+		      <input type="button" class="btn" id="signUp" value="Sign Up">
 		      <pre class="searchIDPW">Find   <span id="searchID">ID</span>  /  <span id="searchPW">Password?</span></pre>
 		    </form>
 		  </div>
 		</div>
    	</div>
-	   	
-	   	
 
 	 <!--=========================회원가입 화면========================== -->
 	<div id="signUpForm" class="signInHidden">
@@ -199,17 +197,7 @@
 			<div class="container__form container--signin">
 				<div class="form">
 					<h2 class="searchID_head">아이디 찾기</h2>
-					<div class="email-section">
-						<input type="email" placeholder="Email" class="input email-input"
-							name="email" id="email" />
-						<button type="button" class="E_btn">인증코드 전송</button>
-					</div>
-					<div class="verification-section">
-						<input type="text" placeholder="인증코드"
-							class="input verification-input" name="verificationCode"
-							id="verificationCode" />
-						<button type="button" class="E_btn">코드 확인</button>
-					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -221,17 +209,7 @@
 			<div class="container__form container--signin">
 				<div class="form">
 					<h2>아이디 찾기</h2>
-					<div class="email-section">
-						<input type="email" placeholder="Email" class="input email-input"
-							name="email" id="email" />
-						<button type="button" class="E_btn">인증코드 전송</button>
-					</div>
-					<div class="verification-section">
-						<input type="text" placeholder="인증코드"
-							class="input verification-input" name="verificationCode"
-							id="verificationCode" />
-						<button type="button" class="E_btn">코드 확인</button>
-					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -247,9 +225,9 @@
 	    </div>
 </section>
     <script th:src="@{../js/sidebar.js}"></script>
-    <script th:src="@{../js/background.js}"></script>
     <script th:src="@{../js/toDo.js}"></script>
     <script th:src="@{../js/login.js}"></script>
+    <script th:src="@{../js/background.js}"></script>
 
 </body>
 </html>
