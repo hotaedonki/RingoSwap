@@ -44,41 +44,12 @@ public class MemberController
 		return "main";
 	}
 	
-<<<<<<< HEAD
 	@GetMapping("loginForm")
 	public String login()
 	{
 		return "memberView/loginForm";
 	}
 	
-=======
-	@GetMapping("login")
-	public String login(String error, Model model)
-	{
-		model.addAttribute("error", error);
-		
-		return "memberView/loginForm";
-	}
-	
-	@PostMapping("login")
-	public String login(Member m, Model model) {
-		log.debug("login : {}", m);
-		Member mCheck = service.memberLogin(m);
-
-		if(mCheck == null) {
-			String error = "등록되지 않은 계정입니다.";
-			model.addAttribute("error", error);
-			return "redirect:/member/login";
-		}
-		if(!mCheck.isEnabled()) {
-			String error = "인증되지 않은 회원입니다.";
-			model.addAttribute("error", error);
-			return "redirect:/member/login";
-		}
-		return "main";
-	}
-	
->>>>>>> c42563ef3c18c707903cfb15abf01c09bcbab76f
 	@ResponseBody
 	@PostMapping(PathHandler.EMAILCONFIRM)
 	public void emailConfirm(String email) throws Exception

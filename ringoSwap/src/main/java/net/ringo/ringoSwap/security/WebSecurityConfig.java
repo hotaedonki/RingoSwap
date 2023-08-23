@@ -65,14 +65,14 @@ public class WebSecurityConfig {
         .dataSource(dataSource)
         // 인증 (로그인)
         .usersByUsernameQuery(
-        		"select memberid username, memberpw password, enabled " +
-                "from market_member " +
-                "where memberid = ?")
+        		"select user_id username, password password, enabled " +
+                "from ringo_member " +
+                "where user_id = ?")
         // 권한
         .authoritiesByUsernameQuery(
-        		"select memberid username, rolename role_name " +
-                "from market_member " +
-                "where memberid = ?");
+        		"select user_id username, role_name " +
+                "from ringo_member " +
+                "where user_id = ?");
     }
 
     // 단방향 비밀번호 암호화
