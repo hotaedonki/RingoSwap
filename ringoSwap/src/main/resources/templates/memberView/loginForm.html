@@ -113,22 +113,26 @@
             </div>
         </div>
     </nav>
-
-    <section class="home" id="home">
+  <!--=========================로그인 화면========================== -->
+<section class="home" id="home">
     <div id="loginForm">
-	   		<div class="container">
-			  <div class="container__form container--signin">
-			    <form th:action="@{/member/login}" class="form" method="post">
-			      <h2 class="form__title">Welcome</h2>
-			      <input type="text" placeholder="ID" class="input" name="user_id"/>
-			      <input type="password" placeholder="Password" class="input" name="password"/>
-			      <button class="btn">Sign In</button>
-			      <input type="button" class="btn" id="signUp" onclick="joinForm()" value="Sign Up">
-			    </form>
-			  </div>
-			</div>
-	   	</div>
+   		<div class="container">
+		  <div class="container__form container--signin">
+		    <form th:action="@{/member/login}" class="form" method="post">
+		      <h2 class="form__title">Welcome</h2>
+		      <input type="text" placeholder="ID" class="input" name="user_id"/>
+		      <input type="password" placeholder="Password" class="input" name="password"/>
+		      <input type="submit" class="btn" value="Sign In">
+		      <input type="button" class="btn" id="signUp" onclick="joinForm()" value="Sign Up">
+		      <pre class="searchIDPW">Find   <span id="searchID">ID</span>  /  <span id="searchPW">Password?</span></pre>
+		    </form>
+		  </div>
+		</div>
+   	</div>
 	   	
+	   	
+
+	 <!--=========================회원가입 화면========================== -->
 	<div id="signUpForm" class="signInHidden">
 	<div class="container_signup">
 	   	<div class="container_signup__form container--signup" id="signUpForm">
@@ -136,59 +140,104 @@
 		        <h2 class="signup_form__title">Sign Up</h2>
 	
 	        <!-- Basic Information -->
-	        <div class="id-section">
-		        <input type="text" placeholder="ID" class="input" name="user_id" id="user_id"/>
-		        <button type="button" class="E_btn" id="idCheck_Btn" onclick="idCheck()">중복 확인</button>
-	        </div>
-	        <input type="password" placeholder="Password" class="input" name="password" id="password"/>
-	        <input type="password" placeholder="Confirm Password" class="input" name="confirmPassword" id="confirmPassword"/>
-	        <input type="text" placeholder="First Name" class="input" name="first_name" id="first_name"/>
-	        <input type="text" placeholder="Last Name" class="input" name="last_name" id="last_name"/>
-	
-	        <!-- Gender & Date of Birth -->
-	        <select class="selectGender" name="gender" id="gender">
-	            <option value="M">남자</option>
-	            <option value="F">여자</option>
-	            <option value="N">기타</option>
-	        </select>
-	        <input type="date" class="input" name="birth_date" id="birth_date"/>
-	
-	    <!-- Email & Verification -->
-	        <div class="email-section">
-                <input type="email" placeholder="Email" class="input email-input" name="email" id="email"/>
-                <button type="button" class="E_btn">인증코드 전송</button>
-            </div>
-            <div class="verification-section">
-                <input type="text" placeholder="인증코드" class="input verification-input" name="verificationCode" id="verificationCode"/>
-                <button type="button" class="E_btn">코드 확인</button>
-            </div>
-	
-	    <!-- Language Preferences -->
-	    <label>모국어를 선택해주세요.</label>
-	        <select class="select" name="native_lang" id="target_lang">
-	            <option value="korean">한국어</option>
-	            <option value="japanese">일본어</option>
-	            <option value="english">영어</option>
-	        </select>
-	        
-        <label>배우고 싶은 언어를 선택해주세요.</label>
-	        <select class="select" name="target_lang" id="target_lang">
-	            <option value="korean">한국어</option>
-	            <option value="japanese">일본어</option>
-	            <option value="english">영어</option>
-	        </select>
-	
-	    <!-- Introduction & Hobby -->
-	        <textarea class="introduceBox" placeholder="자기소개" name="introduction" id="introduction" maxlength="500"></textarea>
+			        <div class="id-section">
+				        <input type="text" placeholder="ID" class="input" name="user_id" id="user_id"/>
+				        <button type="button" class="E_btn" id="idCheck_Btn" onclick="idCheck()">중복 확인</button>
+			        </div>
+			        <input type="password" placeholder="Password" class="input" name="password" id="password"/>
+			        <input type="password" placeholder="Confirm Password" class="input" name="confirmPassword" id="confirmPassword"/>
+			        <input type="text" placeholder="First Name" class="input" name="first_name" id="first_name"/>
+			        <input type="text" placeholder="Last Name" class="input" name="last_name" id="last_name"/>
+		
+					<!-- Gender & Date of Birth -->
+			        <select class="selectGender" name="gender" id="gender">
+			            <option value="M">남자</option>
+			            <option value="F">여자</option>
+			            <option value="N">기타</option>
+			        </select>
+			        <input type="date" class="input" name="birth_date" id="birth_date"/>
+		
+					<!-- Email & Verification -->
+			        <div class="email-section">
+		                <input type="email" placeholder="Email" class="input email-input" name="email" id="email"/>
+		                <button type="button" class="E_btn">인증코드 전송</button>
+		            </div>
+		            <div class="verification-section">
+		                <input type="text" placeholder="인증코드" class="input verification-input" name="verificationCode" id="verificationCode"/>
+		                <button type="button" class="E_btn">코드 확인</button>
+		            </div>
+		
+					<!-- Language Preferences -->
+				    <label>모국어를 선택해주세요.</label>
+				        <select class="select" name="native_lang" id="native_lang">
+				            <option value="korean">한국어</option>
+				            <option value="japanese">일본어</option>
+				            <option value="english">영어</option>
+				        </select>
+				        
+			        <label>배우고 싶은 언어를 선택해주세요.</label>
+				        <select class="select" name="target_lang" id="target_lang">
+				            <option value="korean">한국어</option>
+				            <option value="japanese">일본어</option>
+				            <option value="english">영어</option>
+				        </select>
+
+					
+					<!-- Introduction & Hobby -->
+	        		<textarea class="introduceBox" placeholder="자기소개" name="introduction" id="introduction" maxlength="500"></textarea>
 	    
-	    <!-- Submit Button -->
-		      <button class="Register_btn" type="submit">Register</button>
-		    </form>
+					<!-- Submit Button -->
+					<button class="Register_btn" type="submit">Register</button>
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
 	
-	   	<button id="toDo" onclick="toggleToDo()">ToDo</button>
+	<!--=========================아이디 찾기 화면========================== -->
+	<div id="paintSearchID" class="signInHidden" >
+   		<div class="container">
+			<div class="container__form container--signin">
+				<div class="form">
+					<h2 class="searchID_head">아이디 찾기</h2>
+					<div class="email-section">
+						<input type="email" placeholder="Email" class="input email-input"
+							name="email" id="email" />
+						<button type="button" class="E_btn">인증코드 전송</button>
+					</div>
+					<div class="verification-section">
+						<input type="text" placeholder="인증코드"
+							class="input verification-input" name="verificationCode"
+							id="verificationCode" />
+						<button type="button" class="E_btn">코드 확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--=========================비밀번호 찾기 화면========================== -->
+	<div id="paintSearchPW" class="signInHidden" >
+   		<div class="container">
+			<div class="container__form container--signin">
+				<div class="form">
+					<h2>아이디 찾기</h2>
+					<div class="email-section">
+						<input type="email" placeholder="Email" class="input email-input"
+							name="email" id="email" />
+						<button type="button" class="E_btn">인증코드 전송</button>
+					</div>
+					<div class="verification-section">
+						<input type="text" placeholder="인증코드"
+							class="input verification-input" name="verificationCode"
+							id="verificationCode" />
+						<button type="button" class="E_btn">코드 확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		<button id="toDo" onclick="toggleToDo()">ToDo</button>
 	    <div id="todo-container" style="display: none;">
 	        <form id="todo-form">
 	            <input type="text" placeholder="What will you do?">
@@ -196,10 +245,9 @@
 	        </form>
 	        <ul id="todo-list"></ul>
 	    </div>
-    </section>
+</section>
     <script th:src="@{../js/sidebar.js}"></script>
     <script th:src="@{../js/background.js}"></script>
-    <script th:src="@{../js/clock.js}"></script>
     <script th:src="@{../js/toDo.js}"></script>
     <script th:src="@{../js/login.js}"></script>
 
