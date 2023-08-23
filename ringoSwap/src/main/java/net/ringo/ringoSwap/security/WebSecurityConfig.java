@@ -29,14 +29,7 @@ public class WebSecurityConfig {
         		"/taeho/**",
         		"/bootstrap/**",
         		"/member/emailConfirm",
-<<<<<<< HEAD
-        		"/member/join",
-        		"/member/idcheck",
-        		"/board/main",
-        		"/board/read",
-=======
         		"/member/**",
->>>>>>> main
         		"/chat/chatMain",
         		"/feed/feedMain",
         		"/game/gameMain",
