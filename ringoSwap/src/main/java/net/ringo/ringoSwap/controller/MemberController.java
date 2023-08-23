@@ -41,10 +41,22 @@ public class MemberController
 		return "main";
 	}
 	
+	@GetMapping("home")
+	public String home()
+	{
+		return "memberView/home";
+	}
+	
 	@GetMapping("login")
 	public String login()
 	{
 		return "memberView/loginForm";
+	}
+	
+	@GetMapping("idCheck")
+	public String idCheck()
+	{
+		return "memberView/idCheck";
 	}
 	
 	@ResponseBody
