@@ -76,7 +76,7 @@ section {
 }
 
 .form > .btn {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .btn:active {
@@ -297,4 +297,21 @@ section {
     display: flex;
     justify-content: space-between;
     width: 100%;
+}
+
+.searchIDPW {
+	margin: 15px 0 0 0;
+	font-size: 20px;
+	font-family: Roboto;
+	
+}
+
+#searchID, #searchPW {
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#searchID:hover, #searchPW:hover {
+    text-decoration: underline;
 }
