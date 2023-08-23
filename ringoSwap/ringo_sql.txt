@@ -2,26 +2,26 @@
 --회원정보 테이블
 CREATE TABLE ringo_member (
 	user_num 				number			primary key,				--회원 고유 번호, 기본키, 마이피드 및 마이페이지 게시글의 게시글번호로도 활용합니다
-	user_id					varchar2(50)		NOT NULL unique,	--회원 id
+	user_id					varchar2(30)		NOT NULL unique,	--회원 id
 	password				varchar2(255)	NOT NULL,			--비밀번호
-	username				varchar2(50)		NOT NULL,			--회원 닉네임
-	first_name				varchar2(50)		NOT NULL,			--회원 이름
-	last_name				varchar2(50)		NOT NULL,			--회원 성
+	username				varchar2(30)		NOT NULL,			--회원 닉네임
+	first_name				varchar2(20)		NOT NULL,			--회원 이름
+	last_name				varchar2(15)		NOT NULL,			--회원 성
 	gender					char(1)			NOT NULL check(gender in('F', 'M', 'N')),	--성별
 	birth_date				date					NOT NULL,			--생년월일
-	email	 					varchar2(100)	NOT NULL unique,	--이메일(인증용)
-	native_lang			varchar2(20)		NOT NULL,		--모국어 설정
-	target_lang			varchar2(20)		NOT NULL,		--학습언어 설정
+	email	 					varchar2(60)	NOT NULL unique,	--이메일(인증용)
+	native_lang			varchar2(8)		NOT NULL,		--모국어 설정
+	target_lang			varchar2(8)		NOT NULL,		--학습언어 설정
 	--취미 및 기타 선택입력 정보
-	introduction			varchar2(4000),						--자기소개
-	mbti						varchar2(12)		check(mbti in('ISFJ', 'ISFP', 'ISTJ', 'ISTP', 'INFJ', 'INFP', 'INTJ', 'INTP', 'ESFJ', 'ESFP', 'ESTJ', 'ESTP', 'ENFJ', 'ENFP', 'ENTJ', 'ENTP')),
+	introduction			varchar2(1500),						--자기소개
+	mbti						varchar2(5)		check(mbti in('ISFJ', 'ISFP', 'ISTJ', 'ISTP', 'INFJ', 'INFP', 'INTJ', 'INTP', 'ESFJ', 'ESFP', 'ESTJ', 'ESTP', 'ENFJ', 'ENFP', 'ENTJ', 'ENTP')),
 	--mbti 성격 지정, 16가지로 선택지를 한정함
 	--해당 계정의 유료, 무료재화 보유량에 관한 정보
 	point						number				default 0,				--포인트, 무료재화
 	cash						number				default 0,				--캐쉬, 유료재화
 	--계정 권한에 관한 정보
 	rewrite_time			date					default sysdate,		--수정일자
-	role_name				varchar2(30)		default 'ROLE_USER' check(role_name in ('ROLE_USER', 'ROLE_DELETE', 'ROLE_VIP', 'ROLE_ADMIN')),
+	role_name				varchar2(15)		default 'ROLE_USER' check(role_name in ('ROLE_USER', 'ROLE_DELETE', 'ROLE_VIP', 'ROLE_ADMIN')),
 	--일반사용자 = role_user, VIP사용자 = role_vip, 관리자=role_admin, '탈퇴한 유저는 delete_user로 변경
 	enabled					number(1)			default 0 check(enabled in(0, 1)),	--계정 사용가능 여부, 가능=1, 불가=0
 	--정보공개 여부에 관한 정보
@@ -42,13 +42,13 @@ CREATE TABLE ringo_taglink_member (
 --회원에 기록할 취미 태그를 직접 기록하는 테이블
 CREATE TABLE ringo_tagstorage_member (
 	tag_num		number				primary key,		--태그 번호
-	tag			varchar2(200)	not null					--실제 태그 이름
+	tag			varchar2(60)	not null					--실제 태그 이름
 );
 --회원의 프로필 사진을 기록하는 테이블
 CREATE TABLE ringo_member_profile (
 	user_num				number			primary key,			--유저 키, 멤버로부터 받아온 외래키이자 기본키
-	original_profile	varchar2(50)	NULL,					--실제 파일 이름
-	saved_profile		varchar2(50)	NULL,					--저장경로에서의 이름
+	original_profile	varchar2(100)	NULL,					--실제 파일 이름
+	saved_profile		varchar2(100)	NULL,					--저장경로에서의 이름
 	constraint fk_user_num		foreign key (user_num) references ringo_member(user_num) on delete cascade
 );
 
@@ -57,8 +57,8 @@ CREATE TABLE ringo_member_profile (
 CREATE TABLE ringo_notification (
 	noti_num					number					primary key,		--공지글 번호
 	admin_num				number					references ringo_member(user_num) on delete cascade,
-	title				varchar2(500)		not null,				--제목
-	contents			varchar2(4000)		NOT NULL,		--내용
+	title				varchar2(100)		not null,				--제목
+	contents			varchar2(3000)		NOT NULL,		--내용
 	views				number					default 0,			--조회수
 	inputdate		date					default sysdate,		--작성일
 	modifie_date	date					default sysdate		--수정일
@@ -69,15 +69,15 @@ CREATE TABLE ringo_notification (
 CREATE TABLE ringo_feed (
 	feed_num			number				primary key,			--피드 글번호
 	user_num			number				references ringo_member(user_num) on delete cascade,	--유저 키, 피드 작성자
-	contents		varchar2(4000)	NOT NULL,			--내용
-	inputdate		date					default sysdate		--작성일
+	contents			varchar2(3000)	NOT NULL,			--내용
+	inputdate			date					default sysdate		--작성일
 );
 --피드에 사진을 넣는 테이블, 한 피드에 여러개의 사진을 넣을 수 있다.
 CREATE TABLE ringo_feed_photo (
 	feedphoto_num		number			primary key,		--피드 사진 번호
 	feed_num				number,								--사진이 입력된 글번호를 불러오는 외래키
-	origin_file			varchar2(50) not null,					--실제 파일명
-	saved_file			varchar2(300) not null,				--저장된 경로에서의 파일명
+	origin_file			varchar2(100) not null,					--실제 파일명
+	saved_file			varchar2(100) not null,				--저장된 경로에서의 파일명
 	constraint	fk_feed_num	foreign key (feed_num) references ringo_feed(feed_num) on delete cascade
 );
 --피드에 달린 좋아요를 기록하는 테이블. 동일 피드에 동일 회원이 중복해서 좋아요 누르는건 불가능
@@ -93,7 +93,7 @@ CREATE TABLE ringo_reply (
 	reply_num		number			primary key,
 	user_num		number,					--왜래키, 계정 삭제시 cascade 대신 null로 표기
 	feed_num		number,					--외래키, 글 삭제시 cascade 됨
-	contents	varchar2(4000)	NOT NULL,
+	contents	varchar2(250)	NOT NULL,
 	inputdate		date		default sysdate,
 	constraint fk_feed_num		foreign key (feed_num) references ringo_feed(feed_num) on delete cascade,
 	constraint fk_user_num		foreign key (user_num) references ringo_member(user_num) on delete set null
@@ -125,7 +125,7 @@ CREATE TABLE ringo_taglink_reply (
 --피드, 에 달 태그를 실제로 기록하는 테이블
 CREATE TABLE ringo_tagstorage (
 	tag_num			number				primary key,			--태그 번호
-	tag_name		varchar2(50)		not null,					--실제 태그 이름
+	tag_name		varchar2(60)		not null,					--실제 태그 이름
 	tag_bann		char(1)				default 'N' check(tag_bann in('N', 'Y'))		--태그 금지어 설정, 금지어 아님=n, 금지어로 설정=y
 );
 
@@ -135,7 +135,7 @@ CREATE TABLE ringo_tagstorage (
 CREATE TABLE ringo_chatroom (
 	chatroom_num		number				primary key,				--공통 채팅룸 번호
 	host_num				number				references ringo_member(user_num) on delete cascade,	--해당 채팅룸의 호스트(방장) 계정 번호
-	title						varchar2(500)	NOT NULL,		--채팅방 제목
+	title						varchar2(60)	NOT NULL,		--채팅방 제목
 	lang_category		varchar2(10)		NOT NULL	check(lang_category in('kor', 'jap', 'eng')),	--채팅방 언어 설정
 	gen_category		varchar2(10)		NOT NULL	check(gen_category in('enjoy', 'study', 'dm', 'voice', 'live', 'game'))	--채팅반 기능 분류 설정
 	modifie_date			timestamp			default sysdate,
@@ -179,8 +179,8 @@ CREATE TABLE ringo_chat_multi (
 CREATE TABLE ringo_chatphoto (
 	chatphoto_num		number				primary key,							-- '메시지가 사진인 경우, 해당 사진의 정보(사진 테이블)를 참조'
 	file_size				number				default 10000000,			--파일 객체 용량, 기본 10MB
-	origin_file				varchar2(50),
-	saved_file				varchar2(300)
+	origin_file				varchar2(100),
+	saved_file				varchar2(100)
 );
 --음성 채팅방에서 각 회원이 음성 채팅 서비스가 허용되었는지 여부를 기록하는 테이블.
 --일반 사용자는 기본 서비스 비허용 상태이지만 방장은 서비스 허용 상태로 시작하며, 방장은 다른 사용자의 서비스 권한을
@@ -198,7 +198,7 @@ CREATE TABLE ringo_voice_permission (
 CREATE TABLE ringo_directory (
 	dir_num				number				primary key,
 	user_num				number				references ringo_member(user_num) on delete cascade,	--계정 삭제시 cascade
-	dir_name				varchar2(50)		NOT NULL,
+	dir_name				varchar2(100)		NOT NULL,
 	path						varchar2(300)	NOT NULL,		--경로 저장
 	parent_dir_num		number				default null		--자신의 상위 경로 폴더를 저장하는 속성
 );
@@ -212,7 +212,7 @@ CREATE TABLE ringo_file (
 	size					number			NOT NULL,		--해당 파일의 크기
 	inputdate			date				default sysdate,	--최초 작성일
 	modifie_date		date				default sysdate,	--최근 수정일
-	file_type			varchar2(10) check(file_type in ('file', 'word')),		--문서 형식, file = 메모장, word = 단어장
+	file_type	 		varchar2(10) check(file_type in ('file', 'word')),		--문서 형식, file = 메모장, word = 단어장
     constraint fk_dir_num FOREIGN KEY (dir_num) REFERENCES ringo_directory(dir_num) ON DELETE CASCADE,
     constraint fk_user_num FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) on delete cascade
 );
@@ -221,9 +221,9 @@ CREATE TABLE ringo_word (
 	file_num		number			references ringo_file(file_num) on delete cascade,
 	dir_num		number			references ringo_directory(dir_num) on delete cascade,
 	user_num		number			references ringo_member(user_num) on delete cascade,
-	word				varchar2(200)	not null,		--단어부, 적어야 합니다.
-	pron				varchar2(200),					--발음부, 적지 않아도 됩니다.
-	mean			varchar2(200)	not null,		--의미부, 적어야 합니다.
+	word				varchar2(100)	not null,		--단어부, 적어야 합니다.
+	pron				varchar2(100),					--발음부, 적지 않아도 됩니다.
+	mean			varchar2(100)	not null,		--의미부, 적어야 합니다.
 	inputdate		timestamp			default sysdate
 );
 --메모장 파일의 실제 메모 저장부
@@ -243,10 +243,10 @@ CREATE TABLE ringo_notepad (
 --라이브 방 테이블
 CREATE TABLE ringo_liveroom (
 	live_num					number			primary key,			--라이브룸 번호(프라이머리 키로 사용)
-	host_num			number			references ringo_member(user_num) on delete cascade		--'members의 users_num를 reference',
-	live_title						varchar2(50)	NOT NULL,			--제목
+	host_num					number			references ringo_member(user_num) on delete cascade		--'members의 users_num를 reference',
+	live_title						varchar2(60)	NOT NULL,			--제목
 	live_cam					number(1)		default 0 check(live_cam in ('0', '1')),	-- 카메라 여부, 0 cam off 1 cam on	
-	live_lang					varchar2(20)	NOT NULL,			--해당 라이브 방의 사용 언어
+	live_lang					varchar2(8)	NOT NULL,			--해당 라이브 방의 사용 언어
 	viewer_max		number			default 0				--해당 라이브 방의 최대 시청자 수
 );
 --라이브 방 각 시청자의 특정 방의 즐겨찾기 여부
@@ -300,8 +300,8 @@ CREATE TABLE ringo_item (
 	item_num				number			primary key,			--아이템 고유번호, 기본키
 	item_point				number 		default 0,		--아이템 가격(무료재화)
 	item_cash				number 		default 0,		--아이템 가격(유료재화)
-	item_name			varchar2(50)	NOT NULL,	--아이템 이름, origin filename의 열할도 겸한다
-	item_image_url		varchar2(500),					--아이템 저장경로 값
+	item_name			varchar2(60)	NOT NULL,	--아이템 이름, origin filename의 열할도 겸한다
+	item_image_url		varchar2(200),					--아이템 저장경로 값, saved filename의 역할을 한다
 	inputdate				date				default sysdate,	--아이템 등록일자
 	item_category		varchar2(20)	NOT NULL,	--아이템 분류
 	item_bann				number(1)		default 0 check(item_bann in(0, 1))
@@ -329,9 +329,9 @@ CREATE TABLE ringo_item_cart (
 CREATE TABLE ringo_buy_cash (
 	cash_num					number			primary key,			--매매기록 번호, 기본키
 	user_num					number			references ringo_member(user_num) on delete cascade,	--회원 번호
-	purchase_category	varchar2(100)	NOT NULL,	--해당 매매번호의 재화 결제, 아이템 구매등의 분류를 저장하는 속성
+	purchase_category	varchar2(50)	NOT NULL,	--해당 매매번호의 재화 결제, 아이템 구매등의 분류를 저장하는 속성
 	cash_buy					number			NOT NULL default 0,	--유료재화를 얼마만큼 소비/획득했는지 저장하는 속성
-	buytext						varchar2(2000),				--해당 매매기록의 대략적인 기록을 저장하는 속성
+	buytext						varchar2(100),				--해당 매매기록의 대략적인 기록을 저장하는 속성
 	inputdate					TIMESTAMP	default sysdate			--해당 매매기록의 발생시각을 저장하는 속성
 );
 
@@ -340,7 +340,6 @@ CREATE TABLE ringo_buy_cash (
 CREATE TABLE ringo_multiroom (
 	multi_num		number				primary key,		--멀티게임방 번호, 기본키
 	host_num		number,		--방장의 계정 번호
-	multi_title		varchar2(200)	not null,				--게임방 이름
 	opendate		date					default sysdate,	--게임방 개설일자
 	capacity		number				DEFAULT 4,		--게임방 참여자 상한, 기본4, 게임에 따라 상한 지정
 	category		varchar2(30)		not null check(category in('sichuan', 'catch', 'siritory', 'twenty')),
@@ -354,7 +353,7 @@ CREATE TABLE ringo_multiroom_score (
 	playdate		TIMESTAMP		default sysdate,		--게임을 끝낸 시각
 	multi_record	char(1),					--해당 게임의 전적. 'v'=승, 'd'=패, 'q'=실격패, 그외=무승부, null=경기오류
 	score			number,				--해당 멀티게임 플레이로 획득한 스코어 점수
-	category		varchar2(30)		NOT NULL check(category in('sichuan', 'catch', 'siritory', 'twenty')),
+	category		varchar2(20)		NOT NULL check(category in('sichuan', 'catch', 'siritory', 'twenty')),
 	--플레이한 게임 분류/ sichuan=사천성, catch=캐치마인드, siritory=끝말잇기, twenty=스무고개
 	primary key(multi_num, user_num),
 	constraint fk_multi_num foreign key (multi_num) references ringo_multiroom(multi_num) on delete cascade,
@@ -365,8 +364,8 @@ CREATE TABLE ringo_ranking (
 	user_num			number				NOT NULL,			--유저 회원 번호, category와 복합하여 복합 기본키를 구성합니다.
 	category			varchar2(20) 	check(category in('sichuan', 'catch', 'siritory', 'twenty', 'total')),
 	--게임분류, user_num과 복합하여 복합 기본키를 구성합니다./total=전체 랭킹
-	score				number				default 0,				--해당 분류의 게임 점수 총합
-	maxscore			number				default 0,				--해당 분류의 게임 점수 최대치
+	score				number				default 0,				--해당 분류의 게임 점수 총합(시즌마다 초기화함)
+	maxscore			number				default 0,				--사용자가 해당 분류의 게임으로 획득했던 최대 점수
 	last_playetime	TIMESTAMP		default sysdate,		--최근 플레이한 시각
 	primary key(user_num, category),			--계정 번호와 게임분류를 복합하여 기본키로 구성합니다
 	constraint fk_user_num	foreign key (user_num)	references ringo_member(user_num) on delete cascade
