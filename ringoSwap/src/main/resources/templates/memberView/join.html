@@ -8,6 +8,7 @@
 	
 	<script th:src="@{/js/jQuery-3.7.0.js}"></script>
 	<script th:src="@{/js/memberView/join.js}"></script>
+    <script th:src="@{../js/login.js}"></script>
 	
 </head>
 <body>
@@ -18,7 +19,8 @@
 		<table>
 			<tr>
 				<th>ID</th>
-				<td><input type="text" name="user_id"></td>
+				<td><input type="text" name="user_id" id="user_id"></td>
+		        <button type="button" class="E_btn" id="idCheck_Btn" onclick="idCheck()">중복 확인</button>
 			</tr>
 			
 			<tr>

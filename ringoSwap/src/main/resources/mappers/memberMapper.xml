@@ -16,13 +16,7 @@
 			, email
 			, native_lang
 			, target_lang
-			, introduction
-			, mbti
-			, ranking_open
-			, email_open
-			, follow_open
-			, gps_open
-			, trans_lang)
+			, introduction)
 		values
 			(ringo_member_seq.nextval
 			, #{user_id}
@@ -36,12 +30,6 @@
 			, #{native_lang}
 			, #{target_lang}
 			, #{introduction}
-			, #{mbti}
-			, #{ranking_open}
-			, #{email_open}
-			, #{follow_open}
-			, #{gps_open}
-			, #{trans_lang}
 		)
 	</insert>
 	<!-- 로그인을 위한 select문 -->
