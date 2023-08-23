@@ -118,7 +118,7 @@
     <div id="loginForm">
 	   		<div class="container">
 			  <div class="container__form container--signin">
-			    <form action="#" class="form" method="get">
+			    <form th:action="@{/member/login}" class="form" method="post">
 			      <h2 class="form__title">Welcome</h2>
 			      <input type="text" placeholder="ID" class="input" name="user_id"/>
 			      <input type="password" placeholder="Password" class="input" name="password"/>
