@@ -2,6 +2,8 @@ package net.ringo.ringoSwap.controller;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,7 @@ import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.service.EmailService;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.util.PathHandler;
+import net.ringo.ringoSwap.enums.email.*;
 
 @Slf4j
 @Controller
@@ -90,10 +93,28 @@ public class MemberController
 		return "memberView/idCheck";
 	}
 	
-	@ResponseBody
 	@PostMapping(PathHandler.EMAILCONFIRM)
-	public void emailConfirm(String email) throws Exception
+	public void emailConfirm(String email, HttpSession session) throws Exception
 	{
-		String confirm = emailService.sendSimpleMessage(email);
+		String verifyCode = emailService.sendVerifyMessage(email);
+		
+		session.removeAttribute("verifyCode");
+		session.setAttribute("verifyCode", verifyCode);
+		session.setMaxInactiveInterval(60);
+	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.CHECKVERITYCODE)
+	public int checkVerifyCode(String code, HttpSession session)
+	{
+		if (session.getAttribute("verifyCode") == null)
+			return EmailVerifyState.CHECKINPUT.ordinal();
+		
+		String vCode = (String)session.getAttribute("verifyCode");
+		
+		if (vCode != code)
+			return EmailVerifyState.INCORRECT.ordinal();
+		
+		return EmailVerifyState.VERIFIED.ordinal();
 	}
 }

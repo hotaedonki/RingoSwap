@@ -22,6 +22,7 @@
     <title>Dashboard Sidebar Menu</title> 
 </head>
 <body>
+<!-- =============================사이드바 상단=============================== -->
     <nav class="sidebar close">
         <header>
             <div class="image-text">
@@ -83,22 +84,30 @@
                     
                 </ul>
             </div>
-
+	<!-- ========================사이드바 하단=========================== -->
             <div class="bottom-content">
             	<ul>
+	                <li class="">
+          	            <div sec:authorize="isAuthenticated()">
+		                    <a th:href="@{/member/logout}">
+		                        <i class='bx bx-log-out icon' ></i>
+		                        <span class="text nav-text">Logout</span>
+		                    </a>
+	                	</div>
+                	</li>
+	                
 	                 <li class="">
-	                    <a href="#">
+	                    <a th:href="@{/notification/notificationMain}">
 	                        <i class='bx bx-bell icon'></i>
 	                        <span class="text nav-text">Notifications</span>
 	                    </a>
 	                </li>
-	                <li class="">
-	                    <a th:href="@{/member/logout}">
-	                        <i class='bx bx-log-out icon' ></i>
-	                        <span class="text nav-text">Logout</span>
+					<li class="">
+	                    <a th:href="@{/store/storeMain}">
+	                        <i class='bx bx-shopping-bag icon'></i>
+	                        <span class="text nav-text">Store</span>
 	                    </a>
 	                </li>
-	
 	                <li class="mode">
 	                    <div class="sun-moon">
 	                        <i class='bx bx-moon icon moon'></i>
@@ -146,6 +155,7 @@
 			        <input type="password" placeholder="Confirm Password" class="input" name="confirmPassword" id="confirmPassword"/>
 			        <input type="text" placeholder="First Name" class="input" name="first_name" id="first_name"/>
 			        <input type="text" placeholder="Last Name" class="input" name="last_name" id="last_name"/>
+			        <input type="text" placeholder="Nickname" class="input" name="username" id="username"/>
 		
 					<!-- Gender & Date of Birth -->
 			        <select class="selectGender" name="gender" id="gender">
@@ -196,8 +206,15 @@
    		<div class="container">
 			<div class="container__form container--signin">
 				<div class="form">
-					<h2 class="searchID_head">아이디 찾기</h2>
-					
+					<h2>아이디 찾기</h2>
+					<div class="email-section">
+		                <input type="email" placeholder="Email" class="input email-input" name="searchEmail" id="searchEmail"/>
+		                <button type="button" class="E_btn">인증코드 전송</button>
+		            </div>
+		            <div class="verification-section">
+		                <input type="text" placeholder="인증코드" class="input verification-input" name="verificationCode_email" id="verificationCode_email"/>
+		                <button type="button" class="E_btn">코드 확인</button>
+		            </div>
 				</div>
 			</div>
 		</div>
@@ -208,7 +225,7 @@
    		<div class="container">
 			<div class="container__form container--signin">
 				<div class="form">
-					<h2>아이디 찾기</h2>
+					<h2>비밀번호 찾기</h2>
 					
 				</div>
 			</div>

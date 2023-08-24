@@ -60,8 +60,16 @@ body.dark{
 }
 
 /* ===== Reusable code - Here ===== */
-.sidebar li{
-    height: 50px;
+.sidebar li:not(.mode){
+    height: 30px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.mode {
+	height: 50px;
     list-style: none;
     display: flex;
     align-items: center;
