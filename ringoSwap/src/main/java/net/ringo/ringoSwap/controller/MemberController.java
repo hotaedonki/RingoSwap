@@ -94,6 +94,7 @@ public class MemberController
 	@PostMapping(PathHandler.EMAILCONFIRM)
 	public void emailConfirm(String email) throws Exception
 	{
-		String confirm = emailService.sendSimpleMessage(email);
+		String confirm = emailService.sendVerifyMessage(email);
+		log.debug("{} - confirm", confirm);
 	}
 }
