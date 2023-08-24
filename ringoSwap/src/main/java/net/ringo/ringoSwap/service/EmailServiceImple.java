@@ -20,7 +20,7 @@ public class EmailServiceImple implements EmailService
 	@Autowired
 	JavaMailSender emailSender;
 	
-	private String createKey() 
+	private String createKey()
 	{
 		StringBuilder key = new StringBuilder();
 		Random rand = new Random();
