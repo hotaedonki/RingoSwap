@@ -28,12 +28,11 @@ public class WebSecurityConfig {
         		"/",
         		"/taeho/**",
         		"/bootstrap/**",
-        		"/member/emailConfirm",
         		"/member/**",
         		"/chat/chatMain",
         		"/feed/feedMain",
         		"/game/gameMain",
-                "/image/**",
+                "/img/**",
                 "/css/**",
                 "/js/**").permitAll()
         .anyRequest().authenticated()

@@ -13,5 +13,5 @@ function setBackgroundImage() {
     document.getElementById("home").style.backgroundImage = `url('../img/${randomImage}')`;
 }
 
-window.onload = setBackgroundImage;
+setBackgroundImage();
 
