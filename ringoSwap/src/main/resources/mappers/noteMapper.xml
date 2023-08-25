@@ -1,0 +1,35 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.ringo.ringoSwap.dao.NoteDAO">
+	<!-- 폴더정보를 배열로 리턴하는 select 코드 -->
+	<select id="selectUserDirectoryAll" resultType="Directory">
+		select * 
+		from ringo_directory
+		where user_num = #{user_num}
+		order by dir_num
+	</select>
+	<!-- 파일정보를 배열로 리턴하는 select 코드 -->
+	<select id="selectUserFileAll" parameterType="java.util.HashMap" resultType="DirFile">
+		select *
+		from ringo_file
+		where user_num = #{user_num}
+			<if test="category != 'all'">
+				and file_type = #{category}
+			</if>
+			<if test = "text !='null' ">
+				and title like '%'||#{text}||'%'
+			</if>
+		<if test="sort == 'input'">
+			order by file_num
+		</if>
+		<if test="sort == 'title'">
+			order by title desc
+		</if>
+		<if test="sort == 'modifie'">
+			order by modifie_date desc
+		</if>
+	</select>
+	
+</mapper>

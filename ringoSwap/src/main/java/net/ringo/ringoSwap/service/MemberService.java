@@ -19,4 +19,7 @@ public interface MemberService
 	 * 리턴값 = 1 : 중복되는 id값이 존재합니다.
 	 */
 	public int idCheck(String user_id);
+
+	//자신의 id값을 매개변수로 DB에서 select문을 돌려 user_num값을 리턴받는 메서드
+	public int memberSearchByIdReturnUserNum(String username);
 }

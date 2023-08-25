@@ -19,4 +19,7 @@ public interface MemberDAO
 	 * 리턴값 = 1 : 중복되는 id값이 존재합니다.
 	 */
 	public int idCheck(String user_id);
+	
+	//매개변수로 받은 사용자의 id로 DB에서 검색하여 나온 회원 정보를 리턴합니다.
+	public Member memberSearchById(String user_id);
 }

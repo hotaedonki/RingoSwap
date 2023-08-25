@@ -102,24 +102,24 @@ public class GameController
 	@GetMapping("multiSichuan")
 	public String multiSichuan(@AuthenticationPrincipal UserDetails user) {
 		
-		return "";
+		return "game/multiSichuan";
 	}
 	//멀티 끝말잇기 게임 페이지
 	@GetMapping("multiSiritory")
 	public String multiSiritory(@AuthenticationPrincipal UserDetails user) {
 		
-		return "";
+		return "game/multiSiritory";
 	}
 	//멀티 스무고개 게임 페이지
 	@GetMapping("multiTwenty")
 	public String multiTwenty(@AuthenticationPrincipal UserDetails user) {
 		
-		return "";
+		return "game/multiTwenty";
 	}
 	//멀티 캐치마인드 게임 페이지
 	@GetMapping("multiCatch")
 	public String multiCatch(@AuthenticationPrincipal UserDetails user) {
 		
-		return "";
+		return "game/multiCatch";
 	}
 }
