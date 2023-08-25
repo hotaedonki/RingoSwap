@@ -93,15 +93,6 @@ public class MemberController
 		return "memberView/idCheck";
 	}
 	
-	@ResponseBody
-	@PostMapping(PathHandler.GETMEMBER)
-	public Boolean getMember(Member member)
-	{
-		Member m = service.getMember(member);
-		
-		return true;
-	}
-	
 	@PostMapping(PathHandler.EMAILCONFIRM)
 	public void emailConfirm(String email, HttpSession session) throws Exception
 	{
