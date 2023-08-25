@@ -40,4 +40,14 @@ public class MemberServiceImple implements MemberService
 		Member member = dao.memberSearchById(user_id);
 		return member.getUser_num();
 	}
+	@Override
+	public Member getMember(Member member) 
+	{
+		Member m = dao.getMember(member);
+		return m;
+	}
+	@Override
+	public Member emailConfirmForPassword(HashMap<String, String> parameters) {
+		return dao.emailConfirmForPassword(parameters);
+	}
 }

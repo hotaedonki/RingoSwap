@@ -93,6 +93,15 @@ public class MemberController
 		return "memberView/idCheck";
 	}
 	
+	@ResponseBody
+	@PostMapping(PathHandler.GETMEMBER)
+	public Boolean getMember(Member member)
+	{
+		Member m = service.getMember(member);
+		
+		return true;
+	}
+	
 	@PostMapping(PathHandler.EMAILCONFIRM)
 	public void emailConfirm(String email, HttpSession session) throws Exception
 	{
@@ -100,6 +109,22 @@ public class MemberController
 		session.removeAttribute("verifyCode");
 		session.setAttribute("verifyCode", verifyCode);
 		session.setMaxInactiveInterval(60);
+	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.EMAILCONFIRMFORPASSWORD)
+	public boolean emailConfirmForPassword(String user_id, String email)
+	{
+		HashMap<String, String> parameters = new HashMap<>();
+		parameters.put("user_id", user_id);
+		parameters.put("email", email);
+		
+		Member member = service.emailConfirmForPassword(parameters);
+		
+		if (member == null)
+			return false;
+		
+		return true;
 	}
 	
 	@ResponseBody

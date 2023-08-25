@@ -11,4 +11,6 @@ public class PathHandler
 	public final static String JOIN = "join";
 	public final static String EMAILCONFIRM = "emailConfirm";
 	public final static String CHECKVERIFYCODE = "checkverifycode";
+	public final static String GETMEMBER = "getMember";
+	public final static String EMAILCONFIRMFORPASSWORD = "emailConfirmForPassword";
 }

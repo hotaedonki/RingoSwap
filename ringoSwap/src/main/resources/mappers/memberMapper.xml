@@ -48,4 +48,12 @@
 	where user_id = #{user_id}
 	</select>
 	
+	<select id="emailConfirmForPassword" parameterType="hashmap" resultType="Member">
+	select *
+		from ringo_member
+	where
+		user_id = #{user_id}
+		and
+		email = #{email};
+	</select>
 </mapper>
