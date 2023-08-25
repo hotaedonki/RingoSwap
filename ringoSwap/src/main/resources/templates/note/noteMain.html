@@ -5,9 +5,56 @@
 <meta charset="UTF-8">
 <title>ringo</title>
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
+<script th:src="@{/js/notePrint.js}"></script>
 
 </head>
 <body>
+<header>
+<input type="hidden" id="category" value="all">
+<input type="hidden" id="sort" value="input">
+<input type="hidden" id="searchText" value="">
+</header>
 
+<section>
+	<button class="cateBtn" value="all">전체</button>
+	<button class="cateBtn" value="note">메모장</button>
+	<button class="cateBtn" value="word">단어장</button><br>
+	<button class="sortBtn" value="input">생성순</button>
+	<button class="sortBtn" value="title">제목순</button>
+	<button class="sortBtn" value="modifie">최신순</button>
+
+	<table>
+		<tr th:each = "list : ${dir}">
+			<td>
+				<p th:text="${list.dir_num}"></p>
+			</td>
+			<td>
+				<p th:text="${list.dir_name}"></p>
+			</td>
+			<td>
+				<p th:text="${list.parent_dir_num}"></p>
+			</td>
+		</tr>
+	</table>
+	<table>
+		<tr th:each = "list : ${file}">
+			<td>
+				<p th:text="${list.file_num}"></p>
+			</td>
+			<td>
+				<p th:text="${list.title}"></p>
+			</td>
+			<td>
+				<p th:text="${list.inputdate}"></p>
+			</td>
+			<td>
+				<p th:text="${list.modifie_date}"></p>
+			</td>
+			<td>
+				<p th:text="${list.file_type}"></p>
+			</td>
+		</tr>
+	</table>
+</section>
 </body>
 </html>

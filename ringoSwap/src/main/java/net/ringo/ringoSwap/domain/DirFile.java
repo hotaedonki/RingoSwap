@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notepad {
+public class DirFile {
 	int file_num;
 	int dir_num;
 	int user_num;
-	String text;
+	String title;
+	int size;
 	String inputdate;
 	String modifie_date;
+	String file_type;
 }
