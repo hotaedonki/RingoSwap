@@ -23,37 +23,9 @@
 	<button class="sortBtn" value="title">제목순</button>
 	<button class="sortBtn" value="modifie">최신순</button>
 
-	<table>
-		<tr th:each = "list : ${dir}">
-			<td>
-				<p th:text="${list.dir_num}"></p>
-			</td>
-			<td>
-				<p th:text="${list.dir_name}"></p>
-			</td>
-			<td>
-				<p th:text="${list.parent_dir_num}"></p>
-			</td>
-		</tr>
+	<table id="dirList">
 	</table>
-	<table>
-		<tr th:each = "list : ${file}">
-			<td>
-				<p th:text="${list.file_num}"></p>
-			</td>
-			<td>
-				<p th:text="${list.title}"></p>
-			</td>
-			<td>
-				<p th:text="${list.inputdate}"></p>
-			</td>
-			<td>
-				<p th:text="${list.modifie_date}"></p>
-			</td>
-			<td>
-				<p th:text="${list.file_type}"></p>
-			</td>
-		</tr>
+	<table id="fileList">
 	</table>
 </section>
 </body>

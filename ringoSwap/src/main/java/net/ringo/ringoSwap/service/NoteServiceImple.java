@@ -1,6 +1,7 @@
 package net.ringo.ringoSwap.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,8 @@ public class NoteServiceImple implements NoteService{
 	}
 	//사용자의 아이디를 매개변수로 dao파일에 넘겨, dao로부터 해당 id로 검색하여 나온 모든 파일 정보를 배열로 리턴받는 메서드
 	@Override
-	public ArrayList<DirFile> selectUserFileAll(int user_num){
-		return dao.selectUserFileAll(user_num);
+	public ArrayList<DirFile> selectUserFileAll(HashMap<String, Object> map){
+		return dao.selectUserFileAll(map);
 	}
 
 }
