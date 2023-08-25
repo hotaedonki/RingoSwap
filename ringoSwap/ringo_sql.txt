@@ -205,16 +205,16 @@ CREATE TABLE ringo_directory (
 --각 폴더에 저장되는 실제 메모장이나 단어장을 문서 형태로 저장하는 테이블.
 --file_type 속성으로 해당 문서가 메모장(tile)인지 단어장(word)인지 결정합니다.
 CREATE TABLE ringo_file (
-	file_num			number			primary key,		--파일 번호, 기본키
-	dir_num			number	,				--해당 파일이 들어가는 폴더 번호, 계정 삭제시 cascade
-	user_num			number	,				--해당 파일을 작성한 사용자의 계정 번호, 계정 삭제시 cascade
-	title				varchar2(100)	not null,		--해당 파일의 제목
-	size					number			NOT NULL,		--해당 파일의 크기
-	inputdate			date				default sysdate,	--최초 작성일
-	modifie_date		date				default sysdate,	--최근 수정일
-	file_type	 		varchar2(10) check(file_type in ('file', 'word')),		--문서 형식, file = 메모장, word = 단어장
+	file_num			number			primary key,			--파일 번호, 기본키
+	dir_num			number,								--해당 파일이 들어가는 폴더 번호, 계정 삭제시 cascade
+	user_num			number,								--해당 파일을 작성한 사용자의 계정 번호, 계정 삭제시 cascade
+	title				varchar2(100)	not null,					--해당 파일의 제목
+	file_size			number			NOT NULL,			--해당 파일의 크기	
+	inputdate			date				default sysdate,		--최초 작성일
+	modifie_date		date				default sysdate,		--최근 수정일
+	file_type	 		varchar2(10) check(file_type in ('note', 'word')),	--문서 형식, file = 메모장, word = 단어장
     constraint fk_dir_num FOREIGN KEY (dir_num) REFERENCES ringo_directory(dir_num) ON DELETE CASCADE,
-    constraint fk_user_num FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) on delete cascade
+    constraint fk_user_num_f FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) on delete cascade
 );
 --단어장 파일의 각 단어 저장부
 CREATE TABLE ringo_word (
@@ -234,9 +234,9 @@ CREATE TABLE ringo_notepad (
     text				CLOB,						--실제로 작성한 문서 정보
     inputdate		timestamp		default sysdate,
     modifie_date	tumestamp	default sysdate,
-    constraint fk_file_num FOREIGN KEY (file_num) REFERENCES ringo_file(file_num) ON DELETE CASCADE,
-    constraint fk_dir_num FOREIGN KEY (dir_num) REFERENCES ringo_directory(dir_num) ON DELETE CASCADE,
-    constraint fk_user_num FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) ON DELETE CASCADE
+    constraint fk_file_num_txt FOREIGN KEY (file_num) REFERENCES ringo_file(file_num) ON DELETE CASCADE,
+    constraint fk_dir_num_txt FOREIGN KEY (dir_num) REFERENCES ringo_directory(dir_num) ON DELETE CASCADE,
+    constraint fk_user_num_txt FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) ON DELETE CASCADE
 );
 
 --라이브 관련
@@ -362,11 +362,25 @@ CREATE TABLE ringo_multiroom_score (
 --멀티게임 랭킹을 기록하는 테이블
 CREATE TABLE ringo_ranking (
 	user_num			number				NOT NULL,			--유저 회원 번호, category와 복합하여 복합 기본키를 구성합니다.
-	category			varchar2(20) 	check(category in('sichuan', 'catch', 'siritory', 'twenty', 'total')),
+	category			varchar2(10) 	check(category in('sichuan', 'catch', 'siritory', 'twenty', 'total')),
 	--게임분류, user_num과 복합하여 복합 기본키를 구성합니다./total=전체 랭킹
 	score				number				default 0,				--해당 분류의 게임 점수 총합(시즌마다 초기화함)
 	maxscore			number				default 0,				--사용자가 해당 분류의 게임으로 획득했던 최대 점수
 	last_playetime	TIMESTAMP		default sysdate,		--최근 플레이한 시각
 	primary key(user_num, category),			--계정 번호와 게임분류를 복합하여 기본키로 구성합니다
 	constraint fk_user_num	foreign key (user_num)	references ringo_member(user_num) on delete cascade
+);
+--싱글게임 난이도 정보를 기록하는 테이블
+create table ringo_single_difficulty (
+	user_num			number				NOT NULL,				--싱글게임을 실행하는 유저의 계정 번호, 왜래키이면서 기본키입니다
+	file_num			number				not null,						--싱글게임 문제제출에 사용하는 단어장 파일 번호, 왜래키
+	difficulty				varchar2(8)		default 'easy' check(difficulty in ('hard', 'normal', 'easy')),	--문제 난이도, 
+	word_method	varchar2(10)		default 'random' check(word_method in ('first_in','random')),		--문제 배열 방법, first_in=단어장에 적은 단어 순서대로, random=랜덤 출력
+	quest_num		number				default 5,					--한 게임당 문제 갯수
+	sichuan_num		number				default 10,					--사천성 게임에서 생성되는 카드 총 수
+	word_check		number(1)		default 0 check(word_check in(0, 1)),							--체크한 단어만 문제에 사용할지 여부/0=비체크단어도 사용, 1=체크단어만 사용
+	answer_category	varchar2(10) check(answer_category in('sichuan', 'catch', 'siritory', 'twenty')),
+	primary key(user_num),
+	constraint fk_user_num_sd	foreign key (user_num)	references ringo_member(user_num) on delete cascade,
+	constraint fk_file_num_sd 		foreign key (file_num) references ringo_file(file_num) on delete set null
 );

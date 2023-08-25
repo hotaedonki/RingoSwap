@@ -4,10 +4,46 @@
 <head>
 <meta charset="UTF-8">
 <title>ringo</title>
-<script th:src="@{/js/jquery-3.6.0.js}"></script>
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
 
 </head>
 <body>
+	<header>
+	<p><a th:href="@{/}">back to main</a></p>
+	</header>
+	
+	<section>
+	<table>
+		<tr>
+			<td colspan="2">
+				싱글게임
+			</td>
+		</tr>
+		<tr>
+			<td><a th:href="@{/game/singleSichuan}">사천성(싱글)</a></td>
+			<td><a th:href="@{/game/singleWordCombine}">단어조합</a></td>
+		</tr>
+		<tr>
+			<td><a th:href="@{/game/singleChoice}">객관식</a></td>
+			<td><a th:href="@{/game/singleDictation}">받아쓰기</a></td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<td colspan="2">
+				멀티게임
+			</td>
+		</tr>
+		<tr>
+			<td><a th:href="@{/game/multiSichuan}">사천성(멀티)</a></td>
+			<td><a th:href="@{/game/multiSiritory}">끝말잇기</a></td>
+		</tr>
+		<tr>
+			<td><a th:href="@{/game/multiTwenty}">스무고개</a></td>
+			<td><a th:href="@{/game/multiCatch}">캐치마인드</a></td>
+		</tr>
+	</table>
+	</section>
 
 </body>
 </html>
