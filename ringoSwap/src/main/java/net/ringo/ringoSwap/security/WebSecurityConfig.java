@@ -29,6 +29,8 @@ public class WebSecurityConfig {
         		"/",
         		"/bootstrap/**",
         		"/member/join",
+        		"/member/emailConfirm",
+        		"/member/emailConfirmForPassword",
         		"/member/home",
         		"/chat/chatMain",
         		"/feed/feedMain",
