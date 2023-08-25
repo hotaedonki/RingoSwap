@@ -34,4 +34,15 @@ public class MemberServiceImple implements MemberService
 	public int idCheck(String user_id) {
 		return dao.idCheck(user_id);
 	}
+	//
+	@Override
+	public int memberSearchByIdReturnUserNum(String user_id) {
+		Member member = dao.memberSearchById(user_id);
+		return member.getUser_num();
+	}
+
+	@Override
+	public Member emailConfirmForPassword(HashMap<String, String> parameters) {
+		return dao.emailConfirmForPassword(parameters);
+	}
 }

@@ -103,6 +103,22 @@ public class MemberController
 	}
 	
 	@ResponseBody
+	@PostMapping(PathHandler.EMAILCONFIRMFORPASSWORD)
+	public boolean emailConfirmForPassword(String user_id, String email)
+	{
+		HashMap<String, String> parameters = new HashMap<>();
+		parameters.put("user_id", user_id);
+		parameters.put("email", email);
+		
+		Member member = service.emailConfirmForPassword(parameters);
+		
+		if (member == null)
+			return false;
+		
+		return true;
+	}
+	
+	@ResponseBody
 	@PostMapping(PathHandler.CHECKVERIFYCODE)
 	public EmailVerifyState checkVerifyCode(String code, HttpSession session)
 	{
@@ -110,9 +126,14 @@ public class MemberController
 			return EmailVerifyState.CHECKINPUT;
 		
 		String vCode = (String)session.getAttribute("verifyCode");
+<<<<<<< HEAD
 		log.debug("vcode{}", vCode);
 		log.debug("그냥code{}", code);
 		if (!vCode.equals(code)) 
+=======
+		
+		if (!vCode.equals(code))
+>>>>>>> main
 	        return EmailVerifyState.INCORRECT;
 	    
 	    return EmailVerifyState.VERIFIED;

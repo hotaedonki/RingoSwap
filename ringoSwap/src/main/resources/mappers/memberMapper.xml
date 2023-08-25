@@ -33,6 +33,7 @@
 			, #{introduction}
 		)
 	</insert>
+	
 	<!-- 회원가입시 입력한 id에 중복이 존재하는지 확인하는 select문 -->
 	<select id="idCheck" parameterType="Member">
 	select count(*)
@@ -40,4 +41,19 @@
 	where user_id = #{user_id}
 	</select>
 	
+	<!-- 매개변수로 받은 id값으로 검색한 정보를 member 객체로 리턴하는 select문 -->
+	<select id="memberSearchById" parameterType="String" resultType="Member">
+	select *
+	from ringo_member
+	where user_id = #{user_id}
+	</select>
+	
+	<select id="emailConfirmForPassword" parameterType="hashmap" resultType="Member">
+	select *
+		from ringo_member
+	where
+		user_id = #{user_id}
+		and
+		email = #{email}
+	</select>
 </mapper>
