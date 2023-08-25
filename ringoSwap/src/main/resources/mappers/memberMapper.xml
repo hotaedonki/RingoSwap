@@ -54,6 +54,6 @@
 	where
 		user_id = #{user_id}
 		and
-		email = #{email};
+		email = #{email}
 	</select>
 </mapper>
