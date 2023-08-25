@@ -104,16 +104,16 @@ public class MemberController
 	
 	@ResponseBody
 	@PostMapping(PathHandler.CHECKVERIFYCODE)
-	public int checkVerifyCode(String code, HttpSession session)
+	public EmailVerifyState checkVerifyCode(String code, HttpSession session)
 	{
 		if (session.getAttribute("verifyCode") == null)
-			return EmailVerifyState.CHECKINPUT.ordinal();
+			return EmailVerifyState.CHECKINPUT;
 		
 		String vCode = (String)session.getAttribute("verifyCode");
 		
-		if (!vCode.equals(code)) 
-	        return EmailVerifyState.INCORRECT.ordinal();
+		if (!vCode.equals(code))
+	        return EmailVerifyState.INCORRECT;
 	    
-	    return EmailVerifyState.VERIFIED.ordinal();
+	    return EmailVerifyState.VERIFIED;
 	}
 }
