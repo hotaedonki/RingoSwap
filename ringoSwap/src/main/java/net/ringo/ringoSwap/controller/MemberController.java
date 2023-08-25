@@ -93,12 +93,10 @@ public class MemberController
 		return "memberView/idCheck";
 	}
 	
-	@ResponseBody
 	@PostMapping(PathHandler.EMAILCONFIRM)
 	public void emailConfirm(String email, HttpSession session) throws Exception
 	{
 		String verifyCode = emailService.sendVerifyMessage(email);
-		
 		session.removeAttribute("verifyCode");
 		session.setAttribute("verifyCode", verifyCode);
 		session.setMaxInactiveInterval(60);
@@ -106,26 +104,16 @@ public class MemberController
 	
 	@ResponseBody
 	@PostMapping(PathHandler.CHECKVERIFYCODE)
-	public EmailVerifyState checkVerifyCode(String code, HttpSession session)
+	public int checkVerifyCode(String code, HttpSession session)
 	{
-		log.debug("{} - 세션 코드 값", session.getAttribute("verifyCode"));
-		log.debug("{} - 입력 코드 값", code);
-		
 		if (session.getAttribute("verifyCode") == null)
-		{
-			log.debug("{} - 이메일 확인 상태", EmailVerifyState.CHECKINPUT);
-			return EmailVerifyState.CHECKINPUT;
-		}
+			return EmailVerifyState.CHECKINPUT.ordinal();
 		
 		String vCode = (String)session.getAttribute("verifyCode");
 		
-		if (!vCode.equals(code))
-		{
-			log.debug("{} - 이메일 확인 상태", EmailVerifyState.INCORRECT);
-			return EmailVerifyState.INCORRECT;
-		}
-		
-		log.debug("{} - 이메일 확인 상태", EmailVerifyState.VERIFIED);
-		return EmailVerifyState.VERIFIED;
+		if (!vCode.equals(code)) 
+	        return EmailVerifyState.INCORRECT.ordinal();
+	    
+	    return EmailVerifyState.VERIFIED.ordinal();
 	}
 }

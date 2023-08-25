@@ -167,13 +167,14 @@
 		
 					<!-- Email & Verification -->
 			        <div class="email-section">
-		                <input type="email" placeholder="Email" class="input email-input" name="email" id="email"/>
-		                <button type="button" class="E_btn">인증코드 전송</button>
+		                <input type="email" placeholder="Email" class="email-input" name="email" id="email1"/>
+		                <button type="button" class="E_btn sendCode" data-id="1">인증코드 전송</button>
 		            </div>
 		            <div class="verification-section">
-		                <input type="text" placeholder="인증코드" class="input verification-input" name="verificationCode" id="verificationCode"/>
-		                <button type="button" class="E_btn">코드 확인</button>
+		                <input type="text" placeholder="인증코드" class="verification-input" name="verificationCode" id="code1" />
+		                <button type="button" class="E_btn confirmCode" data-id="1">코드 확인</button>
 		            </div>
+		            <div class="resultMessage1"></div>
 		
 					<!-- Language Preferences -->
 				    <label>모국어를 선택해주세요.</label>
@@ -204,17 +205,23 @@
 	<!--=========================아이디 찾기 화면========================== -->
 	<div id="paintSearchID" class="signInHidden" >
    		<div class="container">
-			<div class="container__form container--signin">
-				<div class="form">
-					<h2>아이디 찾기</h2>
+	   		<div class="container_signup__form container--signup">
+				<div class="form_search">
+					<h1 class="h1_searchID">아이디 찾기</h1><br><br>
 					<div class="email-section">
-		                <input type="email" placeholder="Email" class="input email-input" name="searchEmail" id="searchEmail"/>
-		                <button type="button" class="E_btn">인증코드 전송</button>
+		                <input type="email" placeholder="Email" class="email-input" name="email" id="email2"/>
+		                <button type="button" class="E_btn sendCode" data-id="2" >인증코드 전송</button>
 		            </div>
 		            <div class="verification-section">
-		                <input type="text" placeholder="인증코드" class="input verification-input" name="verificationCode_email" id="verificationCode_email"/>
-		                <button type="button" class="E_btn">코드 확인</button>
+		                <input type="text" placeholder="인증코드" class="verification-input" name="verificationCode" id="code2"/>
+		                <button type="button" class="E_btn confirmCode" data-id="2">코드 확인</button>
 		            </div>
+		            <div class="resultMessage2"></div>
+		            <div class="paintID"></div><br>
+		            <div class="checkSection">
+			            <button class="btn IDcheckbtn" id="checkIdBtn">아이디 확인하기</button>
+						<a class="btn IDcheckbtn" th:href="@{/member/login}">돌아가기</a>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -223,10 +230,25 @@
 	<!--=========================비밀번호 찾기 화면========================== -->
 	<div id="paintSearchPW" class="signInHidden" >
    		<div class="container">
-			<div class="container__form container--signin">
-				<div class="form">
-					<h2>비밀번호 찾기</h2>
-					
+	   		<div class="container_signup__form container--signup">
+				<div class="form_search">
+					<h1 class="h1_searchID">비밀번호 찾기</h1><br><br>
+						<div class="IDForPassword">
+							<input type="text" placeholder="ID" class="input_IDForPassword" name="user_id">
+						</div>
+						<div class="email-section">
+			                <input type="email" placeholder="Email" class="email-input" name="email" id="email3"/>
+			                <button type="button" class="E_btn sendCode" data-id="3">인증코드 전송</button>
+			            </div>
+			            <div class="verification-section">
+			                <input type="text" placeholder="인증코드" class="verification-input" name="verificationCode" id="code3"/>
+			                <button type="button" class="E_btn confirmCode" data-id="3">코드 확인</button>
+			            </div>
+			            <div class="resultMessage3"></div>
+			            <div class="checkSection">
+				            <button class="btn PWcheckbtn">비밀번호 재설정하기</button>
+							<a class="btn IDcheckbtn" th:href="@{/member/login}">돌아가기</a>
+						</div>
 				</div>
 			</div>
 		</div>

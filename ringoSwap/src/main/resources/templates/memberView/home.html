@@ -19,7 +19,7 @@
     
     <title>Dashboard Sidebar Menu</title> 
 </head>
-<body>
+<!-- =============================사이드바 상단=============================== -->
     <nav class="sidebar close">
         <header>
             <div class="image-text">
@@ -45,35 +45,35 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="#">
+                        <a th:href="@{/feed/feedMain}">
                             <i class='bx bx-detail icon' ></i>
                             <span class="text nav-text">Feed</span>
                         </a>
                     </li>
 					
                     <li class="nav-link">
-                        <a href="#">
+                        <a th:href="@{/note/noteMain}">
                             <i class='bx bx-edit icon' ></i>
                             <span class="text nav-text">Note</span>
                         </a>
                     </li>
 
                     <li class="nav-link">
-                        <a href="#">
+                        <a th:href="@{/message/messageMain}">
                             <i class='bx bx-message-square-dots icon' ></i>
                             <span class="text nav-text">Message</span>
                         </a>
                     </li>
 
                     <li class="nav-link">
-                        <a href="#">
+                        <a th:href="@{/game/gameMain}">
                             <i class='bx bx-game icon' ></i>
                             <span class="text nav-text">Game</span>
                         </a>
                     </li>
                     
                     <li class="nav-link">
-                        <a href="#">
+                        <a th:href="@{/live/liveMain}">
                             <i class='bx bx-tv icon' ></i>
                             <span class="text nav-text">Live</span>
                         </a>
@@ -81,22 +81,30 @@
                     
                 </ul>
             </div>
-
+	<!-- ========================사이드바 하단=========================== -->
             <div class="bottom-content">
             	<ul>
+	                <li class="">
+          	            <div sec:authorize="isAuthenticated()">
+		                    <a th:href="@{/member/logout}">
+		                        <i class='bx bx-log-out icon' ></i>
+		                        <span class="text nav-text">Logout</span>
+		                    </a>
+	                	</div>
+                	</li>
+	                
 	                 <li class="">
-	                    <a href="#">
+	                    <a th:href="@{/notification/notificationMain}">
 	                        <i class='bx bx-bell icon'></i>
 	                        <span class="text nav-text">Notifications</span>
 	                    </a>
 	                </li>
-	                <li class="">
-	                    <a href="#">
-	                        <i class='bx bx-log-out icon' ></i>
-	                        <span class="text nav-text">Logout</span>
+					<li class="">
+	                    <a th:href="@{/store/storeMain}">
+	                        <i class='bx bx-shopping-bag icon'></i>
+	                        <span class="text nav-text">Store</span>
 	                    </a>
 	                </li>
-	
 	                <li class="mode">
 	                    <div class="sun-moon">
 	                        <i class='bx bx-moon icon moon'></i>
@@ -111,7 +119,7 @@
             </div>
         </div>
     </nav>
-
+  <!--=========================로그인 화면========================== -->
     <section class="home" id="home">
     
 		<div id="center-content">
