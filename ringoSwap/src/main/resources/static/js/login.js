@@ -16,17 +16,19 @@ function showSearchPW() {
     document.getElementById('paintSearchPW').classList.remove("signInHidden");
 }
 
-// 각 버튼을 클릭하면 위 함수 이벤트가 실행됨
-document.getElementById('searchID').addEventListener('click', showSearchID);
-document.getElementById('searchPW').addEventListener('click', showSearchPW);
-document.getElementById('signUp').addEventListener('click', showSignUpForm);
-
 
 $(document).ready(function(){
 	
     //id체크 이벤트
     $('#idCheck_Btn').click(memberIdCheck)
-})
+    
+    /*
+    // 각 버튼을 클릭하면 위 함수 이벤트가 실행됨
+	document.getElementById('searchID').addEventListener('click', showSearchID);
+	document.getElementById('searchPW').addEventListener('click', showSearchPW);
+	document.getElementById('signUp').addEventListener('click', showSignUpForm);
+	*/
+});
 
 
 function memberIdCheck() {

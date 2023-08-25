@@ -93,6 +93,7 @@ public class MemberController
 		return "memberView/idCheck";
 	}
 	
+	@ResponseBody
 	@PostMapping(PathHandler.EMAILCONFIRM)
 	public void emailConfirm(String email, HttpSession session) throws Exception
 	{
@@ -104,17 +105,27 @@ public class MemberController
 	}
 	
 	@ResponseBody
-	@PostMapping(PathHandler.CHECKVERITYCODE)
-	public int checkVerifyCode(String code, HttpSession session)
+	@PostMapping(PathHandler.CHECKVERIFYCODE)
+	public EmailVerifyState checkVerifyCode(String code, HttpSession session)
 	{
+		log.debug("{} - 세션 코드 값", session.getAttribute("verifyCode"));
+		log.debug("{} - 입력 코드 값", code);
+		
 		if (session.getAttribute("verifyCode") == null)
-			return EmailVerifyState.CHECKINPUT.ordinal();
+		{
+			log.debug("{} - 이메일 확인 상태", EmailVerifyState.CHECKINPUT);
+			return EmailVerifyState.CHECKINPUT;
+		}
 		
 		String vCode = (String)session.getAttribute("verifyCode");
 		
-		if (vCode != code)
-			return EmailVerifyState.INCORRECT.ordinal();
+		if (!vCode.equals(code))
+		{
+			log.debug("{} - 이메일 확인 상태", EmailVerifyState.INCORRECT);
+			return EmailVerifyState.INCORRECT;
+		}
 		
-		return EmailVerifyState.VERIFIED.ordinal();
+		log.debug("{} - 이메일 확인 상태", EmailVerifyState.VERIFIED);
+		return EmailVerifyState.VERIFIED;
 	}
 }
