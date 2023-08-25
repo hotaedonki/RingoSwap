@@ -24,11 +24,12 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
         .authorizeRequests()
+        .antMatchers("/member/login").not().authenticated()
         .antMatchers(
         		"/",
-        		"/taeho/**",
         		"/bootstrap/**",
-        		"/member/**",
+        		"/member/join",
+        		"/member/home",
         		"/chat/chatMain",
         		"/feed/feedMain",
         		"/game/gameMain",
