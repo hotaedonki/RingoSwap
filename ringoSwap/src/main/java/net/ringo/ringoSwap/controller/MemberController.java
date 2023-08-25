@@ -126,14 +126,8 @@ public class MemberController
 			return EmailVerifyState.CHECKINPUT;
 		
 		String vCode = (String)session.getAttribute("verifyCode");
-<<<<<<< HEAD
-		log.debug("vcode{}", vCode);
-		log.debug("그냥code{}", code);
-		if (!vCode.equals(code)) 
-=======
 		
 		if (!vCode.equals(code))
->>>>>>> main
 	        return EmailVerifyState.INCORRECT;
 	    
 	    return EmailVerifyState.VERIFIED;

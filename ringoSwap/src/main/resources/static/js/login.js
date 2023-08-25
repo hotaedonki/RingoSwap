@@ -9,15 +9,6 @@ $(document).ready(function() {
     $('.sendCodeForPassword').click(emailConfirmForPassword);
     $('.confirmCode').click(searchIDCode);
     $('#checkIdBtn').click(paintID);
-<<<<<<< HEAD
-=======
-    
-    // 각 버튼을 클릭하면 위 함수 이벤트가 실행됨
-	document.getElementById('searchID').addEventListener('click', showSearchID);
-	document.getElementById('searchPW').addEventListener('click', showSearchPW);
-	document.getElementById('signUp').addEventListener('click', showSignUpForm);
-});
->>>>>>> main
 
     function showSignUpForm() {
         $('#loginForm').addClass("signInHidden");
