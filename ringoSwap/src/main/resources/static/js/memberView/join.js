@@ -27,7 +27,7 @@ function checkVerifyCode()
 	let verifyCode = $('#verifyCode').val();
 	
 	$.ajax({
-		url: 'checkVerifyCode'
+		url: 'checkverifyCode'
 		, type:'post'
 		, data:{code:verifyCode}
 		, datatype:'json'
@@ -55,4 +55,10 @@ function checkVerifyCode()
 			}
 		}
 	});	
+}
+
+// 입력 폼 유효성 검사
+function checkJoinForm()
+{
+	return true;
 }
