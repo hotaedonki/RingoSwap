@@ -79,12 +79,22 @@ section {
   margin-top: 1rem;
 }
 
+.form_search > .btn {
+  margin-top: 1rem;
+}
+
 .btn:active {
   transform: scale(0.95);
 }
 
 .btn:focus {
   outline: none;
+}
+
+.IDcheckbtn {
+    display: inline-block;
+    text-decoration: none;  
+    padding: 13px 25px;
 }
 
 .form {
@@ -98,12 +108,32 @@ section {
   text-align: center;
 }
 
+.form_search {
+  background-color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 70px 30px;
+  height: 100%;
+  width: 90%;
+  text-align: center;
+}
+
 .input {
   background-color: #fff;
   border: none;
   padding: 0.9rem 0.9rem;
   margin: 0 0 13px 0;
   width: 100%;
+}
+
+.input_IDForPassword {
+  background-color: #fff;
+  border: none;
+  padding: 0.9rem 0.9rem;
+  margin: 0 0 13px 0;
+  width: 400px;
 }
 
 .email-input,
@@ -114,6 +144,7 @@ section {
   margin: 0 0 10px 0;
   width: 100%;
 }
+
 
 .selectGender {
 	background-color: #fff;
@@ -264,6 +295,7 @@ section {
     padding : 10px 10px;
 }
 
+
 .Register_btn {
   background-color: var(--blue);
   background-image: linear-gradient(90deg, var(--blue) 0%, var(--lightblue) 74%);
@@ -314,4 +346,8 @@ section {
 
 #searchID:hover, #searchPW:hover {
     text-decoration: underline;
+}
+
+.h1_searchID {
+	font-size: 36px;
 }
