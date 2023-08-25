@@ -23,6 +23,8 @@ public interface MemberService
 	//자신의 id값을 매개변수로 DB에서 select문을 돌려 user_num값을 리턴받는 메서드
 	public int memberSearchByIdReturnUserNum(String username);
 
-	// 입력받은 이메일과 아이디가 같으면 멤버 반환
+	//멤버를 가져오는 메서드
+	public Member getMember(Member member);
+
 	public Member emailConfirmForPassword(HashMap<String, String> parameters);
 }
