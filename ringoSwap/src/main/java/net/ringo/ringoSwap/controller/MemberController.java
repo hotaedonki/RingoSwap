@@ -97,14 +97,13 @@ public class MemberController
 	public void emailConfirm(String email, HttpSession session) throws Exception
 	{
 		String verifyCode = emailService.sendVerifyMessage(email);
-		
 		session.removeAttribute("verifyCode");
 		session.setAttribute("verifyCode", verifyCode);
 		session.setMaxInactiveInterval(60);
 	}
 	
 	@ResponseBody
-	@PostMapping(PathHandler.CHECKVERITYCODE)
+	@PostMapping(PathHandler.CHECKVERIFYCODE)
 	public int checkVerifyCode(String code, HttpSession session)
 	{
 		if (session.getAttribute("verifyCode") == null)
@@ -112,9 +111,9 @@ public class MemberController
 		
 		String vCode = (String)session.getAttribute("verifyCode");
 		
-		if (vCode != code)
-			return EmailVerifyState.INCORRECT.ordinal();
-		
-		return EmailVerifyState.VERIFIED.ordinal();
+		if (!vCode.equals(code)) 
+	        return EmailVerifyState.INCORRECT.ordinal();
+	    
+	    return EmailVerifyState.VERIFIED.ordinal();
 	}
 }
