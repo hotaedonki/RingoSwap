@@ -23,7 +23,7 @@ CREATE TABLE ringo_member (
 	rewrite_time			date					default sysdate,		--수정일자
 	role_name				varchar2(15)		default 'ROLE_USER' check(role_name in ('ROLE_USER', 'ROLE_DELETE', 'ROLE_VIP', 'ROLE_ADMIN')),
 	--일반사용자 = role_user, VIP사용자 = role_vip, 관리자=role_admin, '탈퇴한 유저는 delete_user로 변경
-	enabled					number(1)			default 0 check(enabled in(0, 1)),	--계정 사용가능 여부, 가능=1, 불가=0
+	enabled					number(1)			default 1 check(enabled in(0, 1)),	--계정 사용가능 여부, 가능=1, 불가=0
 	--정보공개 여부에 관한 정보
 	ranking_open		char(1)				default 'Y',				--랭킹정보 공개여부
 	email_open			char(1)				default 'Y',				--이메일 공개여부

@@ -30,7 +30,12 @@
 			, #{email}
 			, #{native_lang}
 			, #{target_lang}
-			, #{introduction})
+			,
+			<!-- 자기소개 값을 입력하지 않은 경우 빈칸으로 대체 --> 
+			<choose>
+            <when test="introduction == null">''</when>
+            <otherwise>#{introduction}</otherwise>
+          </choose>)
 	</insert>
 	
 	<!-- 회원가입시 입력한 id에 중복이 존재하는지 확인하는 select문 -->
@@ -55,4 +60,12 @@
 		and
 		email = #{email}
 	</select>
+	
+	<update id="resetPassword" parameterType="Member">
+	update ringo_member
+	set 
+		password = #{password}
+	where 
+		user_id = #{user_id}
+	</update>
 </mapper>

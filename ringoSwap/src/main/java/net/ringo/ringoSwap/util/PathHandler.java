@@ -13,4 +13,6 @@ public class PathHandler
 	public final static String CHECKVERIFYCODE = "checkverifycode";
 	public final static String GETMEMBER = "getMember";
 	public final static String EMAILCONFIRMFORPASSWORD = "emailConfirmForPassword";
+	public final static String RESETPASSWORD = "resetPassword";
+	
 }

@@ -25,4 +25,6 @@ public interface MemberDAO
 	
 	// 이메일과 아이디가 같으면 멤버를 반환.
 	public Member emailConfirmForPassword(HashMap<String, String> parameters);
+	
+	public int resetPassword(Member member);
 }

@@ -82,6 +82,7 @@ public class MemberController
 	{
 		//service부의 id체크 메서드 실행
 		int n = service.idCheck(user_id);
+		
 		if(n==0) {
 			model.addAttribute("result", user_id+"는 사용 가능한 ID입니다.");
 			model.addAttribute("searchid", user_id);
@@ -101,11 +102,13 @@ public class MemberController
 		session.removeAttribute("verifyCode");
 		session.setAttribute("verifyCode", verifyCode);
 		session.setMaxInactiveInterval(60);
+		log.debug("verifyCode{}", verifyCode);
 	}
 	
 	@ResponseBody
 	@PostMapping(PathHandler.EMAILCONFIRMFORPASSWORD)
-	public boolean emailConfirmForPassword(String user_id, String email)
+	public boolean emailConfirmForPassword(String user_id, String email,
+			HttpSession session) throws Exception
 	{
 		HashMap<String, String> parameters = new HashMap<>();
 		parameters.put("user_id", user_id);
@@ -113,8 +116,15 @@ public class MemberController
 		
 		Member member = service.emailConfirmForPassword(parameters);
 		
-		if (member == null)
+		if (member == null) {
 			return false;
+		} else { 
+		String verifyCode = emailService.sendVerifyMessage(email);
+		session.removeAttribute("verifyCode");
+		session.setAttribute("verifyCode", verifyCode);
+		session.setMaxInactiveInterval(60);
+		log.debug("verifyCode{}", verifyCode);
+		}
 		
 		return true;
 	}
@@ -127,10 +137,39 @@ public class MemberController
 			return EmailVerifyState.CHECKINPUT;
 		
 		String vCode = (String)session.getAttribute("verifyCode");
-		
+		log.debug("vCode{}", vCode);
+		log.debug("code{}", code);
 		if (!vCode.equals(code))
 	        return EmailVerifyState.INCORRECT;
 	    
 	    return EmailVerifyState.VERIFIED;
 	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.RESETPASSWORD)
+	public boolean resetPassword(String password, 
+			String user_id) {
+		
+		Member member = service.memberSearchById(user_id);
+		String currentPassword = member.getPassword();
+		
+		log.debug("패스워드 넣기 전{}", member.getPassword());
+		
+		member.setPassword(password);
+		
+		log.debug("새 패스워드 넣은 후{}", member.getPassword());
+		service.resetPassword(member);
+		
+		String newPassword = member.getPassword(); 
+		
+		if(currentPassword.equals(newPassword)) {
+			return false;
+		} else {
+			return true;
+		}
+		
+	}
+	
+	
+	
 }

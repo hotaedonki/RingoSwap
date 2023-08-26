@@ -22,12 +22,7 @@
     <title>Dashboard Sidebar Menu</title> 
 </head>
 <body>
-<!-- ===========================로그인 한 상태일 시 메인페이지로 감======================== -->
-<div sec:authorize="isAuthenticated()">
-    <script>
-        window.location.href = "/member/home";
-    </script>
-</div>
+
 <!-- =============================사이드바 상단=============================== -->
     <nav class="sidebar close">
         <header>
@@ -132,9 +127,9 @@
 <section class="home" id="home">
     <div id="loginForm">
    		<div class="container">
-		  <div class="container__form container--signin">
+		  <div class="container_form container_signin">
 		    <form th:action="@{/member/login}" class="form" method="post">
-		      <h2 class="form__title">Welcome</h2>
+		      <h2>Welcome</h2><br>
 		      <input type="text" placeholder="ID" class="input" name="user_id"/>
 		      <input type="password" placeholder="Password" class="input" name="password"/>
 		      <input type="submit" class="btn" value="Sign In">
@@ -146,11 +141,11 @@
    	</div>
 
 	 <!--=========================회원가입 화면========================== -->
-	<div id="signUpForm" class="signInHidden">
-	<div class="container_signup">
-	   	<div class="container_signup__form container--signup" id="signUpForm">
-		    <form th:action="@{/member/join}" class="signup_form" method="post">
-		        <h2 class="signup_form__title">Sign Up</h2>
+	<div id="signUpForm" class="hidden">
+	<div class="container">
+	   	<div class="container_signup_form" id="signUpForm">
+		    <form th:action="@{/member/join}" class="form" method="post">
+		        <h2>Sign Up</h2>
 	
 	        <!-- Basic Information -->
 			        <div class="id-section">
@@ -159,13 +154,13 @@
 			        </div>
 			        <input type="password" placeholder="Password" class="input" name="password" id="password"/>
 			        <input type="password" placeholder="Confirm Password" class="input" name="confirmPassword" id="confirmPassword"/>
-			        <span id="passwordErr"></span>
+			        <span class="doNotMatchPassword"></span>
 			        <input type="text" placeholder="First Name" class="input" name="first_name" id="first_name"/>
 			        <input type="text" placeholder="Last Name" class="input" name="last_name" id="last_name"/>
 			        <input type="text" placeholder="Nickname" class="input" name="username" id="username"/>
 		
 					<!-- Gender & Date of Birth -->
-			        <select class="selectGender" name="gender" id="gender">
+			        <select class="select" name="gender" id="gender">
 			            <option value="M">남자</option>
 			            <option value="F">여자</option>
 			            <option value="N">기타</option>
@@ -174,11 +169,11 @@
 		
 					<!-- Email & Verification -->
 			        <div class="email-section">
-		                <input type="email" placeholder="Email" class="email-input" name="email" id="email1"/>
+		                <input type="email" placeholder="Email" class="input" name="email" id="email1"/>
 		                <button type="button" class="E_btn sendCode" data-id="1">인증코드 전송</button>
 		            </div>
 		            <div class="verification-section">
-		                <input type="text" placeholder="인증코드" class="verification-input" name="verificationCode" id="code1" />
+		                <input type="text" placeholder="인증코드" class="input" name="verificationCode" id="code1" />
 		                <button type="button" class="E_btn confirmCode" data-id="1">코드 확인</button>
 		            </div>
 		            <div class="resultMessage1"></div>
@@ -210,17 +205,17 @@
 	</div>
 	
 	<!--=========================아이디 찾기 화면========================== -->
-	<div id="paintSearchID" class="signInHidden" >
+	<div id="paintSearchID" class="hidden" >
    		<div class="container">
-	   		<div class="container_signup__form container--signup">
+	   		<div class="container_search_form">
 				<div class="form_search">
-					<h1 class="h1_searchID">아이디 찾기</h1><br><br>
+					<h1>아이디 찾기</h1><br><br>
 					<div class="email-section">
-		                <input type="email" placeholder="Email" class="email-input" name="email" id="email2"/>
+		                <input type="email" placeholder="Email" class="input" name="email" id="email2"/>
 		                <button type="button" class="E_btn sendCode" data-id="2" >인증코드 전송</button>
 		            </div>
 		            <div class="verification-section">
-		                <input type="text" placeholder="인증코드" class="verification-input" name="verificationCode" id="code2"/>
+		                <input type="text" placeholder="인증코드" class="input" name="verificationCode" id="code2"/>
 		                <button type="button" class="E_btn confirmCode" data-id="2">코드 확인</button>
 		            </div>
 		            <div class="resultMessage2"></div>
@@ -235,23 +230,23 @@
 	</div>
 	
 	<!--=========================비밀번호 찾기 화면========================== -->
-	<div id="paintSearchPW" class="signInHidden" >
+	<div id="paintSearchPW" class="hidden">
    		<div class="container">
-	   		<div class="container_signup__form container--signup">
+	   		<div class="container_search_form">
 				<div class="form_search">
-					<h1 class="h1_searchID">비밀번호 찾기</h1><br><br>
+					<h1 class="h1">비밀번호 찾기</h1><br><br>
 						<div class="IDForPassword">
 							<input type="text" placeholder="ID" class="input_IDForPassword" name="user_id" id="idForPassword">
 						</div>
 						<div class="email-section">
-			                <input type="email" placeholder="Email" class="email-input" name="email" id="emailForPassword"/>
+			                <input type="email" placeholder="Email" class="input" name="email" id="emailForPassword"/>
 			                <button type="button" class="E_btn sendCodeForPassword">인증코드 전송</button>
 			            </div>
 			            <div class="verification-section">
-			                <input type="text" placeholder="인증코드" class="verification-input" name="verificationCode" id="code3"/>
+			                <input type="text" placeholder="인증코드" class="input" name="verificationCode" id="code3"/>
 			                <button type="button" class="E_btn confirmCode" data-id="3">코드 확인</button>
 			            </div>
-			            <div class="resultMessage3"></div>
+			            <div class="resultMessage3"></div><br>
 			            <div class="checkSection">
 				            <button class="btn PWcheckbtn">비밀번호 재설정하기</button>
 							<a class="btn IDcheckbtn" th:href="@{/member/login}">돌아가기</a>
@@ -260,7 +255,25 @@
 			</div>
 		</div>
 	</div>
-
+	<!-- ===========================================비밀번호 재설정 화면======================================================== -->
+	<div id="resetPassword" class="hidden">
+   		<div class="container">
+	   		<div class="container_signup_form container_signup">
+				<div class="form_search">
+					<h1 class="h1">비밀번호 재설정</h1><br><br>
+					<div class="newPassword-section">
+						<input type="password" placeholder="New password" class="input" name="password" id="newPassword"> 
+						<input type="password" placeholder="Confirm password" class="input" name="password" id="confirmNewPassword">
+						<span class="doNotMatchPassword"></span> 
+						<button type="button" class="btn resetPassword" >비밀번호 재설정하기</button>
+						<a class="btn IDcheckbtn" th:href="@{/member/login}">돌아가기</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- ==================================ToDo List============================================== -->
 		<button id="toDo" onclick="toggleToDo()">ToDo</button>
 	    <div id="todo-container" style="display: none;">
 	        <form id="todo-form">

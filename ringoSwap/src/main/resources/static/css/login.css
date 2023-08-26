@@ -1,64 +1,56 @@
 :root {
-  /* COLORS */
+  /* Variables */
   --white: #e9e9e9;
   --gray: #333;
   --blue: #0367a6;
   --lightblue: #008997;
-
-  /* RADII */
   --button-radius: 0.7rem;
-
-  /* SIZES */
   --max-width: 758px;
   --max-height: 420px;
-
   font-size: 16px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
+/* General Styles */
+
 section {
-  align-items: center;
+  display: grid;
+  place-items: center;
+  height: 100vh;
   background-color: var(--white);
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  display: grid;
-  height: 100vh;
-  place-items: center;
-}
-
-.form__title {
-  font-weight: 300;
-  margin: 0;
-  margin-bottom: 35px;
-  font-size: 42px;
+  align-items: center;
 }
 
 .container {
-  border-radius: var(--button-radius);
-  box-shadow:  0 0.9rem 1.7rem rgba(0, 0, 0, 0.25),
-    0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
-  position: fixed;  /* absolute를 fixed로 변경 */
-  top: 50%;         /* 화면의 위에서 50% 위치 */
-  left: 50%;        /* 화면의 왼쪽에서 50% 위치 */
-  transform: translate(-50%, -50%); /* 요소의 중앙을 정확히 맞추기 위해 */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 750px;
-  height: 600px;	
+  height: 600px;
+  border-radius: var(--button-radius);
   padding: 10px;
+  box-shadow: 0 0.9rem 1.7rem rgba(0, 0, 0, 0.25),
+    0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
 }
 
-.container__form {
-  height: 80%;
+.container_form {
   position: absolute;
   top: 45px;
+  height: 80%;
 }
 
-.container--signin {
-  left: 25%;
+.container_signin {
   width: 50%;
+  left: 25%;
 }
+
+/* Button Styles */
 
 .btn {
   background-color: var(--blue);
@@ -79,10 +71,6 @@ section {
   margin-top: 1rem;
 }
 
-.form_search > .btn {
-  margin-top: 1rem;
-}
-
 .btn:active {
   transform: scale(0.95);
 }
@@ -91,13 +79,15 @@ section {
   outline: none;
 }
 
-.IDcheckbtn {
-    display: inline-block;
-    text-decoration: none;  
-    padding: 13px 25px;
+.IDcheckbtn, .PWcheckbtn {
+  display: inline-block;
+  text-decoration: none;  
+  padding: 13px 25px;
 }
 
-.form {
+/* Form Styles */
+
+.form, .form_search {
   background-color: var(--white);
   display: flex;
   align-items: center;
@@ -109,114 +99,49 @@ section {
 }
 
 .form_search {
-  background-color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
   padding: 70px 30px;
-  height: 100%;
   width: 90%;
-  text-align: center;
 }
 
-.input {
+.input, .input_IDForPassword, .introduceBox {
   background-color: #fff;
   border: none;
   padding: 0.9rem 0.9rem;
-  margin: 0 0 13px 0;
+  margin-bottom: 13px;
   width: 100%;
 }
 
 .input_IDForPassword {
-  background-color: #fff;
-  border: none;
-  padding: 0.9rem 0.9rem;
-  margin: 0 0 13px 0;
   width: 400px;
 }
 
-.email-input,
-.verification-input {
-  background-color: #fff;
-  border: none;
-  padding: 0.9rem 0.9rem;
-  margin: 0 0 10px 0;
-  width: 100%;
-}
-
-
-.selectGender {
-	background-color: #fff;
-	border: none;
-	padding: 0.9rem 0.9rem;
-	margin: 5px 0;
-	width: 100%;
-	appearance: none;  /* 또는 -webkit-appearance: none; -moz-appearance: none; */
-	background-color: #fff; /* 원하는 배경색을 설정 */
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><path d="M7 10L3.5 5.5h7L7 10z"/></svg>'); /* 삼각형 아이콘 */
-	background-repeat: no-repeat;
-	background-position: right 1rem center; /* 오른쪽 패딩을 고려하여 위치 조정 */
-	padding-right: 2.5rem; /* 삼각형 아이콘 공간 확보 */
-}
-.select {
-	background-color: #fff;
-	border: none;
-	padding: 0.9rem 0.9rem;
-	margin: 0 0 5px 0;
-	width: 100%;
-	appearance: none;  /* 또는 -webkit-appearance: none; -moz-appearance: none; */
-	background-color: #fff; /* 원하는 배경색을 설정 */
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><path d="M7 10L3.5 5.5h7L7 10z"/></svg>'); /* 삼각형 아이콘 */
-	background-repeat: no-repeat;
-	background-position: right 1rem center; /* 오른쪽 패딩을 고려하여 위치 조정 */
-	padding-right: 2.5rem; /* 삼각형 아이콘 공간 확보 */
-}
-
 .introduceBox {
-  background-color: #fff;
-  border: none;
-  padding: 0.9rem 0.9rem;
   margin: 5px 0 0 0;
-  width: 100%;
 }
 
-.signInHidden {
-	display: none;
+.hidden {
+  display: none;
 }
 
-/* 회원가입 창 스타일 */
-.container_signup {
-  border-radius: var(--button-radius);
-  box-shadow:  0 0.9rem 1.7rem rgba(0, 0, 0, 0.25),
-    0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
-  position: fixed;  /* absolute를 fixed로 변경 */
-  top: 50%;         /* 화면의 위에서 50% 위치 */
-  left: 50%;        /* 화면의 왼쪽에서 50% 위치 */
-  transform: translate(-50%, -50%); /* 요소의 중앙을 정확히 맞추기 위해 */
-  width: 750px;
-  height: 600px;	
-  padding: 10px;
-}
-
-.container--signup {
-  left: 25%;
-  width: 70%;
-  height: 80%;  /* 높이를 설정. 원하는 높이에 맞게 조정 가능합니다. */
-  padding-bottom: 1px;  /* 추가: 아래쪽 패딩 추가 */
-}
-
-.container_signup__form {
-  height: auto;  /* 80%에서 auto로 변경 */
-  position: relative;  /* absolute에서 relative로 변경 */
-  max-height: 500px;  /* 최대 높이 제한 (적절히 조정 가능) */
-  overflow-y: auto;  /* 내용이 넘치면 스크롤 표시 */
+.container_signup_form, .container_search_form {
+  position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 70%;
+  max-height: 500px;
+  height: auto;
 }
 
-.container--signup select {
+.container_signup_form {
+  overflow-y: auto;
+}
+
+.container select {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><path d="M7 10L3.5 5.5h7L7 10z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
   appearance: none;
   background-color: #fff;
   border: 1px solid var(--blue);
@@ -228,73 +153,63 @@ section {
   transition: border 0.3s ease-in-out;
 }
 
-.container--signup select:hover,
-.container--signup select:focus {
+.container select:hover,
+.container select:focus {
   border: 1px solid var(--lightblue);
   outline: none;
 }
 
-.container--signup textarea {
+.container textarea {
   border: 1px solid var(--blue);
   border-radius: var(--button-radius);
   padding: 10px;
   width: 100%;
   margin-bottom: 15px;
   transition: border 0.3s ease-in-out;
-  resize: vertical; /* 세로 크기 조정만 가능하도록 설정 */
+  resize: vertical;
 }
 
-.container--signup textarea:hover,
-.container--signup textarea:focus {
+.container textarea:hover,
+.container textarea:focus {
   border: 1px solid var(--lightblue);
   outline: none;
 }
 
-.container--signup label {
+.container label {
   display: block;
   margin-bottom: 10px;
   font-weight: 500;
   color: var(--gray);
 }
 
-.container--signup label input[type="radio"] {
-  margin-right: 5px;
+/* Other Styles */
+
+h1 {
+  font-size: 36px;
 }
 
-.signup_form {
-  background-color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 3rem;
-  height: 100%;
-  text-align: center;
-}
-
-.signup_form__title {
+h2 {
   font-weight: 300;
+  font-size: 42px;
   margin-top: 20px;
   margin-bottom: 20px;
-  font-size: 42px;
 }
 
 .E_btn {
-	background-color: var(--blue);
-	background-image: linear-gradient(90deg, var(--blue) 0%, var(--lightblue) 74%);
-	border-radius: 10px;
-	border: 1px solid var(--blue);
-	color: var(--white);
-	width: 40%;
-	height: 30%;
-	cursor: pointer;
-    font-family: Roboto;
-    font-size: 12px;
-    font-weight: bold;
-    margin: 5px 0 10px 15px; 
-    padding : 10px 10px;
+  background-color: var(--blue);
+  background-image: linear-gradient(90deg, var(--blue) 0%, var(--lightblue) 74%);
+  border-radius: 10px;
+  border: 1px solid var(--blue);
+  color: var(--white);
+  width: 40%;
+  height: 30%;
+  cursor: pointer;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 5px 0 10px 15px;
+  padding: 10px;
 }
-
 
 .Register_btn {
   background-color: var(--blue);
@@ -326,28 +241,23 @@ section {
 }
 
 .id-section, .email-section, .verification-section {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .searchIDPW {
-	margin: 15px 0 0 0;
-	font-size: 20px;
-	font-family: Roboto;
-	
+  margin: 15px 0 0 0;
+  font-size: 20px;
+  font-family: Roboto;
 }
 
 #searchID, #searchPW {
-    color: blue;
-    text-decoration: none;
-    cursor: pointer;
+  color: blue;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 #searchID:hover, #searchPW:hover {
-    text-decoration: underline;
-}
-
-.h1_searchID {
-	font-size: 36px;
+  text-decoration: underline;
 }
