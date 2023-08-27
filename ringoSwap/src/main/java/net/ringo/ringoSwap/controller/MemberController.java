@@ -31,8 +31,10 @@ public class MemberController
 	EmailService emailService;
 	
 	@GetMapping(PathHandler.JOIN)
-	public String join()
+	public String join(HttpSession session)
 	{
+		session.removeAttribute("isVerifiedJoin");
+		session.setAttribute("isVerifiedJoin", false);
 		return "memberView/join";
 	}
 	
@@ -134,14 +136,22 @@ public class MemberController
 	public EmailVerifyState checkVerifyCode(String code, HttpSession session)
 	{
 		if (session.getAttribute("verifyCode") == null)
+		{
+			session.setAttribute("isVerifiedJoin", false);
 			return EmailVerifyState.CHECKINPUT;
+		}
 		
 		String vCode = (String)session.getAttribute("verifyCode");
 		log.debug("vCode{}", vCode);
 		log.debug("code{}", code);
+		
 		if (!vCode.equals(code))
+		{
+			session.setAttribute("isVerifiedJoin", false);
 	        return EmailVerifyState.INCORRECT;
-	    
+		}
+		
+		session.setAttribute("isVerifiedJoin", true);
 	    return EmailVerifyState.VERIFIED;
 	}
 	
