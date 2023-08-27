@@ -2,6 +2,12 @@ $(document).ready(function()
 {
 	$('#checkEmailBtn').click(emailConfirm);
 	$('#checkVerifyCodeBtn').click(checkVerifyCode);
+	
+	
+	$(window).on('beforeunload', function()
+    {
+		setTimeout(saveChanges, 0);
+    });
 });
 
 //E-mail 전송
@@ -61,4 +67,17 @@ function checkVerifyCode()
 function checkJoinForm()
 {
 	return true;
+}
+
+// beforeunload 호출 테스트
+function saveChanges()
+{
+	if (confirm("수정된 내용이 있습니다. 저장 후 이동하시겠습니까?"))
+	{
+		saveData();
+	}
+}
+
+function saveData()
+{
 }
