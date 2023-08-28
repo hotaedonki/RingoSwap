@@ -4,7 +4,6 @@
   --gray: #333;
   --blue: #0367a6;
   --lightblue: #008997;
-  --button-radius: 0.7rem;
   --max-width: 758px;
   --max-height: 420px;
   font-size: 16px;
@@ -18,7 +17,6 @@ section {
   display: grid;
   place-items: center;
   height: 100vh;
-  background-color: var(--white);
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -38,7 +36,6 @@ section {
   box-shadow: 0 0.9rem 1.7rem rgba(0, 0, 0, 0.25),
     0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
 }
-
 .container_form {
   position: absolute;
   top: 45px;
@@ -52,7 +49,7 @@ section {
 
 /* Button Styles */
 
-.btn {
+.btn:not(#toDo) {
   background-color: var(--blue);
   background-image: linear-gradient(90deg, var(--blue) 0%, var(--lightblue) 74%);
   border-radius: 10px;
@@ -62,7 +59,7 @@ section {
   font-size: 0.8rem;
   font-weight: bold;
   letter-spacing: 0.1rem;
-  padding: 0.9rem 3.5rem;
+  padding: 0.9rem 3rem;
   text-transform: uppercase;
   transition: transform 80ms ease-in;
 }
@@ -79,12 +76,6 @@ section {
   outline: none;
 }
 
-.IDcheckbtn, .PWcheckbtn {
-  display: inline-block;
-  text-decoration: none;  
-  padding: 13px 25px;
-}
-
 /* Form Styles */
 
 .form, .form_search {
@@ -99,8 +90,9 @@ section {
 }
 
 .form_search {
-  padding: 70px 30px;
+  padding: 40px 30px;
   width: 90%;
+  transform: translate(5%, 0%);
 }
 
 .input, .input_IDForPassword, .introduceBox {
@@ -250,14 +242,18 @@ h2 {
   margin: 15px 0 0 0;
   font-size: 20px;
   font-family: Roboto;
+  overflow: hidden;
 }
 
 #searchID, #searchPW {
   color: blue;
   text-decoration: none;
   cursor: pointer;
+  padding: 10px;
 }
 
 #searchID:hover, #searchPW:hover {
   text-decoration: underline;
 }
+
+

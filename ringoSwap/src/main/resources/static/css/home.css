@@ -10,6 +10,7 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
+    
 }
 
 #login {
@@ -17,33 +18,9 @@ section {
       top: 20px;
       right: 30px;
       font-size: x-large;
-      background: none;
-      border: 2px solid white;
-      border-radius: 18px;
-      padding: 7px 20px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-      color: white;
-      display: flex;               /* flexbox 사용 */
-	  justify-content: center;     /* 가로 중앙 정렬 */
-	  align-items: center;         
-}
-
-#login:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: scale(1.05);
-}
-
-#center-content {
-
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    font-size: 64px;
-}
-
-#clock {
-	font-family: 'Roboto', sans-serif;
+      display: flex;   
+	  justify-content: center;    
+	  padding: 10px 20px;
 }
 
 #kiminonawa {
@@ -64,11 +41,10 @@ section {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size:x-large;
-    color: white;
+    font-size: x-large;
+	display: flex;   
+	justify-content: center;    
+	padding: 10px 20px;
 }
 
 #todo-container {
@@ -122,3 +98,12 @@ section {
     cursor: pointer;
     color: white;
 }
+
+#greeting, #clock {
+    font-size: 64px;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

@@ -170,6 +170,10 @@ public class MemberController
 		
 	}
 	
+	@GetMapping(PathHandler.MYPAGE)
+	public String myPage() {
+		return "memberView/myPage";
+	}
 	
 	
 }
