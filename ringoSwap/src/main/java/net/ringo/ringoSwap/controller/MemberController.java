@@ -17,6 +17,7 @@ import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.service.EmailService;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.util.PathHandler;
+import net.ringo.ringoSwap.util.SessionNameHandler;
 import net.ringo.ringoSwap.enums.email.*;
 
 @Slf4j
@@ -33,8 +34,7 @@ public class MemberController
 	@GetMapping(PathHandler.JOIN)
 	public String join(HttpSession session)
 	{
-		session.removeAttribute("isVerifiedJoin");
-		session.setAttribute("isVerifiedJoin", false);
+		removeAllSessions(session);
 		return "memberView/join";
 	}
 	
@@ -48,12 +48,12 @@ public class MemberController
 		
 		return "main";
 	}
+	
 	/*
 	 *  /taeho/main.html으로 연결되었던 controller를 해당 html을 memberView로 이동시키면서 수정한 컨트롤러 메서드.
 	 *  해당 컨트롤러의 연결 Mapping을 수정하면서 이름도 home으로 바꿨습니다.
 	 */
-	
-	@GetMapping("home")
+	@GetMapping(PathHandler.HOME)
 	public String home()
 	{
 		return "memberView/home";
@@ -65,11 +65,12 @@ public class MemberController
 	 * loginForm을 수정했습니다.
 	 * controller를 수정하면서 WebSecurityConfig 또한 수정된 사항에 맞게 수정하였습니다.
 	 */
-	@GetMapping("login")
+	@GetMapping(PathHandler.LOGIN)
 	public String login()
 	{
 		return "memberView/loginForm";
 	}
+
 	/*
 	 * loginForm.html에 존재하는 회원가입 부문에서 id의 중복체크 이벤트를 실행할때 idCheck.html을 실행시키는 메서드
 	 * 해당 html을 실행시킬때 loginForm.html에서 user_id의 value를 xml로 memberDB에 넘겨 중복되는 id가 존재하는지 확인한 후,
@@ -79,7 +80,7 @@ public class MemberController
 	 * 중복 존재 : model을 통해 사용가능하지 않음을 표시하는 문자열을 idCheck.html에 보내고 해당 html문서를
 	 * 		새장으로 엽니다.
 	 */
-	@GetMapping("idCheck")
+	@GetMapping(PathHandler.IDCHECK)
 	public String idCheck(String user_id, Model model)
 	{
 		//service부의 id체크 메서드 실행
@@ -97,14 +98,30 @@ public class MemberController
 	}
 	
 	@ResponseBody
+	@PostMapping(PathHandler.IDCHECK)
+	public boolean idCheck(String user_id, HttpSession session)
+	{
+		//service부의 id체크 메서드 실행
+		int result = service.idCheck(user_id);
+		
+		// 존재하는 아이디가 있을때
+		if (result < 0)
+		{
+			resetSession(session, SessionNameHandler.isVerifiedID, false);
+			return false;
+		}
+		
+		resetSession(session, SessionNameHandler.isVerifiedID, true);
+		return true;
+	}
+	
+	@ResponseBody
 	@PostMapping(PathHandler.EMAILCONFIRM)
 	public void emailConfirm(String email, HttpSession session) throws Exception
 	{
 		String verifyCode = emailService.sendVerifyMessage(email);
-		session.removeAttribute("verifyCode");
-		session.setAttribute("verifyCode", verifyCode);
-		session.setMaxInactiveInterval(60);
-		log.debug("verifyCode{}", verifyCode);
+		resetSession(session, SessionNameHandler.verifyCode, verifyCode, 60);
+		log.debug("verifyCode - {}", verifyCode);
 	}
 	
 	@ResponseBody
@@ -118,14 +135,15 @@ public class MemberController
 		
 		Member member = service.emailConfirmForPassword(parameters);
 		
-		if (member == null) {
+		if (member == null) 
+		{
 			return false;
-		} else { 
-		String verifyCode = emailService.sendVerifyMessage(email);
-		session.removeAttribute("verifyCode");
-		session.setAttribute("verifyCode", verifyCode);
-		session.setMaxInactiveInterval(60);
-		log.debug("verifyCode{}", verifyCode);
+		} 
+		else 
+		{ 
+			String verifyCode = emailService.sendVerifyMessage(email);
+			resetSession(session, SessionNameHandler.verifyCode, verifyCode, 60);
+			log.debug("verifyCode - {}", verifyCode);
 		}
 		
 		return true;
@@ -135,23 +153,23 @@ public class MemberController
 	@PostMapping(PathHandler.CHECKVERIFYCODE)
 	public EmailVerifyState checkVerifyCode(String code, HttpSession session)
 	{
-		if (session.getAttribute("verifyCode") == null)
+		if (session.getAttribute(SessionNameHandler.verifyCode) == null)
 		{
-			session.setAttribute("isVerifiedJoin", false);
+			resetSession(session, SessionNameHandler.isVerifiedEmail, false);
 			return EmailVerifyState.CHECKINPUT;
 		}
 		
-		String vCode = (String)session.getAttribute("verifyCode");
-		log.debug("vCode{}", vCode);
-		log.debug("code{}", code);
+		String vCode = (String)session.getAttribute(SessionNameHandler.verifyCode);
+		log.debug("vCode - {}", vCode);
+		log.debug("input code - {}", code);
 		
 		if (!vCode.equals(code))
 		{
-			session.setAttribute("isVerifiedJoin", false);
+			resetSession(session, SessionNameHandler.isVerifiedEmail, false);
 	        return EmailVerifyState.INCORRECT;
 		}
 		
-		session.setAttribute("isVerifiedJoin", true);
+		resetSession(session, SessionNameHandler.isVerifiedEmail, true);
 	    return EmailVerifyState.VERIFIED;
 	}
 	
@@ -180,6 +198,29 @@ public class MemberController
 		
 	}
 	
+	@GetMapping(PathHandler.MYPAGE)
+	public String myPage() 
+	{
+		return "memberView/myPage";
+	}
 	
+	private void resetSession(HttpSession session, String name, boolean value)
+	{
+		session.removeAttribute(name);
+		session.setAttribute(name, value);
+	}
+
+	private void resetSession(HttpSession session, String name, String value, int lifeTime)
+	{
+		session.removeAttribute(name);
+		session.setAttribute(name, value);
+		session.setMaxInactiveInterval(lifeTime);
+	}
 	
+	private void removeAllSessions(HttpSession session)
+	{
+		session.removeAttribute(SessionNameHandler.isVerifiedID);
+		session.removeAttribute(SessionNameHandler.isVerifiedEmail);
+		session.removeAttribute(SessionNameHandler.verifyCode);
+	}
 }
