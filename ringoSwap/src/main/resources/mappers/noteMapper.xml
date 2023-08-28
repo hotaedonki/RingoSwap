@@ -81,4 +81,43 @@
 	from ringo_word
 	where file_num = #{file_num}
 	</select>
+	<!-- 출력부 끝 -->
+	
+	<!-- 생성부 -->
+	<!-- 매개변수로 받은 directory객체를 통해 DB에 새로운 directory정보를 생성하는 insert문 -->
+	<insert id="dirCreateOne" parameterType="Directory">
+	insert into ringo_directory (dir_num, user_num, dir_name
+		<if test="parent_dir_num != -1">
+		, parent_dir_num
+		</if>
+		)
+	values(ringo_directory_seq.nextval, #{user_num}, #{dir_name}
+		<if test="parent_dir_num != -1">
+		, #{parent_dir_num}
+		</if>
+	)
+	</insert>
+	<!-- 매개변수로 받은 file객체를 통해 DB에 새로운 file정보를 생성하는 insert문 -->
+	<insert id="fileCreateOne" parameterType="DirFile">
+	insert into ringo_file(file_num, dir_num, user_num, title, file_type)
+	values(ringo_file_seq.nextval, #{dir_num}, #{user_num}, #{title}, #{file_type})
+	</insert>
+	<!-- 매개변수로 받은 file객체를 통해 DB에 새로운 file정보를 생성하는 insert문 -->
+	<insert id="notepadCreateOne" parameterType="DirNotepad">
+	insert into ringo_notepad (file_num, dir_num, user_num)
+	values(#{file_num}, #{dir_num}, #{user_num})
+	</insert>
+	<!-- 매개변수로 받은 file객체를 통해 DB에 새로운 file정보를 생성하는 insert문 -->
+	<insert id="wordCreateOne" parameterType="DirWord">
+	insert into ringo_word(word_num, file_num, user_num, word
+		<if test="#{pron} != 'null'">
+		, pron
+		</if>
+		, mean)
+	values(ringo_word_seq.nextval, #{file_num}, #{user_num}, #{word}
+		<if test="pron != 'null'">
+		, #{pron}
+		</if>
+		, #{mean})
+	</insert>
 </mapper>

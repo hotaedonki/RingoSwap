@@ -60,4 +60,28 @@ public class NoteServiceImple implements NoteService{
 	public ArrayList<DirWord> selectWordArrayByFileNum(int file_num){
 		return dao.selectWordArrayByFileNum(file_num);
 	}
+	//-----------[ 노트 출력기능 종료 ]-------------->>>>>>>>>>>>>>
+
+	//<<<<<<<<<<<<-----[ 노트 생성기능 시작 ]-----------------------
+	//폴더를 생성하는 메서드
+	@Override
+	public int dirCreateOne(Directory dir) {
+		return dao.dirCreate(dir);
+	}
+	//파일을 생성하는 메서드
+	@Override
+	public int fileCreateOne(DirFile file) {
+		return dao.fileCreateOne(file);
+	}
+	
+	//파일 부속 객체인 NotePade를 생성하는 메서드
+	@Override
+	public int notepadCreateOne(DirNotepad note) {
+		return dao.notepadCreateOne(note);
+	}
+	//파일 부속 객체인 Word를 생성하는 메서드
+	@Override
+	public int wordCreateOne(DirWord word) {
+		return dao.wordCreateOne(word);
+	}
 }
