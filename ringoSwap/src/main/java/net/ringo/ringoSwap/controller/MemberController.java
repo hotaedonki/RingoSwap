@@ -17,6 +17,7 @@ import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.service.EmailService;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.util.PathHandler;
+import net.ringo.ringoSwap.util.SessionNameHandler;
 import net.ringo.ringoSwap.enums.email.*;
 
 @Slf4j
@@ -34,7 +35,6 @@ public class MemberController
 	public String join(HttpSession session)
 	{
 		removeAllSessions(session);
-		session.setAttribute("isVerifiedJoin", false);
 		return "memberView/join";
 	}
 	
@@ -107,11 +107,11 @@ public class MemberController
 		// 존재하는 아이디가 있을때
 		if (result < 0)
 		{
-			resetSession(session, "isVerifiedID", false);
+			resetSession(session, SessionNameHandler.isVerifiedID, false);
 			return false;
 		}
 		
-		resetSession(session, "isVerifiedID", true);
+		resetSession(session, SessionNameHandler.isVerifiedID, true);
 		return true;
 	}
 	
@@ -120,7 +120,7 @@ public class MemberController
 	public void emailConfirm(String email, HttpSession session) throws Exception
 	{
 		String verifyCode = emailService.sendVerifyMessage(email);
-		resetSession(session, "verifyCode", verifyCode, 60);
+		resetSession(session, SessionNameHandler.verifyCode, verifyCode, 60);
 		log.debug("verifyCode - {}", verifyCode);
 	}
 	
@@ -142,7 +142,7 @@ public class MemberController
 		else 
 		{ 
 			String verifyCode = emailService.sendVerifyMessage(email);
-			resetSession(session, "verifyCode", verifyCode, 60);
+			resetSession(session, SessionNameHandler.verifyCode, verifyCode, 60);
 			log.debug("verifyCode - {}", verifyCode);
 		}
 		
@@ -153,23 +153,23 @@ public class MemberController
 	@PostMapping(PathHandler.CHECKVERIFYCODE)
 	public EmailVerifyState checkVerifyCode(String code, HttpSession session)
 	{
-		if (session.getAttribute("verifyCode") == null)
+		if (session.getAttribute(SessionNameHandler.verifyCode) == null)
 		{
-			session.setAttribute("isVerifiedJoin", false);
+			resetSession(session, SessionNameHandler.isVerifiedEmail, false);
 			return EmailVerifyState.CHECKINPUT;
 		}
 		
-		String vCode = (String)session.getAttribute("verifyCode");
+		String vCode = (String)session.getAttribute(SessionNameHandler.verifyCode);
 		log.debug("vCode - {}", vCode);
 		log.debug("input code - {}", code);
 		
 		if (!vCode.equals(code))
 		{
-			session.setAttribute("isVerifiedJoin", false);
+			resetSession(session, SessionNameHandler.isVerifiedEmail, false);
 	        return EmailVerifyState.INCORRECT;
 		}
 		
-		session.setAttribute("isVerifiedJoin", true);
+		resetSession(session, SessionNameHandler.isVerifiedEmail, true);
 	    return EmailVerifyState.VERIFIED;
 	}
 	
@@ -219,8 +219,8 @@ public class MemberController
 	
 	private void removeAllSessions(HttpSession session)
 	{
-		session.removeAttribute("isVerifiedID");
-		session.removeAttribute("isVerifiedJoin");
-		session.removeAttribute("verifyCode");
+		session.removeAttribute(SessionNameHandler.isVerifiedID);
+		session.removeAttribute(SessionNameHandler.isVerifiedEmail);
+		session.removeAttribute(SessionNameHandler.verifyCode);
 	}
 }

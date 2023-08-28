@@ -2,6 +2,7 @@ $(document).ready(function()
 {
 	$('#checkEmailBtn').click(emailConfirm);
 	$('#checkVerifyCodeBtn').click(checkVerifyCode);
+	
    	window.addEventListener('beforeunload', (event) => 
 	{
 		// 표준에 따라 기본 동작 방지
@@ -10,6 +11,10 @@ $(document).ready(function()
 		event.returnValue = '';
 		console.log(event);
 	});
+	
+	// 현재 저장된 세션 클리어 & 저장된 세션 길이 확인용
+	//sessionStorage.clear();
+	//alert(sessionStorage.length);
 });
 
 // 아이디 유호성 검사 및 중복 검사
@@ -112,15 +117,9 @@ function checkJoinForm()
 {
 	let email = $('#email').val();
 	
-	if (email.length <= 4)
+	if (email.length <= 4 || !email.includes('@'))
 	{
 		alert("잘못된 형식의 이메일입니다. 다시 확인해주세요.");
-		return false;
-	}
-	
-	if (!email.includes('@'))
-	{
-		alert("@가 포함되어있지 않습니다.");
 		return false;
 	}
 	
