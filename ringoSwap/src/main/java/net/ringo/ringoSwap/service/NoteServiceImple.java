@@ -6,8 +6,13 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.evernote.edam.notestore.NoteCollectionCounts;
+import com.evernote.edam.notestore.NoteFilter;
+
 import net.ringo.ringoSwap.dao.NoteDAO;
 import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.DirNotepad;
+import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.Directory;
 
 @Service
@@ -26,4 +31,25 @@ public class NoteServiceImple implements NoteService{
 		return dao.selectUserFileAll(map);
 	}
 
+	//매개변수로 주어지는 부모폴더 정보로 검색된 폴더목록을 리턴하는 메서드
+	@Override
+	public ArrayList<Directory> selectDirectoryByPDirNum(int dir_num){
+		return dao.selectDirectoryByPDirNum(dir_num);
+	}
+	//매개변수로 주어지는 부모폴더 정보로 검색된 파일목록을 리턴하는 메서드
+	@Override
+	public ArrayList<DirFile> selectFileByDirNum(HashMap<String, Object> map){
+		return dao.selectFileByDirNum(map);
+	}
+
+	//file_num을 매개변수로 해당 파일에 속하는 notepad 객체를 리턴하는 메서드
+	@Override
+	public DirNotepad selectNotepadByFileNum(int file_num) {
+		return dao.selectNotepadByFileNum(file_num);
+	}
+	//file_num을 매개변수로 해당 파일에 속하는 word객체 목록을 리턴하는 메서드 
+	@Override
+	public ArrayList<DirWord> selectWordArrayByFileNum(int file_num){
+		return dao.selectWordArrayByFileNum(file_num);
+	}
 }

@@ -6,7 +6,30 @@
 <title>ringo</title>
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
 <script th:src="@{/js/notePrint.js}"></script>
+<style>
+	section {
+		border: 2px solid salmon;
+		width: 25%;
+		height: 100%;
+		top: 0px;
+	}
+	#windowPrint {
+		position: absolute;
+		top:0px;
+		margin-left: 25%;
+		width: 75%;
+		height: 100%;
+		border: 5px solid gray;
+	}
 
+	table {
+		border: 1px solid black;
+		border-collapse: collapse;
+	}
+	tr, td {
+		border: 1px solid black;
+	}
+</style>
 </head>
 <body>
 <header>
@@ -23,10 +46,11 @@
 	<button class="sortBtn" value="title">제목순</button>
 	<button class="sortBtn" value="modifie">최신순</button>
 
-	<table id="dirList">
-	</table>
-	<table id="fileList">
-	</table>
+	<ul id="dirList">
+	</ul>
 </section>
+<div id="windowPrint">
+
+</div>
 </body>
 </html>

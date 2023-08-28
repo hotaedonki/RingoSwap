@@ -19,8 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Directory;
 import net.ringo.ringoSwap.dao.Mapper;
 import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.DirNotepad;
+import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.service.ChatService;
-import net.ringo.ringoSwap.service.EverServiceImple;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.service.NoteService;
 
@@ -71,12 +72,41 @@ public class NoteController
 		return fileList;
 	}
 	
-	@RequestMapping(value="/evernote")
-	public String evernote_request(HttpServletRequest request) {
-		EverServiceImple evernoteSubscribeService = new EverServiceImple();
-		Mapper mapper = null;
-		evernoteSubscribeService.service(request, mapper);
-		return "evertest";
+	//ajax를 통해 실행되는 하위 폴더를 검색하여 그 목록을 리턴하는 메서드
+	@ResponseBody
+	@PostMapping("dirOpenDirectory")
+	public ArrayList<Directory> dirOpenDirectory(int dir_num){
+		ArrayList<Directory> dirList = service.selectDirectoryByPDirNum(dir_num);
+		return dirList;
+	}
+	//ajax를 통해 실행되는 하위 파일을 검색하여 그 목록을 리턴하는 메서드
+	@ResponseBody
+	@PostMapping("dirOpenFile")
+	public ArrayList<DirFile> dirOpenFile(int dir_num, String category, String sort, String text){
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("dir_num", dir_num);
+		map.put("category", category);
+		map.put("sort", sort);
+		map.put("text", text);
+		ArrayList<DirFile> fileList = service.selectFileByDirNum(map);
+		log.debug("ghkrdls: {} ", fileList);
+		return fileList;
+	}
+	
+	//ajax를 통해 실행되는 해당 메모장분류 파일을 file_num을 매개변수로 검색하여 그 하위 Notepad객체를 리턴하는 메서드
+	@ResponseBody
+	@PostMapping("fileOpenNote")
+	public DirNotepad fileOpenNote(int file_num) {
+		DirNotepad notepad = service.selectNotepadByFileNum(file_num);
+		return notepad;
+	}
+	
+	//ajax를 통해 실행되는 해당 메모장분류 파일을 file_num을 매개변수로 검색하여 그 하위 Word목록을 리턴하는 메서드
+	@ResponseBody
+	@PostMapping("fileOpenWord")
+	public ArrayList<DirWord> fileOpenWord(int file_num) {
+		ArrayList<DirWord> wordList = service.selectWordArrayByFileNum(file_num);
+		return wordList;
 	}
 	
 }

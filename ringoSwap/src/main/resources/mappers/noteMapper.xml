@@ -8,8 +8,10 @@
 		select * 
 		from ringo_directory
 		where user_num = #{user_num}
+			and parent_dir_num = -1
 		order by dir_num
 	</select>
+	
 	<!-- 파일정보를 배열로 리턴하는 select 코드 -->
 	<select id="selectUserFileAll" parameterType="java.util.HashMap" resultType="DirFile">
 		select *
@@ -32,4 +34,45 @@
 		</if>
 	</select>
 	
+	<!-- 부모폴더 정보를 기반으로 검색한 폴더정보를 리턴하는 select문 -->
+	<select id="selectDirectoryByPDirNum" resultType="Directory">
+		select * 
+		from ringo_directory
+		where parent_dir_num = #{dir_num}
+		order by dir_num
+	</select>
+	
+	<!-- 부모폴더 정보를 기반으로 검색한 파일정보를 리턴하는 select문 -->
+	<select id="selectFileByDirNum" parameterType="java.util.HashMap" resultType="DirFile">
+		select *
+		from ringo_file
+		where dir_num = #{dir_num}
+			<if test="category != 'all'">
+				and file_type = #{category}
+			</if>
+			<if test = "text !='null' ">
+				and title like '%'||#{text}||'%'
+			</if>
+		<if test="sort eq 'input'">
+			order by file_num
+		</if>
+		<if test="sort eq 'title'">
+			order by title desc
+		</if>
+		<if test="sort == 'modifie'">
+			order by modifie_date desc
+		</if>
+	</select>
+	<select id="selectNotepadByFileNum" resultType="DirtNotepad">
+	select *
+	from ringo_file
+	where file_num = #{file_num}
+		and file_type = 'note'
+	</select>
+	<select id="selectWordArrayByFileNum" resultType="DirWord">
+	select *
+	from ringo_file
+	where file_num = #{file_num}
+		and file_type = 'word'
+	</select>
 </mapper>
