@@ -210,12 +210,6 @@ public class MemberController
 		session.setAttribute(name, value);
 	}
 
-	private void resetSession(HttpSession session, String name, String value)
-	{
-		session.removeAttribute(name);
-		session.setAttribute(name, value);
-	}
-	
 	private void resetSession(HttpSession session, String name, String value, int lifeTime)
 	{
 		session.removeAttribute(name);
