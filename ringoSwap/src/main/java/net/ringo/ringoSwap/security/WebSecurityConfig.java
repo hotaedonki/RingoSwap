@@ -26,7 +26,6 @@ public class WebSecurityConfig {
         .authorizeRequests()
         .antMatchers(
         		"/",
-        		"/taeho/**",
         		"/bootstrap/**",
         		"/member/**",
         		"/chat/chatMain",

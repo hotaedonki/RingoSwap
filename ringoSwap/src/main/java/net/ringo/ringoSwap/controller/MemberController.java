@@ -31,8 +31,10 @@ public class MemberController
 	EmailService emailService;
 	
 	@GetMapping(PathHandler.JOIN)
-	public String join()
+	public String join(HttpSession session)
 	{
+		session.removeAttribute("isVerifiedJoin");
+		session.setAttribute("isVerifiedJoin", false);
 		return "memberView/join";
 	}
 	
@@ -82,6 +84,7 @@ public class MemberController
 	{
 		//service부의 id체크 메서드 실행
 		int n = service.idCheck(user_id);
+		
 		if(n==0) {
 			model.addAttribute("result", user_id+"는 사용 가능한 ID입니다.");
 			model.addAttribute("searchid", user_id);
@@ -93,28 +96,90 @@ public class MemberController
 		return "memberView/idCheck";
 	}
 	
+	@ResponseBody
 	@PostMapping(PathHandler.EMAILCONFIRM)
 	public void emailConfirm(String email, HttpSession session) throws Exception
 	{
 		String verifyCode = emailService.sendVerifyMessage(email);
-		
 		session.removeAttribute("verifyCode");
 		session.setAttribute("verifyCode", verifyCode);
 		session.setMaxInactiveInterval(60);
+		log.debug("verifyCode{}", verifyCode);
 	}
 	
 	@ResponseBody
-	@PostMapping(PathHandler.CHECKVERITYCODE)
-	public int checkVerifyCode(String code, HttpSession session)
+	@PostMapping(PathHandler.EMAILCONFIRMFORPASSWORD)
+	public boolean emailConfirmForPassword(String user_id, String email,
+			HttpSession session) throws Exception
+	{
+		HashMap<String, String> parameters = new HashMap<>();
+		parameters.put("user_id", user_id);
+		parameters.put("email", email);
+		
+		Member member = service.emailConfirmForPassword(parameters);
+		
+		if (member == null) {
+			return false;
+		} else { 
+		String verifyCode = emailService.sendVerifyMessage(email);
+		session.removeAttribute("verifyCode");
+		session.setAttribute("verifyCode", verifyCode);
+		session.setMaxInactiveInterval(60);
+		log.debug("verifyCode{}", verifyCode);
+		}
+		
+		return true;
+	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.CHECKVERIFYCODE)
+	public EmailVerifyState checkVerifyCode(String code, HttpSession session)
 	{
 		if (session.getAttribute("verifyCode") == null)
-			return EmailVerifyState.CHECKINPUT.ordinal();
+		{
+			session.setAttribute("isVerifiedJoin", false);
+			return EmailVerifyState.CHECKINPUT;
+		}
 		
 		String vCode = (String)session.getAttribute("verifyCode");
+		log.debug("vCode{}", vCode);
+		log.debug("code{}", code);
 		
-		if (vCode != code)
-			return EmailVerifyState.INCORRECT.ordinal();
+		if (!vCode.equals(code))
+		{
+			session.setAttribute("isVerifiedJoin", false);
+	        return EmailVerifyState.INCORRECT;
+		}
 		
-		return EmailVerifyState.VERIFIED.ordinal();
+		session.setAttribute("isVerifiedJoin", true);
+	    return EmailVerifyState.VERIFIED;
 	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.RESETPASSWORD)
+	public boolean resetPassword(String password, 
+			String user_id) {
+		
+		Member member = service.memberSearchById(user_id);
+		String currentPassword = member.getPassword();
+		
+		log.debug("패스워드 넣기 전{}", member.getPassword());
+		
+		member.setPassword(password);
+		
+		log.debug("새 패스워드 넣은 후{}", member.getPassword());
+		service.resetPassword(member);
+		
+		String newPassword = member.getPassword(); 
+		
+		if(currentPassword.equals(newPassword)) {
+			return false;
+		} else {
+			return true;
+		}
+		
+	}
+	
+	
+	
 }

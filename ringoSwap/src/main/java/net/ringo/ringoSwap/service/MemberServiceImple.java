@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.MemberDAO;
 import net.ringo.ringoSwap.domain.Member;
 
+@Slf4j
 @Service
 public class MemberServiceImple implements MemberService 
 {
@@ -39,5 +41,21 @@ public class MemberServiceImple implements MemberService
 	public int memberSearchByIdReturnUserNum(String user_id) {
 		Member member = dao.memberSearchById(user_id);
 		return member.getUser_num();
+	}
+
+	@Override
+	public Member emailConfirmForPassword(HashMap<String, String> parameters) {
+		return dao.emailConfirmForPassword(parameters);
+	}
+	@Override
+	public Member memberSearchById(String user_id) {
+		return dao.memberSearchById(user_id);
+	}
+	@Override
+	public int resetPassword(Member member) {
+		log.debug("임플에서 패스워드 확인{}",member.getPassword());
+		member.setPassword(passwordEncoder.encode(member.getPassword()));
+		log.debug("임플에서 패스워드 확인 - 암호화 후 {}",member.getPassword());
+		return dao.resetPassword(member);
 	}
 }

@@ -22,4 +22,9 @@ public interface MemberDAO
 	
 	//매개변수로 받은 사용자의 id로 DB에서 검색하여 나온 회원 정보를 리턴합니다.
 	public Member memberSearchById(String user_id);
+	
+	// 이메일과 아이디가 같으면 멤버를 반환.
+	public Member emailConfirmForPassword(HashMap<String, String> parameters);
+	
+	public int resetPassword(Member member);
 }
