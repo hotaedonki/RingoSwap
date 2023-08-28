@@ -18,6 +18,7 @@ public class PathHandler
 	public final static String EMAILCONFIRMFORPASSWORD = "emailConfirmForPassword";
 	public final static String RESETPASSWORD = "resetPassword";
 	public final static String MYPAGE = "myPage";
-	
+	public final static String CHECKSESSION = "checkSession";
+	public final static String REMOVEALLSESSIONJOIN = "removeAllSessionJoin";
 	
 }

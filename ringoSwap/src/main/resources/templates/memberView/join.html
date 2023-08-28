@@ -9,11 +9,12 @@
 	<script th:src="@{/js/jQuery-3.7.0.js}"></script>
 	<script th:src="@{/js/memberView/join.js}"></script>
 </head>
+<!-- <body onbeforeunload="javascript:clearPageData();"> -->
 <body>
 	<div>
 		<h1>[ 회원가입 ]</h1>
 		
-		<form th:action="@{/member/join}" method="post" onsubmit="return checkJoinForm();">
+		<form th:action="@{/member/join}" method="post" onsubmit="return checkSession();">
 		<table>
 			<tr>
 				<th>ID</th>

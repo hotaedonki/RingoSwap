@@ -19,6 +19,7 @@ import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.util.PathHandler;
 import net.ringo.ringoSwap.util.SessionNameHandler;
 import net.ringo.ringoSwap.enums.email.*;
+import net.ringo.ringoSwap.enums.member.JoinState;
 
 @Slf4j
 @Controller
@@ -81,7 +82,7 @@ public class MemberController
 	 * 		새장으로 엽니다.
 	 */
 	@GetMapping(PathHandler.IDCHECK)
-	public String idCheck(String user_id, Model model)
+	public String idCheck(String user_id, Model model, HttpSession session)
 	{
 		//service부의 id체크 메서드 실행
 		int n = service.idCheck(user_id);
@@ -90,9 +91,11 @@ public class MemberController
 			model.addAttribute("result", user_id+"는 사용 가능한 ID입니다.");
 			model.addAttribute("searchid", user_id);
 			model.addAttribute("accept", true);
+			resetSession(session, SessionNameHandler.isVerifiedID, false);
 		}else {
 			model.addAttribute("result", user_id+"는 이미 존재하는 ID입니다.");
 			model.addAttribute("accept", false);
+			resetSession(session, SessionNameHandler.isVerifiedID, true);
 		}
 		return "memberView/idCheck";
 	}
@@ -142,7 +145,7 @@ public class MemberController
 		else 
 		{ 
 			String verifyCode = emailService.sendVerifyMessage(email);
-			resetSession(session, SessionNameHandler.verifyCode, verifyCode, 60);
+			resetSession(session, SessionNameHandler.verifyCode, verifyCode, 180);
 			log.debug("verifyCode - {}", verifyCode);
 		}
 		
@@ -153,6 +156,8 @@ public class MemberController
 	@PostMapping(PathHandler.CHECKVERIFYCODE)
 	public EmailVerifyState checkVerifyCode(String code, HttpSession session)
 	{
+		log.debug("init checkverifyCode()");
+		
 		if (session.getAttribute(SessionNameHandler.verifyCode) == null)
 		{
 			resetSession(session, SessionNameHandler.isVerifiedEmail, false);
@@ -202,6 +207,40 @@ public class MemberController
 	public String myPage() 
 	{
 		return "memberView/myPage";
+	}
+	
+	@PostMapping(PathHandler.CHECKSESSION)
+	public JoinState checkSession(HttpSession session)
+	{
+		if (session.getAttribute(SessionNameHandler.isVerifiedID) == null)
+		{
+			log.debug("check the VerifiedID session");
+			return JoinState.CHECKID;
+		}
+		
+		if (session.getAttribute(SessionNameHandler.isVerifiedEmail) == null)
+		{
+			log.debug("check the VerifiedEmail session");
+			return JoinState.CHECKEMAIL;
+		}
+		
+		boolean isVerifiedID = (boolean)session.getAttribute(SessionNameHandler.isVerifiedID);
+		boolean isVerifiedEmail = (boolean)session.getAttribute(SessionNameHandler.isVerifiedEmail);
+		
+		if (!isVerifiedID)
+			return JoinState.CHECKID;
+		
+		if (!isVerifiedEmail)
+			return JoinState.CHECKEMAIL;
+		
+		return JoinState.SUCCESS;
+	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.REMOVEALLSESSIONJOIN)
+	public void removeAllSessionJoin(HttpSession session)
+	{
+		removeAllSessions(session);
 	}
 	
 	private void resetSession(HttpSession session, String name, boolean value)

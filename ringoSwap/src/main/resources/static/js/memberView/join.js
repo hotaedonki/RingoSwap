@@ -3,14 +3,23 @@ $(document).ready(function()
 	$('#checkEmailBtn').click(emailConfirm);
 	$('#checkVerifyCodeBtn').click(checkVerifyCode);
 	
+	
    	window.addEventListener('beforeunload', (event) => 
 	{
 		// 표준에 따라 기본 동작 방지
 	 	event.preventDefault();
-		// Chrome에서는 returnValue 설정이 필요함
+	 	
+		// Chrome에서는 returnValue까지 값을 줘야 활성화 됨
 		event.returnValue = '';
-		console.log(event);
 	});
+	
+	/*
+	$(window).on('beforeunload', function(event) 
+	{
+		event.preventDefault();
+    	return '이 페이지를 벗어나면 현재 작성중인 내용이 지워집니다. 응애';
+    });
+    */
 	
 	// 현재 저장된 세션 클리어 & 저장된 세션 길이 확인용
 	//sessionStorage.clear();
@@ -65,7 +74,7 @@ function emailConfirm()
 		}
 		, error: function()
 		{
-			let formCheck = checkJoinForm();
+			let formCheck = checkEmailForm();
 			
 			if (formCheck)
 			{
@@ -78,22 +87,15 @@ function emailConfirm()
 //인증 번호 확인
 function checkVerifyCode()
 {
-	let email = $('#email').val();
 	let verifyCode = $('#verifyCode').val();
 	
 	$.ajax({
-		url: 'checkverifyCode'
+		url: 'checkverifycode'
 		, type:'post'
 		, data:{code:verifyCode}
 		, datatype:'json'
 		, success: function(state)
 		{
-			if (email.length <= 5)
-			{
-				alert("이메일을 입력해주세요.");
-				return;
-			}
-			
 			switch (state)
 			{
 				case 'CHECKINPUT':
@@ -109,11 +111,15 @@ function checkVerifyCode()
 					return;
 			}
 		}
+		, error: function(e)
+		{
+			alert(e);
+		}
 	});	
 }
 
 // 입력 폼 유효성 검사
-function checkJoinForm()
+function checkEmailForm()
 {
 	let email = $('#email').val();
 	
@@ -124,4 +130,45 @@ function checkJoinForm()
 	}
 	
 	return true;
+}
+
+// 세션 클리어
+function removeAllSessionJoin()
+{
+	$.ajax({
+		url: 'removeAllSessionJoin'
+		, type:'post'
+		, success: function()
+		{
+			alert("세션 제거 완료")
+		}
+		, error: function(e)
+		{
+			alert(e);
+		}
+	});
+}
+
+function checkSession()
+{
+	$.ajax({
+		url:'checkSession'
+		, type:'post'
+		, datatype:'json'
+		, success: function(state)
+		{
+			switch (state)
+			{
+				case 'CHECKID':
+					alert("ID 중복확인을 해주세요.");
+					return false;
+				case 'CHECKEMAIL':
+					alert("이메일 인증코드 확인을 해주세요.");
+					return false;
+				case 'SUCCESS':
+					alert("가입을 진심으로 축하드립니다.");
+					return true;
+			}
+		}
+	});
 }
