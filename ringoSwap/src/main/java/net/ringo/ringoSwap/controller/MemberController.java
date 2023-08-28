@@ -198,12 +198,18 @@ public class MemberController
 		
 	}
 	
+	@GetMapping(PathHandler.MYPAGE)
+	public String myPage() 
+	{
+		return "memberView/myPage";
+	}
+	
 	private void resetSession(HttpSession session, String name, boolean value)
 	{
 		session.removeAttribute(name);
 		session.setAttribute(name, value);
 	}
-	
+
 	private void resetSession(HttpSession session, String name, String value)
 	{
 		session.removeAttribute(name);
