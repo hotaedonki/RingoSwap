@@ -63,16 +63,22 @@
 			order by modifie_date desc
 		</if>
 	</select>
-	<select id="selectNotepadByFileNum" resultType="DirtNotepad">
+	
+	<!-- file_num을 매개변수로 file객체를 검색해 리턴하는 select문 -->
+	<select id="selectFileByFileNum" resultType="DirFile">
 	select *
 	from ringo_file
 	where file_num = #{file_num}
-		and file_type = 'note'
+	</select>
+	
+	<select id="selectNotepadByFileNum" resultType="DirNotepad">
+	select *
+	from ringo_notepad
+	where file_num = #{file_num}
 	</select>
 	<select id="selectWordArrayByFileNum" resultType="DirWord">
 	select *
-	from ringo_file
+	from ringo_word
 	where file_num = #{file_num}
-		and file_type = 'word'
 	</select>
 </mapper>

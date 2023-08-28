@@ -89,7 +89,6 @@ public class NoteController
 		map.put("sort", sort);
 		map.put("text", text);
 		ArrayList<DirFile> fileList = service.selectFileByDirNum(map);
-		log.debug("ghkrdls: {} ", fileList);
 		return fileList;
 	}
 	
@@ -97,7 +96,12 @@ public class NoteController
 	@ResponseBody
 	@PostMapping("fileOpenNote")
 	public DirNotepad fileOpenNote(int file_num) {
+		String title = service.selectFileByFileNumReturnTitle(file_num);
 		DirNotepad notepad = service.selectNotepadByFileNum(file_num);
+		
+		notepad.setTitle(title);
+		
+		log.debug("ghkrdls: {} ", notepad);
 		return notepad;
 	}
 	
@@ -106,6 +110,7 @@ public class NoteController
 	@PostMapping("fileOpenWord")
 	public ArrayList<DirWord> fileOpenWord(int file_num) {
 		ArrayList<DirWord> wordList = service.selectWordArrayByFileNum(file_num);
+		log.debug("ghkrdls: {} ", wordList);
 		return wordList;
 	}
 	

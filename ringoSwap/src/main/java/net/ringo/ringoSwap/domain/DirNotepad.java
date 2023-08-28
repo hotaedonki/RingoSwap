@@ -12,6 +12,7 @@ public class DirNotepad {
 	int file_num;
 	int dir_num;
 	int user_num;
+	String title;					//File의 제목값을 받아올때 사용하는 변수
 	String text;
 	String inputdate;
 	String modifie_date;

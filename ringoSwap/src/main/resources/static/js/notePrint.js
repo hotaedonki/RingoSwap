@@ -174,6 +174,8 @@ function dirOpen(){
 	});
 }
 
+
+//파일 이름을 클릭하면 fileWindow에
 function fileOpen(){
 	//매개변수 dir_num 획득을 위한 처리
 	let num = $(this).attr("id");
@@ -187,21 +189,24 @@ function fileOpen(){
 		$.ajax({
 			url:'fileOpenNote',
 			type:'post',
-			data: {file_num : num, file_type: type},
+			data: {file_num : arr[1], file_type: type},
 			dataType: 'json',
-			success:function(list){
-				str ='<ul>'
-				$(list).each(function(i, item){
-					str+=`<li>
-					<span>${item.file_num}</span> / <span id="fileType${item.file_num}">${item.file_type}</span> / 
-					<span id="fileOpen${item.file_num}">${item.title}</span> / <span>${item.modifie_date}</span> /
-					<span>${item.dir_num}</span>
-					</li>`;
-				})
+			success:function(notepad){
+				str =`<table>
+					<tr>
+						<td rowspan="2">${notepad.title}</td>
+						<td rowspan="2">${notepad.file_num}</td>
+						<td>${notepad.input_date}</td>
+					</tr>
+					<tr>
+						<td>${notepad.modifie_date}</td>
+					</tr>
+					<tr>
+						<td colspan="3"><textarea  cols="60" rows="15" >${notepad.text}</textarea></td>
+					</tr>
+				</table>`
 				str +='</ul>'
-				console.log('filePrint'+num);
-				$('#filePrint'+num).html(str);
-				$('[id^="fileOpen"]').click(fileOpen);
+				$('#windowPrint').html(str);
 			},
 			error:function(e){
 				console.log("error");
@@ -212,21 +217,24 @@ function fileOpen(){
 		$.ajax({
 			url:'fileOpenWord',
 			type:'post',
-			data: {file_num : num, file_type: type},
+			data: {file_num : arr[1]},
 			dataType: 'json',
 			success:function(list){
 				str ='<ul>'
 				$(list).each(function(i, item){
+					let inputDate = new Date(item.inputdate).toLocaleString();
 					str+=`<li>
-					<span>${item.file_num}</span> / <span id="fileType${item.file_num}">${item.file_type}</span> / 
-					<span id="fileOpen${item.file_num}">${item.title}</span> / <span>${item.modifie_date}</span> /
-					<span>${item.dir_num}</span>
+					<span>${item.word_num}</span> / <span>${item.file_num}</span> / 
+					<span id="wordOpen${item.word_num}">${item.word}</span> / 
+					<span>${item.pron}</span> / <span>${item.mean}</span> /
+					<span>${inputDate}</span> / <span>${item.user_num}</span>
 					</li>`;
+					console.log(item.word_num);
 				})
-				str +='</ul>'
-				console.log('filePrint'+num);
-				$('#filePrint'+num).html(str);
-				$('[id^="fileOpen"]').click(fileOpen);
+				str +=`<li><button id="wordInsert${arr[1]}"> + 단어 추가 + </button></li>
+					</ul>`
+				console.log('filePrint'+arr[1]);
+				$('#windowPrint').html(str);
 			},
 			error:function(e){
 				console.log("error");

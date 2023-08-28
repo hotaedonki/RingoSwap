@@ -23,6 +23,8 @@ public interface NoteDAO
 	ArrayList<Directory> selectDirectoryByPDirNum(int dir_num);
 	//
 	ArrayList<DirFile> selectFileByDirNum(HashMap<String, Object> map);
+	//file_num을 매개변수로 DB에서 검색해 출력된 file객체를 리턴하는 메서드
+	DirFile selectFileByFileNum(int file_num);
 	//file_num을 매개변수로 DB에서 검색해 출력된 notepad객체를 리턴하는 메서드
 	DirNotepad selectNotepadByFileNum(int file_num);
 	//file_num을 매개변수로 DB에서 검색해 출력된 word객체 목록을 리턴하는 메서드

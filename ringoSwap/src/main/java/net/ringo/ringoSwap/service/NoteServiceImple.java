@@ -41,6 +41,14 @@ public class NoteServiceImple implements NoteService{
 	public ArrayList<DirFile> selectFileByDirNum(HashMap<String, Object> map){
 		return dao.selectFileByDirNum(map);
 	}
+	
+	//file_num을 매개변수로 검색해 나온 file객체에서 해당 파일의 title값만 리턴하는 메서드
+	@Override
+	public String selectFileByFileNumReturnTitle(int file_num) {
+		DirFile file = dao.selectFileByFileNum(file_num);
+		String title = file.getTitle();
+		return title;
+	}
 
 	//file_num을 매개변수로 해당 파일에 속하는 notepad 객체를 리턴하는 메서드
 	@Override
