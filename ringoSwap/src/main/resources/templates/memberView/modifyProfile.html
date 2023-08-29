@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<!-- Coding by CodingLab | www.codinglabweb.com -->
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!----======== CSS ======== -->
+<link rel="stylesheet"
+	th:href="@{/bootstrap-5.3.1-dist/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{../css/sidebar.css}">
+<link rel="stylesheet" th:href="@{../css/myPage.css}">
+<link
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+	rel="stylesheet">
+<!----===== Boxicons CSS ===== -->
+<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'
+	rel='stylesheet'>
+
+<!-- JS -->
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
+
+<title>Dashboard Sidebar Menu</title>
+</head>
+<body>
+	<!-- =============================사이드바 상단=============================== -->
+	<nav class="sidebar close">
+		<header>
+			<div class="image-text">
+				<span class="image"> <img th:src="@{../img/sidebar.png}"
+					alt="">
+				</span>
+
+				<div class="text logo-text">
+					<span class="name">LingoSwap</span>
+				</div>
+			</div>
+			<i class='bx bx-chevron-right toggle'></i>
+		</header>
+
+		<div class="menu-bar">
+			<div class="menu">
+				<ul class="menu-ul">
+					<li><a th:href="@{/member/home}"> <i
+							class='bx bx-home-alt icon'></i> <span class="text nav-text">Hoooome</span>
+					</a></li>
+
+					<li><a th:href="@{/feed/feedMain}"> <i
+							class='bx bx-detail icon'></i> <span class="text nav-text">Feed</span>
+					</a></li>
+
+					<li><a th:href="@{/note/noteMain}"> <i
+							class='bx bx-edit icon'></i> <span class="text nav-text">Note</span>
+					</a></li>
+
+					<li><a th:href="@{/message/messageMain}"> <i
+							class='bx bx-message-square-dots icon'></i> <span
+							class="text nav-text">Message</span>
+					</a></li>
+
+					<li><a th:href="@{/game/gameMain}"> <i
+							class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
+					</a></li>
+
+					<li><a th:href="@{/live/liveMain}"> <i
+							class='bx bx-tv icon'></i> <span class="text nav-text">Live</span>
+					</a></li>
+
+				</ul>
+			</div>
+			<!-- ========================사이드바 하단=========================== -->
+			<div class="bottom-content">
+				<ul class="menu-ul">
+					<li class="">
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/logout}"> <i class='bx bx-log-out icon'></i>
+								<span class="text nav-text">Logout</span>
+							</a>
+						</div>
+					</li>
+
+					<li class=""><a th:href="@{/notification/notificationMain}">
+							<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
+					</a></li>
+					<li class=""><a th:href="@{/store/storeMain}"> <i
+							class='bx bx-shopping-bag icon'></i> <span class="text nav-text">Store</span>
+					</a></li>
+					<li class="">
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/myPage}"> <span class="profile-pic-li"
+								data-tooltip="프로필 사진으로 이동합니다."> <span class="profile-pic">
+										<img th:src="@{../img/2.jpg}" alt="Your Profile Picture">
+								</span>
+							</span> <span class="text nav-text">Profile</span>
+							</a>
+						</div>
+					</li>
+					<li class="mode">
+						<div class="sun-moon">
+							<i class='bx bx-moon icon moon'></i> <i
+								class='bx bx-sun icon sun'></i>
+						</div> <span class="mode-text text">Dark mode</span>
+						<div class="toggle-switch">
+							<span class="switch"></span>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!-- ... (상단 코드 생략) ... -->
+	<section class="home custom-container">
+		<div class="container mt-5" style="margin-left: 50px;">
+			<!-- 첫 번째 컨테이너 -->
+			<div class="row mb-4 profile-section">
+				<!-- 프로필 사진 및 수정 버튼 -->
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="position-relative">
+							<img th:src="@{../img/5.jpg}" alt="배경사진" class="card-img-top">
+							<img th:src="@{../img/123.png}" alt="프로필 사진"
+								style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; width: 200px; height: 200px;">
+
+							<!-- 버튼들을 중앙에 배치하기 위한 div -->
+							<div class="d-flex justify-content-center align-items-center"
+								style="position: absolute; top: 78%; width: 100%;">
+								<button type="button" class="btn btn-info btn-lg"
+									style="margin-right: 20px;" th:href="@{/member/myPage}">수정 완료</button> 
+								<button type="button" class="btn btn-info btn-lg"
+									th:href="@{/member/updatePersonalInfo}">개인정보 수정</button> 
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 닉네임 및 자기소개 -->
+				<div class="col-lg-6 mt-4">
+					<div class="card mb-4" style="height: 200px;">
+						<div class="card-body">
+							<h4 class="card-title">닉네임</h4>
+							<p class="card-text">자기소개 내용입니다. 여기에 사용자의 소개를 입력하세요.</p>
+						</div>
+					</div>
+					<!-- 팔로워, 팔로우, 언어 정보 -->
+					<div class="col-lg-6">
+						<div class="card-body profile-info">
+							<div>
+								<span style="font-size: 1.3em;"><a href="/followerPage">팔로워
+										100</a></span> 
+										<span style="margin-left: 10px; font-size: 1.3em;"><a
+									href="/followingPage">팔로우 150</a></span>
+							</div>
+							<div style="margin-top: 10px;">
+								<span>모국어</span> <img th:src="@{../img/일본.jpg}"
+									alt="Korean Flag"
+									style="border-radius: 50%; width: 20px; height: 20px;"> <span
+									style="margin-left: 10px;">배우고 싶은 언어: 🇺🇸</span> <img
+									th:src="@{../img/한국.png}" alt="US Flag"
+									style="border-radius: 50%; width: 20px; height: 20px;">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 두 번째 컨테이너 -->
+			<div class="row">
+				<!-- 정보/취미 탭 -->
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">정보/취미</h5>
+							<button type="button" class="btn btn-primary btn-sm">MBTI</button>
+							<button type="button" class="btn btn-primary btn-sm">인스타그램</button>
+							<button type="button" class="btn btn-primary btn-sm">만화카페</button>
+							<button type="button" class="btn btn-primary btn-sm">E-스포츠</button>
+							<button type="button" class="btn btn-primary btn-sm">캠핑</button>
+							<button type="button" class="btn btn-primary btn-sm">온천</button>
+							<button type="button" class="btn btn-primary btn-sm">쇼핑</button>
+							<button type="button" class="btn btn-primary btn-sm">스시</button>
+							<button type="button" class="btn btn-primary btn-sm">여행</button>
+							<button type="button" class="btn btn-primary btn-sm">미드</button>
+							<button type="button" class="btn btn-primary btn-sm">전시회</button>
+							<button type="button" class="btn btn-primary btn-sm">PC방</button>
+							<button type="button" class="btn btn-primary btn-sm">축구</button>
+							<button type="button" class="btn btn-primary btn-sm">애니메이션</button>
+							<button type="button" class="btn btn-primary btn-sm">롤</button>
+							<button type="button" class="btn btn-primary btn-sm">바</button>
+							<button type="button" class="btn btn-primary btn-sm">운동</button>
+							<button type="button" class="btn btn-primary btn-sm">코미디</button>
+							<button type="button" class="btn btn-primary btn-sm">베이킹</button>
+							<button type="button" class="btn btn-primary btn-sm">틱톡</button>
+							<button type="button" class="btn btn-primary btn-sm">패션</button>
+							<button type="button" class="btn btn-primary btn-sm">BTS</button>
+							<button type="button" class="btn btn-primary btn-sm">클라이밍</button>
+							<button type="button" class="btn btn-primary btn-sm">음악</button>
+							<button type="button" class="btn btn-primary btn-sm">주식</button>
+							<button type="button" class="btn btn-primary btn-sm">카페</button>
+							<button type="button" class="btn btn-primary btn-sm">야구</button>
+							<button type="button" class="btn btn-primary btn-sm">와인</button>
+							<button type="button" class="btn btn-primary btn-sm">수제 맥주</button>
+							<button type="button" class="btn btn-primary btn-sm">등산</button>
+							<button type="button" class="btn btn-primary btn-sm">블로그</button>
+							<button type="button" class="btn btn-primary btn-sm">유튜브</button>
+							<button type="button" class="btn btn-primary btn-sm">동물</button>
+							<button type="button" class="btn btn-primary btn-sm">디즈니</button>
+							<button type="button" class="btn btn-primary btn-sm">블랙핑크</button>
+							<button type="button" class="btn btn-primary btn-sm">언어교환</button>
+							<button type="button" class="btn btn-primary btn-sm">문화</button>
+							<button type="button" class="btn btn-primary btn-sm">전화</button>
+							<button type="button" class="btn btn-primary btn-sm">워킹홀리데이</button>
+							<button type="button" class="btn btn-primary btn-sm">유학</button>
+							<button type="button" class="btn btn-primary btn-sm">피크닉</button>
+						</div>
+					</div>
+				</div>
+				<!-- 최근 게시물 및 내 피드 가기 버튼 -->
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">최근 게시물</h5>
+							<p class="card-text">최근 게시물의 내용 미리보기입니다.</p>
+							<a href="#" class="btn btn-primary">내 피드 가기</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 세 번째 컨테이너 -->
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="card game-section">
+						<div class="card-body">
+							<h5 class="card-title">나의 게임 성적</h5>
+							<p>끝말잇기: A등급</p>
+							<p>캐치마인드: B등급</p>
+							<!-- 생략... -->
+							<h6>나의 게임 랭크: Gold</h6>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="card store-section">
+						<div class="card-body">
+							<h5 class="card-title">상점에서 구매한 아이템</h5>
+							<p>아이템1: 2023-08-28 구매</p>
+							<p>아이템2: 2023-08-27 구매</p>
+							<!-- 생략... -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- ... (하단 코드 생략) ... -->
+
+	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{../js/sidebar.js}"></script>
+
+</body>
+</html>
