@@ -281,7 +281,7 @@ public class MemberController
 	 * 		기본적이고 필수적인 기능만 구현했습니다. 
 	 * 		이후 논의를 통해 프론트엔드 구현을 확정하고 그에 따라 controller메서드의 수정이 필요합니다(by2023.08.29)
 	 */
-	@PostMapping("memberTagLinkInsert")
+	@PostMapping(PathHandler.MEMBERTAGLINKINSERT)
 	public String memberTagLinkInsert(ArrayList<Integer> tag_num
 					, @AuthenticationPrincipal UserDetails user) {
 		//현재 사용자 id를 기반으로 사용자의 user_num을 검색해 리턴
@@ -292,4 +292,17 @@ public class MemberController
 		return "";
 	}
 	
+	@ResponseBody
+	@GetMapping(PathHandler.MODIFYPROFILE)
+	public String modifyProfile()
+	{
+		return "memberView/modifyProfile";
+	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.MODIFYPROFILE)
+	public void modifyProfile(Member m)
+	{
+		log.debug("{} - modifyProfile", m);
+	}
 }
