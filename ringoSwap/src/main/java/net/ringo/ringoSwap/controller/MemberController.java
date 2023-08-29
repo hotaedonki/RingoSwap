@@ -1,10 +1,13 @@
 package net.ringo.ringoSwap.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -262,4 +265,23 @@ public class MemberController
 		session.removeAttribute(SessionNameHandler.isVerifiedEmail);
 		session.removeAttribute(SessionNameHandler.verifyCode);
 	}
+	//----------------[회원가입&로그인 기능 종료]----------->>>>>>>>>>>>
+
+	//<<<<<<<<<<<------[멤버태그 기능 시작]----------------------
+	/*
+	 * 사용자가 설정한 멤버태그 설정 member_taglink에 insert하는 테이블
+	 * 컨트롤러에 연결된 service 메서드가 search/insert/delete 기능의 dao메서드 모두와 연결되어
+	 * 해당 기능을 수행하기에 membertag의 link설정에 관한 전 과정을 관여합니다.
+	 */
+	@PostMapping("memberTagLinkInsert")
+	public String memberTagLinkInsert(ArrayList<Integer> tag_num
+					, @AuthenticationPrincipal UserDetails user) {
+		//현재 사용자 id를 기반으로 사용자의 user_num을 검색해 리턴
+		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
+		//검색한 user_num을 기반으로 설정한 태그 배열을 매개변수로 DB에 전달한다.
+		int insertResult = service.memberTagLinkInsertArray(tag_num, user_num);
+		
+		return "";
+	}
+	
 }

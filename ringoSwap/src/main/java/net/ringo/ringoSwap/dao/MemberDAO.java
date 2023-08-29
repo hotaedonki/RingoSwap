@@ -1,5 +1,6 @@
 package net.ringo.ringoSwap.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -27,4 +28,15 @@ public interface MemberDAO
 	public Member emailConfirmForPassword(HashMap<String, String> parameters);
 	
 	public int resetPassword(Member member);
+	//----------------[회원가입&로그인 기능 종료]----------->>>>>>>>>>>>
+
+	//<<<<<<<<<<<------[멤버태그 기능 시작]----------------------
+	//사용자가 설정한 멤버태그 객체가 이미 존재하는지 확인하는 메서드
+	public int memberTagLinkSearch(HashMap<String, Object> map);
+	//사용자가 설정한 멤버태그 객체를 DB의 taglink_member 테이블에 insert하는 메서드
+	public int memberTagLinkInsert(HashMap<String, Object> map);
+	//사용자의 user_num을 이용하여 현재 taglink가 걸린 tag_num을 배열로 전부 리턴받는 메서드
+	public ArrayList<Integer> memberTagLinkSearchAllByUserNum(int user_num);
+	//특정 taglink 객체를 DB의 taglink_member 테이블에서 delete하는 메서드
+	public int memberTagLinkDelete(HashMap<String, Object> map);
 }

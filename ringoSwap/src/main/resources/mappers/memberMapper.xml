@@ -68,4 +68,12 @@
 	where 
 		user_id = #{user_id}
 	</update>
+	<!-- [ 회원가입&로그인 기능 종료 ] -->
+
+	<!-- [ 멤버태그 관련 기능 시작 ] -->
+	<!-- 사용자가 설정한 멤버태그 배열을 member_taglink에 insert하는 테이블 -->
+	<insert id="memberTagLinkInsertArray" parameterType="java.util.HashMap">
+	insert into ringo_taglink_member
+	values (#{user_num}, #{tag_num});
+	</insert>
 </mapper>
