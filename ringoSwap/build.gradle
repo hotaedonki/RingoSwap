@@ -44,8 +44,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'javax.mail:mail:1.4.7'
     
-    // evernote api 사용용
-	implementation group: 'com.evernote', name: 'evernote-api', version: '1.25.1'
 }
 
 tasks.named('test') {

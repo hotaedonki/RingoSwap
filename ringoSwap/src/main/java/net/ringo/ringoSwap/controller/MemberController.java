@@ -272,6 +272,10 @@ public class MemberController
 	 * 사용자가 설정한 멤버태그 설정 member_taglink에 insert하는 테이블
 	 * 컨트롤러에 연결된 service 메서드가 search/insert/delete 기능의 dao메서드 모두와 연결되어
 	 * 해당 기능을 수행하기에 membertag의 link설정에 관한 전 과정을 관여합니다.
+	 * 
+	 * @shl reply : 아직 해당 기능에 대한 프론트엔드 구현 방법을 논의하지 않았기 때문에, controller 메서드는
+	 * 		기본적이고 필수적인 기능만 구현했습니다. 
+	 * 		이후 논의를 통해 프론트엔드 구현을 확정하고 그에 따라 controller메서드의 수정이 필요합니다(by2023.08.29)
 	 */
 	@PostMapping("memberTagLinkInsert")
 	public String memberTagLinkInsert(ArrayList<Integer> tag_num

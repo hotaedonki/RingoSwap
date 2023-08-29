@@ -72,6 +72,8 @@ public class MemberServiceImple implements MemberService
 		ArrayList<Integer> tagList = new ArrayList<>();		//사용자의 모든 지정 태그 배열을 저장하는 변수
 		for(int i =0; i < tag_num.size(); i++) {
 			//taglink_member테이블에 넘길 값을 hashmap으로 형성
+			//hashmap에서 같은 이름을 갖는 변수를 여러번 입력할경우, 이전 값이 삭제되고 가장 최신값으로 update되기에
+			//이 코드에서 remove명령어는 필요없는 것으로 확인했습니다.
 			map.put("user_num", user_num);
 			map.put("tag_num", tag_num.get(i));
 			//해당 유저가 동일한 값을 설정했는지 확인하는 메서드 실행
