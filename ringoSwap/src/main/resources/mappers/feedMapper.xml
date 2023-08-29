@@ -31,6 +31,57 @@
 	group by F.feed_num, F.user_num, contents, F.inputdate
 	order by like_num desc
 	</select>
-		
+	
+	<!-- feed_num을 매개변수로 특정 feed 게시글 정보를 리턴하는 select문 -->
+	<select id="feedSelectOneByFeedNum" resultType="Feed">
+	select F.feed_num
+		, F.user_num
+	    , F.contents
+	    , F.inputdate
+	    , count(L.user_num) as like_count
+	    , listagg(T.tag_name, ' ') within group (order by TF.tag_num) as tag_list
+	FROM
+	    ringo_feed F
+	LEFT JOIN
+	    ringo_feed_like L ON F.feed_num = L.feed_num
+	LEFT JOIN
+	    ringo_taglink_feed TF ON F.feed_num = TF.feed_num
+	LEFT JOIN
+	    ringo_tagstorage T ON TF.tag_num = T.tag_num
+	WHERE
+	    F.feed_num = #{feed_num}
+	GROUP BY
+	    F.feed_num, F.user_num, F.contents, F.inputdate;
+	</select>
+	
+	<!-- feed_num을 매개변수로 특정 reply 배열 정보를 리턴하는 select문 -->
+	<select id="replySelectByFeedNum" resultType="Reply">
+	select R.reply_num
+	 	, R.user_num
+	 	, R.feed_num
+	 	, contents
+	 	, R.inputdate
+	 	, count(L.user_num) as like_num
+	from ringo_reply R
+	left join ringo_reply_like L
+	on R.reply_num = L.reply_num
+	where R.feed_num = #{feed_num}
+	group by R.reply_num, R.feed_num, R.user_num, contents, R.inputdate
+	</select>
+	
+	<!-- feed_num을 매개변수로 해당 피드에 등록된 사진 정보 배열 객체를 불러오는 메서드 -->
+	<select id="feedPhotoSelectByFeedNum" resultType="FeedPhoto">
+	select *
+	from ringo_feed_photo
+	where feed_num = #{feed_num}
+	order by photo_num;
+	</select>
 	<!-- 피드 출력 기능 끝 -->
+	
+	<!-- 피드 삽입 기능 시작 -->
+	<!-- 작성한 Reply 객체를 DB에 매개변수로 전달하는 insert문 -->
+	<insert id="replyInsert" parameterType="Reply">
+	insert into ringo_reply(reply_num, feed_num, user_num, contents)
+	values (ringo_reply_seq.nextval, #{feed_num}, #{user_num}, #{contents})
+	</insert>
 </mapper>
