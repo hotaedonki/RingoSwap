@@ -71,9 +71,28 @@
 	<!-- [ 회원가입&로그인 기능 종료 ] -->
 
 	<!-- [ 멤버태그 관련 기능 시작 ] -->
-	<!-- 사용자가 설정한 멤버태그 배열을 member_taglink에 insert하는 테이블 -->
-	<insert id="memberTagLinkInsertArray" parameterType="java.util.HashMap">
+	<!-- 사용자가 설정한 멤버태그 객체가 이미 존재하는지 확인하는 select문 -->
+	<select id="memberTagLinkSearch" parameterType="java.util.HashMap">
+	select count(*)
+	from ringo_taglink_member
+	where user_id = #{user_id}
+		and tag_num = #{tag_num}
+	</select>
+	<!-- 사용자가 설정한 멤버태그를 member_taglink에 삽입하는 insert문 -->
+	<insert id="memberTagLinkInsert" parameterType="java.util.HashMap">
 	insert into ringo_taglink_member
 	values (#{user_num}, #{tag_num});
 	</insert>
+	<!-- 사용자의 user_num을 이용하여 현재 taglink가 걸린 tag_num을 배열로 전부 리턴받는 select문 -->
+	<select id="memberTagLinkSearchAllByUserNum" resultType="Integer">
+	select tag_num
+	from ringo_taglink_member
+	where user_num = #{user_num}
+	</select>
+	<!-- 특정 taglink 객체를 DB의 taglink_member 테이블에서 삭제하는 delete문 -->
+	<delete id="memberTagLinkDelete" parameterType="java.util.HashMap">
+	delete from ringo_taglink_member
+	where user_num = #{user_num}
+		and tag_num = #{tag_num}
+	</delete>
 </mapper>

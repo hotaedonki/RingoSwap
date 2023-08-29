@@ -44,6 +44,14 @@ CREATE TABLE ringo_tagstorage_member (
 	tag_num		number				primary key,		--태그 번호
 	tag			varchar2(60)	not null					--실제 태그 이름
 );
+--회원태그 목록. 아래 insert문을 사용하여 DB에 미리 입력할 것. []로 감싸진 것에 해당하는 정보를 기입하고 사용
+(1, '')(2, '')(3, '')(4, '')(5, '')(6, '')(7, '')(8, '')(9, '')(10, '')
+(11, '')(12, '')(13, '')(14, '')(15, '')(16, '')(17, '')(18, '')(19, '')(20, '')
+(21, '')(22, '')(23, )(24, '')(25, '')(26, '')(27, '')(28, '')(29, '')(30, '')
+
+insert into ringo_tagstorage_member
+values  ([tag_num], [tag]);
+
 --회원의 프로필 사진을 기록하는 테이블
 CREATE TABLE ringo_member_profile (
 	user_num				number			primary key,			--유저 키, 멤버로부터 받아온 외래키이자 기본키
