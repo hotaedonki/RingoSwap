@@ -121,6 +121,7 @@ public class MemberController
 		return true;
 	}
 	
+	// 이메일 전송 
 	@ResponseBody
 	@PostMapping(PathHandler.EMAILCONFIRM)
 	public void emailConfirm(String email, HttpSession session) throws Exception
@@ -155,6 +156,7 @@ public class MemberController
 		return true;
 	}
 	
+	// 전송 받은 인증 코드가 일치한지 확인
 	@ResponseBody
 	@PostMapping(PathHandler.CHECKVERIFYCODE)
 	public EmailVerifyState checkVerifyCode(String code, HttpSession session)
@@ -239,11 +241,13 @@ public class MemberController
 		return JoinState.SUCCESS;
 	}
 	
+	// 회원 가입 관련 세션 관리를 위한 함수들
 	@ResponseBody
 	@PostMapping(PathHandler.REMOVEALLSESSIONJOIN)
 	public void removeAllSessionJoin(HttpSession session)
 	{
 		removeAllSessions(session);
+		log.debug("clear sessions!");
 	}
 	
 	private void resetSession(HttpSession session, String name, boolean value)

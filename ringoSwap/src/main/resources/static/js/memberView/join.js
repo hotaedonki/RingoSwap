@@ -2,29 +2,51 @@ $(document).ready(function()
 {
 	$('#checkEmailBtn').click(emailConfirm);
 	$('#checkVerifyCodeBtn').click(checkVerifyCode);
-	
-	
-   	window.addEventListener('beforeunload', (event) => 
+});
+
+// 페이지를 나가기 전 실행
+window.addEventListener('beforeunload', (e) => 
+{
+	// 표준에 따라 기본 동작 방지
+	e.preventDefault();
+
+	// Chrome에서는 returnValue까지 값을 줘야 활성화 됨
+	e.returnValue = '';
+});
+
+// 페이지를 나갈때 실행
+window.addEventListener('unload', function() 
+{
+	// 세션 날리기
+	removeAllSessionJoin();
+});
+
+
+/* 세션 예제
+// 페이지에 접속했을 때
+window.addEventListener('DOMContentLoaded', function() 
+{
+
+	// 페이지를 나갔다는 표시를 확인
+	if (localStorage.getItem('leftPage') === 'true') 
 	{
-		// 표준에 따라 기본 동작 방지
-	 	event.preventDefault();
-	 	
-		// Chrome에서는 returnValue까지 값을 줘야 활성화 됨
-		event.returnValue = '';
-	});
-	
-	/*
-	$(window).on('beforeunload', function(event) 
-	{
-		event.preventDefault();
-    	return '이 페이지를 벗어나면 현재 작성중인 내용이 지워집니다. 응애';
-    });
-    */
-	
+		alert('당신은 페이지를 나갔습니다!');
+		// 표시를 삭제하여 다음에는 메시지가 표시되지 않도록 함
+		localStorage.removeItem('leftPage');
+	}
+
 	// 현재 저장된 세션 클리어 & 저장된 세션 길이 확인용
 	//sessionStorage.clear();
 	//alert(sessionStorage.length);
 });
+
+window.addEventListener('unload', function() 
+{
+	// 페이지를 나갔다는 표시를 저장
+	localStorage.setItem('leftPage', 'true');
+
+});
+*/
 
 // 아이디 유호성 검사 및 중복 검사
 function idCheck()
@@ -58,8 +80,7 @@ function idCheck()
 	});
 }
 
-
-//E-mail 전송
+// E-mail 전송
 function emailConfirm()
 {
 	let email = $('#email').val();
@@ -84,7 +105,7 @@ function emailConfirm()
 	});
 }
 
-//인증 번호 확인
+// 인증 번호 확인
 function checkVerifyCode()
 {
 	let verifyCode = $('#verifyCode').val();
@@ -140,7 +161,7 @@ function removeAllSessionJoin()
 		, type:'post'
 		, success: function()
 		{
-			alert("세션 제거 완료")
+			console.log("세션 제거 완료");
 		}
 		, error: function(e)
 		{
@@ -149,6 +170,7 @@ function removeAllSessionJoin()
 	});
 }
 
+// 가입시 세션 검사
 function checkSession()
 {
 	$.ajax({
