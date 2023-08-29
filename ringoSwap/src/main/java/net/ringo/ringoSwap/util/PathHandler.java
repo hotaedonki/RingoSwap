@@ -20,5 +20,6 @@ public class PathHandler
 	public final static String MYPAGE = "myPage";
 	public final static String CHECKSESSION = "checkSession";
 	public final static String REMOVEALLSESSIONJOIN = "removeAllSessionJoin";
-	
+	public final static String MEMBERTAGLINKINSERT= "memberTagLinkInsert";
+	public final static String MODIFYPROFILE ="modifyProfile";
 }

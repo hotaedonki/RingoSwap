@@ -1,10 +1,13 @@
 package net.ringo.ringoSwap.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -118,6 +121,7 @@ public class MemberController
 		return true;
 	}
 	
+	// 이메일 전송 
 	@ResponseBody
 	@PostMapping(PathHandler.EMAILCONFIRM)
 	public void emailConfirm(String email, HttpSession session) throws Exception
@@ -152,6 +156,7 @@ public class MemberController
 		return true;
 	}
 	
+	// 전송 받은 인증 코드가 일치한지 확인
 	@ResponseBody
 	@PostMapping(PathHandler.CHECKVERIFYCODE)
 	public EmailVerifyState checkVerifyCode(String code, HttpSession session)
@@ -236,11 +241,13 @@ public class MemberController
 		return JoinState.SUCCESS;
 	}
 	
+	// 회원 가입 관련 세션 관리를 위한 함수들
 	@ResponseBody
 	@PostMapping(PathHandler.REMOVEALLSESSIONJOIN)
 	public void removeAllSessionJoin(HttpSession session)
 	{
 		removeAllSessions(session);
+		log.debug("clear sessions!");
 	}
 	
 	private void resetSession(HttpSession session, String name, boolean value)
@@ -261,5 +268,41 @@ public class MemberController
 		session.removeAttribute(SessionNameHandler.isVerifiedID);
 		session.removeAttribute(SessionNameHandler.isVerifiedEmail);
 		session.removeAttribute(SessionNameHandler.verifyCode);
+	}
+	//----------------[회원가입&로그인 기능 종료]----------->>>>>>>>>>>>
+
+	//<<<<<<<<<<<------[멤버태그 기능 시작]----------------------
+	/*
+	 * 사용자가 설정한 멤버태그 설정 member_taglink에 insert하는 테이블
+	 * 컨트롤러에 연결된 service 메서드가 search/insert/delete 기능의 dao메서드 모두와 연결되어
+	 * 해당 기능을 수행하기에 membertag의 link설정에 관한 전 과정을 관여합니다.
+	 * 
+	 * @shl reply : 아직 해당 기능에 대한 프론트엔드 구현 방법을 논의하지 않았기 때문에, controller 메서드는
+	 * 		기본적이고 필수적인 기능만 구현했습니다. 
+	 * 		이후 논의를 통해 프론트엔드 구현을 확정하고 그에 따라 controller메서드의 수정이 필요합니다(by2023.08.29)
+	 */
+	@PostMapping(PathHandler.MEMBERTAGLINKINSERT)
+	public String memberTagLinkInsert(ArrayList<Integer> tag_num
+					, @AuthenticationPrincipal UserDetails user) {
+		//현재 사용자 id를 기반으로 사용자의 user_num을 검색해 리턴
+		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
+		//검색한 user_num을 기반으로 설정한 태그 배열을 매개변수로 DB에 전달한다.
+		int insertResult = service.memberTagLinkInsertArray(tag_num, user_num);
+		
+		return "";
+	}
+	
+	@ResponseBody
+	@GetMapping(PathHandler.MODIFYPROFILE)
+	public String modifyProfile()
+	{
+		return "memberView/modifyProfile";
+	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.MODIFYPROFILE)
+	public void modifyProfile(Member m)
+	{
+		log.debug("{} - modifyProfile", m);
 	}
 }

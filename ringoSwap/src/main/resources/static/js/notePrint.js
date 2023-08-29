@@ -235,10 +235,16 @@ function fileOpen(){
 					</ul>`
 				console.log('filePrint'+arr[1]);
 				$('#windowPrint').html(str);
+				
+				$('[id^="wordInsert"]').click(wordInsert);
 			},
 			error:function(e){
 				console.log("error");
 			}
 		});
+	}			//fileOpen 함수 종료
+	
+	function wordInsert(){
+		
 	}
 }

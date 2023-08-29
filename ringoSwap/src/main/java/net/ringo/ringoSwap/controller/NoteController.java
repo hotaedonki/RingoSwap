@@ -3,8 +3,6 @@ package net.ringo.ringoSwap.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,11 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Directory;
-import net.ringo.ringoSwap.dao.Mapper;
 import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirNotepad;
 import net.ringo.ringoSwap.domain.DirWord;
-import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.service.NoteService;
 
@@ -133,8 +129,11 @@ public class NoteController
 		
 		int num = service.dirCreateOne(dir);
 	}
-	//html에서 받은 정보를 기반으로 file객체를 생성하는 기능을 가진 메서드
-	//지정된 분류에 따라 추가로 생성하는 객체가 Notepad인지 Word인지 if문으로 구분된다.
+	/*
+	 * html에서 받은 정보를 기반으로 file객체를 생성하는 기능을 가진 메서드
+	 * 지정된 분류에 따라 추가로 생성하는 객체가 Notepad인지 Word인지 if문으로 구분된다.
+	 * 
+	 */
 	@ResponseBody
 	@PostMapping("fileCreateOne")
 	public void fileCreate(@AuthenticationPrincipal UserDetails user

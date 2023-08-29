@@ -1,5 +1,6 @@
 package net.ringo.ringoSwap.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.ringo.ringoSwap.domain.Member;
@@ -30,4 +31,9 @@ public interface MemberService
 	public Member emailConfirmForPassword(HashMap<String, String> parameters);
 
 	public int resetPassword(Member member);
+	//----------------[회원가입&로그인 기능 종료]----------->>>>>>>>>>>>
+
+	//<<<<<<<<<<<------[멤버태그 기능 시작]----------------------
+	//사용자가 설정한 멤버태그 배열을 member_taglink에 insert하는 테이블
+	public int memberTagLinkInsertArray(ArrayList<Integer> tag_num, int user_num);
 }

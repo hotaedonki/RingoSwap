@@ -1,0 +1,36 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.ringo.ringoSwap.dao.FeedDAO">
+	<!-- 피드 출력 기능 시작 -->
+	<!-- 모든 게시물을 최신순으로 리턴하는 select문 -->
+	<select id="feedSelectAll" resultType="Feed">
+	select F.feed_num
+		, F.user_num
+		, contents
+		, F.inputdate
+		, count(L.user_num) as like_num
+	from ringo_feed as F
+	left join ringo_feed_like as L
+	on F.feed_num = L.feed_num
+	group by F.feed_num, F.user_num, contents, F.inputdate
+	order by inputdate desc
+	</select>
+	<!-- 최근 게시물들을 인기순(좋아요 순)으로 리턴하는 select문 -->
+	<select id="feedSelectPopularAll" resultType="Feed">
+	 select F.feed_num
+	 	, F.user_num
+	 	, contents
+	 	, F.inputdate
+	 	, count(L.user_num) as like_num
+	from ringo_feed F
+	left join ringo_feed_like L
+	on F.feed_num = L.feed_num
+	where ( sysdate - F.inputdate) <= INTERVAL '14' DAY
+	group by F.feed_num, F.user_num, contents, F.inputdate
+	order by like_num desc
+	</select>
+		
+	<!-- 피드 출력 기능 끝 -->
+</mapper>
