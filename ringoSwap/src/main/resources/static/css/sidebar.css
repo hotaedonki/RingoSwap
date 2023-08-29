@@ -25,7 +25,7 @@
 
 body{
     min-height: 100vh;
-    background-color: var(--body-color);
+    background-color: beigh;
     transition: var(--tran-05);
 }
 
@@ -50,7 +50,8 @@ body.dark{
     width: 250px;
     padding: 10px 15px 0px 15px;
     background: var(--sidebar-color);
-    transition: var(--tran-05);
+    border-right: 0.01px solid #000; /* 기본 모드에서의 검정색 선 */
+    transition: var(--tran-05), border-color 0.3s ease;
     z-index: 100;  
 }
 .sidebar.close{
