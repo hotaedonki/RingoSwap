@@ -127,11 +127,8 @@
 							<!-- 버튼들을 중앙에 배치하기 위한 div -->
 							<div class="d-flex justify-content-center align-items-center"
 								style="position: absolute; top: 78%; width: 100%;">
-								<button type="button" class="btn btn-info btn-lg"
-									style="margin-right: 20px;" th:href="@{/member/updateProfile}">프로필
-									수정</button>
-								<button type="button" class="btn btn-info btn-lg"
-									th:href="@{/member/updatePersonalInfo}">개인정보 수정</button>
+								<a href="#" th:href="@{/member/modifyProfile}" class="btn btn-info btn-lg" style="margin-right: 20px;">프로필 수정</a>
+								<a href="#" th:href="@{/member/updatePersonalInfo}" class="btn btn-info btn-lg">개인정보 수정</a>
 							</div>
 						</div>
 					</div>
@@ -223,7 +220,7 @@
 	<!-- ... (하단 코드 생략) ... -->
 
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
-	<script th:src="@{../js/sidebar.js}"></script>
+	<script th:src="@{../js/memberView/sidebar.js}"></script>
 
 </body>
 </html>

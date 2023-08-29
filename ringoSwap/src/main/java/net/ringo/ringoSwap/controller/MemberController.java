@@ -292,7 +292,6 @@ public class MemberController
 		return "";
 	}
 	
-	@ResponseBody
 	@GetMapping(PathHandler.MODIFYPROFILE)
 	public String modifyProfile()
 	{

@@ -1,7 +1,6 @@
 .custom-container {
     border-radius: 15px;
     background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     min-height: calc(100vh - 20px); /* sidebar의 top/bottom padding 제외 */
     margin-right: 0; /* 우측 여백 제거 */
 }
@@ -29,13 +28,23 @@
  	position: relative; /* 내 피드 가기 버튼 위치 설정을 위해 */
 }
 
-.btn-primary {
-    position: absolute; /* 절대 위치 설정 */
-    bottom: 10px; /* 카드의 하단에서 10px 위에 위치 */
-    right: 10px; /* 카드의 우측에서 10px 왼쪽에 위치 */
-}
-
 a[href="/followerPage"], a[href="/followingPage"] {
     text-decoration: none; /* 밑줄 제거 */
     font-weight: bold; /* 글씨 굵게 */
+}
+
+.profile-picture {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+}
+
+.profile-buttons {
+    position: absolute;
+    top: 78%;
+    width: 100%;
 }
