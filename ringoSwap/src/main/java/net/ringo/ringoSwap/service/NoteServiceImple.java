@@ -6,9 +6,6 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.evernote.edam.notestore.NoteCollectionCounts;
-import com.evernote.edam.notestore.NoteFilter;
-
 import net.ringo.ringoSwap.dao.NoteDAO;
 import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirNotepad;
