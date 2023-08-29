@@ -27,7 +27,7 @@
 	from ringo_feed F
 	left join ringo_feed_like L
 	on F.feed_num = L.feed_num
-	where ( sysdate - F.inputdate) <= INTERVAL '14' DAY
+	<!-- where ( sysdate - F.inputdate) <= INTERVAL '14' DAY //오류 해결방법 알 때까지 주석으로 처리 -->
 	group by F.feed_num, F.user_num, contents, F.inputdate
 	order by like_num desc
 	</select>
