@@ -113,14 +113,16 @@
 	                    </a>
 	                </li>
 	                <li class="">
-					    <a th:href="@{/member/myPage}">
-					    <span class="profile-pic-li" data-tooltip="프로필 사진으로 이동합니다.">
-					        <span class="profile-pic" >
-					            <img th:src="@{../img/2.jpg}" alt="Your Profile Picture">
-					        </span>
-					    </span>
-					        <span class="text nav-text">Profile</span>
-					    </a>
+	                	<div sec:authorize="isAuthenticated()">
+						    <a th:href="@{/member/myPage}">
+						    <span class="profile-pic-li" data-tooltip="프로필 사진으로 이동합니다.">
+						        <span class="profile-pic" >
+						            <img th:src="@{../img/2.jpg}" alt="Your Profile Picture">
+						        </span>
+						    </span>
+						        <span class="text nav-text">Profile</span>
+						    </a>
+					    </div>
 					</li>
 	                <li class="mode">
 	                    <div class="sun-moon">

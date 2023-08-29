@@ -1,139 +1,160 @@
 <!DOCTYPE html>
-  <!-- Coding by CodingLab | www.codinglabweb.com -->
+<!-- Coding by CodingLab | www.codinglabweb.com -->
 <html xmlns:th="http://thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!----======== CSS ======== -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{../css/sidebar.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!----===== Boxicons CSS ===== -->
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-    
-    
-    <!-- JS -->
-    <script th:src="@{/js/jquery-3.7.0.js}"></script>
-    
-    <title>Dashboard Sidebar Menu</title> 
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!----======== CSS ======== -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+	crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{../css/sidebar.css}">
+<link rel="stylesheet" th:href="@{../css/myPage.css}">
+<link
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+	rel="stylesheet">
+<!----===== Boxicons CSS ===== -->
+<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'
+	rel='stylesheet'>
+
+<!-- JS -->
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
+
+<title>Dashboard Sidebar Menu</title>
 </head>
 <body>
-<!-- =============================사이드바 상단=============================== -->
-    <!-- =============================사이드바 상단=============================== -->
-    <nav class="sidebar close">
-        <header>
-            <div class="image-text">
-                <span class="image">
-                    <img th:src="@{../img/sidebar.png}" alt="">
-                </span>
-				
-                <div class="text logo-text">
-                    <span class="name">LingoSwap</span>
-               </div>
-            </div>
-            <i class='bx bx-chevron-right toggle'></i>
-        </header>
+	<!-- =============================사이드바 상단=============================== -->
+	<!-- =============================사이드바 상단=============================== -->
+	<nav class="sidebar close">
+		<header>
+			<div class="image-text">
+				<span class="image"> <img th:src="@{../img/sidebar.png}"
+					alt="">
+				</span>
 
-        <div class="menu-bar">
-            <div class="menu">
-                <ul class="menu-ul">
-                    <li>
-                        <a th:href="@{/member/home}">
-                            <i class='bx bx-home-alt icon' ></i>
-                            <span class="text nav-text">Hoooome</span>
-                        </a>
-                    </li>
+				<div class="text logo-text">
+					<span class="name">LingoSwap</span>
+				</div>
+			</div>
+			<i class='bx bx-chevron-right toggle'></i>
+		</header>
 
-                    <li>
-                        <a th:href="@{/feed/feedMain}">
-                            <i class='bx bx-detail icon' ></i>
-                            <span class="text nav-text">Feed</span>
-                        </a>
-                    </li>
-					
-                    <li>
-                        <a th:href="@{/note/noteMain}">
-                            <i class='bx bx-edit icon' ></i>
-                            <span class="text nav-text">Note</span>
-                        </a>
-                    </li>
+		<div class="menu-bar">
+			<div class="menu">
+				<ul class="menu-ul">
+					<li><a th:href="@{/member/home}"> <i
+							class='bx bx-home-alt icon'></i> <span class="text nav-text">Hoooome</span>
+					</a></li>
 
-                    <li>
-                        <a th:href="@{/message/messageMain}">
-                            <i class='bx bx-message-square-dots icon' ></i>
-                            <span class="text nav-text">Message</span>
-                        </a>
-                    </li>
+					<li><a th:href="@{/feed/feedMain}"> <i
+							class='bx bx-detail icon'></i> <span class="text nav-text">Feed</span>
+					</a></li>
 
-                    <li>
-                        <a th:href="@{/game/gameMain}">
-                            <i class='bx bx-game icon' ></i>
-                            <span class="text nav-text">Game</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a th:href="@{/live/liveMain}">
-                            <i class='bx bx-tv icon' ></i>
-                            <span class="text nav-text">Live</span>
-                        </a>
-                    </li>
-                    
-                </ul>
-            </div>
-	<!-- ========================사이드바 하단=========================== -->
-            <div class="bottom-content">
-            	<ul class="menu-ul">
-	                <li class="">
-          	            <div sec:authorize="isAuthenticated()">
-		                    <a th:href="@{/member/logout}">
-		                        <i class='bx bx-log-out icon' ></i>
-		                        <span class="text nav-text">Logout</span>
-		                    </a>
-	                	</div>
-                	</li>
-	                
-	                 <li class="">
-	                    <a th:href="@{/notification/notificationMain}">
-	                        <i class='bx bx-bell icon'></i>
-	                        <span class="text nav-text">Notifications</span>
-	                    </a>
-	                </li>
+					<li><a th:href="@{/note/noteMain}"> <i
+							class='bx bx-edit icon'></i> <span class="text nav-text">Note</span>
+					</a></li>
+
+					<li><a th:href="@{/message/messageMain}"> <i
+							class='bx bx-message-square-dots icon'></i> <span
+							class="text nav-text">Message</span>
+					</a></li>
+
+					<li><a th:href="@{/game/gameMain}"> <i
+							class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
+					</a></li>
+
+					<li><a th:href="@{/live/liveMain}"> <i
+							class='bx bx-tv icon'></i> <span class="text nav-text">Live</span>
+					</a></li>
+
+				</ul>
+			</div>
+			<!-- ========================사이드바 하단=========================== -->
+			<div class="bottom-content">
+				<ul class="menu-ul">
 					<li class="">
-	                    <a th:href="@{/store/storeMain}">
-	                        <i class='bx bx-shopping-bag icon'></i>
-	                        <span class="text nav-text">Store</span>
-	                    </a>
-	                </li>
-	                <li class="">
-					    <a th:href="@{/member/myPage}">
-					    <span class="profile-pic-li" data-tooltip="프로필 사진으로 이동합니다.">
-					        <span class="profile-pic" >
-					            <img th:src="@{../img/2.jpg}" alt="Your Profile Picture">
-					        </span>
-					    </span>
-					        <span class="text nav-text">Profile</span>
-					    </a>
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/logout}"> <i class='bx bx-log-out icon'></i>
+								<span class="text nav-text">Logout</span>
+							</a>
+						</div>
 					</li>
-	                <li class="mode">
-	                    <div class="sun-moon">
-	                        <i class='bx bx-moon icon moon'></i>
-	                        <i class='bx bx-sun icon sun'></i>
-	                    </div>
-	                    <span class="mode-text text">Dark mode</span>
-	                    <div class="toggle-switch">
-	                        <span class="switch"></span>
-	                    </div>
-	                </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-    <script th:src="@{../js/sidebar.js}"></script>
-    
+
+					<li class=""><a th:href="@{/notification/notificationMain}">
+							<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
+					</a></li>
+					<li class=""><a th:href="@{/store/storeMain}"> <i
+							class='bx bx-shopping-bag icon'></i> <span class="text nav-text">Store</span>
+					</a></li>
+					<li class="">
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/myPage}"> <span class="profile-pic-li"
+								data-tooltip="프로필 사진으로 이동합니다."> <span class="profile-pic">
+										<img th:src="@{../img/2.jpg}" alt="Your Profile Picture">
+								</span>
+							</span> <span class="text nav-text">Profile</span>
+							</a>
+						</div>
+					</li>
+					<li class="mode">
+						<div class="sun-moon">
+							<i class='bx bx-moon icon moon'></i> <i
+								class='bx bx-sun icon sun'></i>
+						</div> <span class="mode-text text">Dark mode</span>
+						<div class="toggle-switch">
+							<span class="switch"></span>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<section>
+		<div class="container-sm">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="card mb-3">
+						  <img th:src="@{../img/배경.jpg}" alt="배경사진" class="card-img-top">
+							<button type="button" class="btn btn-info" th:href="@{/member/updateProfile}">프로필 수정</button>
+            				<button type="button" class="btn btn-info" th:href="@{/member/updatePersonalInfo}">개인정보 수정</button>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="row">
+						<div class="col-12">
+							<div class="mb-3">
+								<div class="card border-dark">
+									<div class="card-body">
+										<h4 class="card-title">Dark card title</h4>
+										<p class="card-text">Some quick example text to build on
+											the card title and make up the bulk of the card's content.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- 이 자리에 팔로워 : "숫자" 팔로잉 : "숫자"   모국어 : "동그란 국기 사진" 배우고 싶은 언어 : "동그란 국기 사진" -->
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+	</section>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+		crossorigin="anonymous"></script>
+	<script th:src="@{../js/sidebar.js}"></script>
+
 </body>
 </html>
