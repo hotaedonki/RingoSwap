@@ -31,8 +31,24 @@ CREATE TABLE ringo_member (
 	gps_open				char(1)				default 'Y',				--장소(gps) 공개여부
 	trans_lang				varchar2(8)		default 'kor' check(trans_lang in ('kor', 'jap', 'eng'))			--기본 번역언어 설정
 );
---
-CREATE VIEW ringo_feed_with_likeandtag AS
+--마이탭에 표시하기 위해 기존 회원정보에 더해 프로필사진정보+팔로워/팔로잉 갯수 정보를 같이 출력하는 view create문
+CREATE VIEW ringo_member_with_profileandfollow AS
+	select M.user_num
+		, M.user_id
+		, M.username
+		, M.native_lang
+		, M.target_lang
+		, M.introduction
+		, P.original_profile
+		, P.saved_profile
+		, count(FR.follower) as follower_count
+		, count(FE.followee) as folowee_count
+	from ringo_member M
+	left join ringo_member_profile P M.user_num = P.user_num
+	left join ringo_member_follow FW M.user_num = FW.follower_num
+	left join ringo_member_follow FE M.user_num = FE.followee_num
+	group by
+		M.user_num, M.user_id, M.username, M.native_lang, M.target_lang, M.introduction, P.original_profile, P.saved_profile
 
 --각 회원과 해당 회원이 갖는 태그를 매칭하는 테이블
 CREATE TABLE ringo_taglink_member (
@@ -48,10 +64,10 @@ CREATE TABLE ringo_tagstorage_member (
 	tag			varchar2(60)	not null					--실제 태그 이름
 );
 --회원태그 목록. 아래 insert문을 사용하여 DB에 미리 입력할 것. []로 감싸진 것에 해당하는 정보를 기입하고 사용
-(1, '')(2, '')(3, '')(4, '')(5, '')(6, '')(7, '')(8, '')(9, '')(10, '')
-(11, '')(12, '')(13, '')(14, '')(15, '')(16, '')(17, '')(18, '')(19, '')(20, '')
-(21, '')(22, '')(23, )(24, '')(25, '')(26, '')(27, '')(28, '')(29, '')(30, '')
-
+(1, 'MBTI')(2, '인스타그램')(3, '만화')(4, 'E-스포츠')(5, '캠핑')(6, '온천')(7, '쇼핑')(8, '스시')(9, '여행')(10, '미드')
+(11, '전시회')(12, 'PC방')(13, '축구')(14, '야구')(15, '게임')(16, '애니메이션')(17, '운동')(18, '수영')(19, '베이킹')(20, '커뮤니티')
+(21, '패션')(22, 'BTS')(23, '클라이밍')(25, '음악')(26, '주식')(27, '카페')(28, '주류')(29, '블로그')(30, '유투브')
+(31, '동물')(32, '식물')(33, '언어교환')(34, '문화')(35, '과학')(36, '역사')(37, '유학')(38, '취직')(39, '음식')(40, '코미디')
 insert into ringo_tagstorage_member
 values  ([tag_num], [tag]);
 
@@ -82,6 +98,8 @@ CREATE TABLE ringo_notification (
 	inputdate		date					default sysdate,		--작성일
 	modifie_date	date					default sysdate		--수정일
 );
+
+
 
 --피드 관련
 --피드 테이블
@@ -134,6 +152,7 @@ CREATE TABLE ringo_feed_photo (
 	resolution			varchar2(12),								--사진의 해상도 (예: 1920x1080)
 	constraint	fk_feed_num_ph	foreign key (feed_num) references ringo_feed(feed_num) on delete cascade
 );
+
 --피드에 달린 좋아요를 기록하는 테이블. 동일 피드에 동일 회원이 중복해서 좋아요 누르는건 불가능
 CREATE TABLE ringo_feed_like (
 	feed_num			number, 						--외래키, user와 합쳐서 복합 기본키로 사용
@@ -142,6 +161,7 @@ CREATE TABLE ringo_feed_like (
 	constraint fk_feed_num_flike	foreign key (feed_num)	references ringo_feed(feed_num) on delete cascade,
 	constraint fk_user_num_flike	foreign key (user_num)	references ringo_member(user_num) on delete cascade
 );
+
 --피드에 달린 댓글을 기록하는 테이블.
 CREATE TABLE ringo_reply (
 	reply_num		number			primary key,
@@ -184,6 +204,7 @@ CREATE TABLE ringo_reply_like (
 	constraint fk_reply_num_rlike		foreign key	(reply_num) references ringo_reply(reply_num) on delete cascade,
 	constraint fk_user_num_rlike		foreign key	(user_num) references ringo_member(user_num) on delete cascade
 );
+
 --각 피드와 해당 피드에 달리는 태그를 매칭하는 테이블
 CREATE TABLE ringo_taglink_feed (
 	feed_num		number,			--외래키, 글삭제시 같이 삭제됨
@@ -192,6 +213,14 @@ CREATE TABLE ringo_taglink_feed (
 	constraint fk_feed_num_tlfeed	foreign key (feed_num)	references ringo_feed(feed_num) on delete cascade,
 	constraint fk_tag_num_tlfeed	foreign key (tag_num)	references ringo_tagstorage(tag_num) on delete cascade
 );
+--taglink_feed전용 view create문
+CREATE VIEW ringo_taglink_feed_with_tagname AS
+	select TF.feed_num
+		, TF.tag_num
+		, T.tag_name
+	from ringo_taglink_feed TF
+	left join ringo_tagstorage T ON TF.tag_num = T.tag_num
+
 --각 댓글와 해당 댓글에 달리는 태그를 매칭하는 테이블
 CREATE TABLE ringo_taglink_reply (
 	reply_num		number,						--외래키, 글삭제시 같이 삭제됨
@@ -200,12 +229,22 @@ CREATE TABLE ringo_taglink_reply (
 	constraint fk_relpy_num_tlreply foreign key (reply_num) references ringo_reply(reply_num) on delete cascade,
 	constraint fk_tag_num_tlreply foreign key (tag_num) references ringo_tagstorage(tag_num) on delete cascade
 );
---피드, 에 달 태그를 실제로 기록하는 테이블
+--taglink_reply전용 view create문
+CREATE VIEW ringo_taglink_reply_with_tagname AS
+	select TR.reply_num
+		, TR.tag_num
+		, T.tag_name
+	from ringo_taglink_reply TR
+	left join ringo_tagstorage T ON TR.tag_num = T.tag_num
+
+--피드, 댓글에 달 태그를 실제로 기록하는 테이블
 CREATE TABLE ringo_tagstorage (
 	tag_num			number				primary key,			--태그 번호
 	tag_name		varchar2(60)		not null,					--실제 태그 이름
 	tag_bann		char(1)				default 'N' check(tag_bann in('N', 'Y'))		--태그 금지어 설정, 금지어 아님=n, 금지어로 설정=y
 );
+
+
 
 --채팅룸 관련
 --모든 서비스의 채팅룸 기능의 정보를 기록하는 테이블.

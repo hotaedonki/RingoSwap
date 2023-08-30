@@ -52,6 +52,10 @@ public interface FeedDAO
 	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
-	//피드, 댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 출력하는 메서드
-	ArrayList<Feed> feedSearchByTagName(String tag_name);
+	//피드에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 리턴하는 메서드
+	ArrayList<Feed> feedArraySearchByTagName(String tag_name);
+	//댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 리턴하는 메서드
+	ArrayList<Integer> replyArraySearchByTagNameReturnFeedNum(String tag_name);
+	//피드 번호를 매개변수로 피드 배열을 검색해 리턴하는 메서드
+	ArrayList<Feed> feedArraySearchByFeedNumArray(ArrayList<Integer> numList);
 }

@@ -1,6 +1,8 @@
 package net.ringo.ringoSwap.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +107,13 @@ public class FeedServiceImple implements FeedService{
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
 	//피드, 댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 출력하는 메서드
 	public ArrayList<Feed> feedSearchByTagName(String tag_name){
-		return dao.feedSearchByTagName(tag_name);
+		ArrayList<Feed> feedList = dao.feedArraySearchByTagName(tag_name);
+		ArrayList<Integer> numList = dao.replyArraySearchByTagNameReturnFeedNum(tag_name);
+
+		ArrayList<Feed> feedList2 = dao.feedArraySearchByFeedNumArray(numList);
+		Collections.sort(feedList, (f1, f2) -> Integer.compare(f1.getFeed_num(), f2.getFeed_num()));
+		
+		Comparator<Feed> comparator;
+		return feedList;
 	}
 }
