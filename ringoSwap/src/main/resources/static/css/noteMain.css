@@ -1,0 +1,63 @@
+.custom-container {
+	border-radius: 15px;
+	background-color: #fff;
+	min-height: calc(100vh - 20px); /* sidebar의 top/bottom padding 제외 */
+}
+
+.custom-card {
+	width: 250px;
+	height: 100vh; /* 화면 전체 높이 */
+	position: fixed;
+}
+
+.folder, .note, .wordbook {
+	cursor: pointer;
+	position: flex;
+	margin-top: 10px;
+}
+
+.folder:hover .action-icons, .note:hover .action-icons, .wordbook:hover .action-icons
+	{
+	display: block;
+}
+
+.create-icons {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+/* 토글 버튼 위치 변경 */
+.bi-toggle-off {
+    position: absolute;
+    top: 10px;
+    right: -25px;
+}
+
+/* 카드 내부 아이콘 커서 포인터 추가 */
+.bi-folder-plus, .bi-file-earmark-plus {
+    cursor: pointer;
+}
+
+.action-icons {
+    display: none;
+    position: absolute;
+    right: 0;
+
+    transform: translateY(-50%);
+}
+
+/* 폴더, 노트, 단어장에 호버될 때 수정 및 삭제 버튼 보이기 */
+.folder:hover .action-icons, 
+.note:hover .action-icons, 
+.wordbook:hover .action-icons {
+    display: block;
+}
+
+/* 토글 버튼 위치 및 visibility 설정 */
+.bi-toggle-off {
+    position: absolute;
+    top: 10px;
+    right: -25px;
+    z-index: 10; /* 다른 요소들 위에 표시하기 위해 */
+}
