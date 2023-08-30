@@ -112,7 +112,7 @@
 		</div>
 	</nav>
 
-	<!-- ... (상단 코드 생략) ... -->
+
 	<section class="home custom-container">
 		<div class="container mt-5" style="margin-left: 50px;">
 			<!-- 첫 번째 컨테이너 -->
@@ -129,8 +129,7 @@
 							<div
 								class="profile-buttons d-flex justify-content-center align-items-center">
 								<button type="button" class="btn btn-info btn-lg modify"
-									style="margin-right: 20px;" th:href="@{/member/myPage}">수정
-									완료</button>
+									style="margin-right: 20px;">수정 완료</button>
 								<button type="button" class="btn btn-info btn-lg"
 									th:href="@{/member/updatePersonalInfo}">개인정보 수정</button>
 							</div>
@@ -138,58 +137,66 @@
 					</div>
 				</div>
 				<!-- 닉네임 및 자기소개 -->
-				<div class="col-lg-6 mt-4">
-					<div class="card mb-4" style="height: 200px;">
+				<div class="col-lg-5 mt-4">
+					<div class="card mb-4" style="height: 150px;">
 						<div class="card-body">
-							<h4 class="card-title">닉네임</h4>
+							<h5 class="card-title">닉네임</h5>
 							<p class="card-text">자기소개 내용입니다. 여기에 사용자의 소개를 입력하세요.</p>
 						</div>
 					</div>
 					<!-- 팔로워, 팔로우, 언어 정보 -->
 					<div class="col-lg-6">
 						<div class="card-body profile-info">
-							<div>
-								<span style="font-size: 1.3em;" class="text-primary">팔로워
-									100</span> <span style="margin-left: 10px; font-size: 1.3em;"
+							<div style="min-width: 400px">
+								<span style="font-size: 1.4em;" class="text-primary">팔로워
+									100</span> <span style="margin-left: 10px; font-size: 1.4em;"
 									class="text-primary">팔로우 150</span>
 							</div>
-							<div style="margin-top: 10px;">
-								<span>모국어</span> <img th:src="@{../img/일본어.jpg}"
-									alt="Korean Flag"
-									style="border-radius: 50%; width: 20px; height: 20px;"> <span
-									style="margin-left: 10px;">배우고 싶은 언어</span>
-									<button type="button" class="btn btn-primary btn-sm"
+							<div
+								style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; min-width: 430px;">
+								<!-- 모국어와 국기 -->
+								<div
+									style="display: flex; align-items: center; font-size: 1.1em;">
+									<span>모국어</span> <img th:src="@{../img/일본어.jpg}"
+										alt="Korean Flag"
+										style="border-radius: 50%; width: 20px; height: 20px; margin-left: 10px;">
+									<!-- 배우고 싶은 언어와 국기 -->
+									<span style="margin-left: 10px;">배우고 싶은 언어</span> <img
+										th:src="@{../img/한국어.jpg}" alt="Desired Language"
+										id="desiredLanguageFlag"
+										style="border-radius: 50%; width: 20px; height: 20px; margin-left: 10px;">
+								</div>
+
+								<!-- 언어 선택 버튼 -->
+								<button type="button"
+									class="btn btn-primary btn-sm choiceLanguage"
 									data-bs-toggle="modal" data-bs-target="#languageModal">언어
 									선택</button>
-								<img th:src="@{../img/한국어.jpg}" alt="Desired Language"
-									id="desiredLanguageFlag"
-									style="border-radius: 50%; width: 20px; height: 20px;">
-
-								<!-- 모달 추가 -->
-								<div class="modal fade" id="languageModal" tabindex="-1"
-									aria-labelledby="languageModalLabel" aria-hidden="true">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="languageModalLabel">언어 선택</h5>
-												<button type="button" class="btn-close"
-													data-bs-dismiss="modal" aria-label="Close"></button>
-											</div>
-											<div class="modal-body">
-												<button type="button"
-													class="btn btn-outline-primary btn-sm languageSelect"
-													data-language="한국어">한국어</button>
-												<button type="button"
-													class="btn btn-outline-primary btn-sm languageSelect"
-													data-language="일본어">일본어</button>
-												<button type="button"
-													class="btn btn-outline-primary btn-sm languageSelect"
-													data-language="영어">영어</button>
-											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn btn-secondary"
-													data-bs-dismiss="modal">닫기</button>
-											</div>
+							</div>
+							<!-- 모달 추가 -->
+							<div class="modal fade" id="languageModal" tabindex="-1"
+								aria-labelledby="languageModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="languageModalLabel">언어 선택</h5>
+											<button type="button" class="btn-close"
+												data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											<button type="button"
+												class="btn btn-outline-primary btn-sm languageSelect"
+												data-language="한국어">한국어</button>
+											<button type="button"
+												class="btn btn-outline-primary btn-sm languageSelect"
+												data-language="일본어">일본어</button>
+											<button type="button"
+												class="btn btn-outline-primary btn-sm languageSelect"
+												data-language="영어">영어</button>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary"
+												data-bs-dismiss="modal">닫기</button>
 										</div>
 									</div>
 								</div>
@@ -251,40 +258,43 @@
 					</div>
 				</div>
 				<!-- 최근 게시물 및 내 피드 가기 버튼 -->
-				<div class="col-lg-6">
+				<div class="col-lg-5">
 					<div class="card">
-						<div class="card-body">
+						<div class="card-body" style="position: relative;">
 							<h5 class="card-title">최근 게시물</h5>
 							<p>최근 게시물의 내용 미리보기입니다.</p>
-							<button class="btn btn-primary">내 피드 가기</button>
+							<button class="btn btn-primary"
+								style="position: absolute; right: 10px; bottom: 10px;">내
+								피드 가기</button>
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- 세 번째 컨테이너 -->
-			<div class="row">
-				<div class="col-lg-6">
-					<div class="card game-section">
-						<div class="card-body">
-							<h5 class="card-title">나의 게임 성적</h5>
-							<p>끝말잇기: A등급</p>
-							<p>캐치마인드: B등급</p>
-							<!-- 생략... -->
-							<h6>나의 게임 랭크: Gold</h6>
+				<!-- 세 번째 컨테이너 -->
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="card game-section">
+							<div class="card-body">
+								<h5 class="card-title">나의 게임 성적</h5>
+								<p>끝말잇기: A등급</p>
+								<p>캐치마인드: B등급</p>
+								<!-- 생략... -->
+								<h6>나의 게임 랭크: Gold</h6>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-5" style="padding-right: 40px;">
+						<div class="card store-section">
+							<div class="card-body">
+								<h5 class="card-title">상점에서 구매한 아이템</h5>
+								<p>아이템1: 2023-08-28 구매</p>
+								<p>아이템2: 2023-08-27 구매</p>
+								<!-- 생략... -->
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-6">
-					<div class="card store-section">
-						<div class="card-body">
-							<h5 class="card-title">상점에서 구매한 아이템</h5>
-							<p>아이템1: 2023-08-28 구매</p>
-							<p>아이템2: 2023-08-27 구매</p>
-							<!-- 생략... -->
-						</div>
-					</div>
-				</div>
+				<div style="height: 50px;"></div>
 			</div>
 		</div>
 	</section>

@@ -4,7 +4,7 @@ let st = null;
 let txt = null;
 
 $(document).ready(function(){
-	listPrint();
+	dirPrint();
     //file분류에 따른 검색방식 지정
     $('.cateBtn').click(categoryEvent)
     //정렬방식 지정
@@ -37,10 +37,6 @@ function sortEvent(){
 	listPrint();
 }
 
-function listPrint(){
-	dirPrint();
-	filePrint();
-};
 	//폴더정보를 출력하는 ajax함수
 function dirPrint(){
 	$.ajax({
@@ -71,33 +67,7 @@ function dirPrint(){
 		}
 	});
 }
-	//파일정보를 출력하는 ajax함수
-function filePrint(){
-	//검색제한, 정렬방식 결정용 변수 설정
-	ca = $('#category').val();
-	st = $('#sort').val();
-	txt = $("#searchText").val();
-	//파일검색-출력 ajax실행
-	$.ajax({
-		url:'filePrint',
-		type:'post',
-		data: {category: ca, sort: st, text: txt},
-		dataType: 'json',
-		success:function(list){
-			let str = ``;
-			$(list).each(function(i, item){
-				str += `
-					<li>${item.file_num} / ${item.file_type} / 
-					${item.title} / ${item.modifie_date} / ${item.dir_num}</li>
-					`;
-			});
-			$('#fileList').html(str);
-		},
-		error:function(e){
-			console.log(JSON.stringify(e));
-		}
-	});
-}
+	
 //해당 폴더를 부모폴더로 하여 하위폴더를 생성하는 테이블
 function dirCreate(){
 
