@@ -5,32 +5,110 @@
 <mapper namespace="net.ringo.ringoSwap.dao.FeedDAO">
 	<!-- 피드 출력 기능 시작 -->
 	<!-- 모든 게시물을 최신순으로 리턴하는 select문 -->
-	<select id="feedSelectAll" resultType="Feed">
-	select F.feed_num
-		, F.user_num
-		, contents
-		, F.inputdate
-		, count(L.user_num) as like_num
-	from ringo_feed as F
-	left join ringo_feed_like as L
-	on F.feed_num = L.feed_num
-	group by F.feed_num, F.user_num, contents, F.inputdate
+	<select id="feedSelectDefaultAll" resultType="Feed">
+	select * from ringo_feed_with_likeandtag
 	order by inputdate desc
 	</select>
-	<!-- 최근 게시물들을 인기순(좋아요 순)으로 리턴하는 select문 -->
+	<!-- 최근 게시물들을 인기순(좋아요 순)으로 리턴하는 select문, <는 &lt;로, >는 &gt;로 적습니다(기억할 것) -->
 	<select id="feedSelectPopularAll" resultType="Feed">
-	 select F.feed_num
-	 	, F.user_num
-	 	, contents
-	 	, F.inputdate
-	 	, count(L.user_num) as like_num
-	from ringo_feed F
-	left join ringo_feed_like L
-	on F.feed_num = L.feed_num
-	<!-- where ( sysdate - F.inputdate) <= INTERVAL '14' DAY //오류 해결방법 알 때까지 주석으로 처리 -->
-	group by F.feed_num, F.user_num, contents, F.inputdate
-	order by like_num desc
+	select * from ringo_feed_with_likeandtag
+	where (sysdate - inputdate) &lt;= 14
+	order by like_count DESC
 	</select>
-		
+	
+	<!-- 지정된 feed_num 배열을 매개변수로 주고, 그에 따른 각 feed의 사진 배열을 리턴하는 메서드 -->
+	<select id="feedPhotoSelectArrayByFeedNum" parameterType="java.util.ArrayList" resultType="FeedPhoto">
+	select *
+	from ringo_feed_photo
+	where feed_num in
+	<foreach item="item" collection="list" open="(" separator=", " close=")">
+		#{item}
+	</foreach>
+	order by feed_num desc
+	</select>
+	
+	<!-- feed_num을 매개변수로 특정 feed 게시글 정보를 리턴하는 select문 -->
+	<select id="feedSelectOneByFeedNum" resultType="Feed">
+	select * from ringo_feed_with_likeandtag
+	where feed_num = #{feed_num}
+	</select>
+	
+	<!-- feed_num을 매개변수로 특정 피드에 달린 reply 배열 정보를 리턴하는 select문 -->
+	<select id="replySelectByFeedNum" resultType="Reply">
+		select * from ringo_reply_with_likeandtag
+		where feed_num = #{feed_num}
+		order by inputdate desc;
+	</select>
+	
+	<!-- feed_num을 매개변수로 해당 피드에 등록된 사진 정보 배열 객체를 불러오는 메서드 -->
+	<select id="feedPhotoSelectByFeedNum" resultType="FeedPhoto">
+	select * from ringo_feed_photo
+	where feed_num = #{feed_num}
+	order by photo_num;
+	</select>
 	<!-- 피드 출력 기능 끝 -->
+	
+	<!-- 피드 삽입 기능 시작 -->
+	<!-- 작성한 feed 객체를 DB에 매개변수로 전달하는 메서드 -->
+	<insert id="feedInsert" parameterType="Feed">
+	insert into ringo_feed ()
+	values ()
+	</insert>
+	<!-- 작성한 feedPhoto 배열을 DB에 매개변수로 전달하는 메서드 -->
+	<insert id="feedPhotoInsert" parameterType="FeedPhoto">
+	insert into ringo_feed_photo (photo_num, feed_num, origin_file, saved_file, description, photo_size, photo_format, resolution)
+	values
+	<foreach collection="list" item="item" separator="," >
+		(
+			#{item.photo_num}
+			, #{item.feed_num}
+			, #{item.origin_file}
+			, #{item.saved_file}
+			<if test="#{item.description}!=null">
+				, #{item.description}
+			</if>
+			<if test="#{item.description}==null">
+				, ' '
+			</if>
+			, #{item.photo_size}
+			, #{item.photo_format}
+			, #{item.resolution}
+		)
+	</foreach>
+	</insert>
+	
+	<!-- 작성한 Reply 객체를 DB에 매개변수로 전달하는 insert문 -->
+	<insert id="replyInsert" parameterType="Reply">
+	insert into ringo_reply(reply_num, feed_num, user_num, contents)
+	values (ringo_reply_seq.nextval, #{feed_num}, #{user_num}, #{contents})
+	</insert>
+	
+	<!-- 피드 작성 기능 끝 -->
+	
+	<!-- 피드&댓글 좋아요 기능 시작 -->
+	<!-- 사용자가 해당 피드에 좋아요를 줬는지 여부를 확인해 리턴하는 select문 -->
+	<select id="feedLikeSelectOneForCheck" parameterType="java.util.HashMap">
+	select count(*)]
+	from ringo_feed_like
+	where user_num = #{user_num}
+		feed_num = #{feed_num}
+	</select>
+	<!-- 해당 피드에 사용자의 좋아요를 삽입하는 insert문-->
+	<insert id="feedLikeInsertOne" parameterType="java.util.HashMap">
+	insert into ringo_feed_like (user_num, feed_num)
+	values	(#{user_num}, #{feed_num})
+	</insert>
+	<!-- 해당 피드에서 사용자의 좋아요를 삭제하는 delete문 -->
+	<delete id="feedLikeDeleteOne" parameterType="java.util.HashMap">
+	delete ringo_feed_like
+	where user_num = #{user_num}
+		feed_num = #{feed_num}
+	</delete>
+	<!-- 특정 피드의 현재 좋아요 갯수를 리턴하는 select문 -->
+	<select id="feedLikeCountSelectByFeedNum">
+	select count(*)
+	from ringo_feed_like
+	where feed_num = #{feed_num}
+	</select>
+	<!-- 피드&댓글 좋아요 기능 끝 -->
 </mapper>

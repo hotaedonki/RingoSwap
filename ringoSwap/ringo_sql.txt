@@ -31,6 +31,9 @@ CREATE TABLE ringo_member (
 	gps_open				char(1)				default 'Y',				--장소(gps) 공개여부
 	trans_lang				varchar2(8)		default 'kor' check(trans_lang in ('kor', 'jap', 'eng'))			--기본 번역언어 설정
 );
+--
+CREATE VIEW ringo_feed_with_likeandtag AS
+
 --각 회원과 해당 회원이 갖는 태그를 매칭하는 테이블
 CREATE TABLE ringo_taglink_member (
 	user_num				number,			--멤버 테이블 외래키, tag_num과 복합하여 복합 기본키 구성
@@ -57,7 +60,15 @@ CREATE TABLE ringo_member_profile (
 	user_num				number			primary key,			--유저 키, 멤버로부터 받아온 외래키이자 기본키
 	original_profile	varchar2(100)	NULL,					--실제 파일 이름
 	saved_profile		varchar2(100)	NULL,					--저장경로에서의 이름
-	constraint fk_user_num		foreign key (user_num) references ringo_member(user_num) on delete cascade
+	constraint fk_user_num_profile	foreign key (user_num) references ringo_member(user_num) on delete cascade
+);
+
+CREATE TABLE ringo_member_follow(
+	follower_num			number,
+	followee_num		number,
+	primary key(follower_num, followee_num),
+	constraint fk_follower_num		foreign key (user_num) references ringo_member(user_num) on delete cascade,
+	constraint fk_followee_num		foreign key (user_num) references ringo_member(user_num) on delete cascade
 );
 
 --공지관련
@@ -78,23 +89,58 @@ CREATE TABLE ringo_feed (
 	feed_num			number				primary key,			--피드 글번호
 	user_num			number				references ringo_member(user_num) on delete cascade,	--유저 키, 피드 작성자
 	contents			varchar2(3000)	NOT NULL,			--내용
-	inputdate			date					default sysdate		--작성일
+	inputdate			date					default sysdate,		--작성일
+	enabled				number(1)			default 1 check(enabled in	0, 1)		--해당 피드가 삭제대기를 위해 내려갔는지 여부/ 0=피드 내려감, 1=피드 안 내려감
 );
+--피드 정보+user_id+좋아요 수+태그를 속성으로 갖는 view를 create하는 명령어
+CREATE VIEW ringo_feed_with_likeandtag AS
+SELECT F.feed_num
+	, M.user_id
+	, MP.original_profile
+	, MP.saved_profile	
+	, F.contents
+	, F.inputdate
+	, count(L.user_num) AS like_count
+	, listagg(T.tag_name, ' ') within group (order by TF.tag_num) AS tag_list
+from
+    ringo_feed F
+left join
+	ringo_member M ON F.user_num = M.user_num
+left join
+	ringo_member_profile MP ON F.user_num = MP.user_num
+left join
+    ringo_feed_like L ON F.feed_num = L.feed_num
+left join
+    ringo_taglink_feed TF ON F.feed_num = TF.feed_num
+left join
+    ringo_tagstorage T ON TL.tag_num = T.tag_num
+GROUP BY
+    F.feed_num, M.user_id, MP.original_profile, MP.saved_profile	, F.contents, F.inputdate;
+--view 사용 예시(14일 이내 작성한 글을 좋아요 수가 많은 순으로 정렬해 출력),
+select * from ringo_feed_with_likeandtag
+where (sysdate - inputdate) <= 14
+order by like_count DESC;
+
 --피드에 사진을 넣는 테이블, 한 피드에 여러개의 사진을 넣을 수 있다.
 CREATE TABLE ringo_feed_photo (
-	feedphoto_num		number			primary key,		--피드 사진 번호
-	feed_num				number,								--사진이 입력된 글번호를 불러오는 외래키
-	origin_file			varchar2(100) not null,					--실제 파일명
-	saved_file			varchar2(100) not null,				--저장된 경로에서의 파일명
-	constraint	fk_feed_num	foreign key (feed_num) references ringo_feed(feed_num) on delete cascade
+	photo_num		number				primary key,			--피드 사진 번호
+	feed_num			number,										--사진이 입력된 글번호를 불러오는 외래키
+	origin_file			varchar2(100)	not null,					--실제 파일명
+	saved_file			varchar2(100)	not null,					--저장된 경로에서의 파일명
+	inputdate			date					default sysdate,		--사진 업로드 날짜 및 시간
+	description		varchar2(150),								--사진에 대한 설명이나 캡션
+	photo_size		number,										--사진 파일의 크기 (바이트 단위)
+	photo_format		varchar2(20)		not null,					--사진의 확장자나 형식 (예: JPEG, PNG, GIF 등)
+	resolution			varchar2(12),								--사진의 해상도 (예: 1920x1080)
+	constraint	fk_feed_num_ph	foreign key (feed_num) references ringo_feed(feed_num) on delete cascade
 );
 --피드에 달린 좋아요를 기록하는 테이블. 동일 피드에 동일 회원이 중복해서 좋아요 누르는건 불가능
 CREATE TABLE ringo_feed_like (
 	feed_num			number, 						--외래키, user와 합쳐서 복합 기본키로 사용
 	user_num			number,						--외래키, feed와 합쳐서 복합 기본키로 사용
 	primary key	(feed_num, user_num),		--두 외래키를 복합 기본키로 설정
-	constraint fk_feed_num	foreign key (feed_num)	references ringo_feed(feed_num) on delete cascade,
-	constraint fk_user_num	foreign key (user_num)	references ringo_member(user_num) on delete cascade
+	constraint fk_feed_num_flike	foreign key (feed_num)	references ringo_feed(feed_num) on delete cascade,
+	constraint fk_user_num_flike	foreign key (user_num)	references ringo_member(user_num) on delete cascade
 );
 --피드에 달린 댓글을 기록하는 테이블.
 CREATE TABLE ringo_reply (
@@ -103,32 +149,56 @@ CREATE TABLE ringo_reply (
 	feed_num		number,					--외래키, 글 삭제시 cascade 됨
 	contents	varchar2(250)	NOT NULL,
 	inputdate		date		default sysdate,
-	constraint fk_feed_num		foreign key (feed_num) references ringo_feed(feed_num) on delete cascade,
-	constraint fk_user_num		foreign key (user_num) references ringo_member(user_num) on delete set null
+	constraint fk_feed_num_reply		foreign key (feed_num) references ringo_feed(feed_num) on delete cascade,
+	constraint fk_user_num_reply		foreign key (user_num) references ringo_member(user_num) on delete set null
 );
+--댓글 정보+좋아요 수+태그를 속성으로 갖는 view를 create하는 명령어
+CREATE VIEW ringo_reply_with_likeandtag AS
+	select R.reply_num
+	 	, R.user_num
+	 	, R.feed_num
+	 	, R.contents
+	 	, R.inputdate
+	 	, count(L.user_num) as like_num
+		, listagg(T.tag_name, ' ') within group (order by TR.tag_num) AS tag_list
+	from ringo_reply R
+	left join
+	    ringo_reply_like L ON F.reply_num = L.reply_num
+	left join
+	    ringo_taglink_reply TR ON F.reply_num = TR.reply_num
+	left join
+	    ringo_tagstorage T ON TL.tag_num = T.tag_num
+	GROUP BY
+	    R.feed_num, R.user_num, R.contents, R.inputdate;
+--view 사용 예시(14일 이내 작성한 글을 좋아요 수가 많은 순으로 정렬해 출력),
+	select *
+	from ringo_reply_with_likeandtag
+	where feed_num = #{feed_num}
+	order by inputdate desc;
+
 --댓글에 달린 좋아요를 기록하는 테이블. 동일 댓글에 동일 회원이 좋아요 누르는 건 불가능
 CREATE TABLE ringo_reply_like (
 	reply_num			number, 					--외래키, 글 삭제시 cascade 됨
 	user_num			number,					--외래키, 글 삭제시 cascade 됨
 	primary key	(reply_num, user_num),
-	constraint fk_reply_num		foreign key	(reply_num) references ringo_reply(reply_num) on delete cascade,
-	constraint fk_user_num		foreign key	(user_num) references ringo_member(user_num) on delete cascade
+	constraint fk_reply_num_rlike		foreign key	(reply_num) references ringo_reply(reply_num) on delete cascade,
+	constraint fk_user_num_rlike		foreign key	(user_num) references ringo_member(user_num) on delete cascade
 );
 --각 피드와 해당 피드에 달리는 태그를 매칭하는 테이블
 CREATE TABLE ringo_taglink_feed (
 	feed_num		number,			--외래키, 글삭제시 같이 삭제됨
 	tag_num		number,			--외래키, 태그 삭제시 같이 삭제됨
 	primary key	(feed_num, tag_num),
-	constraint fk_feed_num	foreign key (feed_num)	references ringo_feed(feed_num) on delete cascade,
-	constraint fk_tag_num	foreign key (tag_num)	references ringo_tagstorage(tag_num) on delete cascade
+	constraint fk_feed_num_tlfeed	foreign key (feed_num)	references ringo_feed(feed_num) on delete cascade,
+	constraint fk_tag_num_tlfeed	foreign key (tag_num)	references ringo_tagstorage(tag_num) on delete cascade
 );
 --각 댓글와 해당 댓글에 달리는 태그를 매칭하는 테이블
 CREATE TABLE ringo_taglink_reply (
 	reply_num		number,						--외래키, 글삭제시 같이 삭제됨
 	tag_num		number,						--외래키, 태그 삭제시 같이 삭제됨
 	primary key	(feed_num, tag_num),
-	constraint fk_relpy_num foreign key (reply_num) references ringo_reply(reply_num) on delete cascade,
-	constraint fk_tag_num foreign key (tag_num) references ringo_tagstorage(tag_num) on delete cascade
+	constraint fk_relpy_num_tlreply foreign key (reply_num) references ringo_reply(reply_num) on delete cascade,
+	constraint fk_tag_num_tlreply foreign key (tag_num) references ringo_tagstorage(tag_num) on delete cascade
 );
 --피드, 에 달 태그를 실제로 기록하는 테이블
 CREATE TABLE ringo_tagstorage (
