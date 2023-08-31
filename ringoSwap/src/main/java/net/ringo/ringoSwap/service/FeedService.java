@@ -33,14 +33,15 @@ public interface FeedService {
 	//----------------[피드 작성 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[피드&댓글 좋아요 기능 시작]----------------------
-	//특정 피드의 좋아요 클릭시 해당 피드의 좋아요를 추가하거나 취소하는 기능
+	//특정 피드의 좋아요 클릭시 해당 피드에 좋아요를 추가하거나 취소하는 메서드
 	public int feedLikeClick(int user_num, int feed_num);
-
+	//특정 댓글의 좋아요 클릭시 해당 댓글에 좋아요를 추가하거나 취소하는 메서드
+	public int replyLikeClick(int user_num, int reply_num);
 	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
 	//피드, 댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 출력하는
-	public ArrayList<Feed> feedSearchByTagName(String tag_name);
+	public ArrayList<Feed> feedSearchByTagName(String tag_name, String feedArrayType);
 	
 	
 	

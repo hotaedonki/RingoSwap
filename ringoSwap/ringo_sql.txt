@@ -10,10 +10,12 @@ CREATE TABLE ringo_member (
 	gender					char(1)			NOT NULL check(gender in('F', 'M', 'N')),	--성별
 	birth_date				date					NOT NULL,			--생년월일
 	email	 					varchar2(60)	NOT NULL unique,	--이메일(인증용)
-	native_lang			varchar2(8)		NOT NULL,		--모국어 설정
-	target_lang			varchar2(8)		NOT NULL,		--학습언어 설정
+	native_lang			varchar2(8)		NOT NULL,			--모국어 설정
+	target_lang			varchar2(8)		NOT NULL,			--학습언어 설정
 	--취미 및 기타 선택입력 정보
-	introduction			varchar2(1500),						--자기소개
+	original_profile		varchar2(100)	NULL,					--프로필 사진 실제 파일 이름
+	saved_profile			varchar2(100)	NULL,					--프로필 사진 저장경로에서의 이름
+	introduction			varchar2(1500),								--자기소개
 	mbti						varchar2(5)		check(mbti in('ISFJ', 'ISFP', 'ISTJ', 'ISTP', 'INFJ', 'INFP', 'INTJ', 'INTP', 'ESFJ', 'ESFP', 'ESTJ', 'ESTP', 'ENFJ', 'ENFP', 'ENTJ', 'ENTP')),
 	--mbti 성격 지정, 16가지로 선택지를 한정함
 	--해당 계정의 유료, 무료재화 보유량에 관한 정보
@@ -39,12 +41,11 @@ CREATE VIEW ringo_member_with_profileandfollow AS
 		, M.native_lang
 		, M.target_lang
 		, M.introduction
-		, P.original_profile
-		, P.saved_profile
+		, M.original_profile
+		, M.saved_profile
 		, count(FR.follower) as follower_count
 		, count(FE.followee) as folowee_count
 	from ringo_member M
-	left join ringo_member_profile P M.user_num = P.user_num
 	left join ringo_member_follow FW M.user_num = FW.follower_num
 	left join ringo_member_follow FE M.user_num = FE.followee_num
 	group by
@@ -71,13 +72,6 @@ CREATE TABLE ringo_tagstorage_member (
 insert into ringo_tagstorage_member
 values  ([tag_num], [tag]);
 
---회원의 프로필 사진을 기록하는 테이블
-CREATE TABLE ringo_member_profile (
-	user_num				number			primary key,			--유저 키, 멤버로부터 받아온 외래키이자 기본키
-	original_profile	varchar2(100)	NULL,					--실제 파일 이름
-	saved_profile		varchar2(100)	NULL,					--저장경로에서의 이름
-	constraint fk_user_num_profile	foreign key (user_num) references ringo_member(user_num) on delete cascade
-);
 
 CREATE TABLE ringo_member_follow(
 	follower_num			number,
@@ -114,8 +108,8 @@ CREATE TABLE ringo_feed (
 CREATE VIEW ringo_feed_with_likeandtag AS
 SELECT F.feed_num
 	, M.user_id
-	, MP.original_profile
-	, MP.saved_profile	
+	, M.original_profile
+	, M.saved_profile	
 	, F.contents
 	, F.inputdate
 	, count(L.user_num) AS like_count
@@ -124,8 +118,6 @@ from
     ringo_feed F
 left join
 	ringo_member M ON F.user_num = M.user_num
-left join
-	ringo_member_profile MP ON F.user_num = MP.user_num
 left join
     ringo_feed_like L ON F.feed_num = L.feed_num
 left join
@@ -175,13 +167,17 @@ CREATE TABLE ringo_reply (
 --댓글 정보+좋아요 수+태그를 속성으로 갖는 view를 create하는 명령어
 CREATE VIEW ringo_reply_with_likeandtag AS
 	select R.reply_num
-	 	, R.user_num
+	 	, M.user_ id
+		, M.original_profile
+		, M.saved_profile	
 	 	, R.feed_num
 	 	, R.contents
 	 	, R.inputdate
 	 	, count(L.user_num) as like_num
 		, listagg(T.tag_name, ' ') within group (order by TR.tag_num) AS tag_list
 	from ringo_reply R
+	left join
+		ringo_member M ON F.user_num = M.user_num
 	left join
 	    ringo_reply_like L ON F.reply_num = L.reply_num
 	left join

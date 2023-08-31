@@ -28,6 +28,8 @@ public class Member implements UserDetails
 	String native_lang;			//계정 사용자의 모국어
 	String target_lang;			//계정 사용자의 학습언어
 	//null 가능 부
+	String original_profile;		//프로필 사진 실제 파일 이름
+	String saved_profile;		//프로필 사진 저장경로에서의 이름
 	String introduction;			//계정의 자기소개문구
 	String mbti;					//계정의 MBTI값
 	int point;						//계정의 무료재화 수치
@@ -56,6 +58,8 @@ public class Member implements UserDetails
 				+ "{%s} : email \n"
 				+ "{%s} : native_lang \n"
 				+ "{%s} : target_lang \n"
+				+ "{%s} : original_profile \n"
+				+ "{%s} : saved_profile \n"
 				+ "{%s} : introduction \n"
 				+ "{%s} : mbti \n"
 				+ "{%d} : point \n"
@@ -79,6 +83,8 @@ public class Member implements UserDetails
 								, email
 								, native_lang
 								, target_lang
+								, original_profile
+								, saved_profile
 								, introduction
 								, mbti
 								, point
