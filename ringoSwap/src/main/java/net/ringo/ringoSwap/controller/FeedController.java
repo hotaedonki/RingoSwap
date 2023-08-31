@@ -162,7 +162,7 @@ public class FeedController
 	
 	//<<<<<<<<<<<------[피드&댓글 좋아요 기능 시작]----------------------
 
-	//특정 피드의 좋아요 클릭시 해당 피드의 좋아요를 추가하거나 취소하는 기능
+	//특정 피드의 좋아요 클릭시 해당 피드에 좋아요를 추가하거나 취소하는 기능
 	@ResponseBody
 	@PostMapping("feedLikeClicker")
 	public int feedLikeClicker(@AuthenticationPrincipal UserDetails user
@@ -173,7 +173,18 @@ public class FeedController
 		
 		return methodResult;
 	}
-	
+
+	//특정 댓글의 좋아요 클릭시 해당 댓글에 좋아요를 추가 혹은 취소하는 기능
+	@ResponseBody
+	@PostMapping("replyLikeClicker")
+	public int replyLikeClicker(@AuthenticationPrincipal UserDetails user
+					, int reply_num) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		int methodResult = service.replyLikeClick(user_num, reply_num);
+		
+		return methodResult;
+	}
 	
 	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
 
@@ -183,11 +194,22 @@ public class FeedController
 	
 	//피드, 댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 출력하는 controller메서드
 	@GetMapping("feedTagSearch")
-	public ArrayList<Feed> feedTagSearch(String tag_name){
-		ArrayList<Feed> feedList = service.feedSearchByTagName(tag_name);
+	public ArrayList<Feed> feedTagSearch(String tag_name, String feedArrayType){
+		//service단에 검색한 태그명과 현재 정렬방식을 인계후 계산결과를 feed 배열로 리턴
+		ArrayList<Feed> feedList = service.feedSearchByTagName(tag_name, feedArrayType);
 		
 		return feedList;
 	}
 	
+	//
+	
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
+
+	
+	
+	//<<<<<<<<<<<------[검색 관련 기능 시작]----------------------
+	
+
+	
+	//----------------[검색 관련 기능 종료]----------->>>>>>>>>>>>
 }

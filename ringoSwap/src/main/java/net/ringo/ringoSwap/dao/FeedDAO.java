@@ -49,13 +49,21 @@ public interface FeedDAO
 	int feedLikeDeleteOne(HashMap<String, Integer> map);
 	//특정 피드의 현재 좋아요 갯수를 리턴하는 메서드
 	int feedLikeCountSelectByFeedNum(int feed_num);
+	//사용자가 해당 댓글에 좋아요를 줬는지 여부를 확인해 리턴하는 메서드
+	int replyLikeSelectOneForCheck(HashMap<String, Integer> map);
+	//해당 댓글에 사용자의 좋아요를 insert하는 메서드
+	int replyLikeInsertOne(HashMap<String, Integer> map);
+	//해당 댓글에서 사용자의 좋아요를 delete하는 메서드
+	int replyLikeDeleteOne(HashMap<String, Integer> map);
+	//특정 댓글의 현재 좋아요 갯수를 리턴하는 메서드
+	int replyLikeCountSelectByFeedNum(int reply_num);
 	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
-	//피드에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 리턴하는 메서드
-	ArrayList<Feed> feedArraySearchByTagName(String tag_name);
-	//댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 리턴하는 메서드
-	ArrayList<Integer> replyArraySearchByTagNameReturnFeedNum(String tag_name);
-	//피드 번호를 매개변수로 피드 배열을 검색해 리턴하는 메서드
-	ArrayList<Feed> feedArraySearchByFeedNumArray(ArrayList<Integer> numList);
+	//피드에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드와 태그가 달린 댓글이 달린 피드를 검색해서 리턴하는 메서드
+	ArrayList<Feed> feedArraySearchByTagName(HashMap<String, String> map);
+	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
+	
+	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
+
 }

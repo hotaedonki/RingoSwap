@@ -12,6 +12,7 @@ import net.ringo.ringoSwap.dao.FeedDAO;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Reply;
+import net.ringo.ringoSwap.util.FeedSort;
 
 @Service
 public class FeedServiceImple implements FeedService{
@@ -79,6 +80,7 @@ public class FeedServiceImple implements FeedService{
 	
 	//<<<<<<<<<<<------[피드&댓글 좋아요 기능 시작]----------------------
 	//특정 피드의 좋아요 클릭시 해당 피드의 좋아요를 추가하거나 취소하는 기능
+	@Override
 	public int feedLikeClick(int user_num, int feed_num) {
 		HashMap<String, Integer> map = new HashMap<>();
 		map.put("user_num", user_num);
@@ -102,18 +104,42 @@ public class FeedServiceImple implements FeedService{
 		
 		return methodResult;
 	}
+	//특정 댓글의 좋아요 클릭시 해당 댓글에 좋아요를 추가하거나 취소하는 메서드
+	@Override
+	public int replyLikeClick(int user_num, int reply_num) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("user_num", user_num);
+		map.put("feed_num", reply_num);
+		
+		//해당 사용자가 이미 해당 댓글에 좋아요를 준 적이 있는지 확인하는 메서드
+		int methodResult = dao.replyLikeSelectOneForCheck(map);
+		
+		/*
+		 * 결과가 1=이미 좋아요를 준 적이 있기에 해당 좋아요를 취소하는 delete문 실행
+		 * 결과가 0=아직 좋아요를 준 적이 없기에 해당 피드에 좋아요를 주는 insert문 실행
+		 */
+		if(methodResult==0) {		//insert메서드를 실행하는 if문
+			methodResult = dao.replyLikeInsertOne(map);
+		}else {								//delete메서드를 실행하는 if문
+			methodResult = dao.replyLikeDeleteOne(map);
+		}
+		
+		//삽입/삭제 메서드 실행후 변동된 좋아요 갯수를 다시 검색하여 리턴받는 메서드 실행
+		methodResult = dao.replyLikeCountSelectByFeedNum(reply_num);
+		
+		return methodResult;
+	}
 	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
 	//피드, 댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 출력하는 메서드
-	public ArrayList<Feed> feedSearchByTagName(String tag_name){
-		ArrayList<Feed> feedList = dao.feedArraySearchByTagName(tag_name);
-		ArrayList<Integer> numList = dao.replyArraySearchByTagNameReturnFeedNum(tag_name);
+	@Override
+	public ArrayList<Feed> feedSearchByTagName(String tag_name, String feedArrayType){
+		HashMap<String, String> map = new HashMap<>();				//배열 출력을 위한 조건을 전달할때 사용하는 hashmap변수
+		//검색조건이 담긴 변수 map을 매개변수로 DB에 전달해, db로부터 해당 조건을 만족하는 피드 배열을 리턴받는 메서드 실행
+		ArrayList<Feed> feedList = dao.feedArraySearchByTagName(map);
 
-		ArrayList<Feed> feedList2 = dao.feedArraySearchByFeedNumArray(numList);
-		Collections.sort(feedList, (f1, f2) -> Integer.compare(f1.getFeed_num(), f2.getFeed_num()));
-		
-		Comparator<Feed> comparator;
+		//리턴받은 피드 배열을 service에 리턴
 		return feedList;
 	}
 }
