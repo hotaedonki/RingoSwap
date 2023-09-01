@@ -2,12 +2,33 @@
 <html xmlns:th="http://thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<meta charset="UTF-8">
-<title>ringo</title>
-<script th:src="@{/js/jquery-3.7.0.js}"></script>
-
+    <meta charset="UTF-8">
+    <title>Socket.IO Chat</title>
 </head>
 <body>
+    <h1>Socket.IO Chat</h1>
 
+    <form action="/send" method="post">
+        <input type="text" name="message" placeholder="Type a message..." required />
+        <button type="submit">Send</button>
+    </form>
+
+    <ul id="chat-messages">
+        <!-- 이 영역에 채팅 메시지를 동적으로 추가! -->
+    </ul>
+
+    <script th:src="@{/js/socket.io.js}"></script>
+    <script>
+        const socket = io();
+
+        // 서버로부터 메시지를 받아서 화면에 추가하는 코드
+        socket.on('receiveMessage', (message) => 
+        {
+            const chatMessages = document.getElementById('chat-messages');
+            const listItem = document.createElement('li');
+            listItem.textContent = message;
+            chatMessages.appendChild(listItem);
+        });
+    </script>
 </body>
 </html>

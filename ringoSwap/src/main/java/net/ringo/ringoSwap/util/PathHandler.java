@@ -22,4 +22,8 @@ public class PathHandler
 	public final static String REMOVEALLSESSIONJOIN = "removeAllSessionJoin";
 	public final static String MEMBERTAGLINKINSERT= "memberTagLinkInsert";
 	public final static String MODIFYPROFILE ="modifyProfile";
+	
+	// Chat
+	public final static String CHAT = "chat";
+	public final static String CHATMAIN = "chatMain";
 }
