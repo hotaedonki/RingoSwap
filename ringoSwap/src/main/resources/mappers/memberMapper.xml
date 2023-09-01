@@ -95,4 +95,22 @@
 	where user_num = #{user_num}
 		and tag_num = #{tag_num}
 	</delete>
+	<!-- [ 멤버태그 관련 기능 종료 ] -->
+
+	<!-- [ 마이페이지 시작 ] -->
+	<!-- 사용자의 수정한 프로필 정보 매개변수로 가져가 DB를 수정하는 update문 -->
+	<update id="memberUpdateProfile" parameterType="Member">
+	update ringo_member
+	set native_lang = #{native_lang}, target_lang=#{target_lang}
+        ,original_profile=#{original_profile}, saved_profile=#{saved_profile}
+        , introduction=#{introduction}, mbti=#{mbti}, rewrite_time=sysdate
+	where user_num = #{user_num};
+	</update>
+	<!-- 사용자의 수정한 계정 정보 매개변수로 가져가 DB를 수정하는 update문 -->
+	<update id="memberUpdateAccount" parameterType="Member">
+	update ringo_member
+	set ==== 
+	where user_num = #{user_num}
+	</update>
+	
 </mapper>

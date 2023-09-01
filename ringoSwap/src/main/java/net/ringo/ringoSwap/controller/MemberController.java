@@ -208,12 +208,6 @@ public class MemberController
 		
 	}
 	
-	@GetMapping(PathHandler.MYPAGE)
-	public String myPage() 
-	{
-		return "memberView/myPage";
-	}
-	
 	@PostMapping(PathHandler.CHECKSESSION)
 	public JoinState checkSession(HttpSession session)
 	{
@@ -291,10 +285,20 @@ public class MemberController
 		
 		return "";
 	}
+	//----------------[멤버태그 기능 종료]----------->>>>>>>>>>>>
+
+	//<<<<<<<<<<<------[마이페이지 기능 시작]----------------------
+	//마이페이지
+	@GetMapping(PathHandler.MYPAGE)
+	public String myPage() 
+	{
+		return "memberView/myPage";
+	}
 	
 	@GetMapping(PathHandler.MODIFYPROFILE)
 	public String modifyProfile()
 	{
+		
 		return "memberView/modifyProfile";
 	}
 	
@@ -302,6 +306,17 @@ public class MemberController
 	@PostMapping(PathHandler.MODIFYPROFILE)
 	public void modifyProfile(Member m)
 	{
+		int methodResult = service.memberUpdateProfile(m);
 		log.debug("{} - modifyProfile", m);
 	}
+	@ResponseBody
+	@PostMapping(PathHandler.MODIFYACCOUNT)
+	public void modifyAccount(Member m)
+	{
+		int methodResult = service.memberUpdateAccount(m);
+		log.debug("{} - modifyProfile", m);
+	}
+	//----------------[마이페이지 기능 종료]----------->>>>>>>>>>>>
+
+	//<<<<<<<<<<<------[ 시작]----------------------
 }

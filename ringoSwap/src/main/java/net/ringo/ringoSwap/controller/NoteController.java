@@ -146,7 +146,7 @@ public class NoteController
 		file.setUser_num(user_num);
 		file.setDir_num(dir_num);
 		file.setTitle(title);
-		file.setFile_type(file_type);
+		file.setFile_type(file_type);				//값이 notepad일경우 메모장 생성, word일경우 단어장 본체 생성
 		//파일 생성
 		int num = service.fileCreateOne(file);
 		int file_num = 0;//그 방법을 알아서 생성과 동시에 file_num을 받아오는 시스템을 구현할 것
