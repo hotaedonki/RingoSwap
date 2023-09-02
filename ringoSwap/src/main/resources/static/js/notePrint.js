@@ -18,8 +18,8 @@ $(document).ready(function(){
         fileCreate('word');
     });
     $(document).on('click', '[id^="dirOpen"]', dirOpen);
+    $(document).on('click', '.yes', closeModal);
 });
-
 
 // 폴더 버튼을 클릭할 때의 이벤트 처리
 $(document).on('click', '.dir-btn', function() {
@@ -165,12 +165,14 @@ function dirOpen() {
                             <span id="fileOpen${item.file_num}">${item.title}</span>
                             <span id="fileType${item.file_num}">${item.file_type}</span>
                             <span>${item.lang_type}</span>
+                            <i class="bi bi-pencil" id="fileModify${item.file_num}"></i>
                             <i class="bi bi-trash" id="fileDelete${item.file_num}"></i>
                         </li>`;
             });
             str += '</ul>';
             $('#filePrint' + num).html(str);
             $('[id^="fileOpen"]').click(fileOpen);
+            $('[id^="fileModify"]').click(fileModify);            
             $('[id^="fileDelete"]').click(fileDelete);
         },
         error: function(e) {
@@ -253,30 +255,76 @@ function fileOpen(){
         // 단어 추가 로직
     }
 }
+
+function fileModify() {
+    // 현재 클릭한 수정 버튼의 ID를 가져옵니다.
+    let file_num = $(this).attr('id').replace('fileModify', '');
+    // 현재 파일 이름을 가져옵니다.
+    let currentFileName = $("#fileOpen" + file_num).text();
+    // 모달을 표시합니다.
+    $("#modifyModal").modal('show');
+    $("#newFileNameInput").val(currentFileName);
+    
+    // 수정 버튼을 클릭하면
+    $("#modifyFileName").off().click(function() {
+        let newFileName = $("#newFileNameInput").val(); // 새로운 파일 이름을 가져옵니다.
+
+        // AJAX 호출로 서버에 파일 이름 변경을 요청합니다.
+        $.ajax({
+            url: 'modifyFileName',  // 해당 URL을 변경할 필요가 있을 수 있습니다.
+            type: 'post',
+            data: {
+                file_num: file_num,
+                title : title
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // 이름 업데이트
+                    $("#fileOpen" + file_num).text(newFileName);
+                    $("#modifyModal").modal('hide'); // 모달을 숨깁니다.
+                } else {
+                    alert("파일 이름을 변경하는 데 실패했습니다.");
+                }
+            },
+            error: function() {
+                alert("파일 이름을 변경하는 데 실패했습니다.");
+            }
+        });
+    });
+}
 /* Delete 함수 목록 시작부 */
 function fileDelete(){
-    let arr = $(this).attr("id").split('ete',2);
-    let num = arr[1];
-    console.log(arr);
-    console.log(num);
-
-    $.ajax({
-    url: 'fileDeleteOne',
-    type: 'post',
-    data: {file_num : num},
-    dataType: 'text',
-    success: function(txt){
-        console.log("success"+txt);
-        
-        dirPrint();
-    },
-    error: function(e){
-        console.log("error");
-    }
-});
-
+	    let arr = $(this).attr("id").split('ete',2);
+	    let num = arr[1];
+	    console.log(arr);
+	    console.log(num);
+		
+		$("#deleteModal").modal('show');
+		$("#confirmDelete").off().click(function() {
+		    $.ajax({
+		    url: 'fileDeleteOne',
+		    type: 'post',
+		    data: {file_num : num},
+		    dataType: 'text',
+		    success: function(txt){
+		        console.log("success"+txt);
+		        
+		        dirPrint();
+		    },
+		    error: function(e){
+		        console.log("error");
+		    }
+		});
+	});
 }
 
+function showModal() {
+
+}
+function closeModal() {
+	$(this).closest(".modal").modal("hide");
+}
 let originalWordList = ""; // 임시 변수로 원래 wordList의 내용을 저장
 
 $(document).ready(function() {
@@ -394,6 +442,8 @@ $(document).ready(function() {
 	    $(".carousel-control-next").remove();
 	});
 });
+
+
 
 /*
 function loadNoteContent(file_num) {
