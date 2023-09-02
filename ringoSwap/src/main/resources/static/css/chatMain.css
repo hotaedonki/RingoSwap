@@ -1,119 +1,151 @@
-@charset "UTF-8";
-
-/* styles.css */
+/* 기본 스타일 */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
 }
 
 .container {
     display: flex;
-    max-width: 1920px;
-    margin: 0 auto;
-    background-color: #fff;
+    justify-content: space-between;
+    background-color: beige;
+    padding: 20px;
 }
 
-.chat-sidebar {
+/* 배경 스타일 */
+.background {
+    background-color: beige;
+    flex: 1;
+}
+
+/* 좌측 스타일 */
+.left {
     width: 25%;
     padding: 20px;
-    border-right: 1px solid #ccc;
 }
 
-.chat-list {
+.left-top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.left-top input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.category-buttons {
+    display: flex;
+}
+
+.category-buttons button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.left-center {
     display: flex;
     flex-direction: column;
 }
 
-.chat-room {
-    display: flex;
-    align-items: center;
+/* 오픈 채팅방 및 DM 리스트 스타일 */
+.open-chat-rooms, .dm-list {
+    border: 1px solid #ccc;
+    border-radius: 5px;
     padding: 10px;
-    border-bottom: 1px solid #ccc;
+    margin-top: 10px;
 }
 
-.chat-room img {
+.open-chat-room, .dm-room {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.open-chat-room img, .dm-room img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
 }
 
-.chat-content {
+/* 중앙 스타일 */
+.center {
     flex: 1;
     padding: 20px;
 }
 
-.chat-room-list {
+/* 채팅방 입장 전 스타일 */
+.pre-chat button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* 채팅방 입장 후 스타일 */
+.chat-room {
     display: flex;
     flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.chat-header {
+    text-align: center;
     margin-bottom: 20px;
 }
 
-.chat-room h2 {
-    margin: 0;
-}
-
-.chat-room-content {
-    display: flex;
-    flex-direction: column;
-}
-
-.chat-messages {
-    flex: 2;
+.messages {
+    height: 300px;
     overflow-y: scroll;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 20px;
 }
 
 .message {
-    margin: 10px;
     padding: 10px;
-    border-radius: 10px;
+    margin: 10px;
+    border-radius: 5px;
 }
 
-.message.left {
-    background-color: #f1f1f1;
+.incoming {
+    background-color: #007bff;
+    color: #fff;
     align-self: flex-start;
 }
 
-.message.right {
-    background-color: #4caf50;
-    color: white;
+.outgoing {
+    background-color: #007bff;
+    color: #fff;
     align-self: flex-end;
 }
 
-.chat-participants {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.participant {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-}
-
-.participant img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-/* 입력 영역 스타일링 */
 .message-input {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    border-top: 1px solid #ccc;
-    padding: 10px;
+    margin-top: 20px;
 }
 
 .message-input input {
     flex: 1;
     padding: 10px;
-    border: none;
+    border: 1px solid #ccc;
     border-radius: 5px;
     margin-right: 10px;
 }
@@ -126,3 +158,49 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
+
+/* 우측 스타일 */
+.right {
+    width: 25%;
+    padding: 20px;
+}
+
+/* 채팅방 입장 전 스타일 */
+.voice-room-settings {
+    text-align: center;
+}
+
+.voice-room-settings button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 채팅방 입장 후 스타일 */
+.participants-list h3 {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.participant {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.participant img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* 추가적인 스타일링을 원하는대로 수정 가능합니다. */

@@ -14,4 +14,5 @@ public class Chatroom {
 	String lang_category;
 	String gen_category;
 	String modifie_date;
+	int totalsize;
 }
