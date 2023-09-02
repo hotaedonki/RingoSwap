@@ -75,7 +75,7 @@
 						<li><a th:href="@{/live/liveMain}"> <i
 								class='bx bx-tv icon'></i> <span class="text nav-text">Live</span>
 						</a></li>
-						<li><a th:href="@{/note/noteWord}">단어장으로 이동</a></li>
+
 					</ul>
 				</div>
 				<!-- ========================사이드바 하단=========================== -->
@@ -177,62 +177,96 @@
 						</div>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-12">
+						<div class="card mb-3" style="height: 97vh; top: 9px;">
+							<!-- Header with '추가' button -->
+							<div class="card-header d-flex justify-content-between">
+								<h2>단어장 이름</h2>
+								<button class="btn btn-primary"
+									style="position: absolute; right: 100px;">추가</button>
+							</div>
 
-				<textarea id="noteTextarea">
-					    Welcome to TinyMCE!
-					    
-					  </textarea>
-				<script>
-					tinymce
-							.init({
-								language : "ko_KR",
-								selector : '#noteTextarea',
-								selector : 'textarea',
-								height : '97vh',
-								menubar : false,
-								plugins : [ "advlist", "autolink", "lists",
-										"link", "image", "charmap", "preview",
-										"anchor", "searchreplace",
-										"visualblocks", "code", "fullscreen",
-										"insertdatetime", "media", "table",
-										"code", "help", "wordcount", "save" ],
-								toolbar : 'formatselect fontselect fontsizeselect |'
-										+ ' forecolor backcolor |'
-										+ ' bold italic underline strikethrough |'
-										+ ' alignjustify alignleft aligncenter alignright |'
-										+ ' bullist numlist |'
-										+ ' table tabledelete |'
-										+ ' link image | ' + ' save ',
-								image_title : true,
-								automatic_uploads : true,
-								file_picker_types : 'image',
-								file_picker_callback : function(cb, value, meta) {
-									let input = document.createElement('input');
-									input.setAttribute('type', 'file');
-									input.setAttribute('accept', 'image/*');
-									input.onchange = function() {
-										let file = this.files[0];
-										let reader = new FileReader();
-										reader.onload = function() {
-											let id = 'blobid'
-													+ (new Date()).getTime();
-											let blobCache = tinymce.activeEditor.editorUpload.blobCache;
-											let base64 = reader.result
-													.split(',')[1];
-											let blobInfo = blobCache.create(id,
-													file, base64);
-											blobCache.add(blobInfo);
-											cb(blobInfo.blobUri(), {
-												title : file.name
-											});
-										};
-										reader.readAsDataURL(file);
-									};
-									input.click();
-								},
-								content_style : 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }'
-							});
-				</script>
+							<!-- Body for the words -->
+							<div class="card-body">
+								<div class="row">
+									<!-- 14 단어 예시 (2열, 7행) -->
+									<!-- 첫 번째 열 -->
+									<div class="col-6">
+										<ul class="list-group">
+											<li class="list-group-item word-card"><span class="word">단어</span>
+												<div class="word-content">
+													<span class="pronunciation">발음1</span> <span
+														class="meaning">뜻1</span>
+												</div></li>
+											<li class="list-group-item word-card"><span class="word">단어</span>
+												<div class="word-content">
+													<span class="pronunciation">발음2</span> <span
+														class="meaning">뜻2</span>
+												</div></li>
+											<li class="list-group-item word-card"><span class="word">단어</span>
+												<div class="word-content">
+													<span class="pronunciation">발음3</span> <span
+														class="meaning">뜻3</span>
+												</div></li>
+											<li class="list-group-item word-card"><span class="word">단어</span>
+												<div class="word-content">
+													<span class="pronunciation">발음4</span> <span
+														class="meaning">뜻4</span>
+												</div></li>
+										</ul>
+									</div>
+									<!-- 두 번째 열 -->
+									<div class="col-6">
+										<ul class="list-group">
+											<li class="list-group-item word-card"><span class="word">단어</span>
+												<div class="word-content">
+													<span class="pronunciation">발음1</span> <span
+														class="meaning">뜻1</span>
+												</div></li>
+											<li class="list-group-item word-card"><span class="word">단어</span>
+												<div class="word-content">
+													<span class="pronunciation">발음2</span> <span
+														class="meaning">뜻2</span>
+												</div></li>
+											<li class="list-group-item word-card"><span class="word">단어</span>
+												<div class="word-content">
+													<span class="pronunciation">발음3</span> <span
+														class="meaning">뜻3</span>
+												</div></li>
+											<li class="list-group-item word-card"><span class="word">단어</span>
+												<div class="word-content">
+													<span class="pronunciation">발음4</span> <span
+														class="meaning">뜻4</span>
+												</div></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<!-- Pagination -->
+							<div class="card-footer">
+								<ul class="pagination">
+									<li class="page-item disabled"><a class="page-link"
+										href="#">&laquo;</a></li>
+									<li class="page-item active"><a class="page-link" href="#">1</a>
+									</li>
+									<li class="page-item"><a class="page-link" href="#">2</a>
+									</li>
+									<li class="page-item"><a class="page-link" href="#">3</a>
+									</li>
+									<li class="page-item"><a class="page-link" href="#">4</a>
+									</li>
+									<li class="page-item"><a class="page-link" href="#">5</a>
+									</li>
+									<li class="page-item"><a class="page-link" href="#">&raquo;</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</main>
 

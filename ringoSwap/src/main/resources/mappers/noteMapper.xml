@@ -53,15 +53,17 @@
 			<if test = "text !='null' ">
 				and title like '%'||#{text}||'%'
 			</if>
-		<if test="sort eq 'input'">
-			order by file_num
-		</if>
-		<if test="sort eq 'title'">
-			order by title desc
-		</if>
-		<if test="sort == 'modifie'">
-			order by modifie_date desc
-		</if>
+		<choose>
+	        <when test="sort eq 'input'">
+	            order by file_num
+	        </when>
+	        <when test="sort eq 'title'">
+	            order by title desc
+	        </when>
+	        <otherwise>
+	            order by modifie_date desc
+	        </otherwise>
+    	</choose>
 	</select>
 	
 	<!-- file_num을 매개변수로 file객체를 검색해 리턴하는 select문 -->
@@ -85,7 +87,7 @@
 	
 	<!-- 생성부 -->
 	<!-- 매개변수로 받은 directory객체를 통해 DB에 새로운 directory정보를 생성하는 insert문 -->
-	<insert id="dirCreateOne" parameterType="Directory">
+	<insert id="dirCreate" parameterType="Directory">
 	insert into ringo_directory (dir_num, user_num, dir_name
 		<if test="parent_dir_num != -1">
 		, parent_dir_num

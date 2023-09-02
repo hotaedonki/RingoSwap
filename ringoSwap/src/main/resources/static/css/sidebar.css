@@ -302,12 +302,10 @@ body.dark .switch::before{
 }
 
 .home{
-    position: absolute;
-    top: 0;
-	bottom: 0;
-    left: 237px;
+    position: fixed;
+    left: 170px;
     height: 100vh;
-    width: calc(100% - 237px);
+    width: calc(100% - 170px);
     background-color: var(--body-color);
     transition: var(--tran-05);
 }
