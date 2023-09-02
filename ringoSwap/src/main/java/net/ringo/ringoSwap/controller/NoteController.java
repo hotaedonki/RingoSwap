@@ -224,9 +224,25 @@ public class NoteController
 	
 	
 	
+
+	//<<<<<<<<<<<<-----[ 노트 수정기능 시작 ]-----------------------
+	//파일번호, 수정된 파일명을 매개변수로 DB에 전달하여 해당 파일을 수정하는 메서드
+	@ResponseBody
+	@PostMapping("fileDeleteOne")
+	public String fileModify(int file_num, String title
+				, @AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("user_num", user_num);
+		map.put("file_num", file_num);
+		map.put("title", title);
+		int methodResult = service.fileUpdateOne(map);
+		
+		return "";
+	}
+
 	
-	
-	
+	//-----------[ 노트 수정기능 종료 ]-------------->>>>>>>>>>>>>>
 	@GetMapping("noteWord")
 	public String noteWord() {
 		return "note/noteWord";

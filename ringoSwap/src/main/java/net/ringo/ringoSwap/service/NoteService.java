@@ -39,5 +39,9 @@ public interface NoteService {
 	int dirDeleteOne(HashMap<String, Integer> map);
 	//파일번호를 매개변수로 해당 파일을 DB에서 삭제하는 기능
 	int fileDeleteOne(HashMap<String, Integer> map);
+	//-----------[ 노트 삭제기능 종료 ]-------------->>>>>>>>>>>>>>
 
+	//<<<<<<<<<<<<-----[ 노트 수정기능 시작 ]-----------------------
+	//수정된 파일번호를 보내 해당 파일번호의 파일의 이름을 수정하는 기능
+	int fileUpdateOne(HashMap<String, Object> map);
 }

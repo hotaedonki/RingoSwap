@@ -90,4 +90,12 @@ public class NoteServiceImple implements NoteService{
 	public int fileDeleteOne(HashMap<String, Integer> map) {
 		return dao.fileDeleteOne(map);
 	}
+	//-----------[ 노트 삭제기능 종료 ]-------------->>>>>>>>>>>>>>
+
+	//<<<<<<<<<<<<-----[ 노트 수정기능 시작 ]-----------------------
+	//수정된 파일번호를 보내 해당 파일번호의 파일의 이름을 수정하는 기능
+	@Override
+	public int fileUpdateOne(HashMap<String, Object> map) {
+		return dao.fileUpdateOne(map);
+	}
 }
