@@ -1,34 +1,86 @@
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Socket.IO Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채팅 애플리케이션</title>
+    <link rel="stylesheet" th:href="@{/css/chatMain.css}">
 </head>
 <body>
-    <h1>Socket.IO Chat</h1>
-
-    <form action="/send" method="post">
-        <input type="text" name="message" placeholder="Type a message..." required />
-        <button type="submit">Send</button>
-    </form>
-
-    <ul id="chat-messages">
-        <!-- 이 영역에 채팅 메시지를 동적으로 추가! -->
-    </ul>
-
-    <script th:src="@{/js/socket.io.js}"></script>
-    <script>
-        const socket = io();
-
-        // 서버로부터 메시지를 받아서 화면에 추가하는 코드
-        socket.on('receiveMessage', (message) => 
-        {
-            const chatMessages = document.getElementById('chat-messages');
-            const listItem = document.createElement('li');
-            listItem.textContent = message;
-            chatMessages.appendChild(listItem);
-        });
-    </script>
+    <div class="container">
+        <!-- [ 채팅방 또는 채팅 진입 전 ] -->
+        <div class="chat-sidebar">
+            <div class="chat-list">
+                <!-- 방 목록 요소 -->
+                <div class="chat-room">
+                    <img src="profile1.jpg" alt="프로필 사진">
+                    <h3>채팅방 1</h3>
+                </div>
+                <!-- 다른 채팅방 목록 아이템 추가 -->
+            </div>
+        </div>
+        
+        <div class="chat-content">
+            <!-- 채팅방 리스트 -->
+            <div class="chat-room-list">
+                <!-- 채팅방 목록 요소 -->
+                <div class="chat-room">
+                    <img src="profile1.jpg" alt="프로필 사진">
+                    <h2>채팅방 1</h2>
+                </div>
+                <!-- 다른 채팅방 목록 아이템 추가 -->
+            </div>
+            
+            <!-- 
+		    <script th:src="@{/js/socket.io.js}"></script>
+		    <script>
+		        const socket = io();
+		
+		        // 서버로부터 메시지를 받아서 화면에 추가하는 코드
+		        socket.on('receiveMessage', (message) => 
+		        {
+		            const chatMessages = document.getElementById('chat-messages');
+		            const listItem = document.createElement('li');
+		            listItem.textContent = message;
+		            chatMessages.appendChild(listItem);
+		        });
+		    </script>
+		    -->
+            
+            <!-- 채팅방 진입 후 -->
+            <div class="chat-room-content">
+                <div class="chat-messages">
+                    <!-- 메시지 표시 -->
+                    <div class="message right">
+                        <p>나의 메시지</p>
+                        <span>내 아이디</span>
+                    </div>
+                    <div class="message left">
+                        <p>상대방의 메시지</p>
+                        <span>상대방 아이디</span>
+                    </div>
+                    <!-- 다른 메시지 아이템 추가 -->
+                </div>
+                
+                <div class="chat-participants">
+                    <!-- 참여자 목록 표시 -->
+                    <div class="participant">
+                        <img src="profile1.jpg" alt="참여자 프로필 사진">
+                        <p>참여자 아이디</p>
+                    </div>
+                    <!-- 다른 참여자 아이템 추가 -->
+                </div>
+                
+                <!-- 메시지 입력 영역 -->
+                <div class="message-input">
+                    <input type="text" placeholder="메시지를 입력하세요...">
+                    <button>전송</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
