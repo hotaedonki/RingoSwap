@@ -83,7 +83,9 @@ public class NoteController
 	@ResponseBody
 	@PostMapping("dirOpenFile")
 	public ArrayList<DirFile> dirOpenFile(int dir_num, String category, String sort, String text){
+		log.debug("파일오픈 넘버 {}", dir_num);
 		HashMap<String, Object> map = new HashMap<>();
+		log.debug("해쉬맵확인 {}", map);
 		map.put("dir_num", dir_num);
 		map.put("category", category);
 		map.put("sort", sort);

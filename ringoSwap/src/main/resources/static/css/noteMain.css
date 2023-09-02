@@ -50,3 +50,42 @@
 	margin-top: 9px;
 }
 
+.wordCard {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+}
+
+.carousel-control-prev, .carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-control-prev {
+    left: 0;
+}
+
+.carousel-control-next {
+    right: 0;
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    background-image: url("path_to_your_icons.png"); /* 여기에는 Bootstrap 기본 아이콘 대신 사용할 이미지의 경로를 입력해주세요. */
+}
+
+.pagination li {
+	width: 50px;
+	height: 20px;
+	text-align: center;
+}
