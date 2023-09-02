@@ -45,9 +45,9 @@ public class NoteController
 	@PostMapping("dirPrint")
 	public ArrayList<Directory> dirPrint(@AuthenticationPrincipal UserDetails user) {
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		log.debug("폴더 출력, 유저 넘버 : {}", user_num);
 		ArrayList<Directory> dirList = service.selectUserDirectoryAll(user_num);
-
-		log.debug("디렉토리 : {}", dirList);
+		log.debug("폴더 목록 : {}", dirList);
 		
 		return dirList;
 	}
@@ -74,7 +74,9 @@ public class NoteController
 	@ResponseBody
 	@PostMapping("dirOpenDirectory")
 	public ArrayList<Directory> dirOpenDirectory(int dir_num){
+		log.debug("폴더넘버값 {}", dir_num);
 		ArrayList<Directory> dirList = service.selectDirectoryByPDirNum(dir_num);
+		log.debug("폴더열기 {}", dirList);
 		return dirList;
 	}
 	//ajax를 통해 실행되는 하위 파일을 검색하여 그 목록을 리턴하는 메서드
@@ -87,6 +89,7 @@ public class NoteController
 		map.put("sort", sort);
 		map.put("text", text);
 		ArrayList<DirFile> fileList = service.selectFileByDirNum(map);
+		log.debug("파일열기 {}", fileList);
 		return fileList;
 	}
 	
@@ -95,6 +98,7 @@ public class NoteController
 	@PostMapping("fileOpenNote")
 	public DirNotepad fileOpenNote(int file_num) {
 		String title = service.selectFileByFileNumReturnTitle(file_num);
+		
 		DirNotepad notepad = service.selectNotepadByFileNum(file_num);
 		
 		notepad.setTitle(title);
@@ -126,7 +130,7 @@ public class NoteController
 		dir.setDir_name(dir_name);
 		dir.setUser_num(user_num);
 		dir.setParent_dir_num(parent_dir_num);
-		
+		log.debug("dir통과하나요~{}",dir);
 		int num = service.dirCreateOne(dir);
 	}
 	/*
@@ -139,18 +143,21 @@ public class NoteController
 	public void fileCreate(@AuthenticationPrincipal UserDetails user
 					,int dir_num, String title, String file_type) {
 		//접속한 사용자의 id로 user_num값 획득
+		log.debug("디렉토리넘버 파일생성확인용 {}",dir_num);
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		//파일 생성을 위한 정보를 xml까지 가져갈 DirFile 매개변수 생성
 		DirFile file = new DirFile();
+		log.debug("파일생성{}",user_num);
 		//file에 생성을 위한 정보 삽입
 		file.setUser_num(user_num);
 		file.setDir_num(dir_num);
 		file.setTitle(title);
 		file.setFile_type(file_type);
 		//파일 생성
+		log.debug("파일{}",file);
 		int num = service.fileCreateOne(file);
 		int file_num = 0;//그 방법을 알아서 생성과 동시에 file_num을 받아오는 시스템을 구현할 것
-		
+		log.debug("num값 {}",num);
 		//file_type에 따라 추가생성 정보 분류
 		if(file_type.equals("note")) {
 			DirNotepad note = new DirNotepad();
@@ -159,7 +166,8 @@ public class NoteController
 			note.setUser_num(user_num);
 			
 			int no2 = service.notepadCreateOne(note);
-		}else if(file_type.equals("word")) {
+		} else if(file_type.equals("word")) {
+			
 		}
 		
 	}
@@ -183,4 +191,14 @@ public class NoteController
 	
 	//<<<<<<<<<<<<-----[ 노트 삭제기능 시작 ]-----------------------
 	//-----------[ 노트 삭제기능 종료 ]-------------->>>>>>>>>>>>>>
+	
+	
+	
+	
+	
+	
+	@GetMapping("noteWord")
+	public String noteWord() {
+		return "note/noteWord";
+	}
 }

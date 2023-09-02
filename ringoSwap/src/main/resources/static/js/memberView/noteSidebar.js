@@ -1,6 +1,16 @@
 $(document).ready(function () {
     const sidebar = $('nav.sidebar');
     const noteHome = $('.noteHome');
+    setToggleBtnPosition();
+    $(window).resize(setToggleBtnPosition);
+    
+    function setToggleBtnPosition() {
+    const sidebarWidth = $(".sidebar").width();
+    const directoryWidth = $(".toggleDirectory").width();
+    const btnPosition = sidebarWidth + directoryWidth + 50;  // 25px 추가
+	console.log(sidebarWidth, directoryWidth, btnPosition)
+    $(".toggle-card-btn").css("left", btnPosition + "px");
+};
     
     $(".toggle").click(function () {
         sidebar.toggleClass("close");
@@ -19,16 +29,19 @@ $(document).ready(function () {
     });
     
     $('.toggle-card-btn').on('click', function() {
-        let $card = $(this).closest('.card'); // 해당 버튼의 가장 가까운 '.card' 요소를 선택
-        $card.toggle(); // 카드의 표시/숨김 상태를 토글합니다.
+    const toggleDirectory = $('.toggleDirectory');
+    const toggleBtn = $('.toggle-card-btn');
+    
+    // toggleDirectory의 표시 상태를 변경
+    toggleDirectory.toggle();
 
-        // 아이콘 변경: on/off
-        if ($card.is(':visible')) {
-            $(this).removeClass('bi-toggle-off').addClass('bi-toggle-on');
-        } else {
-            $(this).removeClass('bi-toggle-on').addClass('bi-toggle-off');
-        }
-    });
+    // 아이콘 변경: on/off
+    if (toggleDirectory.is(':visible')) {
+        toggleBtn.removeClass('bi-toggle-on').addClass('bi-toggle-off');
+    } else {
+        toggleBtn.removeClass('bi-toggle-off').addClass('bi-toggle-on');
+    }
+});
     
     $(".bi-file-earmark-plus").click(function() {
         $("#chooseModal").modal('show');
@@ -65,10 +78,10 @@ $(document).ready(function () {
     });
 
     // 노트/단어장 생성 모달에서 이름 입력 필드 추가
-    $(".btn.btn-primary, .btn.btn-secondary").click(function() {
-        let name = prompt("이름을 입력하세요:");
-        if (name) {
+    //$(".btn.btn-primary, .btn.btn-secondary").click(function() {
+   //     let name = prompt("이름을 입력하세요:");
+   //     if (name) {
             // 노트/단어장 생성 로직
-        }
-    });
+    //    }
+   // });
 });

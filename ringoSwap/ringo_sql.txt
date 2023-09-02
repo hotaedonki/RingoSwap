@@ -312,7 +312,7 @@ CREATE TABLE ringo_directory (
 	dir_num				number				primary key,
 	user_num				number				references ringo_member(user_num) on delete cascade,	--계정 삭제시 cascade
 	dir_name				varchar2(100)		NOT NULL,
-	parent_dir_num		number				default null		--자신의 상위 경로 폴더를 저장하는 속성
+	parent_dir_num		number				default -1		--자신의 상위 경로 폴더를 저장하는 속성
 );
 --각 폴더에 저장되는 실제 메모장이나 단어장을 문서 형태로 저장하는 테이블.
 --file_type 속성으로 해당 문서가 메모장(tile)인지 단어장(word)인지 결정합니다.
