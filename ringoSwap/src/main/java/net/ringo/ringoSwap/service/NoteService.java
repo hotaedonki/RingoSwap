@@ -35,6 +35,8 @@ public interface NoteService {
 	//-----------[ 노트 생성기능 종료 ]-------------->>>>>>>>>>>>>>
 	
 	//<<<<<<<<<<<<-----[ 노트 삭제기능 시작 ]-----------------------
+	//dir_num을 매개변수로 해당 폴더를 DB에서 삭제하는 기능
+	int dirDeleteOne(HashMap<String, Integer> map);
 	//파일번호를 매개변수로 해당 파일을 DB에서 삭제하는 기능
 	int fileDeleteOne(HashMap<String, Integer> map);
 

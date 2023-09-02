@@ -40,6 +40,8 @@ public interface NoteDAO
 	//-----------[ 노트 생성기능 종료 ]-------------->>>>>>>>>>>>>>
 	
 	//<<<<<<<<<<<<-----[ 노트 삭제기능 시작 ]-----------------------
+	//dir_num을 매개변수로 해당 폴더를 DB에서 삭제한 후, 삭제여부를 리턴받는 메서드
+	int dirDeleteOne(HashMap<String, Integer> map);
 	//file_num을 매개변수로 해당 파일을 DB에서 삭제한 후, 삭제여부를 리턴받는 메서드
 	int fileDeleteOne(HashMap<String, Integer> map);
 }

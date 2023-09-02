@@ -71,9 +71,11 @@ function dirPrint(){
                 data-dir-num="${item.dir_num}" id="dirOpen${item.dir_num}">
                 ${item.dir_name}</button>
                 <div id="dirPrint${item.dir_num}"></div><div id="filePrint${item.dir_num}"></div>
+                <i class="bi bi-trash" id="dirDelete${item.dir_num}"></i>
                 </li>`;
             });
             $('.dirPrint').html(str);
+            $('[id^="dirDelete"]').click(dirDelete);
         },
         error: function(e){
             console.log(JSON.stringify(e));  
@@ -140,6 +142,7 @@ function dirOpen() {
                     <span data-dir-num="${item.dir_num}" id="dirOpen${item.dir_num}">${item.dir_name}
                     </span>
                     <div id="dirPrint${item.dir_num}"></div><div id="filePrint${item.dir_num}"></div>
+                    <i class="bi bi-trash" id="dirDelete${item.dir_num}"></i>
                 </li>`;
             });
             str += '</ul>';
@@ -257,6 +260,29 @@ function fileOpen(){
 
 
 /* Delete 함수 목록 시작부 */
+//폴더 삭제기능
+function fileDelete(){
+    let arr = $(this).attr("id").split('ete',2);
+    let num = arr[1];
+    console.log(arr);
+    console.log(num);
+
+    $.ajax({
+    url: 'dirDeleteOne',
+    type: 'post',
+    data: {dir_num : num},
+    dataType: 'text',
+    success: function(txt){
+        console.log("success"+txt);
+        
+        dirPrint();
+    },
+    error: function(e){
+        console.log("error");
+    }
+    });
+}
+//파일 삭제기능
 function fileDelete(){
     let arr = $(this).attr("id").split('ete',2);
     let num = arr[1];
@@ -276,10 +302,8 @@ function fileDelete(){
     error: function(e){
         console.log("error");
     }
-});
-
+    });
 }
-
 
 /*
 function loadNoteContent(file_num) {

@@ -178,6 +178,27 @@ public class NoteController
 	
 	
 	//<<<<<<<<<<<<-----[ 노트 삭제기능 시작 ]-----------------------
+	//폴더 번호를 매개변수로 해당 파일을 DB에서 삭제하는 기능
+	@ResponseBody
+	@PostMapping("dirDeleteOne")
+	public String dirDeleteOne(@AuthenticationPrincipal UserDetails user
+			, @RequestParam(name="dir_num", defaultValue="-1") int dir_num) {
+		if(dir_num == -1) {
+			log.debug("파일{}",dir_num);
+			return "삭제실패";
+		}
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("user_num", user_num);
+		map.put("dir_num", dir_num);
+		
+		int methodResult = service.dirDeleteOne(map);
+		if(methodResult==0) {
+			return dir_num+"번 파일 삭제실패";
+		}
+		return dir_num+"번 파일 삭제성공";
+	}
+	
 	//파일번호를 매개변수로 해당 파일을 DB에서 삭제하는 기능
 	@ResponseBody
 	@PostMapping("fileDeleteOne")
