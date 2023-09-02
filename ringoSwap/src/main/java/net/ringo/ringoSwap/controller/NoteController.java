@@ -174,7 +174,31 @@ public class NoteController
 	}
 	//-----------[ 노트 생성기능 종료 ]-------------->>>>>>>>>>>>>>
 	
+	
+	
+	
 	//<<<<<<<<<<<<-----[ 노트 삭제기능 시작 ]-----------------------
+	//파일번호를 매개변수로 해당 파일을 DB에서 삭제하는 기능
+	@ResponseBody
+	@PostMapping("fileDeleteOne")
+	public String fileDeleteOne(@AuthenticationPrincipal UserDetails user
+					, @RequestParam(name="file_num", defaultValue="-1") int file_num) {
+		if(file_num == -1) {
+			log.debug("파일{}",file_num);
+			return "삭제실패";
+		}
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("user_num", user_num);
+		map.put("file_num", file_num);
+		
+		int methodResult = service.fileDeleteOne(map);
+		if(methodResult==0) {
+			return file_num+"번 파일 삭제실패";
+		}
+		return file_num+"번 파일 삭제성공";
+	}
+	
 	//-----------[ 노트 삭제기능 종료 ]-------------->>>>>>>>>>>>>>
 	
 	

@@ -76,4 +76,12 @@ public class NoteServiceImple implements NoteService{
 	public int wordCreateOne(DirWord word) {
 		return dao.wordCreateOne(word);
 	}
+	//-----------[ 노트 생성기능 종료 ]-------------->>>>>>>>>>>>>>
+	
+	//<<<<<<<<<<<<-----[ 노트 삭제기능 시작 ]-----------------------
+	//파일번호를 매개변수로 해당 파일을 DB에서 삭제하는 기능
+	@Override
+	public int fileDeleteOne(HashMap<String, Integer> map) {
+		return dao.fileDeleteOne(map);
+	}
 }
