@@ -21,6 +21,7 @@
 
 <!-- JS -->
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
+<script th:src="@{/js/memberView/myPage.js}"></script>
 
 <title>Dashboard Sidebar Menu</title>
 </head>
@@ -137,25 +138,25 @@
 				<div class="col-lg-6 mt-4">
 					<div class="card mb-4" style="height: 200px;">
 						<div class="card-body">
-							<h4 class="card-title">닉네임</h4>
-							<p class="card-text">자기소개 내용입니다. 여기에 사용자의 소개를 입력하세요.</p>
+							<h4 class="card-title" id="nickname">닉네임</h4>
+							<p class="card-text" id="introduction">자기소개 내용입니다. 여기에 사용자의 소개를 입력하세요.</p>
 						</div>
 					</div>
 					<!-- 팔로워, 팔로우, 언어 정보 -->
 					<div class="col-lg-6">
 						<div class="card-body profile-info">
 							<div>
-								<span style="font-size: 1.3em;"><a href="/followerPage">팔로워
-										100</a></span> 
+								<span style="font-size: 1.3em;"><a href="/followerPage" >팔로워
+										<span id="fr_count">100</span></a></span> 
 										<span style="margin-left: 10px; font-size: 1.3em;"><a
-									href="/followingPage">팔로우 150</a></span>
+									href="/followingPage">팔로우 <span id="fe_count">150</span></a></span>
 							</div>
 							<div style="margin-top: 10px;">
-								<span>모국어</span> <img th:src="@{../img/일본.jpg}"
+								<span>모국어</span> <img th:src="@{/img/일본어.jpg}"
 									alt="Korean Flag"
 									style="border-radius: 50%; width: 20px; height: 20px;"> <span
 									style="margin-left: 10px;">배우고 싶은 언어: 🇺🇸</span> <img
-									th:src="@{../img/한국.png}" alt="US Flag"
+									th:src="@{/img/일본어.jpg}" alt="US Flag"
 									style="border-radius: 50%; width: 20px; height: 20px;">
 							</div>
 						</div>
@@ -170,6 +171,8 @@
 					<div class="card">
 						<div class="card-body">
 							<h5 class="card-title">정보/취미</h5>
+							<div id="tagBtnList">
+							</div>
 							<button class="btn btn-light m-1">태그1</button>
 							<button class="btn btn-light m-1">태그2</button>
 							<button class="btn btn-light m-1">태그3</button>

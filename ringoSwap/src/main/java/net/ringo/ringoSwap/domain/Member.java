@@ -43,8 +43,8 @@ public class Member implements UserDetails
 	String trans_lang;			//계정의 번역언어 값
 	boolean enabled;			//계정의 인증 허용여부
 	//출력시 추가로 필요한 변수목록
-	int followee_count;			//사용자를 팔로워 건 사용자의 수, 팔로워 수
-	int follower_count;			//사용자가 팔로워를 건 사용자의 수, 팔로우 수
+	int fr_count;			//사용자를 팔로워 건 사용자의 수, 팔로워 수
+	int fe_count;			//사용자가 팔로워를 건 사용자의 수, 팔로우 수
 	String tag_list;
 	
 	@Override

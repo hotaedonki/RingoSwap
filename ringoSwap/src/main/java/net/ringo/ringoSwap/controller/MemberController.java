@@ -275,26 +275,34 @@ public class MemberController
 	 * 		기본적이고 필수적인 기능만 구현했습니다. 
 	 * 		이후 논의를 통해 프론트엔드 구현을 확정하고 그에 따라 controller메서드의 수정이 필요합니다(by2023.08.29)
 	 */
+	@ResponseBody
 	@PostMapping(PathHandler.MEMBERTAGLINKINSERT)
-	public String memberTagLinkInsert(ArrayList<Integer> tag_num
+	public void memberTagLinkInsert(String updatedTags
 					, @AuthenticationPrincipal UserDetails user) {
 		//현재 사용자 id를 기반으로 사용자의 user_num을 검색해 리턴
 		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
-		//검색한 user_num을 기반으로 설정한 태그 배열을 매개변수로 DB에 전달한다.
-		int insertResult = service.memberTagLinkInsertArray(tag_num, user_num);
 		
-		return "";
+		//검색한 user_num을 기반으로 설정한 태그 배열을 매개변수로 DB에 전달한다.
+		int insertResult = service.memberTagLinkInsertArray(updatedTags, user_num);
 	}
 	//----------------[멤버태그 기능 종료]----------->>>>>>>>>>>>
 
 	//<<<<<<<<<<<------[마이페이지 기능 시작]----------------------
-	//마이페이지
+	//마이페이지로 이동
 	@GetMapping(PathHandler.MYPAGE)
 	public String myPage() 
 	{
 		return "memberView/myPage";
 	}
 	
+	@ResponseBody
+	@PostMapping(PathHandler.MYPAGE)
+	public Member myMemberPrint(@AuthenticationPrincipal UserDetails user) {
+		Member member = service.memberSearchById(user.getUsername());
+		return member;
+	}
+	
+	//프로필 수정 페이지로 이동
 	@GetMapping(PathHandler.MODIFYPROFILE)
 	public String modifyProfile()
 	{

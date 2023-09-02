@@ -4,6 +4,7 @@ $(document).ready(function() {
     const languageImages = {
         "한국어": "@{../img/한국어.jpg}",
         "일본어": "@{../img/일본어.jpg}",
+        "영어": "@{../img/영어.jpg}"
     };
 
     // Event Handlers Binding
@@ -17,8 +18,8 @@ $(document).ready(function() {
         $(document)
             .on('click', '.hobbyButton ~', toggleHobbyButtonClass)
             .on('click', '.card-text', enableIntroductionEditing)
-            .on('blur', '.card-text textarea', updateIntroductionText)
-            .on('click', '.modify', sendProfileModification)
+            .on('blur', '.form-control textarea', updateIntroductionText)
+            .on('blur', '.modify', sendProfileModification)
             .on('click', '.languageSelect', selectDesiredLanguage);
 
         $(window).on('beforeunload', saveChangesBeforeExit);
@@ -35,6 +36,7 @@ $(document).ready(function() {
 
     function updateIntroductionText() {
         let newValue = $(this).val();
+        console.log(newValue);
         $(this).closest('.card-text').text(newValue);
     }
 
@@ -46,13 +48,13 @@ $(document).ready(function() {
         let backgroundPic = $("#backgroundPicInput")[0].files[0];
 
         let formData = prepareFormData(updatedTags, introduction, desiredLanguage, profilePic, backgroundPic);
-
+		
+		updateTags(updateTags);		//해당 함수로 멤버태그 수정을 실시합니다.
+		
         $.ajax({
             url: '/modifyProfile',
             type: 'POST',
             data: formData,
-            contentType: false,
-            processData: false,
             dataType: 'json',
             success: function(response) {
                 alert('수정이 완료되었습니다.');
@@ -62,7 +64,7 @@ $(document).ready(function() {
             }
         });
     }
-
+	//클릭한 멤버태그를 전부 수집하는 함수입니다.
     function collectUpdatedTags() {
         let updatedTags = [];
         $('.hobbyButton').each(function() {
@@ -70,6 +72,20 @@ $(document).ready(function() {
         });
         return updatedTags;
     }
+    //태그 수정 ajax 실행 함수
+    function updateTags(updateTags){
+		$.ajax({
+			url: '/memberTagLinkInsert',
+            type: 'POST',
+            data: {updatedTags : updateTags},
+            success: function() {
+				console.log("수정성공");
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error(`AJAX call failed: ${textStatus}, ${errorThrown}`);
+            }
+		});
+	}
 
     function prepareFormData(updatedTags, introduction, desiredLanguage, profilePic, backgroundPic) {
         let formData = new FormData();

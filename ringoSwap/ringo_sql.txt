@@ -13,8 +13,8 @@ CREATE TABLE ringo_member (
 	native_lang			varchar2(8)		NOT NULL,			--모국어 설정
 	target_lang			varchar2(8)		NOT NULL,			--학습언어 설정
 	--취미 및 기타 선택입력 정보
-	original_profile		varchar2(100)	NULL,					--프로필 사진 실제 파일 이름
-	saved_profile			varchar2(100)	NULL,					--프로필 사진 저장경로에서의 이름
+	original_profile		varchar2(100)	default '5.jpg',		--프로필 사진 실제 파일 이름
+	saved_profile			varchar2(100)	default '5.jpg',		--프로필 사진 저장경로에서의 이름
 	introduction			varchar2(1500),								--자기소개
 	mbti						varchar2(5)		check(mbti in('NONE', 'ISFJ', 'ISFP', 'ISTJ', 'ISTP', 'INFJ', 'INFP', 'INTJ', 'INTP', 'ESFJ', 'ESFP', 'ESTJ', 'ESTP', 'ENFJ', 'ENFP', 'ENTJ', 'ENTP')),
 	--mbti 성격 지정, 16개+지정안했을때 전용인 NONE의 17가지로 선택지를 한정함
@@ -33,26 +33,25 @@ CREATE TABLE ringo_member (
 	gps_open				char(1)				default 'Y',				--장소(gps) 공개여부
 	trans_lang				varchar2(8)		default 'kor' check(trans_lang in ('kor', 'jap', 'eng'))			--기본 번역언어 설정
 );
+--member전용 시퀸스
+create SEQUENCE ringo_member_seq;
 --마이탭에 표시하기 위해 기존 회원정보에 더해 프로필사진정보+팔로워/팔로잉 갯수+태그 정보를 같이 출력하는 view create문
-CREATE VIEW ringo_member_with_profileandfollowandtag AS
-	select M.user_num
-		, M.user_id
-		, M.username
-		, M.native_lang
-		, M.target_lang
+CREATE VIEW ringo_member_with_mypage AS
+	select M.user_num, M.user_id, M.username
+		, M.native_lang, M.target_lang
 		, M.introduction
-		, M.original_profile
-		, M.saved_profile
-		, count(FR.follower) as follower_count
-		, count(FE.followee) as folowee_count
-		, listagg(T.tag_name, ' ') within group (order by TL.tag_num) as tag_list
+		, M.original_profile, M.saved_profile
+		, count(FW.follower_num) as fr_count				--팔로워 수를 기록하는 속성
+		, count(FE.followee_num) as fe_count				--팔로우 수를 기록하는 속성
+		, listagg(T.tag, ' ') within group (order by TL.tag_num) as tag_list
 	from ringo_member M
 	left join ringo_member_follow FW ON M.user_num = FW.follower_num
 	left join ringo_member_follow FE ON M.user_num = FE.followee_num
 	left join ringo_taglink_member TL ON M.user_num = TL.user_num
 	left join ringo_tagstorage_member T ON TL.tag_num = T.tag_num
 	group by
-		M.user_num, M.user_id, M.username, M.native_lang, M.target_lang, M.introduction, P.original_profile, P.saved_profile
+		M.user_num, M.user_id, M.username, M.native_lang, M.target_lang
+        , M.introduction, M.original_profile, M.saved_profile;
 
 --각 회원과 해당 회원이 갖는 태그를 매칭하는 테이블
 CREATE TABLE ringo_taglink_member (
@@ -80,8 +79,8 @@ CREATE TABLE ringo_member_follow(
 	follower_num			number,
 	followee_num		number,
 	primary key(follower_num, followee_num),
-	constraint fk_follower_num		foreign key (user_num) references ringo_member(user_num) on delete cascade,
-	constraint fk_followee_num		foreign key (user_num) references ringo_member(user_num) on delete cascade
+	constraint fk_follower_num		foreign key (follower_num) references ringo_member(user_num) on delete cascade,
+	constraint fk_followee_num		foreign key (follower_num) references ringo_member(user_num) on delete cascade
 );
 
 --공지관련

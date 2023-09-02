@@ -31,6 +31,8 @@ public interface MemberDAO
 	//----------------[회원가입&로그인 기능 종료]----------->>>>>>>>>>>>
 
 	//<<<<<<<<<<<------[멤버태그 기능 시작]----------------------
+	//태그명을 기반으로 태그 번호를 검색해 리턴하는 기능
+	public ArrayList<Integer> memberTagSearchByTagNameReturnTagNum(String[] tag);
 	//사용자가 설정한 멤버태그 객체가 이미 존재하는지 확인하는 메서드
 	public int memberTagLinkSearch(HashMap<String, Object> map);
 	//사용자가 설정한 멤버태그 객체를 DB의 taglink_member 테이블에 insert하는 메서드

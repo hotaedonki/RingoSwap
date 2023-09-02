@@ -48,7 +48,7 @@
 	<!-- 매개변수로 받은 id값으로 검색한 정보를 member 객체로 리턴하는 select문 -->
 	<select id="memberSearchById" parameterType="String" resultType="Member">
 	select *
-	from ringo_member
+	from ringo_member_with_mypage
 	where user_id = #{user_id}
 	</select>
 	
@@ -71,6 +71,15 @@
 	<!-- [ 회원가입&로그인 기능 종료 ] -->
 
 	<!-- [ 멤버태그 관련 기능 시작 ] -->
+	<!-- 태그명을 매개변수로 태그번호를 검색해 리턴하는 select문 -->
+	<select id="memberTagSearchByTagNameReturnTagNum" parameterType="String">
+	select tag_num
+	from ringo_tagstorage_member
+	where tag in
+		<foreach collection="list" item="tag" open="(" separator=", " close=")">
+			#{tag}
+		</foreach>
+	</select>
 	<!-- 사용자가 설정한 멤버태그 객체가 이미 존재하는지 확인하는 select문 -->
 	<select id="memberTagLinkSearch" parameterType="java.util.HashMap">
 	select count(*)
@@ -93,7 +102,10 @@
 	<delete id="memberTagLinkDelete" parameterType="java.util.HashMap">
 	delete from ringo_taglink_member
 	where user_num = #{user_num}
-		and tag_num = #{tag_num}
+		and tag_num IN
+		<foreach collection="list" item="tag_num" open="(" separator=", " close=")">
+			#{tag_num}
+		</foreach>
 	</delete>
 	<!-- [ 멤버태그 관련 기능 종료 ] -->
 
@@ -103,13 +115,17 @@
 	update ringo_member
 	set native_lang = #{native_lang}, target_lang=#{target_lang}
         ,original_profile=#{original_profile}, saved_profile=#{saved_profile}
-        , introduction=#{introduction}, mbti=#{mbti}, rewrite_time=sysdate
+        , introduction=#{introduction}, mbti=#{mbti}
+        , rewrite_time=sysdate
 	where user_num = #{user_num};
 	</update>
 	<!-- 사용자의 수정한 계정 정보 매개변수로 가져가 DB를 수정하는 update문 -->
 	<update id="memberUpdateAccount" parameterType="Member">
 	update ringo_member
-	set ==== 
+	set user_id=#{user_id}, password=#{password}, username=#{username}
+		, first_name=#{first_name}, last_name=#{last_name}, gender=#{gender}
+		, birth_date=#{birth_date}, ranking_open=#{ranking_open}, email_open=#{email_open}
+		, follow_open=#{follow_open}, gps_open=#{gps_open}, trans_lang=#{trans_lang}
 	where user_num = #{user_num}
 	</update>
 	
