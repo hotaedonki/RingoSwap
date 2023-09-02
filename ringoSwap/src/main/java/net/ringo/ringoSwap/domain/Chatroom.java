@@ -15,4 +15,10 @@ public class Chatroom {
 	String gen_category;
 	String modifie_date;
 	int totalsize;
+	
+	public String toString()
+	{
+		return String.format("chatroom_num : {%d} / host_num : {%d} / title : {%s} / lang_category : {%s} / gen_category : {%s} / modifie_date : {%s} / totalsize : {%d}"
+				, chatroom_num, host_num, title, lang_category, gen_category, modifie_date, totalsize);
+	}
 }

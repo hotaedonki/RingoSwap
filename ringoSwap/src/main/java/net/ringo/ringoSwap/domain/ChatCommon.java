@@ -14,4 +14,10 @@ public class ChatCommon {
 	int chatphoto_num;
 	String message;
 	String inputdate;
+	
+	public String toString()
+	{
+		return String.format("chat_num : {%d} / user_num : {%d} / chatroom_num : {%d} / chatphoto_num : {%d} / message : {%s} / inputdate :{%s}"
+				, chat_num, user_num, chatroom_num, chatphoto_num, message, inputdate);
+	}
 }
