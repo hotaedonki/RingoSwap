@@ -113,13 +113,17 @@
 	<!-- 생성부 끝 -->
 	
 	<!-- 삭제부 시작-->
+	<!-- dir_num을 매개변수로 해당 폴더를 DB에서 삭제한 후, 삭제여부를 리턴하는 delete문 -->
+	<delete id="dirDeleteOne" parameterType="java.util.HashMap">
+	delete ringo_directory
+	where dir_num = #{dir_num} and user_num = #{user_num}
+	</delete>
 	<!-- file_num을 매개변수로 해당 파일을 DB에서 삭제한 후, 삭제여부를 리턴하는 delete문 -->
 	<delete id="fileDeleteOne" parameterType="java.util.HashMap">
 	delete ringo_file
 	where file_num = #{file_num} and user_num = #{user_num}
 	</delete>
+	<!-- 수정부 끝 -->
 	
-	<!-- 생성부 끝 -->
-	<!-- 생성부 끝 -->
-	<!-- 생성부 끝 -->
+	<!-- 수정부 끝 -->
 </mapper>

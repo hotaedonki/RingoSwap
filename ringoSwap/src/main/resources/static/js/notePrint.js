@@ -17,7 +17,8 @@ $(document).ready(function(){
     $('#createWord').click(function() {
         fileCreate('word');
     });
-    $(document).on('click', '[id^="dirOpen"]', dirOpen);
+    $(document).on('click', '.dirOpen', dirOpen);
+    $(document).on('click', '.dirDelete', dirDelete);
 });
 
 
@@ -67,9 +68,10 @@ function dirPrint(){
             console.log("폴더 출력됐음");
             let str = "";
             $(list).each(function(i, item){
-                str += `<li><i class="bi bi-folder"></i><button class="btn btn-outline-dark dir-btn" 
-                data-dir-num="${item.dir_num}" id="dirOpen${item.dir_num}">
+                str += `<li><i class="bi bi-folder"></i><button class="btn btn-outline-dark dir-btn dirOpen" 
+                data-dir-num="${item.dir_num}">
                 ${item.dir_name}</button>
+                <i data-dir-num="${item.dir_num}" class="bi bi-trash dirDelete"></i>
                 <div id="dirPrint${item.dir_num}"></div><div id="filePrint${item.dir_num}"></div>
                 </li>`;
             });
@@ -125,8 +127,7 @@ function fileCreate(fileType){
 // 해당 폴더 하위에 있는 폴더와 파일을 불러오는 함수
 function dirOpen() {
     let num = $(this).data('dir-num');
-    console.log(num);
-    console.log("폴더 열기");
+
     // 하위 폴더 불러오기
     $.ajax({
         url: 'dirOpenDirectory',
@@ -137,13 +138,15 @@ function dirOpen() {
             let str = '<ul>';
             $(list).each(function(n, item) {
                 str += `<li><i class="bi bi-folder"></i>
-                    <span data-dir-num="${item.dir_num}" id="dirOpen${item.dir_num}">${item.dir_name}
+                    <span data-dir-num="${item.dir_num}" class="dirOpen">${item.dir_name}
                     </span>
+                    <i data-dir-num="${item.dir_num}" class="bi bi-trash dirDelete"></i>
                     <div id="dirPrint${item.dir_num}"></div><div id="filePrint${item.dir_num}"></div>
                 </li>`;
             });
             str += '</ul>';
             $('#dirPrint' + num).html(str);
+            $('.dirDelete').click(dirDelete);
         },
         error: function(e) {
             console.log("error");
@@ -162,16 +165,16 @@ function dirOpen() {
             let str = '<ul>';
             $(list).each(function(n, item) {
                 str += `<li><i class="bi bi-file"></i>
-                            <span id="fileOpen${item.file_num}">${item.title}</span>
+                            <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
                             <span id="fileType${item.file_num}">${item.file_type}</span>
                             <span>${item.lang_type}</span>
-                            <i class="bi bi-trash" id="fileDelete${item.file_num}"></i>
+                            <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-trash fileDelete"></i>
                         </li>`;
             });
             str += '</ul>';
             $('#filePrint' + num).html(str);
-            $('[id^="fileOpen"]').click(fileOpen);
-            $('[id^="fileDelete"]').click(fileDelete);
+            $('.fileOpen').click(fileOpen);
+            $('.fileDelete').click(fileDelete);
         },
         error: function(e) {
             console.log("error");
@@ -182,33 +185,30 @@ function dirOpen() {
 
 // 파일 이름을 클릭하면 fileWindow에 표시하는 함수
 function fileOpen(){
-    let num = $(this).attr("id");
-    let arr = num.split('n', 2);
-    let type = $('#fileType'+arr[1]).text();
-    console.log(type);
+    let num = $(this).data("file-num");
+    let type = $('#fileType'+num).text();
+    console.log(num, type);
 
-    if(type == 'note'){
-        // 클릭한 파일의 분류가 'note=메모장'일 때 실행하는 ajax
-        $.ajax({
-            url: 'fileOpenNote',
-            type: 'post',
-            data: {file_num : arr[1], file_type: type},
-            dataType: 'json',
-            success: function(notepad){
-                console.log(notepad);
-                let str =`<table>
-                    <tr>
-                        <td rowspan="2">${notepad.title}</td>
-                        <td rowspan="2">${notepad.file_num}</td>
-                        <td>${notepad.input_date}</td>
-                    </tr>
-                    <tr>
-                        <td>${notepad.modifie_date}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"><textarea  cols="60" rows="15" >${notepad.text}</textarea></td>
-                    </tr>
-                </table>`;
+    $.ajax({
+        url: 'fileOpenNote',
+        type: 'post',
+        data: {file_num : num, file_type: type},
+        dataType: 'json',
+        success: function(notepad){
+            console.log(notepad);
+            let str =`<table>
+                <tr>
+                     <td rowspan="2">${notepad.title}</td>
+                    <td rowspan="2">${notepad.file_num}</td>
+                    <td>${notepad.input_date}</td>
+                </tr>
+                <tr>
+                    <td>${notepad.modifie_date}</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><textarea  cols="60" rows="15" >${notepad.text}</textarea></td>
+                </tr>
+            </table>`;
                 str += '</ul>';
                 $('#windowPrint').html(str);
                 console.log('프린트 완료 : '+notepad);
@@ -217,12 +217,12 @@ function fileOpen(){
                 console.log("error");
             }
         });
-    } else if(type == 'word'){
+    if(type == 'word'){
         // 클릭한 파일의 분류가 'word=단어장'일 때 실행하는 ajax
         $.ajax({
             url: 'fileOpenWord',
             type: 'post',
-            data: {file_num : arr[1]},
+            data: {file_num : num},
             dataType: 'json',
             success: function(list){
                 console.log(list);
@@ -237,8 +237,8 @@ function fileOpen(){
                     </li>`;
                     console.log(item.word_num);
                 });
-                str += `<li><button id="wordInsert${arr[1]}"> + 단어 추가 + </button></li></ul>`;
-                console.log('filePrint' + arr[1]);
+                str += `<li><button id="wordInsert${num}"> + 단어 추가 + </button></li></ul>`;
+                console.log('filePrint' + num);
                 $('#windowPrint').html(str);
 
                 $('[id^="wordInsert"]').click(wordInsert);
@@ -254,29 +254,51 @@ function fileOpen(){
     }
 }
 /* Delete 함수 목록 시작부 */
-function fileDelete(){
-    let arr = $(this).attr("id").split('ete',2);
-    let num = arr[1];
-    console.log(arr);
+//폴더 삭제기능
+function dirDelete(){
+    let num = $(this).attr('data-dir-num');
     console.log(num);
+
+    $.post("dirDeleteOne", {
+        dir_num : num
+    })
+    .done(function(txt) {
+        // 성공했을 때 실행할 코드
+        console.log("success"+txt);
+        
+        dirPrint();
+    })
+    .fail(function() {
+        // 실패했을 때 실행할 코드
+        console.log("error");
+    })
+    .always(function() {
+        // 항상 실행할 코드
+    });
+}
+//파일 삭제기능
+function fileDelete(){
+    let fnum = $(this).data('file-num');
+    let dnum = $(this).data('dir-num');
+    console.log(fnum, dnum);
 
     $.ajax({
     url: 'fileDeleteOne',
     type: 'post',
-    data: {file_num : num},
+    data: {file_num : fnum},
     dataType: 'text',
     success: function(txt){
         console.log("success"+txt);
         
-        dirPrint();
+        dirOpen();
     },
     error: function(e){
         console.log("error");
     }
-});
-
+    });
 }
 
+<<<<<<< HEAD
 let originalWordList = ""; // 임시 변수로 원래 wordList의 내용을 저장
 
 $(document).ready(function() {
@@ -395,6 +417,8 @@ $(document).ready(function() {
 	});
 });
 
+=======
+>>>>>>> shl
 /*
 function loadNoteContent(file_num) {
             $.ajax({
