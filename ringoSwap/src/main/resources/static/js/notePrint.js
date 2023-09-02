@@ -226,6 +226,7 @@ function fileOpen(){
             data: {file_num : arr[1]},
             dataType: 'json',
             success: function(list){
+                console.log(list);
                 let str = '<ul>';
                 $(list).each(function(i, item){
                     let inputDate = new Date(item.inputdate).toLocaleString();
@@ -257,6 +258,25 @@ function fileOpen(){
 
 /* Delete 함수 목록 시작부 */
 function fileDelete(){
+    let arr = $(this).attr("id").split('ete',2);
+    let num = arr[1];
+    console.log(arr);
+    console.log(num);
+
+    $.ajax({
+    url: 'fileDeleteOne',
+    type: 'post',
+    data: {file_num : num},
+    dataType: 'text',
+    success: function(txt){
+        console.log("success"+txt);
+        
+        dirPrint();
+    },
+    error: function(e){
+        console.log("error");
+    }
+});
 
 }
 

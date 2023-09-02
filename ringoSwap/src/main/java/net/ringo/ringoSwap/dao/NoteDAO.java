@@ -36,5 +36,10 @@ public interface NoteDAO
 	//파일 부속 객체인 notepad를 생성하는 메서드 
 	//파일 부속 객체인 Word를 생성하는 메서드
 	int wordCreateOne(DirWord word);
+
+	//-----------[ 노트 생성기능 종료 ]-------------->>>>>>>>>>>>>>
 	
+	//<<<<<<<<<<<<-----[ 노트 삭제기능 시작 ]-----------------------
+	//file_num을 매개변수로 해당 파일을 DB에서 삭제한 후, 삭제여부를 리턴받는 메서드
+	int fileDeleteOne(HashMap<String, Integer> map);
 }

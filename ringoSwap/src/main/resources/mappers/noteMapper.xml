@@ -77,7 +77,7 @@
 	</select>
 	<!-- 출력부 끝 -->
 	
-	<!-- 생성부 -->
+	<!-- 생성부 시작 -->
 	<!-- 매개변수로 받은 directory객체를 통해 DB에 새로운 directory정보를 생성하는 insert문 -->
 	<insert id="dirCreate" parameterType="Directory">
 	insert into ringo_directory (dir_num, user_num, dir_name
@@ -110,4 +110,16 @@
 		</if>
 		, #{mean})
 	</insert>
+	<!-- 생성부 끝 -->
+	
+	<!-- 삭제부 시작-->
+	<!-- file_num을 매개변수로 해당 파일을 DB에서 삭제한 후, 삭제여부를 리턴하는 delete문 -->
+	<delete id="fileDeleteOne" parameterType="java.util.HashMap">
+	delete ringo_file
+	where file_num = #{file_num} and user_num = #{user_num}
+	</delete>
+	
+	<!-- 생성부 끝 -->
+	<!-- 생성부 끝 -->
+	<!-- 생성부 끝 -->
 </mapper>
