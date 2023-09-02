@@ -395,7 +395,6 @@ $(document).ready(function() {
 	});
 });
 
->>>>>>> taeho
 /*
 function loadNoteContent(file_num) {
             $.ajax({
