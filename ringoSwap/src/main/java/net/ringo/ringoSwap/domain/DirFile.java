@@ -18,4 +18,10 @@ public class DirFile {
 	String modifie_date;
 	String lang_type;
 	String file_type;
+	
+	public String toStirng()
+	{
+		return String.format("file_num : {%d} / dir_num : {%d} / user_num : {%d} / title : {%s} / file_text : {%s} / size : {%d} / inputdate : {%s} / modifie_date : {%s} / lang_type : {%s} / file_type : {%s}"
+				, file_num, dir_num, user_num, title, file_text, file_text, size, inputdate, modifie_date, lang_type, file_type);
+	}
 }

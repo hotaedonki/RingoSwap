@@ -16,4 +16,10 @@ public class DirWord {
 	String pron;
 	String mean;
 	String inputdate;
+	
+	public String toString()
+	{
+		return String.format("word_num : {%d} / file_num : {%d} / user_num : {%d} / word : {%s} / pron : {%s} / mean : {%s} / inputdate : {%s}"
+				, word_num, file_num, user_num, word, pron, mean, inputdate);
+	}
 }
