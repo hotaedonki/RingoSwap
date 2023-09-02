@@ -26,4 +26,5 @@ public class PathHandler
 	// Chat
 	public final static String CHAT = "chat";
 	public final static String CHATMAIN = "chatMain";
+	public final static String MODIFYACCOUNT ="modifyAccount";
 }

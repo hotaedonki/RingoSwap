@@ -152,7 +152,7 @@ public class NoteController
 		file.setUser_num(user_num);
 		file.setDir_num(dir_num);
 		file.setTitle(title);
-		file.setFile_type(file_type);
+		file.setFile_type(file_type);				//값이 notepad일경우 메모장 생성, word일경우 단어장 본체 생성
 		//파일 생성
 		log.debug("파일{}",file);
 		int num = service.fileCreateOne(file);

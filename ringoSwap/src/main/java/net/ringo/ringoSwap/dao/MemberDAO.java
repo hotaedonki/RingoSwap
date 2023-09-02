@@ -31,6 +31,8 @@ public interface MemberDAO
 	//----------------[회원가입&로그인 기능 종료]----------->>>>>>>>>>>>
 
 	//<<<<<<<<<<<------[멤버태그 기능 시작]----------------------
+	//태그명을 기반으로 태그 번호를 검색해 리턴하는 기능
+	public ArrayList<Integer> memberTagSearchByTagNameReturnTagNum(String[] tag);
 	//사용자가 설정한 멤버태그 객체가 이미 존재하는지 확인하는 메서드
 	public int memberTagLinkSearch(HashMap<String, Object> map);
 	//사용자가 설정한 멤버태그 객체를 DB의 taglink_member 테이블에 insert하는 메서드
@@ -39,4 +41,11 @@ public interface MemberDAO
 	public ArrayList<Integer> memberTagLinkSearchAllByUserNum(int user_num);
 	//특정 taglink 객체를 DB의 taglink_member 테이블에서 delete하는 메서드
 	public int memberTagLinkDelete(HashMap<String, Object> map);
+	//----------------[멤버태그 기능 종료]----------->>>>>>>>>>>>
+	
+	//<<<<<<<<<<<------[마이페이지 기능 시작]----------------------
+	//사용자의 수정한 프로필 정보 매개변수로 가져가 DB를 수정하는 메서드
+	public int memberUpdateProfile(Member m);
+	//사용자의 수정한 계정 정보 매개변수로 가져가 DB를 수정하는 메서드
+	public int memberUpdateAccount(Member m);
 }

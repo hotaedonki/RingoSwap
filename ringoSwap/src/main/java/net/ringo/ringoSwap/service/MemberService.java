@@ -35,5 +35,13 @@ public interface MemberService
 
 	//<<<<<<<<<<<------[멤버태그 기능 시작]----------------------
 	//사용자가 설정한 멤버태그 배열을 member_taglink에 insert하는 테이블
-	public int memberTagLinkInsertArray(ArrayList<Integer> tag_num, int user_num);
+	public int memberTagLinkInsertArray(String updatedTags, int user_num);
+
+	//----------------[마이페이지 기능 종료]----------->>>>>>>>>>>>
+
+	//<<<<<<<<<<<------[ 시작]----------------------
+	//수정한 정보를 담은 member 객체를 매개변수로 보내, DB를 수정하는 메서드
+	public int memberUpdateProfile(Member m);
+	//수정한 계정 정보를 담은 member 객체를 매개변수로 보내, DB를 수정하는 메서드
+	public int memberUpdateAccount(Member m);
 }

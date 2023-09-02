@@ -56,25 +56,20 @@
 	</insert>
 	<!-- 작성한 feedPhoto 배열을 DB에 매개변수로 전달하는 메서드 -->
 	<insert id="feedPhotoInsert" parameterType="FeedPhoto">
-	insert into ringo_feed_photo (photo_num, feed_num, origin_file, saved_file, description, photo_size, photo_format, resolution)
-	values
-	<foreach collection="list" item="item" separator="," >
-		(
-			#{item.photo_num}
-			, #{item.feed_num}
-			, #{item.origin_file}
-			, #{item.saved_file}
+	INSERT ALL
+		<foreach collection="list" item="item" separator=" " >
+		INTO ringo_feed_photo(photo_num, feed_num, origin_file, saved_file, description, photo_size, photo_format, resolution)
+		 VALUES (#{item.photo_num}, #{item.feed_num}, #{item.origin_file}, #{item.saved_file}
 			<if test="#{item.description}!=null">
 				, #{item.description}
 			</if>
 			<if test="#{item.description}==null">
 				, ' '
 			</if>
-			, #{item.photo_size}
-			, #{item.photo_format}
-			, #{item.resolution}
+			, #{item.photo_size}, #{item.photo_format}, #{item.resolution}
 		)
-	</foreach>
+		</foreach>
+	SELECT * FROM DUAL
 	</insert>
 	
 	<!-- 작성한 Reply 객체를 DB에 매개변수로 전달하는 insert문 -->
