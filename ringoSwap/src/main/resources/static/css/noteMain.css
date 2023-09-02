@@ -89,3 +89,9 @@
 	height: 20px;
 	text-align: center;
 }
+
+.modifyAndDelete {
+	position: absolute;
+	right: 15px;
+	cursor: pointer;
+}

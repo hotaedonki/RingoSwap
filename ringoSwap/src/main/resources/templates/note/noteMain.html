@@ -238,7 +238,8 @@
 
 
 		<!-- Modal -->
-		<div class="modal fade" id="folderModal" tabindex="-1"
+		<!-- 폴더 생성 -->
+		<div class="modal fade createFolder" id="folderModal" tabindex="-1"
 			aria-labelledby="folderModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -252,7 +253,7 @@
 							id="folderNameInput">
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" id="createFolder"
+						<button type="button" class="btn btn-primary yes" id="createFolder"
 							data-bs-dismiss="modal">Create</button>
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal">Cancel</button>
@@ -260,7 +261,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="modal fade" id="fileModal" tabindex="-1"
+
+		<!-- 파일 생성 -->
+		<div class="modal fade createFile" id="fileModal" tabindex="-1"
 			aria-labelledby="fileModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -275,8 +278,8 @@
 							id="fileNameInput">
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" id="createNote">Note</button>
-						<button type="button" class="btn btn-primary" id="createWord">Word</button>
+						<button type="button" class="btn btn-primary yes" id="createNote">Note</button>
+						<button type="button" class="btn btn-primary yes" id="createWord">Word</button>
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal">Cancel</button>
 					</div>
@@ -285,10 +288,53 @@
 		</div>
 	</div>
 
+	<!-- 파일 이름 수정 -->
+	<div class="modal fade modifyFile" id="modifyModal" tabindex="-1"
+		aria-labelledby="modifyModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modifyModalLabel">Modify File Name</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<input type="text" class="form-control" placeholder="New Name"
+						id="newFileNameInput">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary yes" id="modifyFileName">Save</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+		<!-- 파일 삭제 -->
+	<div class="modal fade deleteFile" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="deleteModalLabel">Delete File</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	            </div>
+	            <div class="modal-body">
+	                <p>Are you sure you want to delete this file?</p>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-danger yes" id="confirmDelete">Confirm Delete</button>
+	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
 
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
 	<script th:src="@{../js/memberView/noteSidebar.js}"></script>
 	<script th:src="@{../js/notePrint.js}"></script>
+	<script th:src="@{../js/wordPrint.js}"></script>
 
 </body>
 </html>

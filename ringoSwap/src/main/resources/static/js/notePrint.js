@@ -19,8 +19,8 @@ $(document).ready(function(){
     });
     $(document).on('click', '.dirOpen', dirOpen);
     $(document).on('click', '.dirDelete', dirDelete);
+    $(document).on('click', '.yes', closeModal);
 });
-
 
 // 폴더 버튼을 클릭할 때의 이벤트 처리
 $(document).on('click', '.dir-btn', function() {
@@ -29,30 +29,17 @@ $(document).on('click', '.dir-btn', function() {
 });
 
 // 파일 분류에 따른 검색 방식을 설정하는 함수
-function categoryEvent(){
+function categoryEvent() {
     let c = $(this).text();
-    if(c == '메모장'){
-        c = 'note';
-    } else if(c == '단어장'){
-        c = 'word';
-    } else {
-        c = 'all';
-    }
+    c = c === '메모장' ? 'note' : c === '단어장' ? 'word' : 'all';
     $('#category').val(c);
     dirPrint();
 }
 
 // 정렬 방식을 설정하는 함수
-function sortEvent(){
+function sortEvent() {
     let s = $(this).text();
-    if(s == '생성순'){
-        s = 'input';
-    } else if(s == '제목순'){
-        s = 'title';
-    } else if(s == '최신순'){
-        s = 'modifie';
-    }
-
+    s = s === '생성순' ? 'input' : s === '제목순' ? 'title' : 'modifie';
     $('#sort').val(s);
     dirPrint();
 }
@@ -71,7 +58,8 @@ function dirPrint(){
                 str += `<li><i class="bi bi-folder"></i><button class="btn btn-outline-dark dir-btn dirOpen" 
                 data-dir-num="${item.dir_num}">
                 ${item.dir_name}</button>
-                <i data-dir-num="${item.dir_num}" class="bi bi-trash dirDelete"></i>
+				<span class="modifyAndDelete">
+                <i data-dir-num="${item.dir_num}" class="bi bi-trash dirDelete"></i></span>
                 <div id="dirPrint${item.dir_num}"></div><div id="filePrint${item.dir_num}"></div>
                 </li>`;
             });
@@ -117,6 +105,7 @@ function fileCreate(fileType){
         data: { dir_num: dir_num, title: title, file_type: file_type },
         success: function(response) {
             console.log("파일이 성공적으로 생성되었습니다.");
+            dirOpen.call($(`.dirOpen[data-dir-num=${dir_num}]`));
         },
         error: function(e) {
             console.log("파일 생성 중 에러 발생");
@@ -137,7 +126,7 @@ function dirOpen() {
         success: function(list) {
             let str = '<ul>';
             $(list).each(function(n, item) {
-                str += `<li><i class="bi bi-folder"></i>
+                str += `<li style="position: relative;"><i class="bi bi-folder"></i>
                     <span data-dir-num="${item.dir_num}" class="dirOpen">${item.dir_name}
                     </span>
                     <i data-dir-num="${item.dir_num}" class="bi bi-trash dirDelete"></i>
@@ -164,17 +153,21 @@ function dirOpen() {
         success: function(list) {
             let str = '<ul>';
             $(list).each(function(n, item) {
-                str += `<li><i class="bi bi-file"></i>
+                str += `<li style="position: relative;"><i class="bi bi-file"></i>
                             <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
                             <span id="fileType${item.file_num}">${item.file_type}</span>
                             <span>${item.lang_type}</span>
+                           	<span class="modifyAndDelete">
+							<i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-pencil fileModify" ></i>
                             <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-trash fileDelete"></i>
-                        </li>`;
+                       </span></li>`;
             });
             str += '</ul>';
             $('#filePrint' + num).html(str);
             $('.fileOpen').click(fileOpen);
+            $('.fileModify').click(fileModify);   
             $('.fileDelete').click(fileDelete);
+
         },
         error: function(e) {
             console.log("error");
@@ -253,6 +246,44 @@ function fileOpen(){
         // 단어 추가 로직
     }
 }
+
+function fileModify() {
+    // 현재 클릭한 수정 버튼의 ID를 가져옵니다.
+    let file_num = $(this).attr('class').replace('fileModify', '');
+    // 현재 파일 이름을 가져옵니다.
+    let currentFileName = $("#fileOpen" + file_num).text();
+    // 모달을 표시합니다.
+    $("#modifyModal").modal('show');
+    $("#newFileNameInput").val(currentFileName);
+    
+    // 수정 버튼을 클릭하면
+    $("#modifyFileName").off().click(function() {
+        let newFileName = $("#newFileNameInput").val(); // 새로운 파일 이름을 가져옵니다.
+
+        // AJAX 호출로 서버에 파일 이름 변경을 요청합니다.
+        $.ajax({
+            url: 'modifyFileName',  // 해당 URL을 변경할 필요가 있을 수 있습니다.
+            type: 'post',
+            data: {
+                file_num: file_num,
+                title : newFileName
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // 이름 업데이트
+                    $("#fileOpen" + file_num).text(newFileName);
+                    $("#modifyModal").modal('hide'); // 모달을 숨깁니다.
+                } else {
+                    alert("파일 이름을 변경하는 데 실패했습니다.");
+                }
+            },
+            error: function() {
+                alert("파일 이름을 변경하는 데 실패했습니다.");
+            }
+        });
+    });
+}
 /* Delete 함수 목록 시작부 */
 //폴더 삭제기능
 function dirDelete(){
@@ -281,166 +312,27 @@ function fileDelete(){
     let fnum = $(this).data('file-num');
     let dnum = $(this).data('dir-num');
     console.log(fnum, dnum);
-
-    $.ajax({
-    url: 'fileDeleteOne',
-    type: 'post',
-    data: {file_num : fnum},
-    dataType: 'text',
-    success: function(txt){
-        console.log("success"+txt);
-        
-        dirOpen();
-    },
-    error: function(e){
-        console.log("error");
-    }
+    
+	$("#deleteModal").modal('show');	
+	
+		$("#confirmDelete").off().click(function() {
+		    $.ajax({
+		    url: 'fileDeleteOne',
+		    type: 'post',
+		    data: {file_num : fnum},
+		    dataType: 'text',
+		    success: function(txt){
+		        console.log("success"+txt);
+		        
+		        dirOpen();
+		    },
+		    error: function(e){
+		        console.log("error");
+		    }
+	    });
     });
 }
 
-<<<<<<< HEAD
-let originalWordList = ""; // 임시 변수로 원래 wordList의 내용을 저장
-
-$(document).ready(function() {
-    // "추가" 버튼 클릭 이벤트 핸들러
-    $("button:contains('추가')").click(function() {
-		originalWordList = $(".wordList").html();
-        const wordCard = `
-		    <div class = "card-body wordCard">
-		        <div class="card border-primary mb-3"  style="width: 400px;"">
-		            <div class="card-body">
-		                <div class="form-group">
-		                    <label class="col-form-label mt-4" for="inputDefault">단어</label>
-		                    <input type="text" class="form-control" placeholder="Word" id="word-input">
-		                </div>
-		                <div class="form-group">
-		                    <label class="col-form-label mt-4" for="inputDefault">의미</label>
-		                    <input type="text" class="form-control" placeholder="Meaning" id="meaning-input">
-		                </div>
-		                <div class="form-group">
-		                    <label class="col-form-label mt-4" for="inputDefault">발음</label>
-		                    <input type="text" class="form-control" placeholder="pronunciation" id="pronunciation-input">
-		                </div>
-		                <div class="form-group">
-		                    <label class="col-form-label mt-4" for="inputDefault">설명</label>
-		                    <input type="text" class="form-control" placeholder="description" id="description-input">
-		                </div>
-		            </div>
-		        </div>
-		    </div>`;
-	        
-        const navigationButtons = `
-            <button class="carousel-control-prev" type="button" style="font-size: 9rem; color: white; display: flex; justify-content: center; align-items: center;">
-                <span class="carousel-control-prev-icon" aria-hidden="true" style="width: 200px; height: 200px;"><</span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" style="font-size: 9rem; color: white; display: flex; justify-content: center; align-items: center;">
-                <span class="carousel-control-next-icon" aria-hidden="true" style="width: 200px; height: 200px;">></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        `;
-
-        // 현재 카드의 내용을 wordCard로 교체
-        $(".card-body").replaceWith(wordCard + navigationButtons);
-        
-        $("button:contains('추가')").hide();
-        
-        // "저장" 버튼 생성
-        const saveButton = '<button class="btn btn-primary save-btn">저장</button>';
-        
-        // 만약 wordCard가 화면에 존재하면 "저장" 버튼을 "추가" 버튼 왼쪽에 생성
-        $(".wordButton").append(saveButton);
-          
-        // "돌아가기" 버튼 생성
-        const backButton = '<button class="btn btn-secondary back-btn">돌아가기</button>';
-        
-        // "저장" 버튼 왼쪽에 "돌아가기" 버튼 추가
-        $(".wordButton").prepend(backButton);
-    });
-
-    // "저장" 버튼 클릭 이벤트 핸들러
-    $(document).on('click', '.save-btn', function() {
-        // 데이터 수집
-        const word = $("#word-input").val();
-        const meaning = $("#meaning-input").val();
-        const pronunciation = $("#pronunciation-input").val();
-        const description = $("#description-input").val();
-
-        // 데이터를 서버로 전송
-        $.post("/wordCreate", {
-            word: word,
-            meaning: meaning,
-            pronunciation: pronunciation,
-            description: description
-        }).done(function(response) {
-            // Toast 메시지 표시
-            const toast = `
-            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-              <div class="toast-header">
-                <strong class="me-auto">Bootstrap</strong>
-                <small>Just now</small>
-                <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
-                  <span aria-hidden="true"></span>
-                </button>
-              </div>
-              <div class="toast-body">
-                저장되었습니다!
-              </div>
-            </div>`;
-
-            $("body").append(toast);
-            $(".toast").toast({ delay: 2000 }).toast('show');
-
-            setTimeout(function() {
-                $(".toast").remove();
-            }, 2100);
-        });
-    });
-
-    // "돌아가기" 버튼 클릭 이벤트 핸들러
-	  $(document).on('click', '.back-btn', function() {
-	    // wordCard + navigationButtons에서 originalWordList로 다시 출력
-	    $(".wordCard").replaceWith('<div class="card-body wordList">' + originalWordList + '</div>');
-	
-	    // "저장" 버튼 제거
-	    $(".save-btn").remove();
-	
-	    // "돌아가기" 버튼 제거
-	    $(".back-btn").remove();
-	
-	    // "추가" 버튼 다시 표시
-	    $("button:contains('추가')").show();
-	
-	    // navigationButtons 제거
-	    $(".carousel-control-prev").remove();
-	    $(".carousel-control-next").remove();
-	});
-});
-
-=======
->>>>>>> shl
-/*
-function loadNoteContent(file_num) {
-            $.ajax({
-                type: "POST",
-                url: "/fileOpenNote",
-                data: {
-                    file_num: file_num
-                },
-                success: function(response) {
-                    tinymce.get('noteTextarea').setContent(response.content);
-                },
-                error: function(error) {
-                    console.error("노트를 불러오는데 실패했습니다.", error);
-                }
-            });
-        }
-
-        $(document).on('click', '.note-item', function() {
-            var file_num = $(this).data('file-num');
-            loadNoteContent(file_num);
-        });
-        tinymce에 저장된 note값을 가져오는 코드
-        */
-        
-        
+function closeModal() {
+	$(this).closest(".modal").modal("hide");
+}

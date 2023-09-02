@@ -17,19 +17,11 @@ $(document).ready(function() {
     function bindEventHandlers() {
         // 각 이벤트에 대한 핸들러 바인딩
         $(document)
-<<<<<<< HEAD
             .on('click', '.hobbyButton ~', toggleHobbyButtonClass) // 취미 버튼 클릭 이벤트
             .on('click', '.card-text', enableIntroductionEditing)  // 자기소개 수정 활성화 이벤트
             .on('blur', '.card-text textarea', updateIntroductionText)  // 자기소개 수정 완료 이벤트
-            .on('click', '.modify', sendProfileModification)  // 프로필 수정 이벤트
+            .on('blur', '.modify', sendProfileModification)  // 프로필 수정 이벤트
             .on('click', '.languageSelect', selectDesiredLanguage);  // 언어 선택 이벤트
-=======
-            .on('click', '.hobbyButton ~', toggleHobbyButtonClass)
-            .on('click', '.card-text', enableIntroductionEditing)
-            .on('blur', '.form-control textarea', updateIntroductionText)
-            .on('blur', '.modify', sendProfileModification)
-            .on('click', '.languageSelect', selectDesiredLanguage);
->>>>>>> shl
 
         $(window).on('beforeunload', saveChangesBeforeExit);  // 페이지 종료 전 변경 사항 저장 이벤트
     }
