@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import net.ringo.ringoSwap.dao.NoteDAO;
 import net.ringo.ringoSwap.domain.DirFile;
-import net.ringo.ringoSwap.domain.DirNotepad;
 import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.Directory;
 
@@ -39,6 +38,12 @@ public class NoteServiceImple implements NoteService{
 		return dao.selectFileByDirNum(map);
 	}
 	
+	//매개변수로 file_num을 받아 해당 번호의 파일 객체를 리턴하는 메서드
+	@Override
+	public DirFile selectFileByFileNum(int file_num) {
+		return dao.selectFileByFileNum(file_num);
+	}
+	
 	//file_num을 매개변수로 검색해 나온 file객체에서 해당 파일의 title값만 리턴하는 메서드
 	@Override
 	public String selectFileByFileNumReturnTitle(int file_num) {
@@ -47,11 +52,6 @@ public class NoteServiceImple implements NoteService{
 		return title;
 	}
 
-	//file_num을 매개변수로 해당 파일에 속하는 notepad 객체를 리턴하는 메서드
-	@Override
-	public DirNotepad selectNotepadByFileNum(int file_num) {
-		return dao.selectNotepadByFileNum(file_num);
-	}
 	//file_num을 매개변수로 해당 파일에 속하는 word객체 목록을 리턴하는 메서드 
 	@Override
 	public ArrayList<DirWord> selectWordArrayByFileNum(int file_num){
@@ -71,11 +71,6 @@ public class NoteServiceImple implements NoteService{
 		return dao.fileCreateOne(file);
 	}
 	
-	//파일 부속 객체인 NotePade를 생성하는 메서드
-	@Override
-	public int notepadCreateOne(DirNotepad note) {
-		return dao.notepadCreateOne(note);
-	}
 	//파일 부속 객체인 Word를 생성하는 메서드
 	@Override
 	public int wordCreateOne(DirWord word) {

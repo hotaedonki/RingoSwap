@@ -1,7 +1,6 @@
 // 함수처리용 변수값 설정 (검색 및 정렬을 위한 변수)
-let ca = null;
-let st = null;
-let txt = null;
+let ca = 'kor';
+let st = 'input';
 
 // 문서 준비가 완료되면 실행
 $(document).ready(function(){
@@ -39,7 +38,7 @@ function categoryEvent(){
         c = 'all';
     }
     $('#category').val(c);
-    listPrint();
+    dirPrint();
 }
 
 // 정렬 방식을 설정하는 함수
@@ -54,7 +53,7 @@ function sortEvent(){
     }
 
     $('#sort').val(s);
-    listPrint();
+    dirPrint();
 }
 
 // 폴더 정보를 출력하는 ajax 함수
@@ -70,7 +69,9 @@ function dirPrint(){
             $(list).each(function(i, item){
                 str += `<li><i class="bi bi-folder"></i><button class="btn btn-outline-dark dir-btn" 
                 data-dir-num="${item.dir_num}" id="dirOpen${item.dir_num}">
-                ${item.dir_name}</button></li>`;
+                ${item.dir_name}</button>
+                <div id="dirPrint${item.dir_num}"></div><div id="filePrint${item.dir_num}"></div>
+                </li>`;
             });
             $('.dirPrint').html(str);
         },
@@ -83,7 +84,7 @@ function dirPrint(){
 // 해당 폴더를 부모 폴더로 설정하고 하위 폴더를 생성하는 함수
 function dirCreate() {
     let dir_name = $("#folderNameInput").val(); // 폴더 이름 가져오기
-    let parent_dir_num = $('.btn-dark').data('dir-num') || -1; // 상위 폴더의 dir_num 값을 할당. 기본값은 -1입니다.
+    let parent_dir_num = $('.btn-dark').attr('data-dir-num') || -1; // 상위 폴더의 dir_num 값을 할당. 기본값은 -1입니다.
     console.log("create가 실행됨");
     $.ajax({
         url: "dirCreate",
@@ -124,6 +125,7 @@ function fileCreate(fileType){
 // 해당 폴더 하위에 있는 폴더와 파일을 불러오는 함수
 function dirOpen() {
     let num = $(this).data('dir-num');
+    console.log(num);
     console.log("폴더 열기");
     // 하위 폴더 불러오기
     $.ajax({
@@ -133,11 +135,12 @@ function dirOpen() {
         dataType: 'json',
         success: function(list) {
             let str = '<ul>';
-            $(list).each(function(i, item) {
-                str += `<li><span data-dir-num="${item.dir_num}" id="dirOpen${item.dir_num}">${item.dir_name}
-                    </span></li>
-                <li id="dirPrint${item.dir_num}"></li>
-                <li id="filePrint${item.dir_num}"></li>`;
+            $(list).each(function(n, item) {
+                str += `<li><i class="bi bi-folder"></i>
+                    <span data-dir-num="${item.dir_num}" id="dirOpen${item.dir_num}">${item.dir_name}
+                    </span>
+                    <div id="dirPrint${item.dir_num}"></div><div id="filePrint${item.dir_num}"></div>
+                </li>`;
             });
             str += '</ul>';
             $('#dirPrint' + num).html(str);
@@ -149,22 +152,27 @@ function dirOpen() {
     });
 
     // 하위 파일 불러오기
-    let ca = $('#category').val();
-    let st = $('#sort').val();
-    let txt = $("#searchText").val();
 
+    console.log(ca, st);
     $.ajax({
         url: 'dirOpenFile',
         type: 'post',
-        data: { dir_num: num, category: ca, sort: st, text: txt },
+        data: { dir_num: num, category: ca, sort: st },
         dataType: 'json',
         success: function(list) {
             let str = '<ul>';
-            $(list).each(function(i, item) {
-                str += `<li><span id="fileType${item.file_num}">${item.file_type}</span> / </li>`;
+            $(list).each(function(n, item) {
+                str += `<li><i class="bi bi-file"></i>
+                            <span id="fileOpen${item.file_num}">${item.title}</span>
+                            <span id="fileType${item.file_num}">${item.file_type}</span>
+                            <span>${item.lang_type}</span>
+                            <i class="bi bi-trash" id="fileDelete${item.file_num}"></i>
+                        </li>`;
             });
             str += '</ul>';
             $('#filePrint' + num).html(str);
+            $('[id^="fileOpen"]').click(fileOpen);
+            $('[id^="fileDelete"]').click(fileDelete);
         },
         error: function(e) {
             console.log("error");
@@ -188,6 +196,7 @@ function fileOpen(){
             data: {file_num : arr[1], file_type: type},
             dataType: 'json',
             success: function(notepad){
+                console.log(notepad);
                 let str =`<table>
                     <tr>
                         <td rowspan="2">${notepad.title}</td>
@@ -203,6 +212,7 @@ function fileOpen(){
                 </table>`;
                 str += '</ul>';
                 $('#windowPrint').html(str);
+                console.log('프린트 완료 : '+notepad);
             },
             error: function(e){
                 console.log("error");
@@ -243,6 +253,13 @@ function fileOpen(){
         // 단어 추가 로직
     }
 }
+
+
+/* Delete 함수 목록 시작부 */
+function fileDelete(){
+
+}
+
 
 /*
 function loadNoteContent(file_num) {

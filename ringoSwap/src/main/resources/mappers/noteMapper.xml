@@ -48,10 +48,7 @@
 		from ringo_file
 		where dir_num = #{dir_num}
 			<if test="category != 'all'">
-				and file_type = #{category}
-			</if>
-			<if test = "text !='null' ">
-				and title like '%'||#{text}||'%'
+				and lang_type = #{category}
 			</if>
 		<choose>
 	        <when test="sort eq 'input'">
@@ -73,11 +70,6 @@
 	where file_num = #{file_num}
 	</select>
 	
-	<select id="selectNotepadByFileNum" resultType="DirNotepad">
-	select *
-	from ringo_notepad
-	where file_num = #{file_num}
-	</select>
 	<select id="selectWordArrayByFileNum" resultType="DirWord">
 	select *
 	from ringo_word
@@ -104,11 +96,7 @@
 	insert into ringo_file(file_num, dir_num, user_num, title, file_type)
 	values(ringo_file_seq.nextval, #{dir_num}, #{user_num}, #{title}, #{file_type})
 	</insert>
-	<!-- 매개변수로 받은 file객체를 통해 DB에 새로운 file정보를 생성하는 insert문 -->
-	<insert id="notepadCreateOne" parameterType="DirNotepad">
-	insert into ringo_notepad (file_num, dir_num, user_num)
-	values(#{file_num}, #{dir_num}, #{user_num})
-	</insert>
+
 	<!-- 매개변수로 받은 file객체를 통해 DB에 새로운 file정보를 생성하는 insert문 -->
 	<insert id="wordCreateOne" parameterType="DirWord">
 	insert into ringo_word(word_num, file_num, user_num, word

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.ringo.ringoSwap.domain.DirFile;
-import net.ringo.ringoSwap.domain.DirNotepad;
 import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.Directory;
 
@@ -18,10 +17,10 @@ public interface NoteService {
 	ArrayList<Directory> selectDirectoryByPDirNum(int dir_num);
 	//매개변수로 주어지는 부모폴더 정보로 검색된 파일목록을 리턴하는 메서드
 	ArrayList<DirFile> selectFileByDirNum(HashMap<String, Object> map);
+	//매개변수로 file_num을 받아 해당 번호의 파일 객체를 리턴하는 메서드
+	public DirFile selectFileByFileNum(int file_num);
 	//file_num을 매개변수로 검색해 나온 file객체에서 해당 파일의 title값만 리턴하는 메서드
 	String selectFileByFileNumReturnTitle(int file_num);
-	//file_num을 매개변수로 해당 파일에 속하는 notepad 객체를 리턴하는 메서드
-	DirNotepad selectNotepadByFileNum(int file_num);
 	//file_num을 매개변수로 해당 파일에 속하는 word객체 목록을 리턴하는 메서드 
 	ArrayList<DirWord> selectWordArrayByFileNum(int file_num);
 	//-----------[ 노트 출력기능 종료 ]-------------->>>>>>>>>>>>>>
@@ -31,8 +30,6 @@ public interface NoteService {
 	int dirCreateOne(Directory dir);
 	//파일을 생성하는 메서드
 	int fileCreateOne(DirFile file);
-	//파일 부속 객체인 NotePade를 생성하는 메서드
-	int notepadCreateOne(DirNotepad note);
 	//파일 부속 객체인 Word를 생성하는 메서드
 	int wordCreateOne(DirWord word);
 

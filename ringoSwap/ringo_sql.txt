@@ -35,6 +35,7 @@ CREATE TABLE ringo_member (
 );
 --member전용 시퀸스
 create SEQUENCE ringo_member_seq;
+
 --마이탭에 표시하기 위해 기존 회원정보에 더해 프로필사진정보+팔로워/팔로잉 갯수+태그 정보를 같이 출력하는 view create문
 CREATE VIEW ringo_member_with_mypage AS
 	select M.user_num, M.user_id, M.username
@@ -67,10 +68,47 @@ CREATE TABLE ringo_tagstorage_member (
 	tag			varchar2(60)	not null					--실제 태그 이름
 );
 --회원태그 목록. 아래 insert문을 사용하여 DB에 미리 입력할 것. []로 감싸진 것에 해당하는 정보를 기입하고 사용
-(1, 'MBTI')(2, '인스타그램')(3, '만화')(4, 'E-스포츠')(5, '캠핑')(6, '온천')(7, '쇼핑')(8, '스시')(9, '여행')(10, '미드')
-(11, '전시회')(12, 'PC방')(13, '축구')(14, '야구')(15, '게임')(16, '애니메이션')(17, '운동')(18, '수영')(19, '베이킹')(20, '커뮤니티')
-(21, '패션')(22, 'BTS')(23, '클라이밍')(25, '음악')(26, '주식')(27, '카페')(28, '주류')(29, '블로그')(30, '유투브')
-(31, '동물')(32, '식물')(33, '언어교환')(34, '문화')(35, '과학')(36, '역사')(37, '유학')(38, '취직')(39, '음식')(40, '코미디')
+INSERT ALL
+   INTO ringo_tagstorage_member VALUES (1, 'MBTI')
+   INTO ringo_tagstorage_member VALUES (2, '인스타그램')
+   INTO ringo_tagstorage_member VALUES (3, '만화')
+   INTO ringo_tagstorage_member VALUES (4, 'E-스포츠')
+   INTO ringo_tagstorage_member VALUES (5, '캠핑')
+   INTO ringo_tagstorage_member VALUES (6, '온천')
+   INTO ringo_tagstorage_member VALUES (7, '쇼핑')
+   INTO ringo_tagstorage_member VALUES (8, '스시')
+   INTO ringo_tagstorage_member VALUES (9, '여행')
+   INTO ringo_tagstorage_member VALUES (10, '미드')
+   INTO ringo_tagstorage_member VALUES (11, '전시회')
+   INTO ringo_tagstorage_member VALUES (12, 'PC방')
+   INTO ringo_tagstorage_member VALUES (13, '축구')
+   INTO ringo_tagstorage_member VALUES (14, '야구')
+   INTO ringo_tagstorage_member VALUES (15, '게임')
+   INTO ringo_tagstorage_member VALUES (16, '애니메이션')
+   INTO ringo_tagstorage_member VALUES (17, '운동')
+   INTO ringo_tagstorage_member VALUES (18, '수영')
+   INTO ringo_tagstorage_member VALUES (19, '베이킹')
+   INTO ringo_tagstorage_member VALUES (20, '커뮤니티')
+   INTO ringo_tagstorage_member VALUES (21, '패션')
+   INTO ringo_tagstorage_member VALUES (22, 'BTS')
+   INTO ringo_tagstorage_member VALUES (23, '클라이밍')
+   INTO ringo_tagstorage_member VALUES (25, '음악')
+   INTO ringo_tagstorage_member VALUES (26, '주식')
+   INTO ringo_tagstorage_member VALUES (27, '카페')
+   INTO ringo_tagstorage_member VALUES (28, '주류')
+   INTO ringo_tagstorage_member VALUES (29, '블로그')
+   INTO ringo_tagstorage_member VALUES (30, '유투브')
+   INTO ringo_tagstorage_member VALUES (31, '동물')
+   INTO ringo_tagstorage_member VALUES (32, '식물')
+   INTO ringo_tagstorage_member VALUES (33, '언어교환')
+   INTO ringo_tagstorage_member VALUES (34, '문화')
+   INTO ringo_tagstorage_member VALUES (35, '과학')
+   INTO ringo_tagstorage_member VALUES (36, '역사')
+   INTO ringo_tagstorage_member VALUES (37, '유학')
+   INTO ringo_tagstorage_member VALUES (38, '취직')
+   INTO ringo_tagstorage_member VALUES (39, '음식')
+   INTO ringo_tagstorage_member VALUES (40, '코미디')
+SELECT * FROM DUAL;
 insert into ringo_tagstorage_member
 values  ([tag_num], [tag]);
 
@@ -83,6 +121,10 @@ CREATE TABLE ringo_member_follow(
 	constraint fk_followee_num		foreign key (follower_num) references ringo_member(user_num) on delete cascade
 );
 
+
+
+
+
 --공지관련
 --공지 게시글의 정보를 기록하는 테이블
 CREATE TABLE ringo_notification (
@@ -94,6 +136,7 @@ CREATE TABLE ringo_notification (
 	inputdate		date					default sysdate,		--작성일
 	modifie_date	date					default sysdate		--수정일
 );
+
 
 
 
@@ -325,11 +368,13 @@ CREATE TABLE ringo_file (
 	dir_num			number,								--해당 파일이 들어가는 폴더 번호, 계정 삭제시 cascade
 	user_num			number,								--해당 파일을 작성한 사용자의 계정 번호, 계정 삭제시 cascade
 	title				varchar2(100)	not null,					--해당 파일의 제목
+    file_text				CLOB,									--실제로 작성한 문서 정보
 	inputdate			date				default sysdate,		--최초 작성일
 	modifie_date		date				default sysdate,		--최근 수정일
+	lang_type			varchar2(10)	default 'kor' check(lang_type in ('kor', 'jap', 'eng')), 	--단어장 언어 구분
 	file_type	 		varchar2(10) check(file_type in ('note', 'word')),	--문서 형식, file = 메모장, word = 단어장
-    constraint fk_dir_num_f FOREIGN KEY (dir_num) REFERENCES ringo_directory(dir_num) ON DELETE CASCADE,
-    constraint fk_user_num_f FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) on delete cascade
+    constraint fk_dir_num_file		FOREIGN KEY (dir_num) REFERENCES ringo_directory(dir_num) ON DELETE CASCADE,
+    constraint fk_user_num_file	FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) on delete cascade
 );
 --단어장 파일의 각 단어 저장부
 CREATE TABLE ringo_word (
@@ -340,18 +385,6 @@ CREATE TABLE ringo_word (
 	pron				varchar2(100),					--발음부, 적지 않아도 됩니다.
 	mean			varchar2(100)	not null,		--의미부, 적어야 합니다.
 	inputdate		timestamp			default sysdate
-);
---메모장 파일의 실제 메모 저장부
-CREATE TABLE ringo_notepad (
-	file_num		number			unique,	--파일 번호
-	dir_num		number,					--폴더 번호
-	user_num		number,					--사용자의 계정 번호
-    text				CLOB,						--실제로 작성한 문서 정보
-    inputdate		timestamp		default sysdate,
-    modifie_date	tumestamp	default sysdate,
-    constraint fk_file_num_txt FOREIGN KEY (file_num) REFERENCES ringo_file(file_num) ON DELETE CASCADE,
-    constraint fk_dir_num_txt FOREIGN KEY (dir_num) REFERENCES ringo_directory(dir_num) ON DELETE CASCADE,
-    constraint fk_user_num_txt FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) ON DELETE CASCADE
 );
 
 --라이브 관련
