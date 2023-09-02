@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Directory;
 import net.ringo.ringoSwap.domain.DirFile;
-import net.ringo.ringoSwap.domain.DirNotepad;
 import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.service.NoteService;
@@ -82,12 +81,12 @@ public class NoteController
 	//ajax를 통해 실행되는 하위 파일을 검색하여 그 목록을 리턴하는 메서드
 	@ResponseBody
 	@PostMapping("dirOpenFile")
-	public ArrayList<DirFile> dirOpenFile(int dir_num, String category, String sort, String text){
+	public ArrayList<DirFile> dirOpenFile(int dir_num, String category, String sort){
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("dir_num", dir_num);
 		map.put("category", category);
 		map.put("sort", sort);
-		map.put("text", text);
+		log.debug("파일열기 {}", map);
 		ArrayList<DirFile> fileList = service.selectFileByDirNum(map);
 		log.debug("파일열기 {}", fileList);
 		return fileList;
@@ -96,15 +95,11 @@ public class NoteController
 	//ajax를 통해 실행되는 해당 메모장분류 파일을 file_num을 매개변수로 검색하여 그 하위 Notepad객체를 리턴하는 메서드
 	@ResponseBody
 	@PostMapping("fileOpenNote")
-	public DirNotepad fileOpenNote(int file_num) {
-		String title = service.selectFileByFileNumReturnTitle(file_num);
+	public DirFile fileOpenNote(int file_num) {
+		DirFile note = service.selectFileByFileNum(file_num);
 		
-		DirNotepad notepad = service.selectNotepadByFileNum(file_num);
-		
-		notepad.setTitle(title);
-		
-		log.debug("ghkrdls: {} ", notepad);
-		return notepad;
+		log.debug("ghkrdls: {} ", note);
+		return note;
 	}
 	
 	//ajax를 통해 실행되는 해당 메모장분류 파일을 file_num을 매개변수로 검색하여 그 하위 Word목록을 리턴하는 메서드
@@ -156,19 +151,9 @@ public class NoteController
 		//파일 생성
 		log.debug("파일{}",file);
 		int num = service.fileCreateOne(file);
-		int file_num = 0;//그 방법을 알아서 생성과 동시에 file_num을 받아오는 시스템을 구현할 것
+		
 		log.debug("num값 {}",num);
 		//file_type에 따라 추가생성 정보 분류
-		if(file_type.equals("note")) {
-			DirNotepad note = new DirNotepad();
-			note.setDir_num(dir_num);
-			note.setFile_num(file_num);
-			note.setUser_num(user_num);
-			
-			int no2 = service.notepadCreateOne(note);
-		} else if(file_type.equals("word")) {
-			
-		}
 		
 	}
 
