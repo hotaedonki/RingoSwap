@@ -251,6 +251,18 @@ public class NoteController
 		return "수정성공";
 	}
 
+	//단어 수정 전 수정할 단어 객체를 호출하는 메서드
+	@ResponseBody
+	@PostMapping("wordModifyPrint")
+	public DirWord wordModifyPrint(int word_num
+			, @AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("word_num", word_num);
+		map.put("user_num", user_num);
+		DirWord word = service.wordSearchByWordNum(map);
+		return word;
+	}
 	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
 	@ResponseBody
 	@PostMapping("wordModify")
