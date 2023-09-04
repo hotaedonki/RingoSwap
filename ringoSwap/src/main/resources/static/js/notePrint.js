@@ -113,6 +113,7 @@ function fileCreate(fileType){
     });
 }
 
+/* 출력부 */
 // 해당 폴더 하위에 있는 폴더와 파일을 불러오는 함수
 function dirOpen() {
     let num = $(this).data('dir-num');
@@ -226,7 +227,7 @@ function fileOpen(){
                 let str1 = '';
                 let str2 = '';
                 let cnt = 0;
-                let cntleng = Math.floor(list.length / 2)+1;
+                let cntleng = Math.floor(list.length / 2);
                 $(list).each(function(i, item){
 	                if(cnt < cntleng){
 	                    str1 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}">
@@ -252,9 +253,7 @@ function fileOpen(){
                 });
                 $('.add-btn').attr('data-file-num', num);
                 console.log('filePrint' + num);
-                $('#windowPrint').html(str);
 
-                $('[id^="wordInsert"]').click(wordInsert);
                 $('.list-group1').html(str1);
                 $('.list-group2').html(str2);
                 $('.btn-close').click();
@@ -264,6 +263,7 @@ function fileOpen(){
             }
         });
     }
+}
 
 /* 수정부 */
 function fileModify() {
@@ -303,6 +303,26 @@ function fileModify() {
         });
     });
 }
+
+function fileSave(){
+    let content = tinymce.activeEditor.getContent();
+    let num = $('#fileNum').data('file-num');
+
+    $.post("fileSave", {
+        file_num : num,
+        file_text : content
+    }).done(function(txt){
+        console.log(txt);
+    }).fail(function() {
+        // 실패했을 때 실행할 코드
+        console.log("error");
+    })
+    .always(function() {
+        // 항상 실행할 코드
+    });
+}
+
+
 
 
 /* Delete 함수 목록 시작부 */
