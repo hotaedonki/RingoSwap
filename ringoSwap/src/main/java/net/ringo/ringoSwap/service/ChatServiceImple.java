@@ -16,9 +16,9 @@ public class ChatServiceImple implements ChatService
 	private ChatDAO dao;
 
 	@Override
-	public ArrayList<Integer> getChatroomLinks(int userNum) 
+	public ArrayList<Integer> getChatroomNums(int userNum) 
 	{
-		return dao.getChatroomLinks(userNum);
+		return dao.getChatroomNums(userNum);
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import net.ringo.ringoSwap.domain.Chatroom;
 
 public interface ChatService 
 {
-	public ArrayList<Integer> getChatroomLinks(int userNum);
+	public ArrayList<Integer> getChatroomNums(int userNum);
 
 	public ArrayList<Chatroom> getChatrooms(ArrayList<Integer> chatRoomNums);
 

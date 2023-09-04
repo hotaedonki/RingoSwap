@@ -19,16 +19,14 @@
 	 			담아온 ArrayList<int>를 parameter에 넣고 getChatrooms에서 ArrayList<Chatroom>으로 가져오기.
 	-->
 	<select id="getChatrooms" parameterType="int" resultType="Chatroom">
-		select * from
-			ringo_chatroom
-		where
-			chatroom_num in
-			<foreach collection="list" item="chatroom_num" open="(" separator=", " close=")">
-				#{chatroom_num}
-			</foreach>
-		order by
-			modifie_date desc
+    select * from 
+    	ringo_chatroom
+    where 
+    	chatroom_num in
+    	<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
+        	#{chatroom_num}
+    	</foreach>
+  		order by modifie_date desc
 	</select>
-	
 	
 </mapper>
