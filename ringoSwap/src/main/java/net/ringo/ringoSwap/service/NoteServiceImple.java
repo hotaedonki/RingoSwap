@@ -113,4 +113,8 @@ public class NoteServiceImple implements NoteService{
 	public int wordUpdateOne(DirWord word) {
 		return dao.wordUpdateOne(word);
 	}
+	@Override
+	public int wordDeleteOne(HashMap<String, Integer> map) {
+		return dao.wordDeleteOne(map);
+	}
 }

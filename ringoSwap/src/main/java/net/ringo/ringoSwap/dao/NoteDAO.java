@@ -55,4 +55,6 @@ public interface NoteDAO
 	DirWord wordSearchByWordNum(HashMap<String, Integer> map);
 	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
 	int wordUpdateOne(DirWord word);
+	// 단어 한개를 삭제하는 메서드
+	int wordDeleteOne(HashMap<String, Integer> map);
 }

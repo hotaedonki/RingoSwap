@@ -3,140 +3,162 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="net.ringo.ringoSwap.dao.NoteDAO">
-	<!-- 폴더정보를 배열로 리턴하는 select 코드 -->
-	<select id="selectUserDirectoryAll" resultType="Directory">
-		select * 
-		from ringo_directory
-		where user_num = #{user_num}
-			and parent_dir_num = -1
-		order by dir_num
-	</select>
-	
-	<!-- 파일정보를 배열로 리턴하는 select 코드 -->
-	<select id="selectUserFileAll" parameterType="java.util.HashMap" resultType="DirFile">
-		select *
-		from ringo_file
-		where user_num = #{user_num}
-			<if test="category != 'all'">
-				and file_type = #{category}
-			</if>
-			<if test = "text !='null' ">
-				and title like '%'||#{text}||'%'
-			</if>
-		<if test="sort == 'input'">
-			order by file_num
-		</if>
-		<if test="sort == 'title'">
-			order by title desc
-		</if>
-		<if test="sort == 'modifie'">
-			order by modifie_date desc
-		</if>
-	</select>
-	
-	<!-- 부모폴더 정보를 기반으로 검색한 폴더정보를 리턴하는 select문 -->
-	<select id="selectDirectoryByPDirNum" resultType="Directory">
-		select * 
-		from ringo_directory
-		where parent_dir_num = #{dir_num}
-		order by dir_num
-	</select>
-	
-	<!-- 부모폴더 정보를 기반으로 검색한 파일정보를 리턴하는 select문 -->
-	<select id="selectFileByDirNum" parameterType="java.util.HashMap" resultType="DirFile">
-		select *
-		from ringo_file
-		where dir_num = #{dir_num}
-			<if test="category != 'all'">
-				and lang_type = #{category}
-			</if>
-		<choose>
-	        <when test="sort eq 'input'">
-	            order by file_num
-	        </when>
-	        <when test="sort eq 'title'">
-	            order by title desc
-	        </when>
-	        <otherwise>
-	            order by modifie_date desc
-	        </otherwise>
-    	</choose>
-	</select>
-	
-	<!-- file_num을 매개변수로 file객체를 검색해 리턴하는 select문 -->
-	<select id="selectFileByFileNum" resultType="DirFile">
-	select *
-	from ringo_file
-	where file_num = #{file_num}
-	</select>
-	
-	<select id="selectWordArrayByFileNum" resultType="DirWord">
-	select *
-	from ringo_word
-	where file_num = #{file_num}
-	</select>
-	<!-- 출력부 끝 -->
-	
-	<!-- 생성부 시작 -->
-	<!-- 매개변수로 받은 directory객체를 통해 DB에 새로운 directory정보를 생성하는 insert문 -->
-	<insert id="dirCreate" parameterType="Directory">
-	insert into ringo_directory (dir_num, user_num, dir_name
-		<if test="parent_dir_num != -1">
-		, parent_dir_num
-		</if>
-		)
-	values(ringo_directory_seq.nextval, #{user_num}, #{dir_name}
-		<if test="parent_dir_num != -1">
-		, #{parent_dir_num}
-		</if>
-	)
-	</insert>
-	<!-- 매개변수로 받은 file객체를 통해 DB에 새로운 file정보를 생성하는 insert문 -->
-	<insert id="fileCreateOne" parameterType="DirFile">
-	insert into ringo_file(file_num, dir_num, user_num, title, file_type)
-	values(ringo_file_seq.nextval, #{dir_num}, #{user_num}, #{title}, #{file_type})
-	</insert>
+   <!-- 폴더정보를 배열로 리턴하는 select 코드 -->
+   <select id="selectUserDirectoryAll" resultType="Directory">
+      select *
+      from
+      ringo_directory
+      where user_num = #{user_num}
+      and parent_dir_num = -1
+      order by dir_num
+   </select>
 
-	<!-- 매개변수로 받은 file객체를 통해 DB에 새로운 file정보를 생성하는 insert문 -->
-	<insert id="wordCreateOne" parameterType="DirWord">
-	insert into ringo_word(word_num, file_num, user_num, word
-		<if test="#{pron} != 'null'">
-		, pron
-		</if>
-		, mean, description)
-	values(ringo_word_seq.nextval, #{file_num}, #{user_num}, #{word}
-		<if test="pron != 'null' ">
-		, #{pron}
-		</if>
-		, #{mean}, #{description})
-	</insert>
-	<!-- 생성부 끝 -->
-	
-	<!-- 삭제부 시작-->
-	<!-- dir_num을 매개변수로 해당 폴더를 DB에서 삭제한 후, 삭제여부를 리턴하는 delete문 -->
-	<delete id="dirDeleteOne" parameterType="java.util.HashMap">
-	delete ringo_directory
-	where dir_num = #{dir_num} and user_num = #{user_num}
+   <!-- 파일정보를 배열로 리턴하는 select 코드 -->
+   <select id="selectUserFileAll" parameterType="java.util.HashMap"
+      resultType="DirFile">
+      select *
+      from ringo_file
+      where user_num = #{user_num}
+      <if test="category != 'all'">
+         and file_type = #{category}
+      </if>
+      <if test="text !='null' ">
+         and title like '%'||#{text}||'%'
+      </if>
+      <if test="sort == 'input'">
+         order by file_num
+      </if>
+      <if test="sort == 'title'">
+         order by title desc
+      </if>
+      <if test="sort == 'modifie'">
+         order by modifie_date desc
+      </if>
+   </select>
+
+   <!-- 부모폴더 정보를 기반으로 검색한 폴더정보를 리턴하는 select문 -->
+   <select id="selectDirectoryByPDirNum" resultType="Directory">
+      select *
+      from
+      ringo_directory
+      where parent_dir_num = #{dir_num}
+      order by dir_num
+   </select>
+
+   <!-- 부모폴더 정보를 기반으로 검색한 파일정보를 리턴하는 select문 -->
+   <select id="selectFileByDirNum"
+      parameterType="java.util.HashMap" resultType="DirFile">
+      select *
+      from ringo_file
+      where dir_num = #{dir_num}
+      <if test="category != 'all'">
+         and lang_type = #{category}
+      </if>
+      <choose>
+         <when test="sort eq 'input'">
+            order by file_num
+         </when>
+         <when test="sort eq 'title'">
+            order by title desc
+         </when>
+         <otherwise>
+            order by modifie_date desc
+         </otherwise>
+      </choose>
+   </select>
+
+   <!-- file_num을 매개변수로 file객체를 검색해 리턴하는 select문 -->
+   <select id="selectFileByFileNum" resultType="DirFile">
+      select *
+      from
+      ringo_file
+      where file_num = #{file_num}
+   </select>
+
+   <select id="selectWordArrayByFileNum" resultType="DirWord">
+      select *
+      from
+      ringo_word
+      where file_num = #{file_num}
+   </select>
+   <!-- 출력부 끝 -->
+
+   <!-- 생성부 시작 -->
+   <!-- 매개변수로 받은 directory객체를 통해 DB에 새로운 directory정보를 생성하는 insert문 -->
+   <insert id="dirCreate" parameterType="Directory">
+      insert into ringo_directory (dir_num, user_num, dir_name
+      <if test="parent_dir_num != -1">
+         , parent_dir_num
+      </if>
+      )
+      values(ringo_directory_seq.nextval, #{user_num}, #{dir_name}
+      <if test="parent_dir_num != -1">
+         , #{parent_dir_num}
+      </if>
+      )
+   </insert>
+   <!-- 매개변수로 받은 file객체를 통해 DB에 새로운 file정보를 생성하는 insert문 -->
+   <insert id="fileCreateOne" parameterType="DirFile">
+      insert into
+      ringo_file(file_num, dir_num, user_num, title, file_type)
+      values(ringo_file_seq.nextval, #{dir_num}, #{user_num}, #{title},
+      #{file_type})
+   </insert>
+
+   <!-- 매개변수로 받은 file객체를 통해 DB에 새로운 file정보를 생성하는 insert문 -->
+   <insert id="wordCreateOne" parameterType="DirWord">
+      insert into ringo_word(word_num, file_num, user_num, word
+      <if test="#{pron} != null">
+         , pron
+      </if>
+      , mean, description)
+      values(ringo_word_seq.nextval, #{file_num},
+      #{user_num}, #{word}
+      <if test="pron != null">
+         , #{pron}
+      </if>
+      , #{mean}, #{description})
+   </insert>
+   <!-- 생성부 끝 -->
+
+   <!-- 삭제부 시작 -->
+   <!-- dir_num을 매개변수로 해당 폴더를 DB에서 삭제한 후, 삭제여부를 리턴하는 delete문 -->
+   <delete id="dirDeleteOne" parameterType="java.util.HashMap">
+      delete ringo_directory
+      where dir_num = #{dir_num} and user_num = #{user_num}
+   </delete>
+   <!-- file_num을 매개변수로 해당 파일을 DB에서 삭제한 후, 삭제여부를 리턴하는 delete문 -->
+   <delete id="fileDeleteOne" parameterType="java.util.HashMap">
+      delete ringo_file
+      where
+      file_num = #{file_num} and user_num = #{user_num}
+   </delete>
+   <!-- 삭제부 끝 -->
+
+   <!-- 수정부 시작 -->
+   <!-- 수정된 파일번호를 보내 해당 파일번호의 파일의 이름을 수정하는 기능 -->
+   <update id="fileUpdateOne" parameterType="java.util.HashMap">
+   </update>
+   <!-- 메모장 작성 완료 후 수정한 작성파일을 DB로 보내 수정하는 메서드 -->
+   <update id="fileTextUpdateOne" parameterType="java.util.HashMap">
+   </update>
+   
+   <update id="wordUpdateOne" parameterType="DirWord">
+    update ringo_word
+    set word = #{word}, mean = #{mean}, pron = #{pron}, description = #{description}
+    where user_num = #{user_num} and word_num = #{word_num}
+    </update>
+   <!-- 단어 수정전 수정할 단어 객체를 DB에서 검색해서 리턴하는 메서드 -->
+   <select id="wordSearchByWordNum">
+      select *
+      from ringo_word
+      where word_num = #{word_num}
+      and user_num = #{user_num}
+   </select>
+   
+   <delete id="wordDeleteOne" parameterType="java.util.HashMap">
+   delete from ringo_word
+   where word_num = #{word_num} and user_num = #{user_num}
 	</delete>
-	<!-- file_num을 매개변수로 해당 파일을 DB에서 삭제한 후, 삭제여부를 리턴하는 delete문 -->
-	<delete id="fileDeleteOne" parameterType="java.util.HashMap">
-	delete ringo_file
-	where file_num = #{file_num} and user_num = #{user_num}
-	</delete>
-	<!-- 삭제부 끝 -->
-	
-	<!-- 수정부 시작 -->
-	<!-- 수정된 파일번호를 보내 해당 파일번호의 파일의 이름을 수정하는 기능 -->
-	<update id="fileUpdateOne" parameterType="java.util.HashMap">
-	</update>
-	<!-- 메모장 작성 완료 후 수정한 작성파일을 DB로 보내 수정하는 메서드 -->
-	<update id="fileUpdateOne" parameterType="java.util.HashMap">
-	</update>
-	<!-- 단어 수정전 수정할 단어 객체를 DB에서 검색해서 리턴하는 메서드 -->
-	<select id="wordSearchByWordNum">
-	select *
-	from ringo_word
-	where word_num = #{word_num} and user_num = #{user_num}
-	</select>
-	<!-- 수정부 끝 -->
+   <!-- 수정부 끝 -->
 </mapper>

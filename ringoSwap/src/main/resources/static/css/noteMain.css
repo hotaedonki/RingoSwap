@@ -23,11 +23,11 @@
 	margin-left: 5px;
 }
 
-.noteOffcanvas {
+.wordButton {
 	z-index: 10; /* textarea 앞에 위치 */
 	position: absolute;
-	top: 18px; /* 상단에서 10px 떨어진 위치에 배치 */
-	right: 60px; /* 우측에서 10px 떨어진 위치에 배치 */
+	top: 10px; /* 상단에서 10px 떨어진 위치에 배치 */
+	right: 10px; /* 우측에서 10px 떨어진 위치에 배치 */
 }
 
 .word-card {
@@ -95,4 +95,12 @@
 	position: absolute;
 	right: 15px;
 	cursor: pointer;
+}
+
+.toast-center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
 }

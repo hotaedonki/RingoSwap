@@ -58,7 +58,7 @@ function dirPrint(){
                 str += `<li><i class="bi bi-folder"></i><button class="btn btn-outline-dark dir-btn dirOpen" 
                 data-dir-num="${item.dir_num}">
                 ${item.dir_name}</button>
-				<span class="modifyAndDelete">
+            <span class="modifyAndDelete">
                 <i data-dir-num="${item.dir_num}" class="bi bi-trash dirDelete"></i></span>
                 <div id="dirPrint${item.dir_num}"></div><div id="filePrint${item.dir_num}"></div>
                 </li>`;
@@ -116,6 +116,9 @@ function fileCreate(fileType){
 // 해당 폴더 하위에 있는 폴더와 파일을 불러오는 함수
 function dirOpen() {
     let num = $(this).data('dir-num');
+    if(num.isNaN){
+        num = -1;
+    }
 
     // 하위 폴더 불러오기
     $.ajax({
@@ -157,8 +160,8 @@ function dirOpen() {
                             <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
                             <span id="fileType${item.file_num}">${item.file_type}</span>
                             <span>${item.lang_type}</span>
-                           	<span class="modifyAndDelete">
-							<i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-pencil fileModify" ></i>
+                              <span class="modifyAndDelete">
+                     <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-pencil fileModify" ></i>
                             <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-trash fileDelete"></i>
                        </span></li>`;
             });
@@ -199,11 +202,11 @@ function fileOpen(){
                     <td>${notepad.modifie_date}</td>
                 </tr>
                 <tr>
-                    <td colspan="3"><textarea  cols="60" rows="15" >${notepad.text}</textarea></td>
+                    <td colspan="3"><textarea  cols="60" rows="15" >${notepad.file_text}</textarea></td>
                 </tr>
             </table>`;
                 str += '</ul>';
-                $('#windowPrint').html(str);
+                $('.tox-edit-area').text(str);
                 console.log('프린트 완료 : '+notepad);
             },
             error: function(e){
@@ -219,34 +222,47 @@ function fileOpen(){
             dataType: 'json',
             success: function(list){
                 console.log(list);
-                let str = '<ul>';
+                let str1 = '';
+                let str2 = '';
+                let cnt = 0;
+                let cntleng = Math.floor(list.length / 2)+1;
                 $(list).each(function(i, item){
-                    let inputDate = new Date(item.inputdate).toLocaleString();
-                    str += `<li>
-                    <span>${item.word_num}</span> / <span>${item.file_num}</span> / 
-                    <span id="wordOpen${item.word_num}">${item.word}</span> / 
-                    <span>${item.pron}</span> / <span>${item.mean}</span> /
-                    <span>${inputDate}</span> / <span>${item.user_num}</span>
-                    </li>`;
+	                if(cnt < cntleng){
+	                    str1 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}">
+	                        <span class="word">${item.word}</span>
+	                        <div class="word-content">
+	                            <span class="pronunciation">${item.pron}</span>
+	                            <span class="meaning">${item.mean}</span>
+	                            <span class="description" style="display:none;">${item.description}</span>
+	                        </div> 
+	                    </li>`;
+	                }else{
+	                    str2 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}">
+	                        <span class="word">${item.word}</span>
+	                        <div class="word-content">
+	                            <span class="pronunciation">${item.pron}</span>
+	                            <span class="meaning">${item.mean}</span>
+	                            <span class="description" style="display:none;">${item.description}</span>
+	                        </div> 
+	                    </li>`;
+                    }
                     console.log(item.word_num);
+                    cnt++;
                 });
-                str += `<li><button id="wordInsert${num}"> + 단어 추가 + </button></li></ul>`;
+                $('.add-btn').attr('data-file-num', num);
                 console.log('filePrint' + num);
-                $('#windowPrint').html(str);
-
-                $('[id^="wordInsert"]').click(wordInsert);
+                $('.list-group1').html(str1);
+                $('.list-group2').html(str2);
             },
             error: function(e){
                 console.log("error");
             }
         });
     }
-
-    function wordInsert(){
-        // 단어 추가 로직
-    }
 }
 
+
+/* 수정부 */
 function fileModify() {
     // 현재 클릭한 수정 버튼의 ID를 가져옵니다.
     let file_num = $(this).attr('class').replace('fileModify', '');
@@ -284,6 +300,8 @@ function fileModify() {
         });
     });
 }
+
+
 /* Delete 함수 목록 시작부 */
 //폴더 삭제기능
 function dirDelete(){
@@ -313,26 +331,27 @@ function fileDelete(){
     let dnum = $(this).data('dir-num');
     console.log(fnum, dnum);
     
-	$("#deleteModal").modal('show');	
-	
-		$("#confirmDelete").off().click(function() {
-		    $.ajax({
-		    url: 'fileDeleteOne',
-		    type: 'post',
-		    data: {file_num : fnum},
-		    dataType: 'text',
-		    success: function(txt){
-		        console.log("success"+txt);
-		        
-		        dirOpen();
-		    },
-		    error: function(e){
-		        console.log("error");
-		    }
-	    });
+   $("#deleteModal").modal('show');   
+   
+      $("#confirmDelete").off().click(function() {
+          $.ajax({
+          url: 'fileDeleteOne',
+          type: 'post',
+          data: {file_num : fnum},
+          dataType: 'text',
+          success: function(txt){
+              console.log("success"+txt);
+              dirPrint();
+          },
+          error: function(e){
+              console.log("error");
+          }
+       });
     });
 }
 
+
 function closeModal() {
-	$(this).closest(".modal").modal("hide");
+   $(this).closest(".modal").modal("hide");
 }
+

@@ -50,4 +50,6 @@ public interface NoteService {
 	DirWord wordSearchByWordNum(HashMap<String, Integer> map);
 	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
 	int wordUpdateOne(DirWord word);
+	// word_num을 받아와서 해당 단어 삭제
+	int wordDeleteOne(HashMap<String, Integer> map);
 }
