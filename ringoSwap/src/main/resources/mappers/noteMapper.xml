@@ -74,6 +74,13 @@
 		ringo_file
 		where file_num = #{file_num}
 	</select>
+	
+	<!-- file_num을 매개변수로 해당 폴더에 속한 단어의 갯수를 리턴하는 select문 -->
+	<select id="wordSelectByFileNum">
+	select count(*)
+	from ringo_word
+	where file_num = #{file_num}
+	</select>
 
 	<select id="selectWordArrayByFileNum" resultType="DirWord">
 		select *

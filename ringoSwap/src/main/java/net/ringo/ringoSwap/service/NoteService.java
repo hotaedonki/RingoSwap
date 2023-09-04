@@ -6,6 +6,7 @@ import java.util.HashMap;
 import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.Directory;
+import net.ringo.ringoSwap.util.PageNavigator;
 
 public interface NoteService {
 	//<<<<<<<<<<<<-----[ 노트 출력기능 시작 ]-----------------------
@@ -21,8 +22,11 @@ public interface NoteService {
 	public DirFile selectFileByFileNum(int file_num);
 	//file_num을 매개변수로 검색해 나온 file객체에서 해당 파일의 title값만 리턴하는 메서드
 	String selectFileByFileNumReturnTitle(int file_num);
+	
+	//file_num을 매개변수로 해당 파일에 속하는 단어목록 네비게이터를 생성하는 메서드
+	PageNavigator wordSelectPageNavigator(int pagePerGroup, int countPerPage, int page, int file_num);
 	//file_num을 매개변수로 해당 파일에 속하는 word객체 목록을 리턴하는 메서드 
-	ArrayList<DirWord> selectWordArrayByFileNum(int file_num);
+	ArrayList<DirWord> selectWordArrayByFileNum(PageNavigator navi, int file_num);
 	//-----------[ 노트 출력기능 종료 ]-------------->>>>>>>>>>>>>>
 
 	//<<<<<<<<<<<<-----[ 노트 생성기능 시작 ]-----------------------

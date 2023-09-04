@@ -3,6 +3,7 @@ package net.ringo.ringoSwap.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import net.ringo.ringoSwap.dao.NoteDAO;
 import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.Directory;
+import net.ringo.ringoSwap.util.PageNavigator;
 
 @Service
 public class NoteServiceImple implements NoteService{
@@ -52,11 +54,25 @@ public class NoteServiceImple implements NoteService{
 		return title;
 	}
 
+	//file_num을 매개변수로 해당 파일에 속하는 단어목록 네비게이터를 생성하는 메서드
+	@Override
+	public PageNavigator wordSelectPageNavigator(int pagePerGroup, int countPerPage, int page, int file_num) {
+		//단어장의 단어 갯수 총합을 검색
+		int total = dao.wordSelectByFileNum(file_num);
+		//검색한 단어를 기준으로 단어장에 사용할 네비게이터 navi 생성
+		PageNavigator navi = new PageNavigator(pagePerGroup, countPerPage, page, total);
+		
+		return navi;
+	}
 	//file_num을 매개변수로 해당 파일에 속하는 word객체 목록을 리턴하는 메서드 
 	@Override
-	public ArrayList<DirWord> selectWordArrayByFileNum(int file_num){
-		return dao.selectWordArrayByFileNum(file_num);
+	public ArrayList<DirWord> selectWordArrayByFileNum(PageNavigator navi, int file_num){
+
+		RowBounds rb = new RowBounds(navi.getStartRecord(), navi.getCountPerPage());
+		
+		return dao.selectWordArrayByFileNum(file_num, rb);
 	}
+	
 	//-----------[ 노트 출력기능 종료 ]-------------->>>>>>>>>>>>>>
 
 	//<<<<<<<<<<<<-----[ 노트 생성기능 시작 ]-----------------------
