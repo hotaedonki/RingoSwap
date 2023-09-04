@@ -108,7 +108,7 @@ public class NoteController
    public DirFile fileOpenNote(int file_num) {
       DirFile note = service.selectFileByFileNum(file_num);
       
-      log.debug("ghkrdls: {} ", note);
+      log.debug("파일 열어~~~: {} ", note);
       return note;
    }
    
@@ -266,8 +266,8 @@ public class NoteController
    }
    //메모장 작성 완료 후 수정한 작성파일을 DB로 보내는 메서드
    @ResponseBody
-   @PostMapping("fileTextModify")
-   public String fileTextModify(int file_num, String file_text
+   @PostMapping("fileSave")
+   public String fileSave(int file_num, String file_text
             , @AuthenticationPrincipal UserDetails user) {
       int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
       HashMap<String, Object> map = new HashMap<>();

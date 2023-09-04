@@ -288,7 +288,6 @@ CREATE TABLE ringo_tagstorage (
 );
 
 
-
 --채팅룸 관련
 --모든 서비스의 채팅룸 기능의 정보를 기록하는 테이블.
 --카테고리에 따라 해당 서비스의 채팅메세지 테이블과 연동되어 채팅기능을 구현한다.
@@ -384,6 +383,17 @@ CREATE TABLE ringo_file (
 	file_type	 		varchar2(10) check(file_type in ('note', 'word')),	--문서 형식, file = 메모장, word = 단어장
     constraint fk_dir_num_file		FOREIGN KEY (dir_num) REFERENCES ringo_directory(dir_num) ON DELETE CASCADE,
     constraint fk_user_num_file	FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) on delete cascade
+);
+CREATE TABLE ringo_file_photo(
+	file_num			number		not null,					--file_num과 같이 복합 기본키 
+	photo_num		number		not null,					--photo_num과 같이 복합 기본키
+	user_num			number		not null,					--member에서 받아오는 왜래키
+	inputdate			date			default sysdate,		--사진 등록일자
+	original_note		varchar2(100),						--노트 사진 실제 이름
+	saved_note		varchar2(100),						--노트 사진 저장 이름
+	primary key(file_num, photo_num),
+	constraint fk_file_num_fphoto		foreign key(file_num)	references ringo_file(file_num) on delete cascade,
+	constraint fk_user_num_fphoto	foriegn key(user_num) references ringo_member(user_num) on delete cascade
 );
 --단어장 파일의 각 단어 저장부
 CREATE TABLE ringo_word (

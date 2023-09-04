@@ -197,7 +197,7 @@ function fileOpen(){
                 <tr>
                      <td rowspan="2">${notepad.title}</td>
                     <td rowspan="2">${notepad.file_num}</td>
-                    <td>${notepad.input_date}</td>
+                    <td>${notepad.inputdate}</td>
                 </tr>
                 <tr>
                     <td>${notepad.modifie_date}</td>
