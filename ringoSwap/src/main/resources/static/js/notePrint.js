@@ -130,8 +130,8 @@ function dirOpen() {
             let str = '<ul>';
             $(list).each(function(n, item) {
                 str += `<li style="position: relative;"><i class="bi bi-folder"></i>
-                    <span data-dir-num="${item.dir_num}" class="dirOpen">${item.dir_name}
-                    </span>
+                    <button class="btn btn-outline-dark dir-btn dirOpen" data-dir-num="${item.dir_num}">
+                    ${item.dir_name}</button>
                     <i data-dir-num="${item.dir_num}" class="bi bi-trash dirDelete"></i>
                     <div id="dirPrint${item.dir_num}"></div><div id="filePrint${item.dir_num}"></div>
                 </li>`;
@@ -208,6 +208,7 @@ function fileOpen(){
                 str += '</ul>';
                 $('.tox-edit-area').text(str);
                 console.log('프린트 완료 : '+notepad);
+                $('.btn-close').click();
             },
             error: function(e){
                 console.log("error");
@@ -251,16 +252,18 @@ function fileOpen(){
                 });
                 $('.add-btn').attr('data-file-num', num);
                 console.log('filePrint' + num);
+                $('#windowPrint').html(str);
+
+                $('[id^="wordInsert"]').click(wordInsert);
                 $('.list-group1').html(str1);
                 $('.list-group2').html(str2);
+                $('.btn-close').click();
             },
             error: function(e){
                 console.log("error");
             }
         });
     }
-}
-
 
 /* 수정부 */
 function fileModify() {
@@ -331,22 +334,22 @@ function fileDelete(){
     let dnum = $(this).data('dir-num');
     console.log(fnum, dnum);
     
-   $("#deleteModal").modal('show');   
-   
-      $("#confirmDelete").off().click(function() {
-          $.ajax({
-          url: 'fileDeleteOne',
-          type: 'post',
-          data: {file_num : fnum},
-          dataType: 'text',
-          success: function(txt){
-              console.log("success"+txt);
-              dirPrint();
-          },
-          error: function(e){
-              console.log("error");
-          }
-       });
+	$("#deleteModal").modal('show');	
+	
+		$("#confirmDelete").off().click(function() {
+		    $.ajax({
+		    url: 'fileDeleteOne',
+		    type: 'post',
+		    data: {file_num : fnum},
+		    dataType: 'text',
+		    success: function(txt){
+		        console.log("success"+txt);
+		        dirPrint();
+		    },
+		    error: function(e){
+		        console.log("error");
+		    }
+	    });
     });
 }
 

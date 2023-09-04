@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,10 @@ public class FeedController
 
 	@Autowired
 	MemberService memberService;
+	
+	//Value : properties파일에 있는 걸 가져오기
+	@Value("${spring.servlet.multipart.location}")
+	String uploadPath;
 	
 	//피드서비스의 메인페이지로 이동하는 컨트롤러 메서드
 	/*

@@ -13,7 +13,7 @@ import net.ringo.ringoSwap.domain.ChatMulti;
 @Mapper
 public interface ChatDAO 
 {
-	public ArrayList<Integer> getChatroomLinks(int userNum);
+	public ArrayList<Integer> getChatroomNums(int userNum);
 
 	public ArrayList<Chatroom> getChatrooms(ArrayList<Integer> chatRoomNums);
 	
