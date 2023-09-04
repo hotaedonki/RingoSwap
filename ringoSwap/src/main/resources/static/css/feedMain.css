@@ -47,7 +47,7 @@ main {
 	display: block;
 	border-radius: 50%;
 	overflow: hidden;
-	bottom: 130px;
+	bottom: 145px;
 	left: 0;
 	right: 0;
 	position: absolute;
@@ -208,12 +208,14 @@ main {
 	cursor: pointer;
 }
 
-.profile-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-}
-
 .profile-link:hover {
     text-decoration: none;
+}
+
+.go-profile {
+	cursor:pointer;
+}
+
+.profile-card {
+	text-align: center;
 }
