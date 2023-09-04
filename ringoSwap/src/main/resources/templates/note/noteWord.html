@@ -25,11 +25,6 @@
 <!-- JS -->
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
 
-<script
-	src="https://cdn.tiny.cloud/1/411l7j9qqhx8mnm091296e4m3si02ode9iylwzccqxc089ij/tinymce/6/tinymce.min.js"
-	referrerpolicy="origin"></script>
-
-
 <title>Dashboard Sidebar Menu</title>
 </head>
 <body>
@@ -123,12 +118,7 @@
 			<div class="container">
 				<div class="row noteHome">
 					<div class="col-1">
-						<button class="btn btn-primary noteOffcanvas" type="button"
-							data-bs-toggle="offcanvas"
-							data-bs-target="#offcanvasWithBothOptions"
-							aria-controls="offcanvasWithBothOptions">
-							<i class="bi bi-arrows-angle-expand"></i>
-						</button>
+
 						<!-- ========================폴더 출력 오프캔버스=================== -->
 						<div class="offcanvas offcanvas-start" data-bs-scroll="true"
 							tabindex="-1" id="offcanvasWithBothOptions"
@@ -180,12 +170,18 @@
 					<div class="col-12">
 						<div class="card mb-3" style="height: 97vh; top: 9px;">
 							<!-- Header with '추가' button -->
-							<div class="card-header d-flex justify-content-between">
+							<div class="card-header d-flex justify-content-between" style="position: relative;">
 								<h2>단어장 이름</h2>
-								<div class="wordButton"
-									style="position: absolute; right: 100px;">
+								<div class="wordButton">
 									<button class="btn btn-primary add-btn">추가</button>
+									<button class="btn btn-primary noteOffcanvas" type="button"
+									data-bs-toggle="offcanvas"
+									data-bs-target="#offcanvasWithBothOptions"
+									aria-controls="offcanvasWithBothOptions">
+									<i class="bi bi-arrows-angle-expand"></i>
+								</button>
 								</div>
+								
 							</div>
 
 							<!-- Body for the words -->
@@ -218,30 +214,7 @@
 										</ul>
 									</div>
 									<!-- 두 번째 열 -->
-									<div class="col-6 wordArea">
-										<ul class="list-group2">
-											<li class="list-group-item word-card"><span class="word">단어</span>
-												<div class="word-content">
-													<span class="pronunciation">발음1</span> <span
-														class="meaning">뜻1</span>
-												</div></li>
-											<li class="list-group-item word-card"><span class="word">단어</span>
-												<div class="word-content">
-													<span class="pronunciation">발음2</span> <span
-														class="meaning">뜻2</span>
-												</div></li>
-											<li class="list-group-item word-card"><span class="word">단어</span>
-												<div class="word-content">
-													<span class="pronunciation">발음3</span> <span
-														class="meaning">뜻3</span>
-												</div></li>
-											<li class="list-group-item word-card"><span class="word">단어</span>
-												<div class="word-content">
-													<span class="pronunciation">발음4</span> <span
-														class="meaning">뜻4</span>
-												</div></li>
-										</ul>
-									</div>
+									<div class="col-6 wordArea"></div>
 								</div>
 							</div>
 
@@ -288,8 +261,8 @@
 							id="folderNameInput">
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary yes" id="createFolder"
-							data-bs-dismiss="modal">Create</button>
+						<button type="button" class="btn btn-primary yes"
+							id="createFolder" data-bs-dismiss="modal">Create</button>
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal">Cancel</button>
 					</div>
@@ -338,31 +311,36 @@
 						id="newFileNameInput">
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary yes" id="modifyFileName">Save</button>
+					<button type="button" class="btn btn-primary yes"
+						id="modifyFileName">Save</button>
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-		<!-- 파일 삭제 -->
-	<div class="modal fade deleteFile" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-	    <div class="modal-dialog">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <h5 class="modal-title" id="deleteModalLabel">Delete File</h5>
-	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-	            </div>
-	            <div class="modal-body">
-	                <p>Are you sure you want to delete this file?</p>
-	            </div>
-	            <div class="modal-footer">
-	                <button type="button" class="btn btn-danger yes" id="confirmDelete">Confirm Delete</button>
-	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-	            </div>
-	        </div>
-	    </div>
+
+	<!-- 파일 삭제 -->
+	<div class="modal fade deleteFile" id="deleteModal" tabindex="-1"
+		aria-labelledby="deleteModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">Delete File</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>Are you sure you want to delete this file?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger yes" id="confirmDelete">Confirm
+						Delete</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 

@@ -168,5 +168,10 @@
 	set word = #{word}, mean = #{mean}, pron = #{pron}, description = #{description}
 	where user_num = #{user_num} and word_num = #{word_num}
 	</update>
+	
+	<delete id="wordDeleteOne" parameterType="java.util.HashMap">
+   delete from ringo_word
+   where word_num = #{word_num} and user_num = #{user_num}
+	</delete>
 	<!-- 수정부 끝 -->
 </mapper>

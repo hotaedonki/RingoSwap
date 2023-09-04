@@ -58,7 +58,7 @@ function dirPrint(){
                 str += `<li><i class="bi bi-folder"></i><button class="btn btn-outline-dark dir-btn dirOpen" 
                 data-dir-num="${item.dir_num}">
                 ${item.dir_name}</button>
-				<span class="modifyAndDelete">
+            <span class="modifyAndDelete">
                 <i data-dir-num="${item.dir_num}" class="bi bi-trash dirDelete"></i></span>
                 <div id="dirPrint${item.dir_num}"></div><div id="filePrint${item.dir_num}"></div>
                 </li>`;
@@ -160,8 +160,8 @@ function dirOpen() {
                             <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
                             <span id="fileType${item.file_num}">${item.file_type}</span>
                             <span>${item.lang_type}</span>
-                           	<span class="modifyAndDelete">
-							<i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-pencil fileModify" ></i>
+                              <span class="modifyAndDelete">
+                     <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-pencil fileModify" ></i>
                             <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-trash fileDelete"></i>
                        </span></li>`;
             });
@@ -228,29 +228,33 @@ function fileOpen(){
                 let cnt = 0;
                 let cntleng = Math.floor(list.length / 2)+1;
                 $(list).each(function(i, item){
-                    let inputDate = new Date(item.inputdate).toLocaleString();
-                    if(cnt < cntleng){
-                        str1 += `<li class="list-group-item word-card">
-                            <span class="word">${item.word}</span>
-                            <div class="word-content">
-                                <span class="pronunciation">${item.pron}</span>
-                                <span class="meaning">${item.mean}</span> /
-                            </div> 
-                        </li>`;
-                    }else{
-                        str2 += `<li class="list-group-item word-card">
-                            <span class="word">${item.word}</span>
-                            <div class="word-content">
-                                <span class="pronunciation">${item.pron}</span>
-                                <span class="meaning">${item.mean}</span> /
-                            </div> 
-                        </li>`;
+	                if(cnt < cntleng){
+	                    str1 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}">
+	                        <span class="word">${item.word}</span>
+	                        <div class="word-content">
+	                            <span class="pronunciation">${item.pron}</span>
+	                            <span class="meaning">${item.mean}</span>
+	                            <span class="description" style="display:none;">${item.description}</span>
+	                        </div> 
+	                    </li>`;
+	                }else{
+	                    str2 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}">
+	                        <span class="word">${item.word}</span>
+	                        <div class="word-content">
+	                            <span class="pronunciation">${item.pron}</span>
+	                            <span class="meaning">${item.mean}</span>
+	                            <span class="description" style="display:none;">${item.description}</span>
+	                        </div> 
+	                    </li>`;
                     }
                     console.log(item.word_num);
                     cnt++;
                 });
                 $('.add-btn').attr('data-file-num', num);
                 console.log('filePrint' + num);
+                $('#windowPrint').html(str);
+
+                $('[id^="wordInsert"]').click(wordInsert);
                 $('.list-group1').html(str1);
                 $('.list-group2').html(str2);
                 $('.btn-close').click();
@@ -260,8 +264,6 @@ function fileOpen(){
             }
         });
     }
-}
-
 
 /* 수정부 */
 function fileModify() {
@@ -351,6 +353,8 @@ function fileDelete(){
     });
 }
 
+
 function closeModal() {
-	$(this).closest(".modal").modal("hide");
+   $(this).closest(".modal").modal("hide");
 }
+

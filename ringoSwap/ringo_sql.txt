@@ -59,8 +59,8 @@ CREATE TABLE ringo_taglink_member (
 	user_num				number,			--멤버 테이블 외래키, tag_num과 복합하여 복합 기본키 구성
 	tag_num				number,			--태그저장소 테이블 외래키, user_num과 복합하여 복합 기본키 구성
 	primary key(user_num, tag_num),
-	constraint fk_tag_num	foreign key	(tag_num) references ringo_tagstorage_member(tag_num) on delete cascade,
-	constraint fk_user_num	foreign key	(user_num) references ringo_member(user_num) on delete cascade
+	constraint fk_tag_num_tlm	    foreign key	(tag_num) references ringo_tagstorage_member(tag_num) on delete cascade,
+	constraint fk_user_num_tlm	foreign key	(user_num) references ringo_member(user_num) on delete cascade
 );
 --회원에 기록할 취미 태그를 직접 기록하는 테이블
 CREATE TABLE ringo_tagstorage_member (

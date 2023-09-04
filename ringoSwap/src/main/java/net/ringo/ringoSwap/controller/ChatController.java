@@ -45,12 +45,16 @@ public class ChatController
 		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
 		
 		// 가져온 user_num으로 chat room의 고유 번호들을 가져온다.
-		ArrayList<Integer> chatRoomNums = service.getChatroomLinks(userNum);
+		ArrayList<Integer> chatRoomNums = service.getChatroomNums(userNum);
 		
-		// chat room의 정보를 가져온다.
-		ArrayList<Chatroom> chatrooms = service.getChatrooms(chatRoomNums);
+		log.debug("{}", chatRoomNums.size());
 		
-		model.addAttribute("chatrooms", chatrooms);
+		// chatRoomNums이 있는 경우(= 한개 이상 링크(ringo_chatroom_link)가 있는 경우) chat room의 정보를 가져온다.
+		if (chatRoomNums != null && chatRoomNums.size() > 0)
+		{
+			ArrayList<Chatroom> chatrooms = service.getChatrooms(chatRoomNums);
+			model.addAttribute("chatrooms", chatrooms);
+		}
 		
 		return "chat/chatMain";
 	}

@@ -2,7 +2,8 @@ $(document).ready(function() {
 	$(".open-chatbox").click(openChatBox);
 	$("#send-message").click(sendMessage);
 	$(".bi-heart, .bi-heart-fill").click(clickLike);
-	$(".goProfile").click(goProfile);
+	$(".profile-card").click(goToProfile);
+	$(".feed-card").click(feedDetail)
 });
 
 function openChatBox() {
@@ -36,4 +37,27 @@ function clickLike() {
 	    } else {
 	        $(this).css('color', 'black');
 	    }
+}
+
+function goToProfile() {
+	window.location.href = '../member/myPage';
+}
+
+function feedDetail() {
+	$(".feed-card").on("click", function() {
+        // 원래의 영역 숨기기
+        $(".profile-area, .notification-area, .feed-area").hide();
+        
+        // feed-detail 표시
+        $("#feedDetail").show();
+    });
+
+    // feed-detail의 "뒤로 가기" 버튼 클릭 이벤트
+    $("#backToFeed").on("click", function() {
+        // 원래의 영역을 다시 표시
+        $(".profile-area, .notification-area, .feed-area").show();
+        
+        // feed-detail 숨기기
+        $("#feedDetail").hide();
+    });
 }
