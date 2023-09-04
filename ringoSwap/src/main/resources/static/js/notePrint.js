@@ -226,7 +226,7 @@ function fileOpen(){
                 let str1 = '';
                 let str2 = '';
                 let cnt = 0;
-                let cntleng = Math.floor(list.length / 2)+1;
+                let cntleng = Math.floor(list.length / 2);
                 $(list).each(function(i, item){
 	                if(cnt < cntleng){
 	                    str1 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}">
@@ -252,9 +252,6 @@ function fileOpen(){
                 });
                 $('.add-btn').attr('data-file-num', num);
                 console.log('filePrint' + num);
-                $('#windowPrint').html(str);
-
-                $('[id^="wordInsert"]').click(wordInsert);
                 $('.list-group1').html(str1);
                 $('.list-group2').html(str2);
                 $('.btn-close').click();
@@ -264,7 +261,7 @@ function fileOpen(){
             }
         });
     }
-
+}
 /* 수정부 */
 function fileModify() {
     // 현재 클릭한 수정 버튼의 ID를 가져옵니다.
@@ -357,4 +354,3 @@ function fileDelete(){
 function closeModal() {
    $(this).closest(".modal").modal("hide");
 }
-
