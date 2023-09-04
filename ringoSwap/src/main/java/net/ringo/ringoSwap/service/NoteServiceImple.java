@@ -98,4 +98,14 @@ public class NoteServiceImple implements NoteService{
 	public int fileUpdateOne(HashMap<String, Object> map) {
 		return dao.fileUpdateOne(map);
 	}
+	//메모장 작성 완료 후 수정한 작성파일을 DB로 보내는 메서드
+	@Override
+	public int fileTextUpdateOne(HashMap<String, Object> map) {
+		return dao.fileTextUpdateOne(map);
+	}
+	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
+	@Override
+	public int wordUpdateOne(DirWord word) {
+		return dao.wordUpdateOne(word);
+	}
 }

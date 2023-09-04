@@ -1,0 +1,34 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.ringo.ringoSwap.dao.ChatDAO">
+	<!-- 채팅방 링크 가져오기 -->
+	<select id="getChatroomNums" parameterType="int" resultType="int">
+		select
+			chatroom_num
+		from
+			ringo_chatroom_link
+		where
+			user_num = #{user_num}
+	</select>
+	
+	<!-- 
+		내가 참여한 채팅방 리스트 가져오기
+		* 주의 : 가져오려면 ringo_chatroom_link에서 chatroom_num을 ArrayList<int>로 담아오고,
+	 			담아온 ArrayList<int>를 parameter에 넣고 getChatrooms에서 ArrayList<Chatroom>으로 가져오기.
+	-->
+	<select id="getChatrooms" parameterType="int" resultType="Chatroom">
+		select * from
+			ringo_chatroom
+		where
+			chatroom_num in
+			<foreach collection="list" item="chatroom_num" open="(" separator=", " close=")">
+				#{chatroom_num}
+			</foreach>
+		order by
+			modifie_date desc
+	</select>
+	
+	
+</mapper>

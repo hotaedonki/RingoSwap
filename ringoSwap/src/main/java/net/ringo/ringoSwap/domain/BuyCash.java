@@ -14,4 +14,10 @@ public class BuyCash {
 	int cash_buy;
 	String buytext;
 	String inputate;
+	
+	public String toString()
+	{
+		return String.format("cash_num : {%d} / user_num : {%d} / purchase_category : {%s} / cash_buy : {%d} / buytext : {%s} / inputate : {%s}"
+				, cash_num, user_num, purchase_category, cash_buy, buytext, inputate);
+	}
 }

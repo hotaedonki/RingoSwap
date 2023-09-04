@@ -44,4 +44,8 @@ public interface NoteService {
 	//<<<<<<<<<<<<-----[ 노트 수정기능 시작 ]-----------------------
 	//수정된 파일번호를 보내 해당 파일번호의 파일의 이름을 수정하는 기능
 	int fileUpdateOne(HashMap<String, Object> map);
+	//메모장 작성 완료 후 수정한 작성파일을 DB로 보내는 메서드
+	int fileTextUpdateOne(HashMap<String, Object> map);
+	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
+	int wordUpdateOne(DirWord word);
 }

@@ -16,4 +16,10 @@ public class Alert {
 	int message_num;
 	boolean alert_checked;
 	String inputdate;
+	
+	public String toString()
+	{
+		return String.format("alert_num : {%d} / alert_type : {%s} / receiver_num : {%d} / sender_num : {%d} / type_num : {%d} / message_num : {%d} / alert_checked : {%b} / inputdate : {%s}"
+				, alert_num, alert_type, receiver_num, sender_num, type_num, message_num, alert_checked, inputdate);
+	}
 }

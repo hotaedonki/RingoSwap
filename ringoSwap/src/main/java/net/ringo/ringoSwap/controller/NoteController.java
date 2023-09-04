@@ -160,7 +160,7 @@ public class NoteController
 
 	//html에서 받은 정보를 기반으로 특정 file객체에 종속되는 word객체를 생성하는 기능을 가진 메서드
 	@ResponseBody
-	@PostMapping("wordCreate")
+	@PostMapping("/wordCreate")
 	public void wordCreate(@AuthenticationPrincipal UserDetails user
 					, int file_num, String word, String pron, String mean) {
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
@@ -227,7 +227,7 @@ public class NoteController
 	
 
 	//<<<<<<<<<<<<-----[ 노트 수정기능 시작 ]-----------------------
-	//파일번호, 수정된 파일명을 매개변수로 DB에 전달하여 해당 파일을 수정하는 메서드
+	//파일번호, 수정된 파일명(title)을 매개변수로 DB에 전달하여 해당 파일을 수정하는 메서드
 	@ResponseBody
 	@PostMapping("fileModify")
 	public String fileModify(int file_num, String title
@@ -238,10 +238,35 @@ public class NoteController
 		map.put("file_num", file_num);
 		map.put("title", title);
 		int methodResult = service.fileUpdateOne(map);
-		
-		return "";
+
+		return "수정성공";
+	}
+	//메모장 작성 완료 후 수정한 작성파일을 DB로 보내는 메서드
+	@ResponseBody
+	@PostMapping("fileTextModify")
+	public String fileTextModify(int file_num, String file_text
+				, @AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("user_num", user_num);
+		map.put("file_num", file_num);
+		map.put("file_text", file_text);
+		int methodResult = service.fileTextUpdateOne(map);
+
+		return "수정성공";
 	}
 
+	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
+	@ResponseBody
+	@PostMapping("wordModify")
+	public String wordModify(DirWord word
+				, @AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		word.setUser_num(user_num);
+		int methodResult = service.wordUpdateOne(word);
+		
+		return "수정성공";
+	}
 	
 	//-----------[ 노트 수정기능 종료 ]-------------->>>>>>>>>>>>>>
 	@GetMapping("noteWord")

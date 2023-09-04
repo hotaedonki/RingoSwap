@@ -13,4 +13,10 @@ public class ChatMulti {
 	int multi_num;
 	String message;
 	String inputdate;
+	
+	public String toString()
+	{
+		return String.format("multi_chat_num : {%d} / user_num : {%d} / multi_num : {%d} / message : {%s} / inputdate : {%s}"
+				, multi_chat_num, user_num, multi_num, message, inputdate);
+	}
 }
