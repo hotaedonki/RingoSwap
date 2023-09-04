@@ -253,7 +253,6 @@ function fileOpen(){
                 });
                 $('.add-btn').attr('data-file-num', num);
                 console.log('filePrint' + num);
-
                 $('.list-group1').html(str1);
                 $('.list-group2').html(str2);
                 $('.btn-close').click();
@@ -264,7 +263,6 @@ function fileOpen(){
         });
     }
 }
-
 /* 수정부 */
 function fileModify() {
     // 현재 클릭한 수정 버튼의 ID를 가져옵니다.
@@ -377,4 +375,3 @@ function fileDelete(){
 function closeModal() {
    $(this).closest(".modal").modal("hide");
 }
-
