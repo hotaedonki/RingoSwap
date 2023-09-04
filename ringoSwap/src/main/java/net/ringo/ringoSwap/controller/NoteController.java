@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,16 +21,24 @@ import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.service.NoteService;
+import net.ringo.ringoSwap.util.PageNavigator;
 
 @Slf4j
 @Controller
 @RequestMapping("note")
 public class NoteController 
 {
-   @Autowired
-   MemberService memberService;
-   @Autowired
-   NoteService service;
+	@Autowired
+	MemberService memberService;
+	@Autowired
+	NoteService service;
+
+	//단어장 목록의 페이지당 글 수
+	@Value("${user.board.page}")
+	int countPerPage;
+	//단어장 목록의 페이지 이동 링크 수
+	@Value("${user.board.pageGroup}")
+	int pagePerGroup;
    
    //노트서비스의 메인페이지로 이동하는 컨트롤러 메서드
    @GetMapping("noteMain")
@@ -106,12 +114,15 @@ public class NoteController
    
    //ajax를 통해 실행되는 해당 메모장분류 파일을 file_num을 매개변수로 검색하여 그 하위 Word목록을 리턴하는 메서드
    @ResponseBody
-   @PostMapping("fileOpenWord")
-   public ArrayList<DirWord> fileOpenWord(int file_num) {
-      ArrayList<DirWord> wordList = service.selectWordArrayByFileNum(file_num);
-      log.debug("ghkrdls: {} ", wordList);
-      return wordList;
-   }
+	@PostMapping("fileOpenWord")
+	public ArrayList<DirWord> fileOpenWord(int file_num, @RequestParam(name="page", defaultValue ="1" ) int page) {
+		//해당 단어장에서 사용할 네비게이터 navi 생성
+		PageNavigator navi = service.wordSelectPageNavigator(pagePerGroup, countPerPage, page, file_num);
+		//navi를 사용해 단어 배열을 리턴하는 메서드 실행
+		ArrayList<DirWord> wordList = service.selectWordArrayByFileNum(navi, file_num);
+		log.debug("ghkrdls: {} ", wordList);
+		return wordList;
+	}
    //-----------[ 노트 출력기능 종료 ]-------------->>>>>>>>>>>>>>
 
    //<<<<<<<<<<<<-----[ 노트 생성기능 시작 ]-----------------------

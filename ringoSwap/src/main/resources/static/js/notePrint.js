@@ -113,6 +113,7 @@ function fileCreate(fileType){
     });
 }
 
+/* 출력부 */
 // 해당 폴더 하위에 있는 폴더와 파일을 불러오는 함수
 function dirOpen() {
     let num = $(this).data('dir-num');
@@ -300,6 +301,26 @@ function fileModify() {
         });
     });
 }
+
+function fileSave(){
+    let content = tinymce.activeEditor.getContent();
+    let num = $('#fileNum').data('file-num');
+
+    $.post("fileSave", {
+        file_num : num,
+        file_text : content
+    }).done(function(txt){
+        console.log(txt);
+    }).fail(function() {
+        // 실패했을 때 실행할 코드
+        console.log("error");
+    })
+    .always(function() {
+        // 항상 실행할 코드
+    });
+}
+
+
 
 
 /* Delete 함수 목록 시작부 */

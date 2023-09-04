@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 
 import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirWord;
@@ -18,14 +19,16 @@ public interface NoteDAO
 	ArrayList<Directory> selectUserDirectoryAll(int user_num);
 	//사용자의 id를 xml에 매개변수로 넘겨, id로 검색하여 나온 파일 정보를 배열로 리턴하는 메서드
 	ArrayList<DirFile> selectUserFileAll(HashMap<String, Object> map);
-	//
+	//폴더번호를 매개변수로 해당 폴더에 속한 하위 폴더 배열을 리턴하는 메서드
 	ArrayList<Directory> selectDirectoryByPDirNum(int dir_num);
-	//
+	//폴더 번호를 매개변수로 해당 폴더에 속한 파일 배열을 리턴하는 메서드
 	ArrayList<DirFile> selectFileByDirNum(HashMap<String, Object> map);
 	//file_num을 매개변수로 DB에서 검색해 출력된 file객체를 리턴하는 메서드
 	DirFile selectFileByFileNum(int file_num);
+	//file_num을 매개변수로 해당 파일에 속한 단어 갯수를 리턴하는 메서드
+	int wordSelectByFileNum(int file_num);
 	//file_num을 매개변수로 DB에서 검색해 출력된 word객체 목록을 리턴하는 메서드
-	ArrayList<DirWord> selectWordArrayByFileNum(int file_num);
+	ArrayList<DirWord> selectWordArrayByFileNum(int file_num, RowBounds rb);
 	//-----------[ 노트 출력기능 종료 ]-------------->>>>>>>>>>>>>>
 
 	//<<<<<<<<<<<<-----[ 노트 생성기능 시작 ]-----------------------
