@@ -13,4 +13,10 @@ public class MultiroomRanking {
 	int score;
 	int maxscore;
 	String last_playtime;
+	
+	public String toString()
+	{
+		return String.format("user_num : {%d} / category : {%s} / score : {%d} / maxscore : {%d} / last_playtime : {%s}"
+				, user_num, category, score, maxscore, last_playtime);
+	}
 }

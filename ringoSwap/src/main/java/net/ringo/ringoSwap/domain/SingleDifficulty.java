@@ -17,4 +17,9 @@ public class SingleDifficulty {
 	boolean check;					//체크한 단어만 문제에 사용할지 여부를 저장하는 변수. true=활성화, false=비활성화
 	String answer_category;	//문제의 정답을 단어, 발음, 뜻 3가지 중 어떤 것으로 받을지 지정하는 변수. 발음&뜻으로 정답을 받게 할 수도 있다.
 	
+	public String toString()
+	{
+		return String.format("user_num : {%d} / file_num : {%d} / difficulty : {%s} / method : {%s} / quest_num : {%d} / sichuan_num : {%d} / check : {%b} / answer_category : {%s}"
+				, user_num, file_num, difficulty, method, quest_num, sichuan_num, check, answer_category);
+	}
 }

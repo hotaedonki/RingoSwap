@@ -15,4 +15,10 @@ public class Notification {
 	int views;
 	String inputdate;
 	String modifie_date;
+	
+	public String toString()
+	{
+		return String.format("{%d} / {%d} / {%s} / {%s} / {%d} / {%s} / {%d} / {%d}"
+				, noti_num, admin_num, title, contents, views, inputdate, modifie_date);
+	}
 }

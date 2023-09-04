@@ -16,4 +16,10 @@ public class Item {
 	String inputdate;
 	String item_category;
 	boolean item_bann;
+	
+	public String toString()
+	{
+		return String.format("item_num : {%d} / item_point : {%d} / item_cash : {%d} / item_name : {%s} / item_image_url : {%s} / inputdate : {%s} / item_category : {%s} / item_bann : {%b}"
+				,item_num ,item_point ,item_cash ,item_name ,item_image_url ,inputdate ,item_category ,item_bann);
+	}
 }
