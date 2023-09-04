@@ -44,8 +44,8 @@ public class FeedController
 	@GetMapping("feedMain")
 	public String feedMain(String feedArrayType)
 	{
-		if(feedArrayType.equals("default") || feedArrayType.equals("popular")) {
-			return "feedMain";					//feedTypeAll 값이 잘못되어있으면 변수를 인계하지 않고 피드목록으로 이동한다
+		if(feedArrayType == null || feedArrayType.equals("default") || feedArrayType.equals("popular")) {
+			return "feed/feedMain";					//feedTypeAll 값이 잘못되어있으면 변수를 인계하지 않고 피드목록으로 이동한다
 		}
 		return "feedMain?feedArrayType="+feedArrayType;			//feedTypeAll 값이 'default' 혹은 'popular'일경우 해당 정렬방식을 피드목록 페이지에 전달합니다.
 	}

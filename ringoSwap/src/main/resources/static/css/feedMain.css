@@ -1,0 +1,219 @@
+#searchBar {
+	border: 1px solid lightgray;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.searchForm {
+	width: 70%;
+	position: relative;
+}
+
+#searchInput {
+	width: 100%;
+	padding-right: 20px; /* 아이콘을 위한 공간 확보 */
+}
+
+#searchBar .bi-search {
+	position: absolute;
+	right: 20px;
+	top: 5px;
+}
+
+main {
+	margin-left: 115px;
+	width:85%;
+}
+
+.container.home {
+	max-width: 100%; /* 부트스트랩의 .container 기본 스타일을 오버라이드해서 최대 넓이 제한을 없앱니다 */
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.no-padding-margin {
+	margin-left: 25px;
+	margin-right: 0px;
+	padding: 0px;
+}
+
+.search-form {
+	display: flex;
+	align-items: center;
+}
+
+.profileImage {
+	width: 110px;
+	height: 110px;
+	display: block;
+	border-radius: 50%;
+	overflow: hidden;
+	bottom: 130px;
+	left: 0;
+	right: 0;
+	position: absolute;
+	margin: auto;
+	left: 0;
+}
+
+.posterImage {
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+}
+
+.postHead {
+	position: absolute;
+	margin: auto;
+	top: 20px;
+	left: 20px;
+}
+
+.row {
+	margin-bottom: 30px;
+}
+
+.feed-create-area {
+	border: 1px solid #ddd;
+	padding: 15px;
+	border-radius: 8px;
+	background-color: #fff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	position: relative;
+}
+
+.feed-create-area button {
+	position: absolute;
+	bottom: 27px;
+	right: 25px;
+	z-index: 2;
+}
+
+.feed-create-area textarea {
+	width: 100%;
+	border: none;
+	border-radius: 8px;
+	padding: 10px;
+	background-color: #f2f3f5;
+	resize: none;
+	height: 100px;
+	font-size: 1rem;
+	position: relative;
+}
+
+.feed-create-area textarea:focus {
+	box-shadow: none;
+	outline: none;
+}
+
+.feed-create-area .icons {
+	display: flex;
+	gap: 15px;
+}
+
+.feed-create-area .bi {
+	font-size: 2rem;
+}
+
+.feed-create-area .bi-image {
+	position: absolute;
+	bottom: 20px;
+	left: 25px;
+}
+
+.feed-card .card-header {
+	display: flex;
+	align-items: center;
+}
+
+.feed-card .card-header img {
+	margin-right: 10px;
+}
+
+.feed-card .card-body {
+	margin-top: 10px;
+	font-size: 20px;
+}
+
+.friend-list-row .list-group-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.friend-list-row .list-group-item img {
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+}
+
+.chat-box {
+	opacity: 0;
+	visibility: hidden;
+	transform: scaleY(0);
+	transform-origin: bottom;
+	transition: transform 0.4s, opacity 0.4s;
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+	width: 300px;
+	height: 200px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 15px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-box.show {
+	opacity: 1;
+	visibility: visible;
+	transform: scaleY(1);
+}
+
+.feed-image {
+	width: 250px;
+	height: 250px;
+	margin-bottom: 20px;
+}
+
+.feed-button .bi {
+	margin-right: 15px;
+	margin-left: 5px;
+}
+
+.card-body .center {
+	text-align: center;
+}
+
+.feed-button .bi {
+	color: black;
+	transition: all 0.2s;
+	display: inline-block;
+}
+
+.bi-heart-fill {
+	color: red;
+}
+
+.feed-button .bi:hover {
+	transform: scale(0.85); /* 마우스 오버 시 아이콘 크기 감소 */
+}
+
+.feed-button .bi:active { /* 클릭 시 아이콘 주변에 테두리 효과 */
+	box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+
+.bi {
+	font-size: 1.3rem;
+	cursor: pointer;
+}
+
+.profile-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.profile-link:hover {
+    text-decoration: none;
+}

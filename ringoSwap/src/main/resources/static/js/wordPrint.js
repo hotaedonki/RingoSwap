@@ -116,6 +116,7 @@ $(document).ready(function() {
 	    $(".carousel-control-next").remove();
 	});
 });
+	//단어 클릭 시 해당 단어의 내용 보이는 js만들기 > 수정가능 // 아직 controller없음.
 /*
 function loadNoteContent(file_num) {
             $.ajax({

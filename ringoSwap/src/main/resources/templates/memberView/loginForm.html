@@ -1,308 +1,323 @@
 <!DOCTYPE html>
-  <!-- Coding by CodingLab | www.codinglabweb.com -->
+<!-- Coding by CodingLab | www.codinglabweb.com -->
 <html xmlns:th="http://thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!----======== CSS ======== -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{../css/sidebar.css}">
-    <link rel="stylesheet" th:href="@{../css/home.css}">
-    <link rel="stylesheet" th:href="@{../css/login.css}">
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-    <!----===== Boxicons CSS ===== -->
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-    
-    
-    <!-- JS -->
-    <script th:src="@{/js/jquery-3.7.0.js}"></script>
-    
-    <title>Dashboard Sidebar Menu</title> 
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!----======== CSS ======== -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+	crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{../css/sidebar.css}">
+<link rel="stylesheet" th:href="@{../css/home.css}">
+<link rel="stylesheet" th:href="@{../css/login.css}">
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+	crossorigin="anonymous"></script>
+<!----===== Boxicons CSS ===== -->
+<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'
+	rel='stylesheet'>
+
+
+<!-- JS -->
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
+
+<title>Dashboard Sidebar Menu</title>
 </head>
 <body>
 
-<!-- =============================사이드바 상단=============================== -->
-   <!-- =============================사이드바 상단=============================== -->
-    <nav class="sidebar close">
-        <header>
-            <div class="image-text">
-                <span class="image">
-                    <img th:src="@{../img/sidebar.png}" alt="">
-                </span>
-				
-                <div class="text logo-text">
-                    <span class="name">LingoSwap</span>
-               </div>
-            </div>
-            <i class='bx bx-chevron-right toggle'></i>
-        </header>
+	<!-- =============================사이드바 상단=============================== -->
+	<!-- =============================사이드바 상단=============================== -->
+	<nav class="sidebar close">
+		<header>
+			<div class="image-text">
+				<span class="image"> <img th:src="@{../img/sidebar.png}"
+					alt="">
+				</span>
 
-        <div class="menu-bar">
-            <div class="menu">
-                <ul class="menu-ul">
-                    <li>
-                        <a th:href="@{/member/home}">
-                            <i class='bx bx-home-alt icon' ></i>
-                            <span class="text nav-text">Hoooome</span>
-                        </a>
-                    </li>
+				<div class="text logo-text">
+					<span class="name">LingoSwap</span>
+				</div>
+			</div>
+			<i class='bx bx-chevron-right toggle'></i>
+		</header>
 
-                    <li>
-                        <a th:href="@{/feed/feedMain}">
-                            <i class='bx bx-detail icon' ></i>
-                            <span class="text nav-text">Feed</span>
-                        </a>
-                    </li>
-					
-                    <li>
-                        <a th:href="@{/note/noteMain}">
-                            <i class='bx bx-edit icon' ></i>
-                            <span class="text nav-text">Note</span>
-                        </a>
-                    </li>
+		<div class="menu-bar">
+			<div class="menu">
+				<ul class="menu-ul">
+					<li><a th:href="@{/member/home}"> <i
+							class='bx bx-home-alt icon'></i> <span class="text nav-text">Hoooome</span>
+					</a></li>
 
-                    <li>
-                        <a th:href="@{/message/messageMain}">
-                            <i class='bx bx-message-square-dots icon' ></i>
-                            <span class="text nav-text">Message</span>
-                        </a>
-                    </li>
+					<li><a th:href="@{/feed/feedMain}"> <i
+							class='bx bx-detail icon'></i> <span class="text nav-text">Feed</span>
+					</a></li>
 
-                    <li>
-                        <a th:href="@{/game/gameMain}">
-                            <i class='bx bx-game icon' ></i>
-                            <span class="text nav-text">Game</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a th:href="@{/live/liveMain}">
-                            <i class='bx bx-tv icon' ></i>
-                            <span class="text nav-text">Live</span>
-                        </a>
-                    </li>
-                    
-                </ul>
-            </div>
-	<!-- ========================사이드바 하단=========================== -->
-            <div class="bottom-content">
-            	<ul class="menu-ul">
-	                <li class="">
-          	            <div sec:authorize="isAuthenticated()">
-		                    <a th:href="@{/member/logout}">
-		                        <i class='bx bx-log-out icon' ></i>
-		                        <span class="text nav-text">Logout</span>
-		                    </a>
-	                	</div>
-                	</li>
-	                
-	                 <li class="">
-	                    <a th:href="@{/notification/notificationMain}">
-	                        <i class='bx bx-bell icon'></i>
-	                        <span class="text nav-text">Notifications</span>
-	                    </a>
-	                </li>
+					<li><a th:href="@{/note/noteMain}"> <i
+							class='bx bx-edit icon'></i> <span class="text nav-text">Note</span>
+					</a></li>
+
+					<li><a th:href="@{/message/messageMain}"> <i
+							class='bx bx-message-square-dots icon'></i> <span
+							class="text nav-text">Message</span>
+					</a></li>
+
+					<li><a th:href="@{/game/gameMain}"> <i
+							class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
+					</a></li>
+
+					<li><a th:href="@{/live/liveMain}"> <i
+							class='bx bx-tv icon'></i> <span class="text nav-text">Live</span>
+					</a></li>
+
+				</ul>
+			</div>
+			<!-- ========================사이드바 하단=========================== -->
+			<div class="bottom-content">
+				<ul class="menu-ul">
 					<li class="">
-	                    <a th:href="@{/store/storeMain}">
-	                        <i class='bx bx-shopping-bag icon'></i>
-	                        <span class="text nav-text">Store</span>
-	                    </a>
-	                </li>
-	                <li class="">
-	                	<div sec:authorize="isAuthenticated()">
-						    <a th:href="@{/member/myPage}">
-						    <span class="profile-pic-li" data-tooltip="프로필 사진으로 이동합니다.">
-						        <span class="profile-pic" >
-						            <img th:src="@{../img/2.jpg}" alt="Your Profile Picture">
-						        </span>
-						    </span>
-						        <span class="text nav-text">Profile</span>
-						    </a>
-					    </div>
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/logout}"> <i class='bx bx-log-out icon'></i>
+								<span class="text nav-text">Logout</span>
+							</a>
+						</div>
 					</li>
-	                <li class="mode">
-	                    <div class="sun-moon">
-	                        <i class='bx bx-moon icon moon'></i>
-	                        <i class='bx bx-sun icon sun'></i>
-	                    </div>
-	                    <span class="mode-text text">Dark mode</span>
-	                    <div class="toggle-switch">
-	                        <span class="switch"></span>
-	                    </div>
-	                </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-  <!--=========================로그인 화면========================== -->
-<section class="home" id="home">
-    <div id="loginForm">
-   		<div class="container">
-		  <div class="container_form container_signin">
-		    <form th:action="@{/member/login}" class="form" method="post">
-		      <h2>Welcome</h2><br>
-		      <input type="text" placeholder="ID" class="input" name="user_id"/>
-		      <input type="password" placeholder="Password" class="input" name="password"/>
-		      <input type="submit" class="btn" value="Sign In">
-		      <input type="button" class="btn" id="signUp" value="Sign Up">
-		      <pre class="searchIDPW">Find   <span id="searchID">ID</span>  /  <span id="searchPW">Password?</span></pre>
-		    </form>
-		  </div>
-		</div>
-   	</div>
 
-	 <!--=========================회원가입 화면========================== -->
-	<div id="signUpForm" class="hidden">
-	<div class="container">
-	   	<div class="container_signup_form" id="signUpForm">
-		    <form th:action="@{/member/join}" class="form" method="post">
-		        <h2>Sign Up</h2>
-	
-	        <!-- Basic Information -->
-			        <div class="id-section">
-				        <input type="text" placeholder="ID" class="input" name="user_id" id="user_id"/>
-				        <button type="button" class="E_btn" id="idCheck_Btn" onclick="idCheck()">중복 확인</button>
-			        </div>
-			        <input type="password" placeholder="Password" class="input" name="password" id="password"/>
-			        <input type="password" placeholder="Confirm Password" class="input" name="confirmPassword" id="confirmPassword"/>
-			        <span class="doNotMatchPassword"></span>
-			        <input type="text" placeholder="First Name" class="input" name="first_name" id="first_name"/>
-			        <input type="text" placeholder="Last Name" class="input" name="last_name" id="last_name"/>
-			        <input type="text" placeholder="Nickname" class="input" name="username" id="username"/>
-		
-					<!-- Gender & Date of Birth -->
-			        <select class="select" name="gender" id="gender">
-			            <option value="M">남자</option>
-			            <option value="F">여자</option>
-			            <option value="N">기타</option>
-			        </select>
-			        <input type="date" class="input" name="birth_date" id="birth_date"/>
-		
-					<!-- Email & Verification -->
-			        <div class="email-section">
-		                <input type="email" placeholder="Email" class="input" name="email" id="email1"/>
-		                <button type="button" class="E_btn sendCode" data-id="1">인증코드 전송</button>
-		            </div>
-		            <div class="verification-section">
-		                <input type="text" placeholder="인증코드" class="input" name="verificationCode" id="code1" />
-		                <button type="button" class="E_btn confirmCode" data-id="1">코드 확인</button>
-		            </div>
-		            <div class="resultMessage1"></div>
-		
-					<!-- Language Preferences -->
-				    <label>모국어를 선택해주세요.</label>
-				        <select class="select" name="native_lang" id="native_lang">
-				            <option value="korean">한국어</option>
-				            <option value="japanese">일본어</option>
-				            <option value="english">영어</option>
-				        </select>
-				        
-			        <label>배우고 싶은 언어를 선택해주세요.</label>
-				        <select class="select" name="target_lang" id="target_lang">
-				            <option value="korean">한국어</option>
-				            <option value="japanese">일본어</option>
-				            <option value="english">영어</option>
-				        </select>
-
-					
-					<!-- Introduction & Hobby -->
-	        		<textarea class="introduceBox" placeholder="자기소개" name="introduction" id="introduction" maxlength="500"></textarea>
-	    
-					<!-- Submit Button -->
-					<button class="Register_btn" type="submit">Register</button>
-				</form>
+					<li class=""><a th:href="@{/notification/notificationMain}">
+							<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
+					</a></li>
+					<li class=""><a th:href="@{/store/storeMain}"> <i
+							class='bx bx-shopping-bag icon'></i> <span class="text nav-text">Store</span>
+					</a></li>
+					<div sec:authorize="isAuthenticated()">
+						<li class=""><a th:href="@{/member/myPage}"> <span
+								class="profile-pic-li" data-tooltip="프로필 사진으로 이동합니다."> <span
+									class="profile-pic"> <img th:src="@{../img/2.jpg}"
+										alt="Your Profile Picture">
+								</span>
+							</span> <span class="text nav-text">Profile</span>
+						</a></li>
+					</div>
+					<li class="mode">
+						<div class="sun-moon">
+							<i class='bx bx-moon icon moon'></i> <i
+								class='bx bx-sun icon sun'></i>
+						</div> <span class="mode-text text">Dark mode</span>
+						<div class="toggle-switch">
+							<span class="switch"></span>
+						</div>
+					</li>
+				</ul>
 			</div>
 		</div>
-	</div>
-	
-	<!--=========================아이디 찾기 화면========================== -->
-	<div id="paintSearchID" class="hidden" >
-   		<div class="container">
-	   		<div class="container_search_form">
-				<div class="form_search">
-					<h1>아이디 찾기</h1><br><br>
-					<div class="email-section">
-		                <input type="email" placeholder="Email" class="input" name="email" id="email2"/>
-		                <button type="button" class="E_btn sendCode" data-id="2" >인증코드 전송</button>
-		            </div>
-		            <div class="verification-section">
-		                <input type="text" placeholder="인증코드" class="input" name="verificationCode" id="code2"/>
-		                <button type="button" class="E_btn confirmCode" data-id="2">코드 확인</button>
-		            </div>
-		            <div class="resultMessage2"></div>
-		            <div class="paintID"></div><br>
-		            <div class="checkSection">
-			            <button class="btn IDcheckbtn" id="checkIdBtn">아이디 확인하기</button>
-						<a class="btn IDcheckbtn" th:href="@{/member/login}">돌아가기</a>
-					</div>
+	</nav>
+	<!--=========================로그인 화면========================== -->
+	<section class="home" id="home">
+		<div id="loginForm">
+			<div class="container">
+				<div class="container_form container_signin">
+					<form th:action="@{/member/login}" class="form" method="post">
+						<h2>Welcome</h2>
+						<br> <input type="text" placeholder="ID" class="input"
+							name="user_id" /> <input type="password" placeholder="Password"
+							class="input" name="password" /> <input type="submit" class="btn"
+							value="Sign In"> <input type="button" class="btn"
+							id="signUp" value="Sign Up">
+						<pre class="searchIDPW">Find   <span id="searchID">ID</span>  /  <span
+								id="searchPW">Password?</span>
+						</pre>
+					</form>
 				</div>
 			</div>
 		</div>
-	</div>
-	
-	<!--=========================비밀번호 찾기 화면========================== -->
-	<div id="paintSearchPW" class="hidden">
-   		<div class="container">
-	   		<div class="container_search_form">
-				<div class="form_search">
-					<h1 class="h1">비밀번호 찾기</h1><br><br>
-						<div class="IDForPassword">
-							<input type="text" placeholder="ID" class="input_IDForPassword" name="user_id" id="idForPassword">
+
+		<!--=========================회원가입 화면========================== -->
+		<div id="signUpForm" class="hidden">
+			<div class="container">
+				<div class="container_signup_form" id="signUpForm">
+					<form th:action="@{/member/join}" class="form" method="post">
+						<h2>Sign Up</h2>
+
+						<!-- Basic Information -->
+						<div class="id-section">
+							<input type="text" placeholder="ID" class="input" name="user_id"
+								id="user_id" />
+							<button type="button" class="E_btn" id="idCheck_Btn"
+								onclick="idCheck()">중복 확인</button>
 						</div>
+						<input type="password" placeholder="Password" class="input"
+							name="password" id="password" /> <input type="password"
+							placeholder="Confirm Password" class="input"
+							name="confirmPassword" id="confirmPassword" /> <span
+							class="doNotMatchPassword"></span> <input type="text"
+							placeholder="First Name" class="input" name="first_name"
+							id="first_name" /> <input type="text" placeholder="Last Name"
+							class="input" name="last_name" id="last_name" /> <input
+							type="text" placeholder="Nickname" class="input" name="username"
+							id="username" />
+
+						<!-- Gender & Date of Birth -->
+						<select class="select" name="gender" id="gender">
+							<option value="M">남자</option>
+							<option value="F">여자</option>
+							<option value="N">기타</option>
+						</select> <input type="date" class="input" name="birth_date"
+							id="birth_date" />
+
+						<!-- Email & Verification -->
 						<div class="email-section">
-			                <input type="email" placeholder="Email" class="input" name="email" id="emailForPassword"/>
-			                <button type="button" class="E_btn sendCodeForPassword">인증코드 전송</button>
-			            </div>
-			            <div class="verification-section">
-			                <input type="text" placeholder="인증코드" class="input" name="verificationCode" id="code3"/>
-			                <button type="button" class="E_btn confirmCode" data-id="3">코드 확인</button>
-			            </div>
-			            <div class="resultMessage3"></div><br>
-			            <div class="checkSection">
-				            <button class="btn PWcheckbtn">비밀번호 재설정하기</button>
+							<input type="email" placeholder="Email" class="input"
+								name="email" id="email1" />
+							<button type="button" class="E_btn sendCode" data-id="1">인증코드
+								전송</button>
+						</div>
+						<div class="verification-section">
+							<input type="text" placeholder="인증코드" class="input"
+								name="verificationCode" id="code1" />
+							<button type="button" class="E_btn confirmCode" data-id="1">코드
+								확인</button>
+						</div>
+						<div class="resultMessage1"></div>
+
+						<!-- Language Preferences -->
+						<label>모국어를 선택해주세요.</label> <select class="select"
+							name="native_lang" id="native_lang">
+							<option value="korean">한국어</option>
+							<option value="japanese">일본어</option>
+							<option value="english">영어</option>
+						</select> <label>배우고 싶은 언어를 선택해주세요.</label> <select class="select"
+							name="target_lang" id="target_lang">
+							<option value="korean">한국어</option>
+							<option value="japanese">일본어</option>
+							<option value="english">영어</option>
+						</select>
+
+
+						<!-- Introduction & Hobby -->
+						<textarea class="introduceBox" placeholder="자기소개"
+							name="introduction" id="introduction" maxlength="500"></textarea>
+
+						<!-- Submit Button -->
+						<button class="Register_btn" type="submit">Register</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!--=========================아이디 찾기 화면========================== -->
+		<div id="paintSearchID" class="hidden">
+			<div class="container">
+				<div class="container_search_form">
+					<div class="form_search">
+						<h1>아이디 찾기</h1>
+						<br>
+						<br>
+						<div class="email-section">
+							<input type="email" placeholder="Email" class="input"
+								name="email" id="email2" />
+							<button type="button" class="E_btn sendCode" data-id="2">인증코드
+								전송</button>
+						</div>
+						<div class="verification-section">
+							<input type="text" placeholder="인증코드" class="input"
+								name="verificationCode" id="code2" />
+							<button type="button" class="E_btn confirmCode" data-id="2">코드
+								확인</button>
+						</div>
+						<div class="resultMessage2"></div>
+						<div class="paintID"></div>
+						<br>
+						<div class="checkSection">
+							<button class="btn IDcheckbtn" id="checkIdBtn">아이디 확인하기</button>
 							<a class="btn IDcheckbtn" th:href="@{/member/login}">돌아가기</a>
 						</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- ===========================================비밀번호 재설정 화면======================================================== -->
-	<div id="resetPassword" class="hidden">
-   		<div class="container">
-	   		<div class="container_signup_form container_signup">
-				<div class="form_search">
-					<h1 class="h1">비밀번호 재설정</h1><br><br>
-					<div class="newPassword-section">
-						<input type="password" placeholder="New password" class="input" name="password" id="newPassword"> 
-						<input type="password" placeholder="Confirm password" class="input" name="password" id="confirmNewPassword">
-						<span class="doNotMatchPassword"></span> 
-						<button type="button" class="btn resetPassword" >비밀번호 재설정하기</button>
-						<a class="btn IDcheckbtn" th:href="@{/member/login}">돌아가기</a>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	
-	<!-- ==================================ToDo List============================================== -->
+
+		<!--=========================비밀번호 찾기 화면========================== -->
+		<div id="paintSearchPW" class="hidden">
+			<div class="container">
+				<div class="container_search_form">
+					<div class="form_search">
+						<h1 class="h1">비밀번호 찾기</h1>
+						<br>
+						<br>
+						<div class="IDForPassword">
+							<input type="text" placeholder="ID" class="input_IDForPassword"
+								name="user_id" id="idForPassword">
+						</div>
+						<div class="email-section">
+							<input type="email" placeholder="Email" class="input"
+								name="email" id="emailForPassword" />
+							<button type="button" class="E_btn sendCodeForPassword">인증코드
+								전송</button>
+						</div>
+						<div class="verification-section">
+							<input type="text" placeholder="인증코드" class="input"
+								name="verificationCode" id="code3" />
+							<button type="button" class="E_btn confirmCode" data-id="3">코드
+								확인</button>
+						</div>
+						<div class="resultMessage3"></div>
+						<br>
+						<div class="checkSection">
+							<button class="btn PWcheckbtn">비밀번호 재설정하기</button>
+							<a class="btn IDcheckbtn" th:href="@{/member/login}">돌아가기</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- ===========================================비밀번호 재설정 화면======================================================== -->
+		<div id="resetPassword" class="hidden">
+			<div class="container">
+				<div class="container_signup_form container_signup">
+					<div class="form_search">
+						<h1 class="h1">비밀번호 재설정</h1>
+						<br>
+						<br>
+						<div class="newPassword-section">
+							<input type="password" placeholder="New password" class="input"
+								name="password" id="newPassword"> <input type="password"
+								placeholder="Confirm password" class="input" name="password"
+								id="confirmNewPassword"> <span
+								class="doNotMatchPassword"></span>
+							<button type="button" class="btn resetPassword">비밀번호
+								재설정하기</button>
+							<a class="btn IDcheckbtn" th:href="@{/member/login}">돌아가기</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ==================================ToDo List============================================== -->
 		<button id="toDo" onclick="toggleToDo()" class="btn btn-outline-light">ToDo</button>
-	    <div id="todo-container" style="display: none;">
-	        <form id="todo-form">
-	            <input type="text" placeholder="What will you do?">
-	            <button type="submit" id="Add">Add</button>
-	        </form>
-	        <ul id="todo-list"></ul>
-	    </div>
-</section>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-    <script th:src="@{../js/memberView/sidebar.js}"></script>
-    <script th:src="@{../js/memberView/toDo.js}"></script>
-    <script th:src="@{../js/memberView/login.js}"></script>
-    <script th:src="@{../js/memberView/background.js}"></script>
+		<div id="todo-container" style="display: none;">
+			<form id="todo-form">
+				<input type="text" placeholder="What will you do?">
+				<button type="submit" id="Add">Add</button>
+			</form>
+			<ul id="todo-list"></ul>
+		</div>
+	</section>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+		crossorigin="anonymous"></script>
+	<script th:src="@{../js/memberView/sidebar.js}"></script>
+	<script th:src="@{../js/memberView/toDo.js}"></script>
+	<script th:src="@{../js/memberView/login.js}"></script>
+	<script th:src="@{../js/memberView/background.js}"></script>
 
 </body>
 </html>

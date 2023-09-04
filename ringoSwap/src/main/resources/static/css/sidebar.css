@@ -306,8 +306,8 @@ body.dark .switch::before{
     left: 170px;
     height: 100vh;
     width: calc(100% - 170px);
-    background-color: var(--body-color);
     transition: var(--tran-05);
+    overflow: auto;
 }
 .home .text{
     font-size: 30px;
