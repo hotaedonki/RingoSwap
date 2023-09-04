@@ -14,4 +14,10 @@ public class Multiroom {
 	String opendate;
 	int capacity;
 	String category;
+	
+	public String toString()
+	{
+		return String.format("multi_num : {%d} / host_num : {%d} / multi_title : {%s} / opendate : {%s} / capacity : {%d} / category : {%s}"
+				, multi_num, host_num, multi_title, opendate, capacity, category);
+	}
 }

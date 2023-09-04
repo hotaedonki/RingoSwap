@@ -10,4 +10,10 @@ import lombok.NoArgsConstructor;
 public class TagstorageM {
 	int tag_num;
 	String tag;
+	
+	public String toString()
+	{
+		return String.format("tag_num : {%d} / tag : {%s}"
+				, tag_num, tag);
+	}
 }

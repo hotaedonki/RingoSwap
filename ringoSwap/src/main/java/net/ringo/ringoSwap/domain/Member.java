@@ -76,6 +76,9 @@ public class Member implements UserDetails
 				+ "{%s} : gps_open \n"
 				+ "{%s} : trans_lang \n"
 				+ "{%b} : enabled \n"
+				+ "{%d} : fr_count \n"
+				+ "{%d} : fe_count \n"
+				+ "{%s} : tag_list \n"
 								, user_num
 								, user_id
 								, password
@@ -100,7 +103,10 @@ public class Member implements UserDetails
 								, follow_open
 								, gps_open
 								, trans_lang
-								, enabled);
+								, enabled
+								, fr_count
+								, fe_count
+								, tag_list);
 	}
 	
 	@Override
@@ -144,5 +150,4 @@ public class Member implements UserDetails
 		// TODO Auto-generated method stub
 		return this.enabled;
 	}
-	
 }

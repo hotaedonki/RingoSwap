@@ -14,4 +14,10 @@ public class Liveroom {
 	boolean live_cam;
 	String live_lang;
 	int viewer_max;
+	
+	public String toString()
+	{
+		return String.format("live_num : {%d} / host_num : {%d} / live_title : {%s} / live_cam : {%b} / live_lang : {%s} / viewer_max : {%d}"
+				, live_num, host_num, live_title, live_cam, live_lang, viewer_max);
+	}
 }
