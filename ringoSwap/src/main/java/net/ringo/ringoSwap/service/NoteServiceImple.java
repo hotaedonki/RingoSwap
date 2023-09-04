@@ -103,6 +103,11 @@ public class NoteServiceImple implements NoteService{
 	public int fileTextUpdateOne(HashMap<String, Object> map) {
 		return dao.fileTextUpdateOne(map);
 	}
+	//단어 수정전 수정할 단어를 DB에서 검색해 리턴하는 메서드
+	@Override
+	public DirWord wordSearchByWordNum(HashMap<String, Integer> map) {
+		return dao.wordSearchByWordNum(map);
+	}
 	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
 	@Override
 	public int wordUpdateOne(DirWord word) {

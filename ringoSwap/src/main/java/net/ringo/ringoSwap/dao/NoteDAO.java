@@ -51,6 +51,8 @@ public interface NoteDAO
 	int fileUpdateOne(HashMap<String, Object> map);
 	//메모장 작성 완료 후 수정한 작성파일을 DB로 보내 수정하는 메서드
 	int fileTextUpdateOne(HashMap<String, Object> map);
+	//단어 수정전 수정할 단어 객체를 DB에서 검색해서 리턴하는 메서드
+	DirWord wordSearchByWordNum(HashMap<String, Integer> map);
 	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
 	int wordUpdateOne(DirWord word);
 }
