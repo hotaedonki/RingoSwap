@@ -32,7 +32,6 @@ body {
 }
 .container .rightside::before {
   content: '';
-  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -43,10 +42,10 @@ body {
 .header {
   position: relative;
   width: 100%;
-  height: 60px;
+  height: 80px;
   background: #eaecec;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   padding: 0 15px;
 }
@@ -320,17 +319,23 @@ body {
 /* open chat list */
 .right.header {
   display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 100px;
   background: #222327;
 }
 .nav_body {
   font-family: 'Open Sans', sans-serif;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  background-color: #111;
 }
 nav {
-  position: relative;
-  margin: 270px auto 0;
+  position: absolute;
+  padding-top: 0;
   width: 590px;
   height: 50px;
   background: #f8fcfc;
@@ -374,7 +379,7 @@ nav .start_language, a:nth-child(2):hover~.animation{
   left: 100px;
 }
 a:nth-child(3){
- width: 100px;
+  width: 100px;
 }
 nav .start_category, a:nth-child(3):hover~.animation{
   width: 100px;
@@ -388,7 +393,7 @@ nav .start_new, a:nth-child(4):hover~.animation{
   left: 310px;
 }
 a:nth-child(5){
-width: 120px;
+  width: 120px;
 }
 nav .start_setting, a:nth-child(5):hover~.animation{
   width: 120px;

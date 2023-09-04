@@ -17,4 +17,10 @@ public class FeedPhoto {
 	int photo_size;							//사진 파일의 크기 (바이트 단위)
 	String photo_format;					//사진의 확장자나 형식 (예: JPEG, PNG, GIF 등)
 	String resolution;						//사진의 해상도 (예: 1920x1080)
+	
+	public String toString()
+	{
+		return String.format("photo_num : {%d} / feed_num : {%d} / origin_file : {%s} / saved_file : {%s} / inputdate : {%s} / description : {%s} / photo_size : {%d} / photo_format : {%s} / resolution : {%s}"
+				, photo_num, feed_num, origin_file, saved_file, inputdate, description, photo_size, photo_format, resolution);
+	}
 }
