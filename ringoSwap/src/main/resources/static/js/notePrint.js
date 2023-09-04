@@ -251,6 +251,10 @@ function fileOpen(){
                 });
                 $('.add-btn').attr('data-file-num', num);
                 console.log('filePrint' + num);
+
+                $('#windowPrint').html(str);
+
+                $('[id^="wordInsert"]').click(wordInsert);
                 $('.list-group1').html(str1);
                 $('.list-group2').html(str2);
                 $('.btn-close').click();
@@ -260,6 +264,11 @@ function fileOpen(){
             }
         });
     }
+
+    function wordInsert(){
+        // 단어 추가 로직
+    }
+
 }
 
 
