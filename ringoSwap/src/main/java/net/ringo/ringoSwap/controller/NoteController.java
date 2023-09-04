@@ -160,16 +160,11 @@ public class NoteController
 
 	//html에서 받은 정보를 기반으로 특정 file객체에 종속되는 word객체를 생성하는 기능을 가진 메서드
 	@ResponseBody
-	@PostMapping("/wordCreate")
+	@PostMapping("wordCreate")
 	public void wordCreate(@AuthenticationPrincipal UserDetails user
-					, int file_num, String word, String pron, String mean) {
+					, DirWord inputword) {
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		DirWord inputword = new DirWord();
-		inputword.setFile_num(file_num);
 		inputword.setUser_num(user_num);
-		inputword.setWord(word);
-		inputword.setPron(pron);
-		inputword.setMean(mean);
 		
 		int num = service.wordCreateOne(inputword);
 	}

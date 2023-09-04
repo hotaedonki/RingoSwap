@@ -61,16 +61,18 @@ $(document).ready(function() {
     // "저장" 버튼 클릭 이벤트 핸들러
     $(document).on('click', '.save-btn', function() {
         // 데이터 수집
+        let num = $('.add-btn').data('file-num');
         const word = $("#word-input").val();
         const meaning = $("#meaning-input").val();
         const pronunciation = $("#pronunciation-input").val();
         const description = $("#description-input").val();
 
         // 데이터를 서버로 전송
-        $.post("/wordCreate", {
+        $.post("wordCreate", {
+            file_num : num,
             word: word,
-            meaning: meaning,
-            pronunciation: pronunciation,
+            mean: meaning,
+            pron: pronunciation,
             description: description
         }).done(function(response) {
             // Toast 메시지 표시

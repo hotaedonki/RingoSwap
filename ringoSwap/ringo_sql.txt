@@ -393,7 +393,7 @@ CREATE TABLE ringo_word (
 	word				varchar2(100)	not null,		--단어부, 적어야 합니다.
 	pron				varchar2(100),					--발음부, 적지 않아도 됩니다.
 	mean			varchar2(100)	not null,		--의미부, 적어야 합니다.
-	lang_type		varchar2(10)		default 'kor' check(lang_type in ('kor', 'jap', 'eng')), 
+	description	varchar2(500)	, 				--단어카드 설명
 	inputdate		timestamp			default sysdate
 );
 

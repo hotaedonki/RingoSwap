@@ -222,23 +222,36 @@ function fileOpen(){
             dataType: 'json',
             success: function(list){
                 console.log(list);
-                let str = '<ul class="list-group">';
+                let str1 = '';
+                let str2 = '';
+                let cnt = 0;
+                let cntleng = Math.floor(list.length / 2)+1;
                 $(list).each(function(i, item){
                     let inputDate = new Date(item.inputdate).toLocaleString();
-                    str += `<li class="list-group-item word-card">
-                        <span class="word">${item.word}</span>
-                        <div class="word-content">
-                            <span class="pronunciation">${item.pron}</span>
-                            <span class="meaning">${item.mean}</span> /
-                        </div> 
-                    </li>`;
+                    if(cnt < cntleng){
+                        str1 += `<li class="list-group-item word-card">
+                            <span class="word">${item.word}</span>
+                            <div class="word-content">
+                                <span class="pronunciation">${item.pron}</span>
+                                <span class="meaning">${item.mean}</span> /
+                            </div> 
+                        </li>`;
+                    }else{
+                        str2 += `<li class="list-group-item word-card">
+                            <span class="word">${item.word}</span>
+                            <div class="word-content">
+                                <span class="pronunciation">${item.pron}</span>
+                                <span class="meaning">${item.mean}</span> /
+                            </div> 
+                        </li>`;
+                    }
                     console.log(item.word_num);
+                    cnt++;
                 });
-                str += `<li><button id="wordInsert${num}"> + 단어 추가 + </button></li></ul>`;
+                $('.add-btn').attr('data-file-num', num);
                 console.log('filePrint' + num);
-                $('.col-6').html(str);
-
-                $('[id^="wordInsert"]').click(wordInsert);
+                $('.list-group1').html(str1);
+                $('.list-group2').html(str2);
             },
             error: function(e){
                 console.log("error");
@@ -246,9 +259,6 @@ function fileOpen(){
         });
     }
 
-    function wordInsert(){
-        // 단어 추가 로직
-    }
 }
 
 
