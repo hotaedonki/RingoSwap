@@ -36,7 +36,7 @@ public class ChatController
 	MemberService mService;
 	
 	//채팅서비스의 메인페이지로 이동하는 컨트롤러 메서드
-	@GetMapping(PathHandler.CHATMAIN)
+	@GetMapping(PathHandler.OPENCHATMAIN)
 	public String chatMain(Model model, @AuthenticationPrincipal UserDetails user)
 	{
 		log.debug("move to chat/chatMain . . .");
@@ -56,7 +56,7 @@ public class ChatController
 			model.addAttribute("chatrooms", chatrooms);
 		}
 		
-		return "chat/chatMain";
+		return "chat/openChatMain";
 	}
 	
     @PostMapping("send")
