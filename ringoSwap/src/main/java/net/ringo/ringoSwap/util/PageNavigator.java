@@ -50,6 +50,10 @@ public class PageNavigator {
 		endPageGroup = endPageGroup < totalPageCount ? endPageGroup : totalPageCount;
 
 		//전체 결과 중 현재 페이지 첫 글의 위치
-		startRecord = (currentPage - 1) * countPerPage;			
+		startRecord = (currentPage - 1) * countPerPage;	
+		//현재 페이지를 기준으로 주변 페이지 출력
+	      if(currentPage < 4) endPageGroup = 5;
+	      if(currentPage - totalPageCount > -2) 
+	         startPageGroup = (totalPageCount - 4);
 	}
 }

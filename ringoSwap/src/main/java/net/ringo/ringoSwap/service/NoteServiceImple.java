@@ -124,6 +124,11 @@ public class NoteServiceImple implements NoteService{
 	public DirWord wordSearchByWordNum(HashMap<String, Integer> map) {
 		return dao.wordSearchByWordNum(map);
 	}
+	//화살표 클릭시 해당 단어를 기준으로 단어장 내 직전/직후 단어를 리턴하는 메서드
+	@Override
+	public DirWord wordSearchByArrow(HashMap<String, Object> map) {
+		return dao.wordSearchByArrow(map);
+	}
 	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
 	@Override
 	public int wordUpdateOne(DirWord word) {

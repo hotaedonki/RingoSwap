@@ -115,13 +115,18 @@ public class NoteController
    //ajax를 통해 실행되는 해당 메모장분류 파일을 file_num을 매개변수로 검색하여 그 하위 Word목록을 리턴하는 메서드
    @ResponseBody
 	@PostMapping("fileOpenWord")
-	public ArrayList<DirWord> fileOpenWord(int file_num, @RequestParam(name="page", defaultValue ="1" ) int page) {
+	public HashMap<String, Object> fileOpenWord(int file_num, @RequestParam(name="page", defaultValue ="1" ) int page) {
+	   HashMap<String, Object> map = new HashMap<>();			//리턴용 변수 설정
 		//해당 단어장에서 사용할 네비게이터 navi 생성
 		PageNavigator navi = service.wordSelectPageNavigator(pagePerGroup, countPerPage, page, file_num);
 		//navi를 사용해 단어 배열을 리턴하는 메서드 실행
 		ArrayList<DirWord> wordList = service.selectWordArrayByFileNum(navi, file_num);
-		log.debug("ghkrdls: {} ", wordList);
-		return wordList;
+		
+		//리턴받은 객체들을 hashmap에 put하고 리턴
+		map.put("navi", navi);
+		map.put("wordList", wordList);
+		
+		return map;
 	}
    //-----------[ 노트 출력기능 종료 ]-------------->>>>>>>>>>>>>>
 
@@ -266,7 +271,7 @@ public class NoteController
    }
    //메모장 작성 완료 후 수정한 작성파일을 DB로 보내는 메서드
    @ResponseBody
-   @PostMapping("fileSave")
+   @PostMapping("fileTextModifie")
    public String fileSave(int file_num, String file_text
             , @AuthenticationPrincipal UserDetails user) {
       int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
@@ -290,6 +295,20 @@ public class NoteController
       map.put("user_num", user_num);
       DirWord word = service.wordSearchByWordNum(map);
       return word;
+   }
+   //수정 이벤트 중 좌우 화살표를 클릭해서 해당 파일의 직전/직후 단어 수정으로 이동하는 메서드
+   @ResponseBody
+   @PostMapping("wordMoveWidth")
+   public DirWord wordMoveWidth(int word_num, int file_num, String arrow
+		   		, @AuthenticationPrincipal UserDetails user) {
+	   int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+	   HashMap<String, Object> map = new HashMap<>();
+	   map.put("word_num", word_num);
+	   map.put("file_num", file_num);
+	   map.put("user_num", user_num);
+	   map.put("arrow", arrow);
+	   DirWord word = service.wordSearchByArrow(map);
+	   return word;
    }
    //수정한 단어 객체를 DB에 전달해 수정하는 메서드
    @ResponseBody

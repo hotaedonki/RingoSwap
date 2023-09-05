@@ -47,6 +47,8 @@ public interface NoteDAO
 	int dirDeleteOne(HashMap<String, Integer> map);
 	//file_num을 매개변수로 해당 파일을 DB에서 삭제한 후, 삭제여부를 리턴받는 메서드
 	int fileDeleteOne(HashMap<String, Integer> map);
+	// 단어 한개를 삭제하는 메서드
+	int wordDeleteOne(HashMap<String, Integer> map);
 	//-----------[ 노트 삭제기능 종료 ]-------------->>>>>>>>>>>>>>
 
 	//<<<<<<<<<<<<-----[ 노트 수정기능 시작 ]-----------------------
@@ -56,8 +58,8 @@ public interface NoteDAO
 	int fileTextUpdateOne(HashMap<String, Object> map);
 	//단어 수정전 수정할 단어 객체를 DB에서 검색해서 리턴하는 메서드
 	DirWord wordSearchByWordNum(HashMap<String, Integer> map);
+	//단어장 내에서 해당 단어를 기준으로 직전/직후 단어를 검색해 리턴하는 메서드
+	DirWord wordSearchByArrow(HashMap<String, Object> map);
 	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
 	int wordUpdateOne(DirWord word);
-	// 단어 한개를 삭제하는 메서드
-	int wordDeleteOne(HashMap<String, Integer> map);
 }
