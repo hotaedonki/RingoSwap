@@ -193,21 +193,19 @@ function fileOpen(){
         dataType: 'json',
         success: function(notepad){
             console.log(notepad);
-            let str =`<table>
-                <tr>
-                     <td rowspan="2">${notepad.title}</td>
-                    <td rowspan="2">${notepad.file_num}</td>
-                    <td>${notepad.inputdate}</td>
-                </tr>
-                <tr>
-                    <td>${notepad.modifie_date}</td>
-                </tr>
-                <tr>
-                    <td colspan="3"><textarea  cols="60" rows="15" >${notepad.file_text}</textarea></td>
-                </tr>
-            </table>`;
-                str += '</ul>';
-                $('.tox-edit-area').text(str);
+            let str =`
+                <div class="tox-edit-area">
+                    <iframe id="noteTextarea_ifr">
+                    <textarea>
+                        ${notepad.title}
+                        ${notepad.file_num}
+                        ${notepad.inputdate}
+                        ${notepad.modifie_date}
+                        ${notepad.file_text}
+                    </textarea>
+                    </iframe>
+                </div>`;
+                $('.tox-sidebar-wrap').html(str);
                 console.log('프린트 완료 : '+notepad);
                 $('.btn-close').click();
             },
@@ -306,7 +304,7 @@ function fileSave(){
     let content = tinymce.activeEditor.getContent();
     let num = $('#fileNum').data('file-num');
 
-    $.post("fileSave", {
+    $.post("fileTextModifie", {
         file_num : num,
         file_text : content
     }).done(function(txt){
