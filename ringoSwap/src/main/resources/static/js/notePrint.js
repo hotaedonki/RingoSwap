@@ -22,14 +22,14 @@ $(document).ready(function(){
     $(document).on('click', '.yes', closeModal);
 
     window.addEventListener('load', function () {
-        let arr = getFileNumFromURL();
-        const fileNum = arr.fileNum;
-        const fileType = arr.type;
+        const fileNum = getUrlParam('file');
+        const fileType = getUrlParam('type');
         if (fileNum) {
             // 파일 번호가 URL에 있을 경우 해당 텍스트 객체 열기
+            console.log('객체 열기');
             fileOpenUrl(fileNum, fileType);
         }
-    });    
+    });
 });
 
 // 폴더 버튼을 클릭할 때의 이벤트 처리
@@ -55,12 +55,9 @@ function sortEvent() {
 }
 
 //URL로부터 파일 번호를 얻어오는 함수
-function getFileNumFromURL() {
+function getUrlParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
-    let arr = {fileNum : urlParams.get('file'), type : urlParams.get('type')};
-    console.log(urlParams);
-    console.log(urlParams.get('file'));
-    return arr;
+    return urlParams.get(param);
 }
 
 // 폴더 정보를 출력하는 ajax 함수
@@ -221,15 +218,15 @@ function fileOpenUrl(fileNum, fileType){
             success: function(notepad){
                 console.log(notepad);
                 let str =`${notepad.file_text}`;
-                    tinymce.activeEditor.setContent(str);
-                    console.log('프린트 완료 : '+notepad);
-                    history.pushState({ file_num: file_num_saver, file_type: fileType }, '', `?file=${file_num_saver}&type=${fileType}`);
-                    $('.btn-close').click();
-                },
-                error: function(e){
-                    console.log("error");
-                }
-            });
+                tinymce.activeEditor.setContent(str);
+                console.log('프린트 완료 : '+notepad);
+                history.pushState({ file_num: file_num_saver, file_type: fileType }, '', `?file=${file_num_saver}&type=${fileType}`);
+                $('.btn-close').click();
+            },
+            error: function(e){
+                console.log("error");
+            }
+        });
     } if(fileType == 'word'){
         // 클릭한 파일의 분류가 'word=단어장'일 때 실행하는 ajax
         $.ajax({
@@ -265,8 +262,8 @@ function fileOpenUrl(fileNum, fileType){
                     console.log(item.word_num);
                     cnt++;
                 });
-                $('.add-btn').attr('data-file-num', num);
-                console.log('filePrint' + num);
+                $('.add-btn').attr('data-file-num', fileNum);
+                console.log('filePrint' + fileNum);
                 $('.list-group1').html(str1);
                 $('.list-group2').html(str2);
                 history.pushState({ file_num: file_num_saver, file_type: fileType }, '', `?file=${file_num_saver}&type=${fileType}`);
@@ -388,5 +385,5 @@ function fileDelete(){
 
 
 function closeModal() {
-   $(this).closest(".modal").modal("hide");
+   $(this).closest(".modal").modal("hidde");
 }

@@ -179,8 +179,7 @@
 				</div>
 
 				<textarea id="noteTextarea">
-					    Welcome to TinyMCE!
-					  </textarea>
+				</textarea>
 				<script>
 					tinymce
 							.init({
@@ -239,6 +238,18 @@
 									//자동 저장될 때마다 아래 함수 fileSave를 호출합니다.
 									console.log('자동저장 작동');
 									fileSave();
+								},
+								setup: function (editor) {
+									editor.on('init', function () {
+										// 에디터 초기화 이벤트 처리
+										// 여기에 추가적인 초기화 작업을 수행할 수 있습니다.
+										console.log('변환');
+										const fileNum = getUrlParam('file');
+										const fileType = getUrlParam('type');
+										console.log(fileOpenUrl(fileNum, fileType));
+									});
+
+									// 다른 이벤트 핸들러를 여기에 추가할 수 있습니다.
 								}
 							});
 				</script>
