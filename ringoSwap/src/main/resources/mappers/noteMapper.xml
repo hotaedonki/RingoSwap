@@ -4,7 +4,7 @@
 
 <mapper namespace="net.ringo.ringoSwap.dao.NoteDAO">
 	<!-- 폴더정보를 배열로 리턴하는 select 코드 -->
-	<select id="selectUserDirectoryAll" resultType="Directory">
+	<select id="userDirectorySelectAll" resultType="Directory">
 		select *
 		from
 		ringo_directory
@@ -14,7 +14,7 @@
 	</select>
 
 	<!-- 파일정보를 배열로 리턴하는 select 코드 -->
-	<select id="selectUserFileAll" parameterType="java.util.HashMap"
+	<select id="userFileSelectAll" parameterType="java.util.HashMap"
 		resultType="DirFile">
 		select *
 		from ringo_file
@@ -37,7 +37,7 @@
 	</select>
 
 	<!-- 부모폴더 정보를 기반으로 검색한 폴더정보를 리턴하는 select문 -->
-	<select id="selectDirectoryByPDirNum" resultType="Directory">
+	<select id="directorySelectByPDirNum" resultType="Directory">
 		select *
 		from
 		ringo_directory
@@ -46,7 +46,7 @@
 	</select>
 
 	<!-- 부모폴더 정보를 기반으로 검색한 파일정보를 리턴하는 select문 -->
-	<select id="selectFileByDirNum"
+	<select id="fileSelectByDirNum"
 		parameterType="java.util.HashMap" resultType="DirFile">
 		select *
 		from ringo_file
@@ -66,9 +66,15 @@
 			</otherwise>
 		</choose>
 	</select>
+	<!-- file_num을 매개변수로 해당 파일 번호로 검색된 사진 정보를 배열로 리턴하는 select문 -->
+	<select id="filePhotoSelectByFileNum" resultType="DirPhoto">
+	select *
+	from ringo_file_photo
+	where file_num = #{file_num}
+	</select>
 
 	<!-- file_num을 매개변수로 file객체를 검색해 리턴하는 select문 -->
-	<select id="selectFileByFileNum" resultType="DirFile">
+	<select id="fileSelectByFileNum" resultType="DirFile">
 		select *
 		from
 		ringo_file
@@ -110,6 +116,33 @@
 		ringo_file(file_num, dir_num, user_num, title, file_type)
 		values(ringo_file_seq.nextval, #{dir_num}, #{user_num}, #{title},
 		#{file_type})
+	</insert>
+	<!-- 매개변수로 받은 photo 배열을 통해 DB에 file_photo 배열을 생성하는 insert문 -->
+	<insert id="filePhotoArrayInsert">
+	<foreach collection="list" item="photo" index="index" separator=",">
+    <choose>
+		<when test="index == 0">
+			insert into ringo_file_photo(file_num, dir_num, user_num, original_note, saved_note)
+			values (
+		          #{file_num},
+		          1,
+		          #{user_num},
+		          #{original_note},
+		          #{saved_note}
+			)
+		</when>
+		<otherwise>
+			insert into ringo_file_photo(file_num, photo_num, user_num, original_note, saved_note)
+			values (
+				#{file_num},
+				(select max(photo_num) + 1 from ringo_file_photo where file_num = #{file_num}),
+				#{user_num},
+				#{original_note},
+				#{saved_note}
+			)
+		</otherwise>
+	</choose>
+	</foreach>
 	</insert>
 
 	<!-- 매개변수로 받은 file객체를 통해 DB에 새로운 file정보를 생성하는 insert문 -->
@@ -156,11 +189,26 @@
 	where user_num =#{user_num} and file_num = #{file_num}
 	</update>
 	<!-- 단어 수정전 수정할 단어 객체를 DB에서 검색해서 리턴하는 메서드 -->
-	<select id="wordSearchByWordNum">
+	<select id="wordSearchByWordNum" parameterType="java.util.HashMap">
 		select *
 		from ringo_word
 		where word_num = #{word_num}
 		and user_num = #{user_num}
+	</select>
+	<!-- 단어 수정 기능의 양 옆의 화살표를 클릭할 경우, 해당 단어를 기준으로 해당 단어장에서 바로 직전/직후의 단어를 호출하는 select문-->
+	<select id="wordSearchByArrow" parameterType="java.util.HashMap" resultType="DirWord">
+	<if test="arrow == 'right' ">
+		select min(word_num)
+		from ringo_word
+		where file_num = #{file_num} 
+			and word_num &gt; #{word_num}
+	</if>
+	<if test="arrow == 'left' ">
+		select max(word_num)
+		from ringo_word
+		where file_num = #{file_num} 
+			and word_num &lt; #{word_num}
+	</if>
 	</select>
 	<!-- 수정한 단어 객체를 DB에 전달해 수정하는 메서드 -->
 	<update id="wordUpdateOne" parameterType="DirWord">

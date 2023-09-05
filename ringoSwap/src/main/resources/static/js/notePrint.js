@@ -20,6 +20,16 @@ $(document).ready(function(){
     $(document).on('click', '.dirOpen', dirOpen);
     $(document).on('click', '.dirDelete', dirDelete);
     $(document).on('click', '.yes', closeModal);
+
+    window.addEventListener('load', function () {
+        let arr = getFileNumFromURL();
+        const fileNum = arr.fileNum;
+        const fileType = arr.type;
+        if (fileNum) {
+            // 파일 번호가 URL에 있을 경우 해당 텍스트 객체 열기
+            fileOpenUrl(fileNum, fileType);
+        }
+    });    
 });
 
 // 폴더 버튼을 클릭할 때의 이벤트 처리
@@ -42,6 +52,15 @@ function sortEvent() {
     s = s === '생성순' ? 'input' : s === '제목순' ? 'title' : 'modifie';
     $('#sort').val(s);
     dirPrint();
+}
+
+//URL로부터 파일 번호를 얻어오는 함수
+function getFileNumFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let arr = {fileNum : urlParams.get('file'), type : urlParams.get('type')};
+    console.log(urlParams);
+    console.log(urlParams.get('file'));
+    return arr;
 }
 
 // 폴더 정보를 출력하는 ajax 함수
@@ -148,7 +167,6 @@ function dirOpen() {
     });
 
     // 하위 파일 불러오기
-    console.log(ca, st);
     $.ajax({
         url: 'dirOpenFile',
         type: 'post',
@@ -157,11 +175,11 @@ function dirOpen() {
         success: function(list) {
             let str = '<ul>';
             $(list).each(function(n, item) {
-                str += `<li style="position: relative;"><i class="bi bi-file"></i>
+				let iconClass = (item.file_type === "note") ? "bi-journal" : "bi-file-word"
+				let langClass = (item.lang_type === "kor") ? "(한국어)" : (item.lang_type === "jap") ? "(일본어)" : "(영어)"
+                str += `<li style="position: relative;"><i class="bi ${iconClass} fileType" data-file-type="${item.file_type}"></i>
                             <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
-                            <span id="fileType${item.file_num}">${item.file_type}</span>
-                            <span>${item.lang_type}</span>
-                              <span class="modifyAndDelete">
+                            <span>${langClass}</span>
                      <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-pencil fileModify" ></i>
                             <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-trash fileDelete"></i>
                        </span></li>`;
@@ -171,7 +189,6 @@ function dirOpen() {
             $('.fileOpen').click(fileOpen);
             $('.fileModify').click(fileModify);   
             $('.fileDelete').click(fileDelete);
-
         },
         error: function(e) {
             console.log("error");
@@ -180,56 +197,53 @@ function dirOpen() {
     });
 }
 
+let file_num_saver;         //메모장 파일번호 저장용
 // 파일 이름을 클릭하면 fileWindow에 표시하는 함수
 function fileOpen(){
     let num = $(this).data("file-num");
-    let type = $('#fileType'+num).text();
+    file_num_saver = num;
+    let type = $('.fileType').data("file-type");
     console.log(num, type);
 
-    $.ajax({
-        url: 'fileOpenNote',
-        type: 'post',
-        data: {file_num : num, file_type: type},
-        dataType: 'json',
-        success: function(notepad){
-            console.log(notepad);
-            let str =`<table>
-                <tr>
-                     <td rowspan="2">${notepad.title}</td>
-                    <td rowspan="2">${notepad.file_num}</td>
-                    <td>${notepad.inputdate}</td>
-                </tr>
-                <tr>
-                    <td>${notepad.modifie_date}</td>
-                </tr>
-                <tr>
-                    <td colspan="3"><textarea  cols="60" rows="15" >${notepad.file_text}</textarea></td>
-                </tr>
-            </table>`;
-                str += '</ul>';
-                $('.tox-edit-area').text(str);
-                console.log('프린트 완료 : '+notepad);
-                $('.btn-close').click();
-            },
-            error: function(e){
-                console.log("error");
-            }
-        });
-    if(type == 'word'){
+    //실제 출력 함수 실행
+    fileOpenUrl(num, type);
+}
+
+function fileOpenUrl(fileNum, fileType){
+    file_num_saver = fileNum;
+
+    if(fileType == 'note'){
+        $.ajax({
+            url: 'fileOpenNote',
+            type: 'post',
+            data: {file_num : fileNum},
+            dataType: 'json',
+            success: function(notepad){
+                console.log(notepad);
+                let str =`${notepad.file_text}`;
+                    tinymce.activeEditor.setContent(str);
+                    console.log('프린트 완료 : '+notepad);
+                    history.pushState({ file_num: file_num_saver, file_type: fileType }, '', `?file=${file_num_saver}&type=${fileType}`);
+                    $('.btn-close').click();
+                },
+                error: function(e){
+                    console.log("error");
+                }
+            });
+    } if(fileType == 'word'){
         // 클릭한 파일의 분류가 'word=단어장'일 때 실행하는 ajax
         $.ajax({
             url: 'fileOpenWord',
             type: 'post',
-            data: {file_num : num},
+            data: {file_num : fileNum},
             dataType: 'json',
-            success: function(list){
-                console.log(list);
+            success: function(res){
+                let wordList = res.wordList;
                 let str1 = '';
                 let str2 = '';
                 let cnt = 0;
-                let cntleng = Math.floor(list.length / 2);
-                $(list).each(function(i, item){
-	                if(cnt < cntleng){
+                $(wordList).each(function(i, item){
+	                if(cnt < 7){
 	                    str1 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}">
 	                        <span class="word">${item.word}</span>
 	                        <div class="word-content">
@@ -255,6 +269,7 @@ function fileOpen(){
                 console.log('filePrint' + num);
                 $('.list-group1').html(str1);
                 $('.list-group2').html(str2);
+                history.pushState({ file_num: file_num_saver, file_type: fileType }, '', `?file=${file_num_saver}&type=${fileType}`);
                 $('.btn-close').click();
             },
             error: function(e){
@@ -263,6 +278,7 @@ function fileOpen(){
         });
     }
 }
+
 /* 수정부 */
 function fileModify() {
     // 현재 클릭한 수정 버튼의 ID를 가져옵니다.
@@ -304,10 +320,9 @@ function fileModify() {
 
 function fileSave(){
     let content = tinymce.activeEditor.getContent();
-    let num = $('#fileNum').data('file-num');
 
-    $.post("fileSave", {
-        file_num : num,
+    $.post("fileTextModifie", {
+        file_num : file_num_saver,
         file_text : content
     }).done(function(txt){
         console.log(txt);

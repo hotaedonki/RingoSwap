@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import net.ringo.ringoSwap.dao.NoteDAO;
 import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.DirPhoto;
 import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.Directory;
 import net.ringo.ringoSwap.util.PageNavigator;
@@ -20,36 +21,41 @@ public class NoteServiceImple implements NoteService{
 	
 	//사용자의 아이디를 매개변수로 dao파일에 넘겨, dao로부터 해당 id로 검색하여 나온 모든 폴더 정보를 배열로 리턴받는 메서드
 	@Override
-	public ArrayList<Directory> selectUserDirectoryAll(int user_num){
-		return dao.selectUserDirectoryAll(user_num);
+	public ArrayList<Directory> userDirectorySelectAll(int user_num){
+		return dao.userDirectorySelectAll(user_num);
 	}
 	//사용자의 아이디를 매개변수로 dao파일에 넘겨, dao로부터 해당 id로 검색하여 나온 모든 파일 정보를 배열로 리턴받는 메서드
 	@Override
-	public ArrayList<DirFile> selectUserFileAll(HashMap<String, Object> map){
-		return dao.selectUserFileAll(map);
+	public ArrayList<DirFile> userFileSelectAll(HashMap<String, Object> map){
+		return dao.userFileSelectAll(map);
 	}
 
 	//매개변수로 주어지는 부모폴더 정보로 검색된 폴더목록을 리턴하는 메서드
 	@Override
-	public ArrayList<Directory> selectDirectoryByPDirNum(int dir_num){
-		return dao.selectDirectoryByPDirNum(dir_num);
+	public ArrayList<Directory> directorySelectByPDirNum(int dir_num){
+		return dao.directorySelectByPDirNum(dir_num);
 	}
 	//매개변수로 주어지는 부모폴더 정보로 검색된 파일목록을 리턴하는 메서드
 	@Override
-	public ArrayList<DirFile> selectFileByDirNum(HashMap<String, Object> map){
-		return dao.selectFileByDirNum(map);
+	public ArrayList<DirFile> fileSelectByDirNum(HashMap<String, Object> map){
+		return dao.fileSelectByDirNum(map);
 	}
 	
 	//매개변수로 file_num을 받아 해당 번호의 파일 객체를 리턴하는 메서드
 	@Override
-	public DirFile selectFileByFileNum(int file_num) {
-		return dao.selectFileByFileNum(file_num);
+	public DirFile fileSelectByFileNum(int file_num) {
+		return dao.fileSelectByFileNum(file_num);
+	}
+	//매개변수로 file_num을 받아 해당 파일에 기록된 사진 목록을 배열로 리턴하는 메서드
+	@Override
+	public ArrayList<DirPhoto> filePhotoSelectByFileNum(int file_num){
+		return dao.filePhotoSelectByFileNum(file_num);
 	}
 	
 	//file_num을 매개변수로 검색해 나온 file객체에서 해당 파일의 title값만 리턴하는 메서드
 	@Override
-	public String selectFileByFileNumReturnTitle(int file_num) {
-		DirFile file = dao.selectFileByFileNum(file_num);
+	public String fileSelectByFileNumReturnTitle(int file_num) {
+		DirFile file = dao.fileSelectByFileNum(file_num);
 		String title = file.getTitle();
 		return title;
 	}
@@ -85,6 +91,11 @@ public class NoteServiceImple implements NoteService{
 	@Override
 	public int fileCreateOne(DirFile file) {
 		return dao.fileCreateOne(file);
+	}
+	//특정 파일에 속한 사진 객체 배열을 생성하는 메서드
+	@Override
+	public int filePhotoArrayInsert(ArrayList<DirPhoto> photo) {
+		return dao.filePhotoArrayInsert(photo);
 	}
 	
 	//파일 부속 객체인 Word를 생성하는 메서드
@@ -123,6 +134,11 @@ public class NoteServiceImple implements NoteService{
 	@Override
 	public DirWord wordSearchByWordNum(HashMap<String, Integer> map) {
 		return dao.wordSearchByWordNum(map);
+	}
+	//화살표 클릭시 해당 단어를 기준으로 단어장 내 직전/직후 단어를 리턴하는 메서드
+	@Override
+	public DirWord wordSearchByArrow(HashMap<String, Object> map) {
+		return dao.wordSearchByArrow(map);
 	}
 	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
 	@Override

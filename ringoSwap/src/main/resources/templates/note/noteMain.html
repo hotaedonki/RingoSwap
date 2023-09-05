@@ -180,7 +180,6 @@
 
 				<textarea id="noteTextarea">
 					    Welcome to TinyMCE!
-					    zxvczczxc
 					  </textarea>
 				<script>
 					tinymce
@@ -230,7 +229,17 @@
 									};
 									input.click();
 								},
-								content_style : 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }'
+								content_style : 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }',
+								save_onsavecallback: function () {
+									// 내용을 저장하는 함수를 호출
+									fileSave();
+								}, 
+								autosave_interval: 600000,			//자동저장 설정 간격(10분 = 10*60*1000밀리초)
+								autosave_callback : function(){
+									//자동 저장될 때마다 아래 함수 fileSave를 호출합니다.
+									console.log('자동저장 작동');
+									fileSave();
+								}
 							});
 				</script>
 			</div>
