@@ -135,6 +135,7 @@ public class NoteController
 		//리턴받은 객체들을 hashmap에 put하고 리턴
 		map.put("navi", navi);
 		map.put("wordList", wordList);
+		log.debug("파일오픈 맵 {}",map);
 		
 		return map;
 	}

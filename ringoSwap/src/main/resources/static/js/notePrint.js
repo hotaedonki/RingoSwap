@@ -161,7 +161,6 @@ function dirOpen() {
                 str += `<li style="position: relative;"><i class="bi ${iconClass} fileType" data-file-type="${item.file_type}"></i>
                             <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
                             <span>${langClass}</span>
-                              <span class="modifyAndDelete">
                      <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-pencil fileModify" ></i>
                             <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-trash fileDelete"></i>
                        </span></li>`;
@@ -187,7 +186,6 @@ function fileOpen(){
     file_num_saver = num;
     let type = $('.fileType').data("file-type");
     console.log(num, type);
-
     if(type == 'note'){
     $.ajax({
         url: 'fileOpenNote',
