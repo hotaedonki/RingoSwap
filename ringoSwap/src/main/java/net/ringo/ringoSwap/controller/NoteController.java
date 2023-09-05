@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Directory;
 import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.DirPhoto;
 import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.service.NoteService;
@@ -33,6 +34,9 @@ public class NoteController
 	@Autowired
 	NoteService service;
 
+	//실제 저장하는 저장경로
+	@Value("${spring.servlet.multipart.location}")
+	String uploadPath;
 	//단어장 목록의 페이지당 글 수
 	@Value("${user.board.page}")
 	int countPerPage;
@@ -54,7 +58,7 @@ public class NoteController
    public ArrayList<Directory> dirPrint(@AuthenticationPrincipal UserDetails user) {
       int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
       log.debug("폴더 출력, 유저 넘버 : {}", user_num);
-      ArrayList<Directory> dirList = service.selectUserDirectoryAll(user_num);
+      ArrayList<Directory> dirList = service.userDirectorySelectAll(user_num);
       log.debug("폴더 목록 : {}", dirList);
       
       return dirList;
@@ -71,7 +75,7 @@ public class NoteController
       map.put("sort", sort);
       map.put("text", text);
       
-      ArrayList<DirFile> fileList = service.selectUserFileAll(map);
+      ArrayList<DirFile> fileList = service.userFileSelectAll(map);
       
       log.debug("파일 : {}", fileList);
       
@@ -83,7 +87,7 @@ public class NoteController
    @PostMapping("dirOpenDirectory")
    public ArrayList<Directory> dirOpenDirectory(int dir_num){
       log.debug("폴더넘버값 {}", dir_num);
-      ArrayList<Directory> dirList = service.selectDirectoryByPDirNum(dir_num);
+      ArrayList<Directory> dirList = service.directorySelectByPDirNum(dir_num);
       log.debug("폴더열기 {}", dirList);
       return dirList;
    }
@@ -97,7 +101,7 @@ public class NoteController
       map.put("category", category);
       map.put("sort", sort);
       log.debug("파일열기 {}", map);
-      ArrayList<DirFile> fileList = service.selectFileByDirNum(map);
+      ArrayList<DirFile> fileList = service.fileSelectByDirNum(map);
       log.debug("파일열기 {}", fileList);
       return fileList;
    }
@@ -106,10 +110,17 @@ public class NoteController
    @ResponseBody
    @PostMapping("fileOpenNote")
    public DirFile fileOpenNote(int file_num) {
-      DirFile note = service.selectFileByFileNum(file_num);
+      DirFile note = service.fileSelectByFileNum(file_num);
       
       log.debug("파일 열어~~~: {} ", note);
       return note;
+   }
+   //메모장분류 파일 출력후 해당 텍스트에 같이 출력될 사진 데이터를 DB에서 찾아 배열로 리턴하는 메서드
+   @ResponseBody
+   @PostMapping("fileOpenNotePhoto")
+   public ArrayList<DirPhoto> fileOpenNotePhoto(int file_num){
+	   ArrayList<DirPhoto> photoList = service.filePhotoSelectByFileNum(file_num);
+	   return photoList;
    }
    
    //ajax를 통해 실행되는 해당 메모장분류 파일을 file_num을 매개변수로 검색하여 그 하위 Word목록을 리턴하는 메서드
@@ -168,10 +179,20 @@ public class NoteController
       //파일 생성
       log.debug("파일{}",file);
       int num = service.fileCreateOne(file);
-      
       log.debug("num값 {}",num);
       //file_type에 따라 추가생성 정보 분류
-      
+   }
+   //html에서 받은 사진 정보를 기반으로 특정 file객체에 종속되는 사진 객체를 DB에 추가하는 메서드
+   @ResponseBody
+   @PostMapping("filePhotoCreate")
+   public void filePhotoCreate(ArrayList<DirPhoto> photo, @AuthenticationPrincipal UserDetails user) {
+	   int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+	   //리턴받은 user_num을 photo 배열 내 모든 사진 객체의 user_num에 집어넣기
+	   for(DirPhoto p : photo) {
+			p.setUser_num(user_num);
+	   }
+	   
+	   int methodResult = service.filePhotoArrayInsert(photo);
    }
 
    //html에서 받은 정보를 기반으로 특정 file객체에 종속되는 word객체를 생성하는 기능을 가진 메서드

@@ -379,7 +379,7 @@ CREATE TABLE ringo_file (
 	dir_num			number,								--해당 파일이 들어가는 폴더 번호, 계정 삭제시 cascade
 	user_num			number,								--해당 파일을 작성한 사용자의 계정 번호, 계정 삭제시 cascade
 	title				varchar2(100)	not null,					--해당 파일의 제목
-    file_text				CLOB,									--실제로 작성한 문서 정보
+    file_text				CLOB			default 'Welcome to RingoSwap',									--실제로 작성한 문서 정보
 	inputdate			date				default sysdate,		--최초 작성일
 	modifie_date		date				default sysdate,		--최근 수정일
 	lang_type			varchar2(10)	default 'kor' check(lang_type in ('kor', 'jap', 'eng')), 	--단어장 언어 구분

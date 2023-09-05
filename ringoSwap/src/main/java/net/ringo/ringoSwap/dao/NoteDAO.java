@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
 import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.DirPhoto;
 import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.Directory;
 
@@ -16,15 +17,17 @@ import net.ringo.ringoSwap.domain.Directory;
 public interface NoteDAO 
 {
 	//사용자의 id를 xml에 매개변수로 넘겨, id로 검색하여 나온 폴더 정보를 배열로 리턴하는 메서드
-	ArrayList<Directory> selectUserDirectoryAll(int user_num);
+	ArrayList<Directory> userDirectorySelectAll(int user_num);
 	//사용자의 id를 xml에 매개변수로 넘겨, id로 검색하여 나온 파일 정보를 배열로 리턴하는 메서드
-	ArrayList<DirFile> selectUserFileAll(HashMap<String, Object> map);
+	ArrayList<DirFile> userFileSelectAll(HashMap<String, Object> map);
 	//폴더번호를 매개변수로 해당 폴더에 속한 하위 폴더 배열을 리턴하는 메서드
-	ArrayList<Directory> selectDirectoryByPDirNum(int dir_num);
+	ArrayList<Directory> directorySelectByPDirNum(int dir_num);
 	//폴더 번호를 매개변수로 해당 폴더에 속한 파일 배열을 리턴하는 메서드
-	ArrayList<DirFile> selectFileByDirNum(HashMap<String, Object> map);
+	ArrayList<DirFile> fileSelectByDirNum(HashMap<String, Object> map);
+	//파일번호를 매개변수로 해당 파일에 속한 사진 배열을 리턴하는 메서드
+	ArrayList<DirPhoto> filePhotoSelectByFileNum(int file_num);
 	//file_num을 매개변수로 DB에서 검색해 출력된 file객체를 리턴하는 메서드
-	DirFile selectFileByFileNum(int file_num);
+	DirFile fileSelectByFileNum(int file_num);
 	//file_num을 매개변수로 해당 파일에 속한 단어 갯수를 리턴하는 메서드
 	int wordSelectByFileNum(int file_num);
 	//file_num을 매개변수로 DB에서 검색해 출력된 word객체 목록을 리턴하는 메서드
@@ -36,6 +39,8 @@ public interface NoteDAO
 	int dirCreate(Directory dir);
 	//파일을 생성하는 메서드
 	int fileCreateOne(DirFile file);
+	//특정 파일의 파일 부속 객체인 dirPhoto 배열을 생성하는 메서드
+	int filePhotoArrayInsert(ArrayList<DirPhoto> photo);
 	//파일 부속 객체인 notepad를 생성하는 메서드 
 	//파일 부속 객체인 Word를 생성하는 메서드
 	int wordCreateOne(DirWord word);

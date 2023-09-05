@@ -196,12 +196,7 @@ function fileOpen(){
         dataType: 'json',
         success: function(notepad){
             console.log(notepad);
-            let str =`
-                    ${notepad.title}
-                    ${notepad.file_num}
-                    ${notepad.inputdate}
-                    ${notepad.modifie_date}
-                    ${notepad.file_text}`;
+            let str =`${notepad.file_text}`;
                 tinymce.activeEditor.setContent(str);
                 console.log('프린트 완료 : '+notepad);
                 $('.btn-close').click();
