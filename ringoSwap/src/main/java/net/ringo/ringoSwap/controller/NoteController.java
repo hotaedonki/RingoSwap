@@ -121,6 +121,7 @@ public class NoteController
 		//navi를 사용해 단어 배열을 리턴하는 메서드 실행
 		ArrayList<DirWord> wordList = service.selectWordArrayByFileNum(navi, file_num);
 		log.debug("ghkrdls: {} ", wordList);
+		log.debug("네비게이터 정보 : {}", navi);
 		return wordList;
 	}
    //-----------[ 노트 출력기능 종료 ]-------------->>>>>>>>>>>>>>
