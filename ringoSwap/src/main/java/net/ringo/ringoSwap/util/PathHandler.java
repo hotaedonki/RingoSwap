@@ -29,4 +29,5 @@ public class PathHandler
 	public final static String OPENCHATMAIN = "openChatMain";
 	public final static String OPENCHATROOM = "openChatRoom";
 	public final static String MODIFYACCOUNT ="modifyAccount";
+	public final static String CREATEOPENCHATROOM = "createOpenChatroom";
 }
