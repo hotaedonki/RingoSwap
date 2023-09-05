@@ -148,7 +148,6 @@ function dirOpen() {
     });
 
     // 하위 파일 불러오기
-    console.log(ca, st);
     $.ajax({
         url: 'dirOpenFile',
         type: 'post',
@@ -159,7 +158,7 @@ function dirOpen() {
             $(list).each(function(n, item) {
 				let iconClass = (item.file_type === "note") ? "bi-journal" : "bi-file-word"
 				let langClass = (item.lang_type === "kor") ? "(한국어)" : (item.lang_type === "jap") ? "(일본어)" : "(영어)"
-                str += `<li style="position: relative;"><i class="bi ${iconClass}"></i>
+                str += `<li style="position: relative;"><i class="bi ${iconClass} fileType" data-file-type="${item.file_type}"></i>
                             <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
                             <span>${langClass}</span>
                      <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-pencil fileModify" ></i>
@@ -180,12 +179,14 @@ function dirOpen() {
     });
 }
 
+let file_num_saver;         //메모장 파일번호 저장용
 // 파일 이름을 클릭하면 fileWindow에 표시하는 함수
 function fileOpen(){
     let num = $(this).data("file-num");
-    let type = $('#fileType'+num).text();
-    console.log(num, type + "파일오픈입니다");
-	if(type == 'note') {
+    file_num_saver = num;
+    let type = $('.fileType').data("file-type");
+    console.log(num, type);
+    if(type == 'note'){
     $.ajax({
         url: 'fileOpenNote',
         type: 'post',
@@ -194,18 +195,12 @@ function fileOpen(){
         success: function(notepad){
             console.log(notepad);
             let str =`
-                <div class="tox-edit-area">
-                    <iframe id="noteTextarea_ifr">
-                    <textarea>
-                        ${notepad.title}
-                        ${notepad.file_num}
-                        ${notepad.inputdate}
-                        ${notepad.modifie_date}
-                        ${notepad.file_text}
-                    </textarea>
-                    </iframe>
-                </div>`;
-                $('.tox-sidebar-wrap').html(str);
+                    ${notepad.title}
+                    ${notepad.file_num}
+                    ${notepad.inputdate}
+                    ${notepad.modifie_date}
+                    ${notepad.file_text}`;
+                tinymce.activeEditor.setContent(str);
                 console.log('프린트 완료 : '+notepad);
                 $('.btn-close').click();
             },
@@ -213,17 +208,15 @@ function fileOpen(){
                 console.log("error");
             }
         });
-    }
-    if(type == 'word'){
+    } if(type == 'word'){
         // 클릭한 파일의 분류가 'word=단어장'일 때 실행하는 ajax
         $.ajax({
             url: 'fileOpenWord',
             type: 'post',
             data: {file_num : num},
             dataType: 'json',
-            success: function(response){
-                console.log(response);
-                let wordList = response.wordList;
+            success: function(res){
+                let wordList = res.wordList;
                 let str1 = '';
                 let str2 = '';
                 let cnt = 0;
@@ -304,10 +297,9 @@ function fileModify() {
 
 function fileSave(){
     let content = tinymce.activeEditor.getContent();
-    let num = $('#fileNum').data('file-num');
 
     $.post("fileTextModifie", {
-        file_num : num,
+        file_num : file_num_saver,
         file_text : content
     }).done(function(txt){
         console.log(txt);

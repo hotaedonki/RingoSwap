@@ -303,6 +303,9 @@ CREATE TABLE ringo_chatroom (
 	--해당 방의 전체 메세지 최대 크기. byte단위. 기본 10MB지만 채팅룸이 채팅 분류에 따라 크기가 더 확장되거나 줄어들 수 있습니다.
 );
 
+-- 채팅룸 생성용 시퀀스
+CREATE SEQUENCE ringo_chatroom_seq;
+
 CREATE TABLE ringo_chatroom_link
 (
 	user_num		number,
