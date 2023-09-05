@@ -148,7 +148,6 @@ function dirOpen() {
     });
 
     // 하위 파일 불러오기
-    console.log(ca, st);
     $.ajax({
         url: 'dirOpenFile',
         type: 'post',
@@ -180,12 +179,15 @@ function dirOpen() {
     });
 }
 
+let file_num_saver;         //메모장 파일번호 저장용
 // 파일 이름을 클릭하면 fileWindow에 표시하는 함수
 function fileOpen(){
     let num = $(this).data("file-num");
+    file_num_saver = num;
     let type = $('#fileType'+num).text();
     console.log(num, type);
 
+    if(type == 'note'){
     $.ajax({
         url: 'fileOpenNote',
         type: 'post',
@@ -194,18 +196,12 @@ function fileOpen(){
         success: function(notepad){
             console.log(notepad);
             let str =`
-                <div class="tox-edit-area">
-                    <iframe id="noteTextarea_ifr">
-                    <textarea>
-                        ${notepad.title}
-                        ${notepad.file_num}
-                        ${notepad.inputdate}
-                        ${notepad.modifie_date}
-                        ${notepad.file_text}
-                    </textarea>
-                    </iframe>
-                </div>`;
-                $('.tox-sidebar-wrap').html(str);
+                    ${notepad.title}
+                    ${notepad.file_num}
+                    ${notepad.inputdate}
+                    ${notepad.modifie_date}
+                    ${notepad.file_text}`;
+                tinymce.activeEditor.setContent(str);
                 console.log('프린트 완료 : '+notepad);
                 $('.btn-close').click();
             },
@@ -213,20 +209,20 @@ function fileOpen(){
                 console.log("error");
             }
         });
-    if(type == 'word'){
+    } if(type == 'word'){
         // 클릭한 파일의 분류가 'word=단어장'일 때 실행하는 ajax
         $.ajax({
             url: 'fileOpenWord',
             type: 'post',
             data: {file_num : num},
             dataType: 'json',
-            success: function(list){
-                console.log(list);
+            success: function(res){
+                let wordList = res.wordList;
                 let str1 = '';
                 let str2 = '';
                 let cnt = 0;
-                let cntleng = Math.floor(list.length / 2);
-                $(list).each(function(i, item){
+                let cntleng = Math.floor(wordList.length / 2);
+                $(wordList).each(function(i, item){
 	                if(cnt < cntleng){
 	                    str1 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}">
 	                        <span class="word">${item.word}</span>
@@ -302,10 +298,9 @@ function fileModify() {
 
 function fileSave(){
     let content = tinymce.activeEditor.getContent();
-    let num = $('#fileNum').data('file-num');
 
     $.post("fileTextModifie", {
-        file_num : num,
+        file_num : file_num_saver,
         file_text : content
     }).done(function(txt){
         console.log(txt);

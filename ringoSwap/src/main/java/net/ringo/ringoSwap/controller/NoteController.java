@@ -280,7 +280,9 @@ public class NoteController
       map.put("file_num", file_num);
       map.put("file_text", file_text);
       int methodResult = service.fileTextUpdateOne(map);
-
+      if(methodResult ==0) {
+    	  return "수정 실패";
+      }
       return "수정성공";
    }
 
