@@ -158,7 +158,7 @@ function dirOpen() {
             $(list).each(function(n, item) {
 				let iconClass = (item.file_type === "note") ? "bi-journal" : "bi-file-word"
 				let langClass = (item.lang_type === "kor") ? "(한국어)" : (item.lang_type === "jap") ? "(일본어)" : "(영어)"
-                str += `<li style="position: relative;"><i class="bi ${iconClass}"></i>
+                str += `<li style="position: relative;"><i class="bi ${iconClass} fileType" data-file-type="${item.file_type}"></i>
                             <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
                             <span>${langClass}</span>
                               <span class="modifyAndDelete">
@@ -185,7 +185,7 @@ let file_num_saver;         //메모장 파일번호 저장용
 function fileOpen(){
     let num = $(this).data("file-num");
     file_num_saver = num;
-    let type = $('#fileType'+num).text();
+    let type = $('.fileType').data("file-type");
     console.log(num, type);
 
     if(type == 'note'){
