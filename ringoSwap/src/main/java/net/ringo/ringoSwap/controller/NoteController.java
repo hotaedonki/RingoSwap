@@ -121,7 +121,6 @@ public class NoteController
 		PageNavigator navi = service.wordSelectPageNavigator(pagePerGroup, countPerPage, page, file_num);
 		//navi를 사용해 단어 배열을 리턴하는 메서드 실행
 		ArrayList<DirWord> wordList = service.selectWordArrayByFileNum(navi, file_num);
-		
 		//리턴받은 객체들을 hashmap에 put하고 리턴
 		map.put("navi", navi);
 		map.put("wordList", wordList);

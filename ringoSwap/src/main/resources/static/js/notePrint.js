@@ -157,10 +157,11 @@ function dirOpen() {
         success: function(list) {
             let str = '<ul>';
             $(list).each(function(n, item) {
-                str += `<li style="position: relative;"><i class="bi bi-file"></i>
+				let iconClass = (item.file_type === "note") ? "bi-journal" : "bi-file-word"
+				let langClass = (item.lang_type === "kor") ? "(한국어)" : (item.lang_type === "jap") ? "(일본어)" : "(영어)"
+                str += `<li style="position: relative;"><i class="bi ${iconClass}"></i>
                             <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
-                            <span id="fileType${item.file_num}">${item.file_type}</span>
-                            <span>${item.lang_type}</span>
+                            <span>${langClass}</span>
                               <span class="modifyAndDelete">
                      <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-pencil fileModify" ></i>
                             <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-trash fileDelete"></i>
