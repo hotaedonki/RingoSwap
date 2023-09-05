@@ -49,6 +49,7 @@ $(document).ready(function () {
 
     // .bi-pencil 아이콘 클릭 시 이름 수정
     $(".bi-pencil").click(function() {
+		console.log("이름 수정")
         let currentItem = $(this).closest('.folder, .note, .wordbook');
         let currentName = currentItem.text().trim();
         let newName = prompt("새 이름을 입력하세요:", currentName);
@@ -70,7 +71,7 @@ $(document).ready(function () {
 
     // 폴더 생성 모달 출력
     $(".bi-folder-plus").click(function() {
-        let folderName = prompt("새 폴더의 이름을 입력하세요:");
+        let folderName;
         if (folderName) {
             // 폴더 생성 로직 (예: DOM 요소 추가 등)
             $(".card-body").append('<div class="folder"><i class="bi bi-folder"></i> ' + folderName + '<div class="action-icons"><i class="bi bi-pencil"></i><i class="bi bi-trash"></i></div></div>');

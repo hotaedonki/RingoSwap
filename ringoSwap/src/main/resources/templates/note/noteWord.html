@@ -24,7 +24,6 @@
 
 <!-- JS -->
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
-
 <title>Dashboard Sidebar Menu</title>
 </head>
 <body>
@@ -134,7 +133,7 @@
 									<div class="btn-group mb-2" role="group"
 										aria-label="Button group with nested dropdown">
 										<div class="col-6 sortCategory">
-											<button type="button" class="btn btn-outline-success"
+											<button type="button" class="btn btn-outline-success sortBtn"
 												style="border: none;">생성순</button>
 											<div class="btn-group" role="group">
 												<button id="btnGroupDrop2" type="button"
@@ -142,8 +141,8 @@
 													data-bs-toggle="dropdown" aria-haspopup="true"
 													aria-expanded="false" style="border: none;"></button>
 												<div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-													<a class="dropdown-item" href="#">제목순</a> <a
-														class="dropdown-item" href="#">최신순</a>
+													<a class="dropdown-item sortBtn" href="#">제목순</a> <a
+														class="dropdown-item sortBtn" href="#">최신순</a>
 												</div>
 											</div>
 										</div>
@@ -170,18 +169,19 @@
 					<div class="col-12">
 						<div class="card mb-3" style="height: 97vh; top: 9px;">
 							<!-- Header with '추가' button -->
-							<div class="card-header d-flex justify-content-between" style="position: relative;">
+							<div class="card-header d-flex justify-content-between"
+								style="position: relative;">
 								<h2>단어장 이름</h2>
 								<div class="wordButton">
 									<button class="btn btn-primary add-btn">추가</button>
 									<button class="btn btn-primary noteOffcanvas" type="button"
-									data-bs-toggle="offcanvas"
-									data-bs-target="#offcanvasWithBothOptions"
-									aria-controls="offcanvasWithBothOptions">
-									<i class="bi bi-arrows-angle-expand"></i>
-								</button>
+										data-bs-toggle="offcanvas"
+										data-bs-target="#offcanvasWithBothOptions"
+										aria-controls="offcanvasWithBothOptions">
+										<i class="bi bi-arrows-angle-expand"></i>
+									</button>
 								</div>
-								
+
 							</div>
 
 							<!-- Body for the words -->
@@ -204,26 +204,12 @@
 							<!-- Pagination -->
 							<div class="card-footer">
 								<ul class="pagination">
-									<li class="page-item disabled"><a class="page-link"
-										href="#">&laquo;</a></li>
-									<li class="page-item active"><a class="page-link" href="#">1</a>
-									</li>
-									<li class="page-item"><a class="page-link" href="#">2</a>
-									</li>
-									<li class="page-item"><a class="page-link" href="#">3</a>
-									</li>
-									<li class="page-item"><a class="page-link" href="#">4</a>
-									</li>
-									<li class="page-item"><a class="page-link" href="#">5</a>
-									</li>
-									<li class="page-item"><a class="page-link" href="#">&raquo;</a>
-									</li>
+									<!-- 페이지 네비게이터 출력부분-->
 								</ul>
 							</div>
 						</div>
 					</div>
 				</div>
-
 			</div>
 		</main>
 

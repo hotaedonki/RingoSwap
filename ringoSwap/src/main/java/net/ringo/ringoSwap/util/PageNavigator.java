@@ -51,11 +51,15 @@ public class PageNavigator {
 
 		//전체 결과 중 현재 페이지 첫 글의 위치
 
-		startRecord = (currentPage - 1) * countPerPage;		
+		startRecord = (currentPage - 1) * countPerPage;	
 		
+		//페이지 수가 5 이하인 경우
+        if(totalRecordsCount % 14 == 0) endPageGroup = totalRecordsCount / 14;
+        else endPageGroup = totalRecordsCount / 14 + 1;
+        	
 		//현재 페이지를 기준으로 주변 페이지 출력
 		if(currentPage < 4) endPageGroup = 5;
-		if(currentPage - totalPageCount > -2) 
-			startPageGroup = (totalPageCount - 4);
+		if(currentPage - totalPageCount > -2 && currentPage > 3) 
+		startPageGroup = (totalPageCount - 3);
 	}
 }

@@ -164,7 +164,7 @@ public class NoteController
     */
    @ResponseBody
    @PostMapping("fileCreateOne")
-   public void fileCreate(@AuthenticationPrincipal UserDetails user
+   public DirFile fileCreate(@AuthenticationPrincipal UserDetails user
                ,int dir_num, String title, String file_type) {
       //접속한 사용자의 id로 user_num값 획득
       log.debug("디렉토리넘버 파일생성확인용 {}",dir_num);
@@ -182,6 +182,7 @@ public class NoteController
       int num = service.fileCreateOne(file);
       log.debug("num값 {}",num);
       //file_type에 따라 추가생성 정보 분류
+      return file;
    }
    //html에서 받은 사진 정보를 기반으로 특정 file객체에 종속되는 사진 객체를 DB에 추가하는 메서드
    @ResponseBody
@@ -205,6 +206,7 @@ public class NoteController
       inputword.setUser_num(user_num);
       
       int num = service.wordCreateOne(inputword);
+      log.debug("단어 생성 성공{}", num);
    }
    //-----------[ 노트 생성기능 종료 ]-------------->>>>>>>>>>>>>>
    
@@ -279,16 +281,17 @@ public class NoteController
    //파일번호, 수정된 파일명(title)을 매개변수로 DB에 전달하여 해당 파일을 수정하는 메서드
    @ResponseBody
    @PostMapping("fileModify")
-   public String fileModify(int file_num, String title
+   public HashMap<String, Object> fileModify(int file_num, String title
             , @AuthenticationPrincipal UserDetails user) {
       int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
       HashMap<String, Object> map = new HashMap<>();
       map.put("user_num", user_num);
       map.put("file_num", file_num);
       map.put("title", title);
+      log.debug("파일명 수정: {}", map);
       int methodResult = service.fileUpdateOne(map);
 
-      return "수정성공";
+      return map;
    }
    //메모장 작성 완료 후 수정한 작성파일을 DB로 보내는 메서드
    @ResponseBody
