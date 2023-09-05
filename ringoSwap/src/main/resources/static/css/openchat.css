@@ -451,7 +451,27 @@ body {
     border-radius: 0.3em;
     padding: 2px;
     cursor: pointer;
-  }
+}
 .page_box {
     margin: 30px;
+}
+/* create new room */
+.create_room_body {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(#f0f5f4 0%, #f0f5f4 130px);
+}
+.create_room_box th{
+    text-align: left;
+    padding-right: 5px;
+}
+.create_room_box td{
+    padding: 10px;
+}
+.btn_div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
