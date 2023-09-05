@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Chatroom;
-import net.ringo.ringoSwap.eventHandlers.ChatEventHandler;
+import net.ringo.ringoSwap.domain.ChatroomLink;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.util.PathHandler;
@@ -24,11 +24,6 @@ import net.ringo.ringoSwap.util.PathHandler;
 @RequestMapping(PathHandler.CHAT)
 public class ChatController 
 {
-	private final ChatEventHandler chatEventHandler;
-	
-    @Autowired
-    public ChatController(ChatEventHandler chatEventHandler) { this.chatEventHandler = chatEventHandler; }
-	
 	@Autowired
 	ChatService service;
 	
@@ -59,13 +54,52 @@ public class ChatController
 		return "chat/openChatMain";
 	}
 	
+	@ResponseBody
+	@PostMapping(PathHandler.CREATEOPENCHATROOM)
+	public void createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
+	{
+		log.debug("create open chat room . . .");
+		
+		if (chatRoom == null)
+		{
+			log.debug("chatRoom is null!");
+			return;
+		}
+		
+		log.debug(chatRoom.toString());
+		
+		chatRoom.setHost_num(mService.memberSearchByIdReturnUserNum(user.getUsername()));
+		
+		int isOpenedChatroom = service.createOpenChatroom(chatRoom);
+		
+		if (isOpenedChatroom > 0)
+		{
+			log.debug("오픈 채팅방 생성 완료.");
+		}
+		else
+		{
+			log.debug("오픈 채팅방 생성 실패.");
+			return;
+		}
+		
+		ChatroomLink chatroomLink = new ChatroomLink();
+		chatroomLink.setChatroom_num(isOpenedChatroom);
+		
+		// 링크는 반드시 채팅방이 만들어진 후에 만든다.
+		int isCreatedChatroomLink = service.createChatroomLink(chatroomLink);
+		
+		//chatEventHandlers...() 채팅방추가 관련
+		
+		if (isOpenedChatroom > 0)
+			log.debug("오픈 채팅방 생성 완료.");
+		
+	}
+	
     @PostMapping("send")
     public String sendMessage(String message) 
     {
 		log.debug("sendMessage Active : [ message - {} ]", message);
 		
-        // Socket.IO 이벤트 핸들러 호출하여 통신
-		chatEventHandler.handleSendMessageEvent(message);
         return "redirect:/";
     }
 }
