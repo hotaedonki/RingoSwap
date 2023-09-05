@@ -162,7 +162,6 @@ function dirOpen() {
                 str += `<li style="position: relative;"><i class="bi ${iconClass}"></i>
                             <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
                             <span>${langClass}</span>
-                              <span class="modifyAndDelete">
                      <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-pencil fileModify" ></i>
                             <i data-file-num="${item.file_num}" data-dir-num="${item.dir_num}" class="bi bi-trash fileDelete"></i>
                        </span></li>`;
@@ -185,8 +184,8 @@ function dirOpen() {
 function fileOpen(){
     let num = $(this).data("file-num");
     let type = $('#fileType'+num).text();
-    console.log(num, type);
-
+    console.log(num, type + "파일오픈입니다");
+	if(type == 'note') {
     $.ajax({
         url: 'fileOpenNote',
         type: 'post',
@@ -214,6 +213,7 @@ function fileOpen(){
                 console.log("error");
             }
         });
+    }
     if(type == 'word'){
         // 클릭한 파일의 분류가 'word=단어장'일 때 실행하는 ajax
         $.ajax({
@@ -221,13 +221,14 @@ function fileOpen(){
             type: 'post',
             data: {file_num : num},
             dataType: 'json',
-            success: function(list){
-                console.log(list);
+            success: function(response){
+                console.log(response);
+                let wordList = response.wordList;
                 let str1 = '';
                 let str2 = '';
                 let cnt = 0;
-                let cntleng = Math.floor(list.length / 2);
-                $(list).each(function(i, item){
+                let cntleng = Math.floor(wordList.length / 2);
+                $(wordList).each(function(i, item){
 	                if(cnt < cntleng){
 	                    str1 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}">
 	                        <span class="word">${item.word}</span>
