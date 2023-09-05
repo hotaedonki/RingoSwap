@@ -87,6 +87,7 @@
 		from
 		ringo_word
 		where file_num = #{file_num}
+		order by word_num desc
 	</select>
 	<!-- 출력부 끝 -->
 
