@@ -21,4 +21,6 @@ public interface ChatService
 	public int sendMessage(ChatCommon cc);
 
 	public int deleteMessage(ArrayList<ChatCommon> cc);
+
+	public ArrayList<ChatroomLink> getChatroomLinks(int userNum);
 }

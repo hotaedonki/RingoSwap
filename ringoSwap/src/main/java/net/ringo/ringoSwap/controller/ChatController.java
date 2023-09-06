@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
+import net.ringo.ringoSwap.domain.ChatroomLink;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.util.FileService;
@@ -81,6 +82,32 @@ public class ChatController
 		return isSuccessCreateRoom;
 		//chatEventHandlers...() 채팅방 서버 기능 관련 함수 추가하기
 	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.LOADCHATLINKS)
+	public ArrayList<ChatroomLink> loadChatLinks(@AuthenticationPrincipal UserDetails user)
+	{
+		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		ArrayList<ChatroomLink> chatroomLinks = service.getChatroomLinks(userNum);
+		
+		if (chatroomLinks == null || chatroomLinks.size() <= 0)
+		{
+			log.debug("현재 chatroom link가 없습니다.");
+			return null;
+		}
+		
+		return chatroomLinks;
+	}
+	
+	/*
+	@ResponseBody
+	@PostMapping(PathHandler.LOADMESSAGE)
+	public ArrayList<ChatCommon> loadMessage()
+	{
+		log.debug("load Messages . . .");
+	}
+	*/
 	
 	@ResponseBody
     @PostMapping(PathHandler.SENDMESSAGE)
