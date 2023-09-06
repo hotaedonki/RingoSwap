@@ -140,8 +140,8 @@
 				<div class="col-lg-5 mt-4">
 					<div class="card mb-4" style="height: 150px;">
 						<div class="card-body">
-							<h5 class="card-title">닉네임</h5>
-							<p class="card-text">자기소개 내용입니다. 여기에 사용자의 소개를 입력하세요.</p>
+							<h5 class="card-title nickname">닉네임</h5>
+							<p class="card-text introduction">자기소개 내용입니다. 여기에 사용자의 소개를 입력하세요.</p>
 						</div>
 					</div>
 					<!-- 팔로워, 팔로우, 언어 정보 -->
@@ -157,11 +157,11 @@
 							<!-- 모국어와 국기 -->
 							<div
 								style="display: flex; align-items: center; font-size: 1.1em;">
-								<span>모국어</span> <img th:src="@{../img/일본어.jpg}"
+								<span class="nativeLanguage">모국어</span> <img th:src="@{../img/일본어.jpg}" class="nativeLanguage"
 									alt="Korean Flag"
 									style="border-radius: 50%; width: 20px; height: 20px; margin-left: 10px;">
 								<!-- 배우고 싶은 언어와 국기 -->
-								<span style="margin-left: 10px;">배우고 싶은 언어</span> <img
+								<span style="margin-left: 10px;" class="targetLanguage">배우고 싶은 언어</span> <img class="targetLanguage" 
 									th:src="@{../img/한국어.jpg}" alt="Desired Language"
 									id="desiredLanguageFlag"
 									style="border-radius: 50%; width: 20px; height: 20px; margin-left: 10px;">
@@ -180,7 +180,7 @@
 							<h5 class="card-title hobbyButton">정보/취미</h5>
 							<button type="button" class="btn btn-outline-primary btn-sm">MBTI</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">인스타그램</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">만화카페</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">만화</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">E-스포츠</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">캠핑</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">온천</button>
@@ -191,34 +191,33 @@
 							<button type="button" class="btn btn-outline-primary btn-sm">전시회</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">PC방</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">축구</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">야구</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">게임</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">애니메이션</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">롤</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">바</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">운동</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">코미디</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">수영</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">베이킹</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">틱톡</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">커뮤니티</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">패션</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">BTS</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">클라이밍</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">음악</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">클라이밍</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">주식</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">카페</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">야구</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">와인</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">수제맥주</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">등산</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">주류</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">블로그</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">유튜브</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">유투브</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">동물</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">디즈니</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">블랙핑크</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">식물</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">언어교환</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">문화</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">전화</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">워킹홀리데이</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">과학</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">역사</button>
 							<button type="button" class="btn btn-outline-primary btn-sm">유학</button>
-							<button type="button" class="btn btn-outline-primary btn-sm">피크닉</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">취직</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">음식</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">코미디</button>
+							<button type="button" class="btn btn-outline-primary btn-sm">워킹홀리데이</button>
 						</div>
 					</div>
 				</div>

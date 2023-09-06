@@ -1,11 +1,13 @@
-$(document).ready(function() {
+// 변수 및 설정
+const languageImages = {
+    "한국어": "../img/한국어.jpg",
+    "일본어": "../img/일본어.jpg",
+    "영어": "../img/영어.jpg"
+};
 
-    // 변수 및 설정
-    const languageImages = {
-        "한국어": "@{../img/한국어.jpg}",
-        "일본어": "@{../img/일본어.jpg}",
-        "영어": "@{../img/영어.jpg}"
-    };
+ $(document).ready(function() {
+    memberPrint();
+
 
     // 이벤트 핸들러 바인딩
     bindEventHandlers();
@@ -20,11 +22,52 @@ $(document).ready(function() {
             .on('click', '.hobbyButton ~', toggleHobbyButtonClass) // 취미 버튼 클릭 이벤트
             .on('click', '.card-text', enableIntroductionEditing)  // 자기소개 수정 활성화 이벤트
             .on('blur', '.card-text textarea', updateIntroductionText)  // 자기소개 수정 완료 이벤트
-            .on('blur', '.modify', sendProfileModification)  // 프로필 수정 이벤트
+            .on('click', '.modify', sendProfileModification)  // 프로필 수정 이벤트
             .on('click', '.languageSelect', selectDesiredLanguage);  // 언어 선택 이벤트
 
         $(window).on('beforeunload', saveChangesBeforeExit);  // 페이지 종료 전 변경 사항 저장 이벤트
     }
+});
+/* 멤버정보를 출력하는 함수 */
+function memberPrint(){
+    $.ajax({
+        url: 'myMemberPrint',
+        type: 'POST',
+        dataType: 'json',
+        success: function(member) {
+            console.log('member출력');
+            $('.nickname').html(member.username);
+            $('.introduction').html(member.introduction);
+            $('.follower-cnt').html(member.fr_count);
+            $('.followee-cnt').html(member.fe_count);
+             let native = selectLanguage(member.native_lang);
+             let target = selectLanguage(member.target_lang);
+            let tagArr = member.tagList;
+            //$('.').html(member.native_lang);
+            //$('.').html(member.native_lang);
+            $('.nativeLanguage').attr('src', native);
+            $('.targetLanguage').attr('src', target);
+            for(let i=0;i<tagArr.length;i++){
+                $('.hobbyButton [value="'+tagArr[i]+'"]').click();
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('에러남 ㅅㄱ');
+        }
+    });
+}
+/* */
+function selectLanguage(lang){
+    if(lang === 'kor'){
+        lang = languageImages["한국어"];
+    }else if(lang === 'jap'){
+        lang = languageImages["일본어"];
+    }else if(lang === 'eng'){
+        lang = languageImages["영어"];
+    }
+    return lang;
+}
+
 
     function toggleHobbyButtonClass() {
         // 취미 버튼 클래스 전환
@@ -47,13 +90,12 @@ $(document).ready(function() {
     function sendProfileModification() {
         // 프로필 수정 정보 수집 및 전송
         let updatedTags = collectUpdatedTags();
-        let introduction = $('.card-text').text();
-        let desiredLanguage = $("#desiredLanguage").val();
-        let profilePic = $("#profilePicInput")[0].files[0];
-        let backgroundPic = $("#backgroundPicInput")[0].files[0];
+        let introduction = $('.card-text').text();              //자기소개
+        let desiredLanguage = $("#desiredLanguage").val();      //배우고 싶은 언어
+        let profilePic = $("#profilePicInput");                 //프로필 사진
+        let backgroundPic = $("#backgroundPicInput");           //배경사진
 
-        let formData = prepareFormData(updatedTags, introduction, desiredLanguage, profilePic, backgroundPic);
-		
+        let formData = prepareFormData(introduction, desiredLanguage, profilePic, backgroundPic);
 		updateTags(updateTags);		//해당 함수로 멤버태그 수정을 실시합니다.
 		
         $.ajax({
@@ -69,6 +111,17 @@ $(document).ready(function() {
                 console.error(`AJAX call failed: ${textStatus}, ${errorThrown}`);
             }
         });
+        $.post('memberTagLinkInsert', {
+            tagNameList : updatedTags
+        }).done(function(){
+            console.log('태그 삽입 실행 완료');
+        }).fail(function() {
+            // 실패했을 때 실행할 코드
+            console.log("error");
+        })
+        .always(function() {
+            // 항상 실행할 코드
+        });
     }
 	//클릭한 멤버태그를 전부 수집하는 함수입니다.
     function collectUpdatedTags() {
@@ -82,22 +135,21 @@ $(document).ready(function() {
     //태그 수정 ajax 실행 함수
     function updateTags(updateTags){
 		$.ajax({
-			url: '/memberTagLinkInsert',
+			url: 'memberTagLinkInsert',
             type: 'POST',
-            data: {updatedTags : updateTags},
+            data: {tagNameList : updateTags},
             success: function() {
 				console.log("수정성공");
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error(`AJAX call failed: ${textStatus}, ${errorThrown}`);
+            error: function(error) {
+                console.log(`AJAX call failed:`+JSON.stringify(error));
             }
 		});
 	}
 
-    function prepareFormData(updatedTags, introduction, desiredLanguage, profilePic, backgroundPic) {
+    function prepareFormData(introduction, desiredLanguage, profilePic, backgroundPic) {
         // 수정 데이터를 FormData 객체에 저장
         let formData = new FormData();
-        formData.append("updatedTags", JSON.stringify(updatedTags));
         formData.append("introduction", introduction);
         formData.append("desiredLanguage", desiredLanguage);
         formData.append("profilePic", profilePic);
@@ -121,7 +173,7 @@ $(document).ready(function() {
                 $('.game-section .card-body').html(`나의 게임 랭크: ${response.gameRank}`);
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error(`AJAX call failed: ${textStatus}, ${errorThrown}`);
+                console.log(`AJAX call failed: ${textStatus}, ${errorThrown}`);
             }
         });
     }
@@ -135,7 +187,7 @@ $(document).ready(function() {
                 updatePurchasedItems(response.items);
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error(`AJAX call failed: ${textStatus}, ${errorThrown}`);
+                console.log(`AJAX call failed: ${textStatus}, ${errorThrown}`);
             } 
             //jqXHR : XMLHttpRequest의 jquery버전 오류
             //textStatus : 요청의 결과를 나타내는 문자열
@@ -171,5 +223,4 @@ $(document).ready(function() {
         // 선택된 언어에 따라 프로필 이미지 변경
         $('.profile-info img').attr('src', languageImages[language]);
     }
-});
 

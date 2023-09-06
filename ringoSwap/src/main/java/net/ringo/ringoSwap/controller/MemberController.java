@@ -277,13 +277,13 @@ public class MemberController
 	 */
 	@ResponseBody
 	@PostMapping(PathHandler.MEMBERTAGLINKINSERT)
-	public void memberTagLinkInsert(String updatedTags
+	public void memberTagLinkInsert(String[] tagNameList
 					, @AuthenticationPrincipal UserDetails user) {
 		//현재 사용자 id를 기반으로 사용자의 user_num을 검색해 리턴
 		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
 		
 		//검색한 user_num을 기반으로 설정한 태그 배열을 매개변수로 DB에 전달한다.
-		int insertResult = service.memberTagLinkInsertArray(updatedTags, user_num);
+		int insertResult = service.memberTagLinkInsertArray(tagNameList, user_num);
 	}
 	//----------------[멤버태그 기능 종료]----------->>>>>>>>>>>>
 
@@ -296,9 +296,12 @@ public class MemberController
 	}
 	
 	@ResponseBody
-	@PostMapping(PathHandler.MYPAGE)
+	@PostMapping("myMemberPrint")
 	public Member myMemberPrint(@AuthenticationPrincipal UserDetails user) {
+		log.debug("아이디 {}", user.getUsername());
+		int user_id = service.memberSearchByIdReturnUserNum(user.getUsername());
 		Member member = service.memberSearchById(user.getUsername());
+		log.debug("멤버 {}", member);
 		return member;
 	}
 	

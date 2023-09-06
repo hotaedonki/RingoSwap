@@ -24,8 +24,6 @@ public interface MemberService
 	//자신의 id값을 매개변수로 DB에서 select문을 돌려 user_num값을 리턴받는 메서드
 	public int memberSearchByIdReturnUserNum(String username);
 	
-	//해당 id유저의 정보를 전부 가져옴
-	public Member memberSearchById(String user_id);
 
 	// 이메일과 아이디가 같으면 멤버를 반환
 	public Member emailConfirmForPassword(HashMap<String, String> parameters);
@@ -35,13 +33,19 @@ public interface MemberService
 
 	//<<<<<<<<<<<------[멤버태그 기능 시작]----------------------
 	//사용자가 설정한 멤버태그 배열을 member_taglink에 insert하는 테이블
-	public int memberTagLinkInsertArray(String updatedTags, int user_num);
+	public int memberTagLinkInsertArray(String[] tagNameList, int user_num);
 
 	//----------------[마이페이지 기능 종료]----------->>>>>>>>>>>>
 
 	//<<<<<<<<<<<------[ 시작]----------------------
+	//해당 id유저의 정보를 전부 가져옴
+	public Member memberSearchById(String user_id);
+	//해당 id유저의 정보를 전부 가져옴
+	public Member memberSearchByMyPage(String user_id);
+	
 	//수정한 정보를 담은 member 객체를 매개변수로 보내, DB를 수정하는 메서드
 	public int memberUpdateProfile(Member m);
 	//수정한 계정 정보를 담은 member 객체를 매개변수로 보내, DB를 수정하는 메서드
 	public int memberUpdateAccount(Member m);
+
 }

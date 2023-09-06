@@ -1,6 +1,7 @@
 package net.ringo.ringoSwap.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -50,10 +51,6 @@ public class MemberServiceImple implements MemberService
 		return dao.emailConfirmForPassword(parameters);
 	}
 	@Override
-	public Member memberSearchById(String user_id) {
-		return dao.memberSearchById(user_id);
-	}
-	@Override
 	public int resetPassword(Member member) {
 		log.debug("임플에서 패스워드 확인{}",member.getPassword());
 		member.setPassword(passwordEncoder.encode(member.getPassword()));
@@ -65,8 +62,7 @@ public class MemberServiceImple implements MemberService
 	//<<<<<<<<<<<------[멤버태그 기능 시작]----------------------
 	//사용자가 설정한 멤버태그 배열을 member_taglink에 insert하는 테이블
 	@Override
-	public int memberTagLinkInsertArray(String updatedTags, int user_num) {
-		String[] tagNameList = updatedTags.split(" ");
+	public int memberTagLinkInsertArray(String[] tagNameList, int user_num) {
 		ArrayList<Integer> tag_num = new ArrayList<>();
 		HashMap<String, Object> map = new HashMap<>();		//insert명령을 수행하기위한 hashmap변수
 		ArrayList<Integer> tagList = new ArrayList<>();		//사용자의 모든 지정 태그 배열을 저장하는 변수
@@ -119,6 +115,20 @@ public class MemberServiceImple implements MemberService
 	//----------------[멤버태그 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[마이페이지 기능 시작]----------------------
+	//일반 검색
+	@Override
+	public Member memberSearchById(String user_id) {
+		return dao.memberSearchById(user_id);
+	}
+	//마이페이지 검색
+	@Override
+	public Member memberSearchByMyPage(String user_id) {
+		Member member = dao.memberSearchById(user_id);
+		String [] list = member.getTag_list().split(" ");
+	    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));
+		member.setTagList(tagList);
+		return member;
+	}
 	//수정한 프로필 정보를 담은 member 객체를 매개변수로 보내, DB를 수정하는 메서드
 	@Override
 	public int memberUpdateProfile(Member m) {

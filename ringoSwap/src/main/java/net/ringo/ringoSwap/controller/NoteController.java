@@ -133,6 +133,8 @@ public class NoteController
 		//navi를 사용해 단어 배열을 리턴하는 메서드 실행
 		ArrayList<DirWord> wordList = service.selectWordArrayByFileNum(navi, file_num);
 		//리턴받은 객체들을 hashmap에 put하고 리턴
+		String title = service.fileSelectByFileNumReturnTitle(file_num);
+		map.put("title", title);
 		map.put("navi", navi);
 		map.put("wordList", wordList);
 		String title = service.fileSelectByFileNumReturnTitle(file_num);
@@ -148,7 +150,7 @@ public class NoteController
    @ResponseBody
    @PostMapping("dirCreate")
    public void dirCreate(@AuthenticationPrincipal UserDetails user
-               , String dir_name, @RequestParam(name="parent_dir_name", defaultValue = "-1") int parent_dir_num){
+               , String dir_name, int parent_dir_num){
       //접속한 사용자의 id로 user_num값 획득
       int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
       //폴더 생성을 위한 정보를 담을 Directory 객체 생성
