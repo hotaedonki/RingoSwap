@@ -349,3 +349,7 @@ body.dark .home .text{
     height: 100%;
     object-fit: cover; /* 이미지가 잘리지 않게 합니다 */
 }
+
+.modal-backdrop {
+	display: none;
+}

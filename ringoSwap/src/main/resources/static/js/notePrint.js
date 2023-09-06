@@ -5,8 +5,6 @@ let st = 'input';
 // 문서 준비가 완료되면 실행
 $(document).ready(function(){
     dirPrint();    
-    // 파일 분류에 따른 검색 방식 설정
-    $('.cateBtn').click(categoryEvent);
     // 정렬 방식 설정
     $('.sortBtn').click(sortEvent);
     $('#createFolder').click(dirCreate);
@@ -27,6 +25,18 @@ $(document).ready(function(){
             fileOpenUrl(fileNum, fileType);
         }
     });
+    
+	$(".dropdown-item.sortBtn").click(function() {
+	    // sortBtnMain의 현재 텍스트를 가져옴
+	    let currentMainText = $(".sortBtnMain").text();
+	    
+	    // 클릭한 .dropdown-item.sortBtn의 텍스트를 가져옴
+	    let selectedText = $(this).text();
+	    
+	    // 두 텍스트를 서로 바꿈
+	    $(".sortBtnMain").text(selectedText);
+	    $(this).text(currentMainText);
+	});
 });
 
 // 폴더 버튼을 클릭할 때의 이벤트 처리
@@ -35,20 +45,12 @@ function highlightSelectedFolder() {
     $(this).removeClass('btn-outline-dark').addClass('btn-dark');
 }
 
-// 파일 분류에 따른 검색 방식을 설정하는 함수
-function categoryEvent() {
-    let c = $(this).text();
-    c = c === '메모장' ? 'note' : c === '단어장' ? 'word' : 'all';
-    $('#category').val(c);
-    dirPrint();
-}
-
 // 정렬 방식을 설정하는 함수
-function sortEvent(event) {
-    event.preventDefault();
-    let selectedSort = $(this).text().trim();  // 클릭된 옵션의 텍스트를 가져옵니다.
-
-    dirPrint();  // 정렬된 데이터를 표시하는 함수를 호출합니다.
+function sortEvent() {
+    let s = $(this).text();
+    s = s === '생성순' ? 'input' : s === '제목순' ? 'title' : 'modifie';
+    st = s;
+    dirPrint();
 }
 
 //URL로부터 파일 번호를 얻어오는 함수
@@ -171,6 +173,7 @@ function dirOpen() {
         dataType: 'json',
         success: function(list) {
             let str = '<ul>';
+            console.log(list.title);
             $(list).each(function(n, item) {
 				let iconClass = (item.file_type === "note") ? "bi-journal" : "bi-file-word"
 				let langClass = (item.lang_type === "kor") ? "(한국어)" : (item.lang_type === "jap") ? "(일본어)" : "(영어)"
@@ -194,7 +197,7 @@ function dirOpen() {
     });
 }
 
-let file_num_saver;         //메모장 파일번호 저장용
+let file_num_saver;
 // 파일 이름을 클릭하면 fileWindow에 표시하는 함수
 function fileOpen(){
     let num = $(this).data("file-num");
@@ -208,8 +211,10 @@ function fileOpen(){
 
 function fileOpenUrl(fileNum, fileType, pageNumber = 1){
     file_num_saver = fileNum;
-
+    
     if(fileType === 'note'){
+		$('.wordMain-content').hide();
+		$('.noteMain-content, noteOffcanvas').show();
         $.ajax({
             url: 'fileOpenNote',
             type: 'post',
@@ -218,16 +223,19 @@ function fileOpenUrl(fileNum, fileType, pageNumber = 1){
             success: function(notepad){
                 console.log(notepad);
                 let str =`${notepad.file_text}`;
-                tinymce.activeEditor.setContent(str);
+                tinymce.activeEditor.setContent(str);  
                 console.log('프린트 완료 : '+notepad);
                 history.pushState({ file_num: file_num_saver, file_type: fileType }, '', `?file=${file_num_saver}&type=${fileType}`);
                 $('.btn-close').click();
+                $('.noteTitle').text("제목: " + notepad.title);
             },
             error: function(e){
                 console.log("error");
             }
         });
     } else if (fileType === 'word'){
+		$('.wordMain-content').show();
+		$('.noteMain-content, .noteOffcanvas').hide();
         // 클릭한 파일의 분류가 'word=단어장'일 때 실행하는 ajax
         loadPage(1);
     }
@@ -244,24 +252,22 @@ function loadPage(pageNumber) {
             let str1 = '';
             let str2 = '';
             let cnt = 0;
-            let cntleng = Math.floor(wordList.length / 2);
-
             $(wordList).each(function(i, item) {
-                if (cnt < cntleng) {
-                    str1 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}">
+                if (cnt < 7) {
+                    str1 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}" data-pron="${item.pron}" data-mean="${item.mean}">
                         <span class="word">${item.word}</span>
                         <div class="word-content">
-                            <span class="pronunciation">${item.pron}</span>
-                            <span class="meaning">${item.mean}</span>
+                            <span class="pronunciation">${(item.pron && item.pron !== '') ? '발음: ' + item.pron : ''}</span>
+                            <span class="meaning">${'의미: ' + item.mean}</span>
                             <span class="description" style="display:none;">${item.description}</span>
                         </div> 
                     </li>`;
                 } else {
-                    str2 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}">
+                    str2 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}" data-pron="${item.pron}" data-mean="${item.mean}">
                         <span class="word">${item.word}</span>
                         <div class="word-content">
-                            <span class="pronunciation">${item.pron}</span>
-                            <span class="meaning">${item.mean}</span>
+                            <span class="pronunciation">${(item.pron && item.pron !== '') ? '발음: ' + item.pron : ''}</span>
+                            <span class="meaning">${'의미: ' + item.mean}</span>
                             <span class="description" style="display:none;">${item.description}</span>
                         </div> 
                     </li>`;
@@ -274,7 +280,8 @@ function loadPage(pageNumber) {
             $('.list-group2').html(str2);						
             history.pushState({ file_num: file_num_saver, file_type: "word" }, '', `?file=${file_num_saver}&type=word`);
             $('.btn-close').click();
-
+			//단어장 이름 출력
+			$(".wordListName").text(res.title);
             // Pagination 처리 부분
             let paginationHtml = '';
             let navi = res.navi;

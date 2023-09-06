@@ -75,7 +75,7 @@
 						<li><a th:href="@{/live/liveMain}"> <i
 								class='bx bx-tv icon'></i> <span class="text nav-text">Live</span>
 						</a></li>
-						<li><a th:href="@{/note/noteWord}">단어장으로 이동</a></li>
+
 					</ul>
 				</div>
 				<!-- ========================사이드바 하단=========================== -->
@@ -124,12 +124,14 @@
 			<div class="container">
 				<div class="row noteHome">
 					<div class="col-1">
-						<button class="btn btn-primary noteOffcanvas" type="button"
+					<div class="noteItem" style="position: fixed; top: 15px; right: 30px; z-index: 9999; ">
+						<h5 class="noteTitle" style="position: relative; display: inline-block; margin-right: 30px; top: 5px; font-size: x-large;"></h5>
+						<button class="btn btn-primary noteOffcanvas " type="button"
 							data-bs-toggle="offcanvas"
 							data-bs-target="#offcanvasWithBothOptions"
-							aria-controls="offcanvasWithBothOptions" style="position: fixed; top: 15px; right: 30px; z-index: 9999;">
+							aria-controls="offcanvasWithBothOptions">
 							<i class="bi bi-arrows-angle-expand"></i>
-						</button>
+						</button></div>
 						<!-- ========================폴더 출력 오프캔버스=================== -->
 						<div class="offcanvas offcanvas-start" data-bs-scroll="true"
 							tabindex="-1" id="offcanvasWithBothOptions"
@@ -144,8 +146,9 @@
 								<div class="row">
 									<div class="btn-group mb-2" role="group"
 										aria-label="Button group with nested dropdown">
-										<div class="col-6">
-											<button type="button" class="btn btn-outline-success"
+										<div class="col-6 sortCategory">
+											<button type="button"
+												class="btn btn-outline-success sortBtnMain"
 												style="border: none;">생성순</button>
 											<div class="btn-group" role="group">
 												<button id="btnGroupDrop2" type="button"
@@ -153,12 +156,12 @@
 													data-bs-toggle="dropdown" aria-haspopup="true"
 													aria-expanded="false" style="border: none;"></button>
 												<div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-													<a class="dropdown-item" href="#">제목순</a> <a
-														class="dropdown-item" href="#">최신순</a>
+													<a class="dropdown-item sortBtn" href="#">제목순</a> <a
+														class="dropdown-item sortBtn" href="#">수정순</a>
 												</div>
 											</div>
 										</div>
-										<div class="col-6" style="position: relative;">
+										<div class="col-6 createArea" style="position: relative;">
 											<div style="position: absolute; right: 5px; top: 5px;">
 												<i class="bi bi-folder-plus createFolder"
 													data-bs-toggle="modal" data-bs-target="#folderModal"></i> <i
@@ -177,82 +180,137 @@
 						</div>
 					</div>
 				</div>
+				<div class="noteOrWord">
+				<div class="row wordMain-content">
+					<div class="col-12">
+						<div class="card mb-3" style="height: 97vh; top: 9px;">
+							<!-- Header with '추가' button -->
+							<div class="card-header d-flex justify-content-between"
+								style="position: relative;">
+								<h2 class="wordListName"></h2>
+								<div class="wordButton">
+									<button class="btn btn-primary add-btn">추가</button>
+									<button class="btn btn-primary wordOffcanvas" type="button"
+										data-bs-toggle="offcanvas"
+										data-bs-target="#offcanvasWithBothOptions"
+										aria-controls="offcanvasWithBothOptions">
+										<i class="bi bi-arrows-angle-expand"></i>
+									</button>
+								</div>
 
-				<textarea id="noteTextarea">
+							</div>
+
+							<!-- Body for the words -->
+							<div class="card-body wordList">
+								<div class="row">
+									<!-- 14 단어 예시 (2열, 7행) -->
+									<!-- 첫 번째 열 -->
+									<div class="col-6 wordArea">
+										<ul class="list-group1">
+										</ul>
+									</div>
+									<!-- 두 번째 열 -->
+									<div class="col-6 wordArea">
+										<ul class="list-group2">
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<!-- Pagination -->
+							<div class="card-footer">
+								<ul class="pagination">
+									<!-- 페이지 네비게이터 출력부분-->
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="noteMain-content">
+					<textarea id="noteTextarea">
 				</textarea>
-				<script>
-					tinymce
-							.init({
-								language : "ko_KR",
-								selector : '#noteTextarea',
-								selector : 'textarea',
-								height : '97vh',
-								menubar : false,
-								plugins : [ "advlist", "autolink", "lists",
-										"link", "image", "charmap", "preview",
-										"anchor", "searchreplace",
-										"visualblocks", "code", "fullscreen",
-										"insertdatetime", "media", "table",
-										"code", "help", "wordcount", "save" ],
-								toolbar : 'formatselect fontselect fontsizeselect |'
-										+ ' forecolor backcolor |'
-										+ ' bold italic underline strikethrough |'
-										+ ' alignjustify alignleft aligncenter alignright |'
-										+ ' bullist numlist |'
-										+ ' table tabledelete |'
-										+ ' link image | ' + ' save ',
-								image_title : true,
-								automatic_uploads : true,
-								file_picker_types : 'image',
-								file_picker_callback : function(cb, value, meta) {
-									let input = document.createElement('input');
-									input.setAttribute('type', 'file');
-									input.setAttribute('accept', 'image/*');
-									input.onchange = function() {
-										let file = this.files[0];
-										let reader = new FileReader();
-										reader.onload = function() {
-											let id = 'blobid'
-													+ (new Date()).getTime();
-											let blobCache = tinymce.activeEditor.editorUpload.blobCache;
-											let base64 = reader.result
-													.split(',')[1];
-											let blobInfo = blobCache.create(id,
-													file, base64);
-											blobCache.add(blobInfo);
-											cb(blobInfo.blobUri(), {
-												title : file.name
-											});
+					<script>
+						tinymce
+								.init({
+									language : "ko_KR",
+									selector : '#noteTextarea',
+									selector : 'textarea',
+									height : '97vh',
+									menubar : false,
+									plugins : [ "advlist", "autolink", "lists",
+											"link", "image", "charmap",
+											"preview", "anchor",
+											"searchreplace", "visualblocks",
+											"code", "fullscreen",
+											"insertdatetime", "media", "table",
+											"code", "help", "wordcount", "save" ],
+									toolbar : 'formatselect fontselect fontsizeselect |'
+											+ ' forecolor backcolor |'
+											+ ' bold italic underline strikethrough |'
+											+ ' alignjustify alignleft aligncenter alignright |'
+											+ ' bullist numlist |'
+											+ ' table tabledelete |'
+											+ ' link image | ' + ' save ',
+									image_title : true,
+									automatic_uploads : true,
+									file_picker_types : 'image',
+									file_picker_callback : function(cb, value,
+											meta) {
+										let input = document
+												.createElement('input');
+										input.setAttribute('type', 'file');
+										input.setAttribute('accept', 'image/*');
+										input.onchange = function() {
+											let file = this.files[0];
+											let reader = new FileReader();
+											reader.onload = function() {
+												let id = 'blobid'
+														+ (new Date())
+																.getTime();
+												let blobCache = tinymce.activeEditor.editorUpload.blobCache;
+												let base64 = reader.result
+														.split(',')[1];
+												let blobInfo = blobCache
+														.create(id, file,
+																base64);
+												blobCache.add(blobInfo);
+												cb(blobInfo.blobUri(), {
+													title : file.name
+												});
+											};
+											reader.readAsDataURL(file);
 										};
-										reader.readAsDataURL(file);
-									};
-									input.click();
-								},
-								content_style : 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }',
-								save_onsavecallback: function () {
-									// 내용을 저장하는 함수를 호출
-									fileSave();
-								}, 
-								autosave_interval: 600000,			//자동저장 설정 간격(10분 = 10*60*1000밀리초)
-								autosave_callback : function(){
-									//자동 저장될 때마다 아래 함수 fileSave를 호출합니다.
-									console.log('자동저장 작동');
-									fileSave();
-								},
-								setup: function (editor) {
-									editor.on('init', function () {
-										// 에디터 초기화 이벤트 처리
-										// 여기에 추가적인 초기화 작업을 수행할 수 있습니다.
-										console.log('변환');
-										const fileNum = getUrlParam('file');
-										const fileType = getUrlParam('type');
-										console.log(fileOpenUrl(fileNum, fileType));
-									});
-
-									// 다른 이벤트 핸들러를 여기에 추가할 수 있습니다.
-								}
-							});
-				</script>
+										input.click();
+									},
+									content_style : 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }',					
+									save_onsavecallback : function() {
+										// 내용을 저장하는 함수를 호출
+										fileSave();
+									},
+									autosave_interval : 600000, //자동저장 설정 간격(10분 = 10*60*1000밀리초)
+									autosave_callback : function() {
+										//자동 저장될 때마다 아래 함수 fileSave를 호출합니다.
+										console.log('자동저장 작동');
+										fileSave();
+									},
+									setup : function(editor) {
+										editor.on('init', function() {
+											// 에디터 초기화 이벤트 처리
+											// 여기에 추가적인 초기화 작업을 수행할 수 있습니다.
+											console.log('변환');
+											const fileNum = getUrlParam('file');
+											const fileType = getUrlParam('type');
+											console
+													.log(fileOpenUrl(
+															fileNum,
+															fileType));
+										});
+										// 다른 이벤트 핸들러를 여기에 추가할 수 있습니다.
+									}
+								});
+					</script>
+					</div>
+				</div>
 			</div>
 		</main>
 
@@ -354,6 +412,7 @@
 			</div>
 		</div>
 	</div>
+
 
 
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>

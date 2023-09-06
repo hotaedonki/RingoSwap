@@ -59,10 +59,10 @@
 				order by file_num
 			</when>
 			<when test="sort eq 'title'">
-				order by title desc
+				order by title
 			</when>
 			<otherwise>
-				order by modifie_date desc
+				order by modifie_date
 			</otherwise>
 		</choose>
 	</select>

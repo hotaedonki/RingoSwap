@@ -47,3 +47,7 @@ a {
 .col-lg-5 {
 	margin-left: 30px;
 }
+
+.modal-backdrop {
+	display: none;
+}

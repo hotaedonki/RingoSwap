@@ -111,11 +111,11 @@ $(document).ready(function() {
    //단어 수정
    $(document).on('click', '.modifyWord', function() {
 	  const word = $(this).find('.word').text();
-	  const pronunciation = $(this).find('.pronunciation').text();
-	  const meaning = $(this).find('.meaning').text();
+	  const pronunciation = $(this).data('pron');  // 원본 발음 데이터 참조
+      const meaning = $(this).data('mean');  // 원본 의미 데이터 참조
 	  const description = $(this).find('.description').text();
 	  currentWordNum = $(this).data('word-num');
-	  
+
 	  console.log(currentWordNum + "수정번호 받아오기");
 	   originalWordList = $(".wordList").html();
         const wordCard = `
@@ -184,12 +184,7 @@ $(document).ready(function() {
         const meaning = $("#meaning-input").val();
         const pronunciation = $("#pronunciation-input").val();
         const description = $("#description-input").val();
-        
-        console.log(word);
-        console.log(meaning);
-        console.log(pronunciation);
-        console.log(description);
-        console.log(currentWordNum);
+
         // 데이터를 서버로 전송
         $.post("wordModify", {
             word_num: currentWordNum,
@@ -278,29 +273,4 @@ $(document).ready(function() {
    
    });
 });
-   //단어 클릭 시 해당 단어의 내용 보이는 js만들기 > 수정가능 // 아직 controller없음.
-/*
-function loadNoteContent(file_num) {
-            $.ajax({
-                type: "POST",
-                url: "/fileOpenNote",
-                data: {
-                    file_num: file_num
-                },
-                success: function(response) {
-                    tinymce.get('noteTextarea').setContent(response.content);
-                },
-                error: function(error) {
-                    console.error("노트를 불러오는데 실패했습니다.", error);
-                }
-            });
-        }
-
-        $(document).on('click', '.note-item', function() {
-            var file_num = $(this).data('file-num');
-            loadNoteContent(file_num);
-        });
-        tinymce에 저장된 note값을 가져오는 코드      
-        */
-        
-        
+   

@@ -113,3 +113,58 @@
 .dirPrint li {
 	list-style-type:none;
 }
+
+.card-body.wordList {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.row {
+    margin: 0;
+}
+
+.wordArea {
+    padding: 10px;
+}
+
+.list-group-item {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 10px 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.word {
+    font-weight: 600;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.word-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.pronunciation,
+.meaning {
+    font-size: 14px;
+    color: #777;
+}
+
+.description {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.modifyWord:hover {
+    background-color: #e6e6e6;
+}
+
+.wordMain-content {
+	display : none;
+}
