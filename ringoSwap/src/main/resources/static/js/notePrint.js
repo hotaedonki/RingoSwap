@@ -206,10 +206,10 @@ function fileOpen(){
     fileOpenUrl(num, type);
 }
 
-function fileOpenUrl(fileNum, fileType){
+function fileOpenUrl(fileNum, fileType, pageNumber = 1){
     file_num_saver = fileNum;
 
-    if(fileType == 'note'){
+    if(fileType === 'note'){
         $.ajax({
             url: 'fileOpenNote',
             type: 'post',
@@ -227,7 +227,7 @@ function fileOpenUrl(fileNum, fileType){
                 console.log("error");
             }
         });
-    } else if(fileType === 'word'){
+    } else if (fileType === 'word'){
         // 클릭한 파일의 분류가 'word=단어장'일 때 실행하는 ajax
         loadPage(1);
     }
@@ -271,8 +271,8 @@ function loadPage(pageNumber) {
 
 			$('.add-btn').attr('data-file-num', file_num_saver);
             $('.list-group1').html(str1);
-            $('.list-group2').html(str2);
-            //history.pushState({ file_num: file_num_saver, file_type: fileType }, '', `?file=${file_num_saver}&type=${fileType}`);
+            $('.list-group2').html(str2);						
+            history.pushState({ file_num: file_num_saver, file_type: "word" }, '', `?file=${file_num_saver}&type=word`);
             $('.btn-close').click();
 
             // Pagination 처리 부분
