@@ -56,43 +56,24 @@ public class ChatController
 	
 	@ResponseBody
 	@PostMapping(PathHandler.CREATEOPENCHATROOM)
-	public void createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
+	public boolean createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
 	{
 		log.debug("create open chat room . . .");
 		
 		if (chatRoom == null)
 		{
 			log.debug("chatRoom is null!");
-			return;
+			return false;
 		}
 		
 		log.debug(chatRoom.toString());
 		
 		chatRoom.setHost_num(mService.memberSearchByIdReturnUserNum(user.getUsername()));
 		
-		int isOpenedChatroom = service.createOpenChatroom(chatRoom);
+		boolean isSuccessCreateRoom = service.createOpenChatroom(chatRoom);
 		
-		if (isOpenedChatroom > 0)
-		{
-			log.debug("오픈 채팅방 생성 완료.");
-		}
-		else
-		{
-			log.debug("오픈 채팅방 생성 실패.");
-			return;
-		}
-		
-		ChatroomLink chatroomLink = new ChatroomLink();
-		chatroomLink.setChatroom_num(isOpenedChatroom);
-		
-		// 링크는 반드시 채팅방이 만들어진 후에 만든다.
-		int isCreatedChatroomLink = service.createChatroomLink(chatroomLink);
-		
-		//chatEventHandlers...() 채팅방추가 관련
-		
-		if (isOpenedChatroom > 0)
-			log.debug("오픈 채팅방 생성 완료.");
-		
+		return isSuccessCreateRoom;
+		//chatEventHandlers...() 채팅방 서버 기능 관련 함수 추가하기
 	}
 	
     @PostMapping("send")

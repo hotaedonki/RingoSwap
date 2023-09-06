@@ -29,4 +29,45 @@
   		order by modifie_date desc
 	</select>
 	
+
+	<select id="getMaxChatroomNum">
+    select
+    	max(chatroom_num) as chatroom_num
+    from 
+    	ringo_chatroom
+    </select>
+	
+	<!-- 오픈 채팅방 만들기 -->
+	<insert id="createOpenChatroom" parameterType="Chatroom">
+	insert into ringo_chatroom
+		(
+			chatroom_num
+			, host_num
+			, title
+			, lang_category
+			, gen_category
+		)
+		values
+		(
+			ringo_chatroom_seq.nextval
+			, #{host_num}
+			, #{title}
+			, #{lang_category}
+			, #{gen_category}
+		)
+	</insert>
+	
+	<!-- 자신이 참가한 채팅방을 DB에 기록 -->
+	<insert id="createChatroomLink" parameterType="ChatroomLink">
+	insert into ringo_chatroom_link
+		(
+			user_num
+			, chatroom_num
+		)
+		values
+		(
+			#{user_num}
+			, #{chatroom_num}
+		)
+	</insert>
 </mapper>
