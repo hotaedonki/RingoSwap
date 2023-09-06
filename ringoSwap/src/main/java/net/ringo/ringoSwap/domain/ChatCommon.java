@@ -13,7 +13,7 @@ public class ChatCommon {
 	int chatroom_num;
 	String message;
 	String inputdate;
-	String origin_file	;
+	String origin_file;
 	String saved_file;
 	int photo_size;
 	

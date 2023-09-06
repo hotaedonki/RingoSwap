@@ -23,4 +23,9 @@ public interface ChatDAO
 	public int createChatroomLink(ChatroomLink chatroomLink);
 
 	public int getMaxChatroomNum();
+
+	public int sendMessage(ChatCommon cc);
+
+	public int deleteMessage(ArrayList<ChatCommon> cc);
+
 }

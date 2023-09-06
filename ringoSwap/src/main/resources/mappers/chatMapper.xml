@@ -19,55 +19,100 @@
 	 			담아온 ArrayList<int>를 parameter에 넣고 getChatrooms에서 ArrayList<Chatroom>으로 가져오기.
 	-->
 	<select id="getChatrooms" parameterType="int" resultType="Chatroom">
-    select * from 
-    	ringo_chatroom
-    where 
-    	chatroom_num in
-    	<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
-        	#{chatroom_num}
-    	</foreach>
-  		order by modifie_date desc
+	    select * from 
+	    	ringo_chatroom
+	    where 
+	    	chatroom_num in
+	    	<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
+	        	#{chatroom_num}
+	    	</foreach>
+	  		order by modifie_date desc
 	</select>
 	
 
 	<select id="getMaxChatroomNum">
-    select
-    	max(chatroom_num) as chatroom_num
-    from 
-    	ringo_chatroom
+	    select
+	    	max(chatroom_num) as chatroom_num
+	    from 
+	    	ringo_chatroom
     </select>
+    
+    <!-- 메시지들을 DB에서 삭제함 -->
+    <delete id="deleteMessage" parameterType="deleteMessage">
+    	delete 
+    		ringo_chat_common
+		
+		where
+			chat_num in 
+			<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
+				#{chat_num}
+			</foreach>
+			
+			user_num in 
+			<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
+				#{user_num}
+			</foreach>
+			
+			chatroom_num in
+			<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
+				#{chatroom_num}
+			</foreach>
+    </delete>
 	
 	<!-- 오픈 채팅방 만들기 -->
 	<insert id="createOpenChatroom" parameterType="Chatroom">
-	insert into ringo_chatroom
-		(
-			chatroom_num
-			, host_num
-			, title
-			, lang_category
-			, gen_category
-		)
-		values
-		(
-			ringo_chatroom_seq.nextval
-			, #{host_num}
-			, #{title}
-			, #{lang_category}
-			, #{gen_category}
-		)
+		insert into ringo_chatroom
+			(
+				chatroom_num
+				, host_num
+				, title
+				, lang_category
+				, gen_category
+			)
+			values
+			(
+				ringo_chatroom_seq.nextval
+				, #{host_num}
+				, #{title}
+				, #{lang_category}
+				, #{gen_category}
+			)
 	</insert>
 	
 	<!-- 자신이 참가한 채팅방을 DB에 기록 -->
 	<insert id="createChatroomLink" parameterType="ChatroomLink">
-	insert into ringo_chatroom_link
-		(
-			user_num
-			, chatroom_num
-		)
-		values
-		(
-			#{user_num}
-			, #{chatroom_num}
-		)
+		insert into ringo_chatroom_link
+			(
+				user_num
+				, chatroom_num
+			)
+			values
+			(
+				#{user_num}
+				, #{chatroom_num}
+			)
 	</insert>
+	
+	<!-- 메시지를 보낼 경우 DB에 기록 -->
+	<insert id="sendMessage" parameterType="ChatCommon">
+		insert into ringo_chat_common
+			(
+				chat_num
+				, user_num
+				, chatroom_num
+				, message
+				, origin_file
+				, saved_file
+			)
+			values
+			{
+				#{chat_num}
+				, #{user_num}
+				, #{chatroom_num}
+				, #{message}
+				, #{origin_file}
+				, #{saved_file}
+			}
+	</insert>
+	
 </mapper>
