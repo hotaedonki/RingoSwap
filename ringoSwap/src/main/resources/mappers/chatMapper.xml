@@ -38,7 +38,7 @@
     </select>
     
     <!-- 메시지들을 DB에서 삭제함 -->
-    <delete id="deleteMessage" parameterType="deleteMessage">
+    <delete id="deleteMessage" parameterType="ChatCommon">
     	delete 
     		ringo_chat_common
 		
