@@ -1,6 +1,7 @@
 package net.ringo.ringoSwap.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -48,10 +49,6 @@ public class MemberServiceImple implements MemberService
 	@Override
 	public Member emailConfirmForPassword(HashMap<String, String> parameters) {
 		return dao.emailConfirmForPassword(parameters);
-	}
-	@Override
-	public Member memberSearchById(String user_id) {
-		return dao.memberSearchById(user_id);
 	}
 	@Override
 	public int resetPassword(Member member) {
@@ -118,6 +115,20 @@ public class MemberServiceImple implements MemberService
 	//----------------[멤버태그 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[마이페이지 기능 시작]----------------------
+	//일반 검색
+	@Override
+	public Member memberSearchById(String user_id) {
+		return dao.memberSearchById(user_id);
+	}
+	//마이페이지 검색
+	@Override
+	public Member memberSearchByMyPage(String user_id) {
+		Member member = dao.memberSearchById(user_id);
+		String [] list = member.getTag_list().split(" ");
+	    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));
+		member.setTagList(tagList);
+		return member;
+	}
 	//수정한 프로필 정보를 담은 member 객체를 매개변수로 보내, DB를 수정하는 메서드
 	@Override
 	public int memberUpdateProfile(Member m) {

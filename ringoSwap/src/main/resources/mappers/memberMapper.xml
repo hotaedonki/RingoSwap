@@ -45,13 +45,6 @@
 	where user_id = #{user_id}
 	</select>
 	
-	<!-- 매개변수로 받은 id값으로 검색한 정보를 member 객체로 리턴하는 select문 -->
-	<select id="memberSearchById" parameterType="String" resultType="Member">
-	select *
-	from ringo_member_with_mypage
-	where user_id = #{user_id}
-	</select>
-	
 	<select id="emailConfirmForPassword" parameterType="hashmap" resultType="Member">
 	select *
 		from ringo_member
@@ -110,6 +103,13 @@
 	<!-- [ 멤버태그 관련 기능 종료 ] -->
 
 	<!-- [ 마이페이지 시작 ] -->
+	<!-- 매개변수로 받은 id값으로 검색한 정보를 member 객체로 리턴하는 select문 -->
+	<select id="memberSearchById" parameterType="String" resultType="Member">
+	select *
+	from ringo_member_with_mypage
+	where user_id = #{user_id}
+	</select>
+	
 	<!-- 사용자의 수정한 프로필 정보 매개변수로 가져가 DB를 수정하는 update문 -->
 	<update id="memberUpdateProfile" parameterType="Member">
 	update ringo_member

@@ -322,7 +322,7 @@ CREATE TABLE ringo_chat_common (
 	chatroom_num		number,
 	origin_file				varchar2(100),
 	saved_file				varchar2(100),
-	photo_size				number				default 10000000,			--파일 객체 용량, 기본 10MB
+	photo_size			number				default 0,			--파일 객체 용량, 기본 10MB
 	message				varchar2(1000)		NOT NULL,
 	inputdate				timestamp 	default sysdate,
 	constraint fk_user_num			foreign key	(user_num) references ringo_member(user_num) on delete cascade,
