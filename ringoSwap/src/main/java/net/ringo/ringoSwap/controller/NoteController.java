@@ -133,6 +133,8 @@ public class NoteController
 		//navi를 사용해 단어 배열을 리턴하는 메서드 실행
 		ArrayList<DirWord> wordList = service.selectWordArrayByFileNum(navi, file_num);
 		//리턴받은 객체들을 hashmap에 put하고 리턴
+		String title = service.fileSelectByFileNumReturnTitle(file_num);
+		map.put("title", title);
 		map.put("navi", navi);
 		map.put("wordList", wordList);
 		log.debug("파일오픈 맵 {}",map);
