@@ -108,6 +108,7 @@ INSERT ALL
    INTO ringo_tagstorage_member VALUES (38, '취직')
    INTO ringo_tagstorage_member VALUES (39, '음식')
    INTO ringo_tagstorage_member VALUES (40, '코미디')
+   INTO ringo_tagstorage_member VALUES (41, '워킹홀리데이')
 SELECT * FROM DUAL;
 insert into ringo_tagstorage_member
 values  ([tag_num], [tag]);

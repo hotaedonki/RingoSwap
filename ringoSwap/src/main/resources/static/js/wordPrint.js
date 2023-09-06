@@ -263,6 +263,9 @@ $(document).ready(function() {
    
        // "돌아가기" 버튼 제거
        $(".back-btn").remove();
+
+       // "삭제" 버튼 제거
+       $(".word-delete-btn").remove();
    
        // "추가" 버튼 다시 표시
        $("button:contains('추가'), .card-footer").show();

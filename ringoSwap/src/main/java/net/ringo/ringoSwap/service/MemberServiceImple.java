@@ -65,8 +65,7 @@ public class MemberServiceImple implements MemberService
 	//<<<<<<<<<<<------[멤버태그 기능 시작]----------------------
 	//사용자가 설정한 멤버태그 배열을 member_taglink에 insert하는 테이블
 	@Override
-	public int memberTagLinkInsertArray(String updatedTags, int user_num) {
-		String[] tagNameList = updatedTags.split(" ");
+	public int memberTagLinkInsertArray(String[] tagNameList, int user_num) {
 		ArrayList<Integer> tag_num = new ArrayList<>();
 		HashMap<String, Object> map = new HashMap<>();		//insert명령을 수행하기위한 hashmap변수
 		ArrayList<Integer> tagList = new ArrayList<>();		//사용자의 모든 지정 태그 배열을 저장하는 변수

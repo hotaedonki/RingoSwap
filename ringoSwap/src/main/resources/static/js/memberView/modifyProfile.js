@@ -20,11 +20,13 @@ $(document).ready(function() {
             .on('click', '.hobbyButton ~', toggleHobbyButtonClass) // 취미 버튼 클릭 이벤트
             .on('click', '.card-text', enableIntroductionEditing)  // 자기소개 수정 활성화 이벤트
             .on('blur', '.card-text textarea', updateIntroductionText)  // 자기소개 수정 완료 이벤트
-            .on('blur', '.modify', sendProfileModification)  // 프로필 수정 이벤트
+            .on('click', '.modify', sendProfileModification)  // 프로필 수정 이벤트
             .on('click', '.languageSelect', selectDesiredLanguage);  // 언어 선택 이벤트
 
         $(window).on('beforeunload', saveChangesBeforeExit);  // 페이지 종료 전 변경 사항 저장 이벤트
     }
+});
+
 
     function toggleHobbyButtonClass() {
         // 취미 버튼 클래스 전환
@@ -49,7 +51,7 @@ $(document).ready(function() {
         let updatedTags = collectUpdatedTags();
         let introduction = $('.card-text').text();
         let desiredLanguage = $("#desiredLanguage").val();
-        let profilePic = $("#profilePicInput")[0].files[0];
+        let profilePic = $("#profilePicInput");
         let backgroundPic = $("#backgroundPicInput")[0].files[0];
 
         let formData = prepareFormData(updatedTags, introduction, desiredLanguage, profilePic, backgroundPic);
@@ -68,6 +70,17 @@ $(document).ready(function() {
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error(`AJAX call failed: ${textStatus}, ${errorThrown}`);
             }
+        });
+        $.post('memberTagLinkInsert', {
+            tagNameList : updatedTags
+        }).done(function(){
+            console.log('태그 삽입 실행 완료');
+        }).fail(function() {
+            // 실패했을 때 실행할 코드
+            console.log("error");
+        })
+        .always(function() {
+            // 항상 실행할 코드
         });
     }
 	//클릭한 멤버태그를 전부 수집하는 함수입니다.
@@ -121,7 +134,7 @@ $(document).ready(function() {
                 $('.game-section .card-body').html(`나의 게임 랭크: ${response.gameRank}`);
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error(`AJAX call failed: ${textStatus}, ${errorThrown}`);
+                console.log(`AJAX call failed: ${textStatus}, ${errorThrown}`);
             }
         });
     }
@@ -135,7 +148,7 @@ $(document).ready(function() {
                 updatePurchasedItems(response.items);
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error(`AJAX call failed: ${textStatus}, ${errorThrown}`);
+                console.log(`AJAX call failed: ${textStatus}, ${errorThrown}`);
             } 
             //jqXHR : XMLHttpRequest의 jquery버전 오류
             //textStatus : 요청의 결과를 나타내는 문자열
@@ -171,5 +184,4 @@ $(document).ready(function() {
         // 선택된 언어에 따라 프로필 이미지 변경
         $('.profile-info img').attr('src', languageImages[language]);
     }
-});
 
