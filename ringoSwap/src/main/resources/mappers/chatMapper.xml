@@ -37,6 +37,15 @@
 	    	ringo_chatroom
     </select>
     
+    <select id="getChatroomLinks" parameterType="int" resultType="ChatroomLink">
+    	select
+    		*
+    	from
+    		ringo_chatroom_link
+    	where
+    		user_num = #{user_num}
+    </select>
+    
     <!-- 메시지들을 DB에서 삭제함 -->
     <delete id="deleteMessage" parameterType="deleteMessage">
     	delete 

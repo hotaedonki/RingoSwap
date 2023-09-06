@@ -88,4 +88,10 @@ public class ChatServiceImple implements ChatService
 	{
 		return dao.deleteMessage(cc);
 	}
+
+	@Override
+	public ArrayList<ChatroomLink> getChatroomLinks(int userNum) 
+	{
+		return dao.getChatroomLinks(userNum);
+	}
 }

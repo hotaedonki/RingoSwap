@@ -28,4 +28,6 @@ public interface ChatDAO
 
 	public int deleteMessage(ArrayList<ChatCommon> cc);
 
+	public ArrayList<ChatroomLink> getChatroomLinks(int userNum);
+
 }

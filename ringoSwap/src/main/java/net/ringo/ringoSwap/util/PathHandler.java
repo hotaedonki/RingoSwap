@@ -32,4 +32,6 @@ public class PathHandler
 	public final static String CREATEOPENCHATROOM = "createOpenChatroom";
 	public final static String SENDMESSAGE = "sendMessage";
 	public final static String DELETEMESSAGE = "deleteMessage";
+	public final static String LOADCHATLINKS = "loadChatLinks";
+	public final static String LOADMESSAGE = "loadMessage";
 }
