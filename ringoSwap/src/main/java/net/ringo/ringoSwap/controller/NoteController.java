@@ -146,7 +146,7 @@ public class NoteController
    @ResponseBody
    @PostMapping("dirCreate")
    public void dirCreate(@AuthenticationPrincipal UserDetails user
-               , String dir_name, @RequestParam(name="parent_dir_name", defaultValue = "-1") int parent_dir_num){
+               , String dir_name, int parent_dir_num){
       //접속한 사용자의 id로 user_num값 획득
       int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
       //폴더 생성을 위한 정보를 담을 Directory 객체 생성

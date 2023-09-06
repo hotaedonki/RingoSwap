@@ -296,9 +296,12 @@ public class MemberController
 	}
 	
 	@ResponseBody
-	@PostMapping(PathHandler.MYPAGE)
+	@PostMapping("myMemberPrint")
 	public Member myMemberPrint(@AuthenticationPrincipal UserDetails user) {
+		log.debug("아이디 {}", user.getUsername());
+		int user_id = service.memberSearchByIdReturnUserNum(user.getUsername());
 		Member member = service.memberSearchById(user.getUsername());
+		log.debug("멤버 {}", member);
 		return member;
 	}
 	

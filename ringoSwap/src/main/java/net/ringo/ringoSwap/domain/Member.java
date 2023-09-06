@@ -1,5 +1,6 @@
 package net.ringo.ringoSwap.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -46,6 +47,7 @@ public class Member implements UserDetails
 	int fr_count;			//사용자를 팔로워 건 사용자의 수, 팔로워 수
 	int fe_count;			//사용자가 팔로워를 건 사용자의 수, 팔로우 수
 	String tag_list;
+	ArrayList<String>tagList;
 	
 	@Override
 	public String toString()

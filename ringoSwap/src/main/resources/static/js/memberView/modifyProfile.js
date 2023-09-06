@@ -1,11 +1,13 @@
-$(document).ready(function() {
+// 변수 및 설정
+const languageImages = {
+    "한국어": "../img/한국어.jpg",
+    "일본어": "../img/일본어.jpg",
+    "영어": "../img/영어.jpg"
+};
 
-    // 변수 및 설정
-    const languageImages = {
-        "한국어": "@{../img/한국어.jpg}",
-        "일본어": "@{../img/일본어.jpg}",
-        "영어": "@{../img/영어.jpg}"
-    };
+ $(document).ready(function() {
+    memberPrint();
+
 
     // 이벤트 핸들러 바인딩
     bindEventHandlers();
@@ -26,6 +28,45 @@ $(document).ready(function() {
         $(window).on('beforeunload', saveChangesBeforeExit);  // 페이지 종료 전 변경 사항 저장 이벤트
     }
 });
+/* 멤버정보를 출력하는 함수 */
+function memberPrint(){
+    $.ajax({
+        url: 'myMemberPrint',
+        type: 'POST',
+        dataType: 'json',
+        success: function(member) {
+            console.log('member출력');
+            $('.nickname').html(member.username);
+            $('.introduction').html(member.introduction);
+            $('.follower-cnt').html(member.fr_count);
+            $('.followee-cnt').html(member.fe_count);
+             let native = selectLanguage(member.native_lang);
+             let target = selectLanguage(member.target_lang);
+            let tagArr = member.tagList;
+            //$('.').html(member.native_lang);
+            //$('.').html(member.native_lang);
+            $('.nativeLanguage').attr('src', native);
+            $('.targetLanguage').attr('src', target);
+            for(let i=0;i<tagArr.length;i++){
+                $('.hobbyButton [value="'+tagArr[i]+'"]').click();
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('에러남 ㅅㄱ');
+        }
+    });
+}
+/* */
+function selectLanguage(lang){
+    if(lang === 'kor'){
+        lang = languageImages["한국어"];
+    }else if(lang === 'jap'){
+        lang = languageImages["일본어"];
+    }else if(lang === 'eng'){
+        lang = languageImages["영어"];
+    }
+    return lang;
+}
 
 
     function toggleHobbyButtonClass() {
@@ -49,13 +90,12 @@ $(document).ready(function() {
     function sendProfileModification() {
         // 프로필 수정 정보 수집 및 전송
         let updatedTags = collectUpdatedTags();
-        let introduction = $('.card-text').text();
-        let desiredLanguage = $("#desiredLanguage").val();
-        let profilePic = $("#profilePicInput");
-        let backgroundPic = $("#backgroundPicInput");
+        let introduction = $('.card-text').text();              //자기소개
+        let desiredLanguage = $("#desiredLanguage").val();      //배우고 싶은 언어
+        let profilePic = $("#profilePicInput");                 //프로필 사진
+        let backgroundPic = $("#backgroundPicInput");           //배경사진
 
-        let formData = prepareFormData(updatedTags, introduction, desiredLanguage, profilePic, backgroundPic);
-		
+        let formData = prepareFormData(introduction, desiredLanguage, profilePic, backgroundPic);
 		updateTags(updateTags);		//해당 함수로 멤버태그 수정을 실시합니다.
 		
         $.ajax({
@@ -97,20 +137,19 @@ $(document).ready(function() {
 		$.ajax({
 			url: 'memberTagLinkInsert',
             type: 'POST',
-            data: {updatedTags : updateTags},
+            data: {tagNameList : updateTags},
             success: function() {
 				console.log("수정성공");
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error(`AJAX call failed: ${textStatus}, ${errorThrown}`);
+            error: function(error) {
+                console.log(`AJAX call failed:`+JSON.stringify(error));
             }
 		});
 	}
 
-    function prepareFormData(updatedTags, introduction, desiredLanguage, profilePic, backgroundPic) {
+    function prepareFormData(introduction, desiredLanguage, profilePic, backgroundPic) {
         // 수정 데이터를 FormData 객체에 저장
         let formData = new FormData();
-        formData.append("updatedTags", JSON.stringify(updatedTags));
         formData.append("introduction", introduction);
         formData.append("desiredLanguage", desiredLanguage);
         formData.append("profilePic", profilePic);

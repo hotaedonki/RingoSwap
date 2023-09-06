@@ -140,8 +140,8 @@
 				<div class="col-lg-5 mt-4">
 					<div class="card mb-4" style="height: 150px;">
 						<div class="card-body">
-							<h5 class="card-title">닉네임</h5>
-							<p class="card-text">자기소개 내용입니다. 여기에 사용자의 소개를 입력하세요.</p>
+							<h5 class="card-title nickname">닉네임</h5>
+							<p class="card-text introduction">자기소개 내용입니다. 여기에 사용자의 소개를 입력하세요.</p>
 						</div>
 					</div>
 					<!-- 팔로워, 팔로우, 언어 정보 -->
@@ -157,11 +157,11 @@
 							<!-- 모국어와 국기 -->
 							<div
 								style="display: flex; align-items: center; font-size: 1.1em;">
-								<span>모국어</span> <img th:src="@{../img/일본어.jpg}"
+								<span class="nativeLanguage">모국어</span> <img th:src="@{../img/일본어.jpg}" class="nativeLanguage"
 									alt="Korean Flag"
 									style="border-radius: 50%; width: 20px; height: 20px; margin-left: 10px;">
 								<!-- 배우고 싶은 언어와 국기 -->
-								<span style="margin-left: 10px;">배우고 싶은 언어</span> <img
+								<span style="margin-left: 10px;" class="targetLanguage">배우고 싶은 언어</span> <img class="targetLanguage" 
 									th:src="@{../img/한국어.jpg}" alt="Desired Language"
 									id="desiredLanguageFlag"
 									style="border-radius: 50%; width: 20px; height: 20px; margin-left: 10px;">
