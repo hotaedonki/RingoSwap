@@ -55,7 +55,7 @@ $(document).ready(function() {
         const meaning = $("#meaning-input").val();
         const pronunciation = $("#pronunciation-input").val();
         const description = $("#description-input").val();
-
+		console.log(num, word, meaning, pronunciation, description + "저장 값 받아오기")
         // 데이터를 서버로 전송
         $.post("wordCreate", {
             file_num : num,
@@ -85,7 +85,9 @@ $(document).ready(function() {
             setTimeout(function() {
                 $(".toast").remove();
             }, 2000);
-        });
+        }).fail(function() {
+			console.log("단어 생성 실패")
+		})
     });
 
     // "돌아가기" 버튼 클릭 이벤트 핸들러
@@ -155,10 +157,10 @@ $(document).ready(function() {
         $(".card-body").replaceWith(wordCard + navigationButtons);
 
         
-        // "저장" 버튼 생성
+        // "수정" 버튼 생성
         const modifyButton = '<button class="btn btn-primary word-modify-btn">수정</button>';
         
-        // 만약 wordCard가 화면에 존재하면 "저장" 버튼을 "추가" 버튼 왼쪽에 생성
+        // 만약 wordCard가 화면에 존재하면 "수정" 버튼을 "추가" 버튼 왼쪽에 생성
         $(".wordButton").prepend(modifyButton);
         
         //"삭제" 버튼 생성
