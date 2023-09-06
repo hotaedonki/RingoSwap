@@ -52,7 +52,7 @@ $(document).ready(function() {
         let introduction = $('.card-text').text();
         let desiredLanguage = $("#desiredLanguage").val();
         let profilePic = $("#profilePicInput");
-        let backgroundPic = $("#backgroundPicInput")[0].files[0];
+        let backgroundPic = $("#backgroundPicInput");
 
         let formData = prepareFormData(updatedTags, introduction, desiredLanguage, profilePic, backgroundPic);
 		
@@ -95,7 +95,7 @@ $(document).ready(function() {
     //태그 수정 ajax 실행 함수
     function updateTags(updateTags){
 		$.ajax({
-			url: '/memberTagLinkInsert',
+			url: 'memberTagLinkInsert',
             type: 'POST',
             data: {updatedTags : updateTags},
             success: function() {

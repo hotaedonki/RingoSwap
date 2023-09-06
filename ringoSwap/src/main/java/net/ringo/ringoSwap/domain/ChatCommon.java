@@ -11,9 +11,11 @@ public class ChatCommon {
 	int chat_num;
 	int user_num;
 	int chatroom_num;
-	int chatphoto_num;
 	String message;
 	String inputdate;
+	String origin_file	;
+	String saved_file;
+	int photo_size;
 	
 	public String toString()
 	{
