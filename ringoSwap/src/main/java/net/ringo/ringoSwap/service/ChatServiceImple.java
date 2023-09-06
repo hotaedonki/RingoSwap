@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.ChatDAO;
+import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
 
@@ -74,5 +75,17 @@ public class ChatServiceImple implements ChatService
 	public int getMaxChatroomNum() 
 	{
 		return dao.getMaxChatroomNum();
+	}
+
+	@Override
+	public int sendMessage(ChatCommon cc) 
+	{
+		return dao.sendMessage(cc);
+	}
+
+	@Override
+	public int deleteMessage(ArrayList<ChatCommon> cc) 
+	{
+		return dao.deleteMessage(cc);
 	}
 }
