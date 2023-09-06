@@ -227,7 +227,7 @@ function fileOpenUrl(fileNum, fileType, pageNumber = 1){
                 console.log('프린트 완료 : '+notepad);
                 history.pushState({ file_num: file_num_saver, file_type: fileType }, '', `?file=${file_num_saver}&type=${fileType}`);
                 $('.btn-close').click();
-                $('.noteTitle').text("제목: " + notepad.title);
+                //$('.noteTitle').text("제목: " + notepad.title);
             },
             error: function(e){
                 console.log("error");

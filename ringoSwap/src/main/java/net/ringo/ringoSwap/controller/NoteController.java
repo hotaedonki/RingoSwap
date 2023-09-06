@@ -137,8 +137,6 @@ public class NoteController
 		map.put("title", title);
 		map.put("navi", navi);
 		map.put("wordList", wordList);
-		String title = service.fileSelectByFileNumReturnTitle(file_num);
-	    map.put("title", title);
 		log.debug("파일오픈 맵 {}",map);
 		
 		return map;
