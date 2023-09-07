@@ -84,30 +84,33 @@ public class ChatController
 	}
 	
 	@ResponseBody
-	@PostMapping(PathHandler.LOADCHATLINKS)
-	public ArrayList<ChatroomLink> loadChatLinks(@AuthenticationPrincipal UserDetails user)
+	@PostMapping(PathHandler.LOADCHATROOMS)
+	public ArrayList<Chatroom> loadChatRooms(@AuthenticationPrincipal UserDetails user)
 	{
 		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
-		
 		ArrayList<ChatroomLink> chatroomLinks = service.getChatroomLinks(userNum);
 		
-		if (chatroomLinks == null || chatroomLinks.size() <= 0)
+		if (chatroomLinks == null)
+			return null;
+		
+		ArrayList<Chatroom> chatrooms = service.loadChatRooms(chatroomLinks);
+		
+		if (chatrooms == null || chatrooms.size() <= 0)
 		{
-			log.debug("현재 chatroom link가 없습니다.");
 			return null;
 		}
 		
-		return chatroomLinks;
+		return chatrooms;
 	}
 	
-	/*
 	@ResponseBody
 	@PostMapping(PathHandler.LOADMESSAGE)
-	public ArrayList<ChatCommon> loadMessage()
+	public ArrayList<ChatCommon> loadMessage(int chatroom_num)
 	{
+		ArrayList<ChatCommon> chatCommons = service.loadMessage(chatroom_num);
+		
 		log.debug("load Messages . . .");
 	}
-	*/
 	
 	@ResponseBody
     @PostMapping(PathHandler.SENDMESSAGE)

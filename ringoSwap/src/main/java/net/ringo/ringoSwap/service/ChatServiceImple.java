@@ -94,4 +94,16 @@ public class ChatServiceImple implements ChatService
 	{
 		return dao.getChatroomLinks(userNum);
 	}
+
+	@Override
+	public ArrayList<Chatroom> loadChatRooms(ArrayList<ChatroomLink> chatroomLinks) 
+	{
+		return dao.loadChatRooms(chatroomLinks);
+	}
+
+	@Override
+	public ArrayList<ChatCommon> loadMessage(int chatroom_num) 
+	{
+		return dao.loadMessage(chatroom_num);
+	}
 }

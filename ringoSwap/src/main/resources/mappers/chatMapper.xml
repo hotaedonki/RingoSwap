@@ -53,12 +53,12 @@
 		
 		where
 			chat_num in 
-			<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
+			<foreach collection="list" item="chat_num" open="(" separator="," close=")">
 				#{chat_num}
 			</foreach>
 			
 			user_num in 
-			<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
+			<foreach collection="list" item="user_num" open="(" separator="," close=")">
 				#{user_num}
 			</foreach>
 			
@@ -124,4 +124,20 @@
 			}
 	</insert>
 	
+	<select id = "loadChatRooms" parameterType="ChatroomLink" resultType="Chatroom">
+		select * from
+			ringo_chatroom
+		where
+			chatroom_num in
+			<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
+				#{chatroom_num}
+			</foreach>
+	</select>
+	
+	<select id="loadMessage" parameterType="int" resultType="ChatCommon">
+		select * from
+			ringo_chat_common
+		where
+			chatroom_num = #{chatroom_num}
+	</select>
 </mapper>
