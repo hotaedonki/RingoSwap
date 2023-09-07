@@ -51,7 +51,7 @@
 	<!-- 피드 삽입 기능 시작 -->
 	<!-- 작성한 feed 객체를 DB에 매개변수로 전달하는 메서드 -->
 	<insert id="feedInsert" parameterType="Feed">
-	insert into ringo_feed ()
+	insert into ringo_feed (feed_num, )
 	values ()
 	</insert>
 	<!-- 작성한 feedPhoto 배열을 DB에 매개변수로 전달하는 메서드 -->
@@ -83,9 +83,9 @@
 	<!-- 피드&댓글 좋아요 기능 시작 -->
 	<!-- 사용자가 해당 피드에 좋아요를 줬는지 여부를 확인해 리턴하는 select문 -->
 	<select id="feedLikeSelectOneForCheck" parameterType="java.util.HashMap">
-	select count(*)]
+	select count(*)
 	from ringo_feed_like
-	where user_num = #{user_num}
+	where user_num = #{user_num} and
 		feed_num = #{feed_num}
 	</select>
 	<!-- 해당 피드에 사용자의 좋아요를 삽입하는 insert문-->
@@ -96,7 +96,7 @@
 	<!-- 해당 피드에서 사용자의 좋아요를 삭제하는 delete문 -->
 	<delete id="feedLikeDeleteOne" parameterType="java.util.HashMap">
 	delete ringo_feed_like
-	where user_num = #{user_num}
+	where user_num = #{user_num} and 
 		feed_num = #{feed_num}
 	</delete>
 	<!-- 특정 피드의 현재 좋아요 갯수를 리턴하는 select문 -->
@@ -108,10 +108,10 @@
 	
 	<!-- 사용자가 해당 피드에 좋아요를 줬는지 여부를 확인해 리턴하는 select문 -->
 	<select id="replyLikeSelectOneForCheck" parameterType="java.util.HashMap">
-	select count(*)]
+	select count(*)
 	from ringo_reply_like
-	where user_num = #{user_num}
-		reply_num = #{reply_num}
+	where user_num = #{user_num} and
+			reply_num = #{reply_num}
 	</select>
 	<!-- 해당 피드에 사용자의 좋아요를 삽입하는 insert문-->
 	<insert id="replyLikeInsertOne" parameterType="java.util.HashMap">
@@ -121,7 +121,7 @@
 	<!-- 해당 피드에서 사용자의 좋아요를 삭제하는 delete문 -->
 	<delete id="replyLikeDeleteOne" parameterType="java.util.HashMap">
 	delete ringo_reply_like
-	where user_num = #{user_num}
+	where user_num = #{user_num} and
 		reply_num = #{reply_num}
 	</delete>
 	<!-- 특정 피드의 현재 좋아요 갯수를 리턴하는 select문 -->

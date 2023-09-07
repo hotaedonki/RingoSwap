@@ -163,7 +163,7 @@
 								<!-- 각 댓글 항목은 다음과 같은 구조를 가집니다 -->
 								<div class="comment-item d-flex">
 									<div class="comment-text flex-grow-1">임시 댓글 내용</div>
-									
+
 									<i class="bi bi-heart unLike replyLike"></i>
 									<!-- 답글 버튼 -->
 									<button class="btn btn-primary reply-btn ml-2">작성</button>
@@ -234,18 +234,23 @@
 				<div class="col-lg-5 middle-area">
 					<div class="row feed-area">
 						<div class="col-12">
-							<div class="feed-create-area">
-								<div class="user-details d-flex align-items-center mb-2">
-									<textarea placeholder="What's on your mind?"
-										class="form-control" id="chatInput"></textarea>
-								</div>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="icons">
-										<i class="bi bi-image"></i>
+							<form id="feedForm" th:action="@{/feed/feedWrite}" method="post"
+								enctype="multipart/form-data">
+								<div class="feed-create-area">
+									<div class="user-details d-flex align-items-center mb-2">
+										<textarea placeholder="What's on your mind?"
+											class="form-control" id="chatInput"></textarea>
 									</div>
-									<button type="button" class="btn btn-outline-primary post">Post</button>
+									<div id="imagePreviewContainer"></div>
+									<div class="d-flex justify-content-between align-items-center">
+										<div class="icons">
+											<i class="bi bi-image" id="imageIcon"></i> <input type="file"
+												id="imageInput" style="display: none;" multiple />
+										</div>
+										<button type="button" class="btn btn-outline-primary post">Post</button>
+									</div>
 								</div>
-							</div>
+							</form>
 						</div>
 					</div>
 					<!-- 피드 작성 영역 끝 -->
@@ -253,22 +258,7 @@
 					<!-- 피드 출력 영역 시작 -->
 					<div class="row feed-display-area">
 						<div class="col-12">
-							<div class="card feed-card collapseFeed">
-								<div class="card-header feed-header" onclick="event.stopPropagation();">
-									<img th:src="@{../img/고양.jpg}" alt="Poster Image"
-										class="posterImage"> <span>cat korea japanese</span>
-								</div>
-								<div class="card-body">
-									<p class="card-text">This is the feed content.</p>
-									<img th:src="@{../img/4.jpg}" alt="Feed Image"
-										class="feed-image">
-									<div class="feed-button" onclick="event.stopPropagation();">
-										<span>15</span> <i class="bi bi-heart unLike"></i> <i
-											class="bi bi-chat reply"></i> <i
-											class="bi bi-translate translate"></i>
-									</div>
-								</div>
-							</div>
+							<!-- 피드 출력 영역 -->
 						</div>
 					</div>
 				</div>

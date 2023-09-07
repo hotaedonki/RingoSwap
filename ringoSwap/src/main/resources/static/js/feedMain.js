@@ -1,3 +1,5 @@
+let selectedImages = [];
+
 $(document).ready(function() {
 	feedPrint();
     $(".bi-heart, .bi-heart-fill").click(clickLike);
@@ -6,6 +8,26 @@ $(document).ready(function() {
     $(".collapseFeed").click(feedDetail);
     $("#backToFeed").click(returnFeed);
 	$(".feed-create-area").blur(collapseFeed);
+	$(".post").on('click', createPost);
+	$("#imageIcon").on('click', function() {
+		$("#imageInput").click();
+	});
+	$("#imageInput").on('change', function(event) {
+		const files = event.target.files;
+		// 미리보기 컨테이너 비우기
+		$("#imagePreviewContainer").empty();
+		
+		//선택된 이미지 파일을 배열에 저장 후 미리보기 생성.
+		selectedImages = [];
+		for (let i = 0; i < files.length; i++) {
+			selectedImages.push(files[i]);
+			
+			const imgElement = document.createElement('img');
+			imgElement.src = URL.createObjectURL(files[i]);
+			imgElement.height = 100;
+			$("#imagePreviewContainer").append(imgElement);
+		}
+	});
 	
     let eA = $("#chatInput").emojioneArea({
         filtersPosition: "bottom",
@@ -23,7 +45,64 @@ $(document).ready(function() {
 });
 
 function feedPrint() {
+	$.ajax({
+		url: "feedPrintAll",
+		type: "post",
+		data: {
+			feedArrayType: "default"
+		},
+		success: function(feeds) {
+			feeds.forEach(feed => {
+				$('.feed-display-area .col-12').append(`
+                    <div class="card feed-card collapseFeed">
+                        <div class="card-header feed-header" onclick="event.stopPropagation();">
+                            <img src="${feed.posterImage}" alt="Poster Image" class="posterImage"> 
+                            <span>${feed.title}</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">${feed.content}</p>
+                            <img src="${feed.feedImage}" alt="Feed Image" class="feed-image">
+                            <div class="feed-button" onclick="event.stopPropagation();">
+                                <span>${feed.likes}</span> 
+                                <i class="bi bi-heart unLike"></i> 
+                                <i class="bi bi-chat reply"></i> 
+                                <i class="bi bi-translate translate"></i>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+        },
+        error: function(error) {
+			console.log(error);
+		}
+	})
+}
+
+function createPost() {
+	let feedData = new FormData();
+	feedData.append('content', $('#chatInput').val());
 	
+	let files = $('#imageInput')[0].files;
+    for (let i = 0; i < files.length; i++) {
+        feedData.append('photos', files[i]);
+    }
+	
+	$.ajax({
+        url: "feedWrite",
+        type: "POST",
+        processData: false, // 필수: jQuery가 데이터를 처리하지 않도록 설정
+        contentType: false, // 필수: Content-Type 헤더를 설정하지 않도록 설정
+        data: feedData,     // FormData 객체를 전송합니다
+        success: function(response) {
+            $('#chatInput').val(''); // 텍스트 입력 영역을 비웁니다
+            $('#imageInput').val(''); // 파일 입력 필드를 비웁니다
+            feedPrint();             // 피드를 다시 로드합니다
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
 }
 
 function collapseFeed() {
@@ -41,7 +120,7 @@ function openChatBox() {
 };
 
 function clickLike() {
-	$.post("feedLikeClicker" {
+	$.post("feedLikeClicker", {
 		feed_num: feed_num
 	}).done(function() {
 		$(this).toggleClass('bi-heart bi-heart-fill');

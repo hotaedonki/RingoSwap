@@ -3,7 +3,7 @@ package net.ringo.ringoSwap.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Feed;
@@ -23,6 +24,7 @@ import net.ringo.ringoSwap.domain.Reply;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.FeedService;
 import net.ringo.ringoSwap.service.MemberService;
+import net.ringo.ringoSwap.util.FileService;
 
 @Slf4j
 @Controller
@@ -65,12 +67,6 @@ public class FeedController
 		return "feedRead?feedArrayType="+feedArrayType+"&feed_num="+feed_num;
 	}
 	
-	//피드를 작성하는 페이지로 이동하는 controller 메서드
-	@GetMapping("feedWrite")
-	public String feedWrite(String feedArrayType) {
-		return "feed/feedWrite?feedArrayType="+feedArrayType;
-	}
-
 	//<<<<<<<<<<<------[피드 출력 기능 시작]----------------------
 	
 	/*
@@ -137,18 +133,38 @@ public class FeedController
 	 * 피드 작성 페이지에서 작성한 피드와 피드에 덧붙인 사진 정보를 매개변수로 하여 DB에 insert하고, 
 	 * insert 작업이 성공하면 피드의 메인 페이지로 이동하는 하는 메서드
 	 */
+	
+	@ResponseBody
 	@PostMapping("feedWrite")
 	public String feedWrite(@AuthenticationPrincipal UserDetails user
-					, Feed feed, ArrayList<FeedPhoto> photo, String feedArrayType) {
+					, Feed feed, @RequestParam("photos") MultipartFile[] photos, String feedArrayType) {
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		feed.setUser_num(user_num);
 		int methodResult = service.feedInsert(feed);
 		if(methodResult == 0) {
-			return "redirect:/feed/feedWrite";
+			return "결과값이 없습니다";
 		}
-		methodResult = service.feedPhotoInsert(photo);
-		
-		return "redirect:/feed/feedMain?feedArrayType="+feedArrayType;
+		 ArrayList<FeedPhoto> photoList = new ArrayList<>();
+		    
+
+	    for (MultipartFile photo : photos) {
+			if(photo != null && !photo.isEmpty()) {
+	        // 파일 메타데이터를 가져와서 FeedPhoto 객체를 생성합니다.
+	        FeedPhoto feedPhoto = new FeedPhoto();
+	        feedPhoto.setPhoto_size((int) photo.getSize());
+	        feedPhoto.setPhoto_format(FilenameUtils.getExtension(photo.getOriginalFilename()));
+	        String savedfile = FileService.saveFile(photo, uploadPath);
+            feedPhoto.setOrigin_file(photo.getOriginalFilename());
+            feedPhoto.setSaved_file(savedfile);
+            photoList.add(feedPhoto);
+	        }
+	    }
+	    
+	    
+	    // 파일을 따로 저장받는 코드를 작성해주세요.
+	    
+		methodResult = service.feedPhotoInsert(photoList);
+		return "성공";
 	}
 	
 	

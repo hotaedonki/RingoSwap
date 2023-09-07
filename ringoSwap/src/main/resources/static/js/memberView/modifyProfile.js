@@ -166,10 +166,9 @@ function printLanguage(lang){
             data: profileData,
             contentType: false,
             processData: false,
-            dataType: 'json',
             success: function() {
                 console.log('수정이 완료되었습니다.');
-                window.location.href = "/member/myPage"; 
+                window.location.href = "../member/myPage"; 
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(`AJAX call failed: ${textStatus}, ${errorThrown}`);

@@ -116,7 +116,9 @@
 	set target_lang=#{target_lang}
         , introduction=#{introduction}
         , rewrite_time=sysdate
-	where user_num = #{user_num};
+        , original_profile=#{original_profile}
+        , saved_profile=#{saved_profile}
+	where user_num = #{user_num}
 	</update>
 	<!-- 사용자의 수정한 계정 정보 매개변수로 가져가 DB를 수정하는 update문 -->
 	<update id="memberUpdateAccount" parameterType="Member">

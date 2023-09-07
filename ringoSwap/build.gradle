@@ -44,6 +44,10 @@ dependencies {
 	
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'javax.mail:mail:1.4.7'
+    
+    //사진 여러장 한번에 받기
+    implementation 'commons-io:commons-io:2.8.0'
+
 }
 
 tasks.named('test') {
