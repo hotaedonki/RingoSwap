@@ -20,7 +20,7 @@ const languageImages = {
     function bindEventHandlers() {
         // 각 이벤트에 대한 핸들러 바인딩
         $(document)
-            .on('click', '.hobbyButton ~', toggleHobbyButtonClass) // 취미 버튼 클릭 이벤트
+            .on('click', '.hobbyButton button', toggleHobbyButtonClass) // 취미 버튼 클릭 이벤트
             .on('click', '.card-text', enableIntroductionEditing)  // 자기소개 수정 활성화 이벤트
             .on('click', '.modify', sendProfileModification)  // 프로필 수정 이벤트
             .on('click', '.languageSelect', selectDesiredLanguage);  // 언어 선택 이벤트
@@ -143,23 +143,19 @@ function printLanguage(lang){
     /* 수정한 프로필 정보를 수집 및 전송하는 함수부 */
     function sendProfileModification() {
         // 프로필 수정 정보 수집 및 전송
-        //let updatedTags = collectUpdatedTags();
+        let updatedTags = collectUpdatedTags();
         let introduction = $('.introduction').text();              //자기소개
         let desiredLanguage = setTargetLanguage();      //배우고 싶은 언어
         let profileData = new FormData();            //프로필 사진 사진객체
-        let backData = new FormData();           //배경사진
         let profileFileInput = document.querySelector('#profileFileInput');
-        let backFileInput = document.querySelector("#backgroundFileInput");
-        //profileData.append('profileUpload', profileFileInput.files[0]);
+        profileData.append('profileUpload', profileFileInput.files[0]);
         profileData.append('introduction', introduction);
         profileData.append('target_lang', desiredLanguage);
 
-		//updateTags(updateTags);		//해당 함수로 멤버태그 수정을 실시합니다.
+        let backFileInput = document.querySelector("#backgroundFileInput");           //배경사진
+		updateTags(updatedTags);		//해당 함수로 멤버태그 수정을 실시합니다.
 		
-        console.log(profileData);
-        console.log(profileFileInput.files[0]);
-        console.log(introduction);
-        console.log(desiredLanguage);
+        console.log('태그 : '+updatedTags);
         $.ajax({
             url: 'memberModifyProfile',
             type: 'POST',
@@ -179,24 +175,14 @@ function printLanguage(lang){
     function collectUpdatedTags() {
         // 수정된 태그 수집
         let updatedTags = [];
-        $('.hobbyButton').each(function() {
-            updatedTags.push($(this).text());
+        $('.hobbyButton button').each(function() {
+            let tag = $(this).attr('class').split(' ');
+            if(tag[2] === 'btn-primary'){
+                console.log($(this).text());
+                updatedTags.push($(this).text());
+            }
         });
         return updatedTags;
-    }
-    //
-    function setTargetLanguage(){
-        let lang = $(".targetLanguage").attr('src');
-        if(lang === languageImages["한국어"]){
-            lang = 'kor';
-        }else if(lang === languageImages["일본어"]){
-            lang = 'jap';
-        }else if(lang === languageImages["영어"]){
-            lang = 'eng';
-        }else{
-            lang = 'kor';
-        }
-        return lang;
     }
     //태그 수정 ajax 실행 함수
     function updateTags(updateTags){
@@ -212,6 +198,21 @@ function printLanguage(lang){
             }
 		});
 	}
+
+    //받은 객체에 따라 DB에 집어넣을 수 있는 문자열로 변경해서 리턴하는 함수
+    function setTargetLanguage(){
+        let lang = $(".targetLanguage").attr('src');
+        if(lang === languageImages["한국어"]){
+            lang = 'kor';
+        }else if(lang === languageImages["일본어"]){
+            lang = 'jap';
+        }else if(lang === languageImages["영어"]){
+            lang = 'eng';
+        }else{
+            lang = 'kor';
+        }
+        return lang;
+    }
 
     function prepareFormData(introduction, desiredLanguage, profilePic, backgroundPic) {
         // 수정 데이터를 FormData 객체에 저장

@@ -373,7 +373,7 @@ public class MemberController
 		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
 		mem.setUser_num(user_num);
 		log.debug("{} - upload", profileUpload);
-		log.debug("출력해~~~{}", mem);
+		log.debug("출력하냔~~~{}", mem);
 		int methodResult = service.memberUpdateProfile(mem);
 		log.debug("출력해~~~{}", mem);
 	}
