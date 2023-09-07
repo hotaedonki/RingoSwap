@@ -1,6 +1,5 @@
 .custom-container {
     border-radius: 15px;
-    background-color: #fff;
     min-height: calc(100vh - 20px); /* sidebar의 top/bottom padding 제외 */
 }
 

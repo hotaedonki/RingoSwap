@@ -24,7 +24,7 @@
 
 body{
     min-height: 100vh;
-    background-color: beigh;
+    background-color: #FEFBF5;
     transition: var(--tran-05);
     display:: flex;
 }
