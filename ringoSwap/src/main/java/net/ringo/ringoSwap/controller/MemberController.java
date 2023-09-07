@@ -1,24 +1,35 @@
 package net.ringo.ringoSwap.controller;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.service.EmailService;
 import net.ringo.ringoSwap.service.MemberService;
+import net.ringo.ringoSwap.util.FileService;
 import net.ringo.ringoSwap.util.PathHandler;
 import net.ringo.ringoSwap.util.SessionNameHandler;
 import net.ringo.ringoSwap.enums.email.*;
@@ -34,6 +45,10 @@ public class MemberController
 	
 	@Autowired
 	EmailService emailService;
+
+	//실제 저장하는 저장경로
+	@Value("${spring.servlet.multipart.location}")
+	String uploadPath;
 	
 	@GetMapping(PathHandler.JOIN)
 	public String join(HttpSession session)
@@ -299,10 +314,38 @@ public class MemberController
 	@PostMapping("myMemberPrint")
 	public Member myMemberPrint(@AuthenticationPrincipal UserDetails user) {
 		log.debug("아이디 {}", user.getUsername());
-		int user_id = service.memberSearchByIdReturnUserNum(user.getUsername());
 		Member member = service.memberSearchById(user.getUsername());
-		log.debug("멤버 {}", member);
 		return member;
+	}
+	//마이페이지의 프로필을 불러오는 메서드
+	@GetMapping("memberProfilePrint")
+	public void memberProfilePrint(String user_id
+					, HttpServletRequest request
+					, HttpServletResponse response) {
+		log.debug("request 출력 {}", request.getRemoteAddr());
+		//해당글의 첨부파일명 확인
+		Member member = service.memberSearchById(user_id); //글에 대한 정보를 읽어옴(savedfile 포함)
+		//파일의 경로를 이용해서 FileInputStream 객체 생성
+		String fullPath = uploadPath+"/"+member.getSaved_profile(); //전체 경로 생성
+		
+		//response를 통해 파일 전송
+		try { //header부분 정보를 주며, 한글 이름일 수도 있으니 UTF-8형식으로 넘긴다.
+			response.setHeader("Content-Disposition", " attachment;filename="+ URLEncoder.encode(member.getOriginal_profile(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace(); 
+		}
+		try {
+			FileInputStream in = new FileInputStream(fullPath); //input
+			ServletOutputStream out = response.getOutputStream(); //output
+			//파일 복사
+			FileCopyUtils.copy(in, out);
+			//스트림 닫기
+			in.close();
+			out.close();
+		}  catch (IOException e) {
+			e.printStackTrace();
+		}
+		return;
 	}
 	
 	//프로필 수정 페이지로 이동
@@ -314,11 +357,25 @@ public class MemberController
 	}
 	
 	@ResponseBody
-	@PostMapping(PathHandler.MODIFYPROFILE)
-	public void modifyProfile(Member m)
+	@PostMapping("memberModifyProfile")
+	public void memberModifyProfile(String introduction, String target_lang, MultipartFile profileUpload
+					,@AuthenticationPrincipal UserDetails user)				//MultipartFile profileUpload로 
 	{
-		int methodResult = service.memberUpdateProfile(m);
-		log.debug("{} - modifyProfile", m);
+		Member mem = new Member();
+		/*upload가 비어있거나 null이 아닐경우 해당 파일을 업로드 하는 메서드 실행*/
+		if(profileUpload != null && !profileUpload.isEmpty()) {
+			String savedfile = FileService.saveFile(profileUpload, uploadPath);
+			mem.setOriginal_profile(profileUpload.getOriginalFilename());
+			mem.setSaved_profile(savedfile);
+		}
+		mem.setIntroduction(introduction);
+		mem.setTarget_lang(target_lang);
+		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
+		mem.setUser_num(user_num);
+		log.debug("{} - upload", profileUpload);
+		log.debug("출력해~~~{}", mem);
+		int methodResult = service.memberUpdateProfile(mem);
+		log.debug("출력해~~~{}", mem);
 	}
 	@ResponseBody
 	@PostMapping(PathHandler.MODIFYACCOUNT)
