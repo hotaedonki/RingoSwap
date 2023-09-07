@@ -10,6 +10,12 @@
 <!----======== CSS ======== -->
 <link rel="stylesheet"
 	th:href="@{/bootstrap-5.3.1-dist/css/bootstrap.min.css}" />
+<link
+	href="https://cdn.jsdelivr.net/emojione/2.2.7/assets/css/emojione.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css"
+	rel="stylesheet">
 <link rel="stylesheet" th:href="@{../css/sidebar.css}">
 <link rel="stylesheet" th:href="@{../css/feedMain.css}">
 <link
@@ -129,13 +135,59 @@
 		</div>
 		<main>
 			<div class="row">
-				<div class="col-3">
-					<div class="row" id="feedDetail" style="display: none;">
-						<div class="col-9">
-							<!-- 여기에 세부 정보가 들어갑니다. -->
-							<button id="backToFeed">Back to Feed</button>
+				<div class="col-lg-8" id="feedDetail" style="display: none;">
+					<div class="card feed-card">
+						<div class="card-header" style="width: 100%;">
+							<img th:src="@{../img/고양.jpg}" alt="Poster Image"
+								class="posterImage"> <span>cat korea japanese</span>
+							<button id="backToFeed" class="btn btn-link">
+								<i class="bi bi-arrow-return-left"></i>
+							</button>
+						</div>
+						<div class="card-body">
+							<p class="card-text">This is the feed content.</p>
+							<img th:src="@{../img/4.jpg}" alt="Feed Image" class="feed-image">
+							<div class="feed-button">
+								<span>15</span> <i class="bi bi-heart unLike"></i> <i
+									class="bi bi-translate translate"></i>
+							</div>
+
+							<div class="comment-input-section d-flex replyMargin">
+								<input type="text" class="form-control flex-grow-1"
+									placeholder="댓글을 입력하세요..." />
+								<button class="btn btn-primary ml-2" style="min-width: 60px;">작성</button>
+							</div>
+
+							<!-- 댓글 목록 -->
+							<div class="comment-list replyMargin">
+								<!-- 각 댓글 항목은 다음과 같은 구조를 가집니다 -->
+								<div class="comment-item d-flex">
+									<div class="comment-text flex-grow-1">임시 댓글 내용</div>
+									
+									<i class="bi bi-heart unLike replyLike"></i>
+									<!-- 답글 버튼 -->
+									<button class="btn btn-primary reply-btn ml-2">작성</button>
+
+									<!-- 답글 입력 섹션 (초기에는 숨겨져 있음) -->
+									<div class="reply-input-section" style="display: none;">
+										<input type="text" class="form-control"
+											placeholder="답글을 입력하세요..." />
+										<button class="btn btn-primary">작성</button>
+									</div>
+
+									<!-- 답글 목록 (초기에는 숨겨져 있음) -->
+									<div class="reply-list replyMargin" style="display: none;">
+										<!-- 각 답글 항목은 다음과 같은 구조를 가집니다 -->
+										<div class="reply-item">
+											<div class="reply-text">임시 답글 내용</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
+				</div>
+				<div class="col-lg-3 left-area">
 					<div class="row profile-area">
 						<div class="col-12">
 							<div class="card profile-card">
@@ -148,14 +200,18 @@
 										<div class="center">
 											<h5 class="card-title">Hotaedonki</h5>
 										</div>
-										<a th:href="@{/member/follower}" class="text-primary">팔로워
-											<span id="fr_count">100</span>
-										</a> <a th:href="@{/member/follow}" style="margin-left: 10px;"
-											class="text-primary">팔로우 <span id="fe_count">150</span></a>
 									</div>
-									<p class="card-text" style="margin: 20px 0;">This is a
-										short description about yourself.</p>
+									<a class="text-primary" data-bs-toggle="modal"
+										data-bs-target="#followerModal"
+										onclick="event.stopPropagation();">팔로워 <span id="fr_count">100</span>
+									</a> <a style="margin-left: 10px;" class="text-primary"
+										data-bs-toggle="modal" data-bs-target="#followModal"
+										onclick="event.stopPropagation();">팔로우 <span id="fe_count">150</span>
+									</a>
 								</div>
+								<p class="card-text" style="margin: 20px 0;">This is a short
+									description about yourself.</p>
+
 							</div>
 						</div>
 					</div>
@@ -175,20 +231,19 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-6">
+				<div class="col-lg-5 middle-area">
 					<div class="row feed-area">
 						<div class="col-12">
 							<div class="feed-create-area">
 								<div class="user-details d-flex align-items-center mb-2">
 									<textarea placeholder="What's on your mind?"
-										class="form-control"></textarea>
-									<button type="button" class="btn btn-outline-primary">Post</button>
+										class="form-control" id="chatInput"></textarea>
 								</div>
 								<div class="d-flex justify-content-between align-items-center">
 									<div class="icons">
 										<i class="bi bi-image"></i>
 									</div>
-
+									<button type="button" class="btn btn-outline-primary post">Post</button>
 								</div>
 							</div>
 						</div>
@@ -198,8 +253,8 @@
 					<!-- 피드 출력 영역 시작 -->
 					<div class="row feed-display-area">
 						<div class="col-12">
-							<div class="card feed-card">
-								<div class="card-header">
+							<div class="card feed-card collapseFeed">
+								<div class="card-header feed-header" onclick="event.stopPropagation();">
 									<img th:src="@{../img/고양.jpg}" alt="Poster Image"
 										class="posterImage"> <span>cat korea japanese</span>
 								</div>
@@ -207,7 +262,7 @@
 									<p class="card-text">This is the feed content.</p>
 									<img th:src="@{../img/4.jpg}" alt="Feed Image"
 										class="feed-image">
-									<div class="feed-button">
+									<div class="feed-button" onclick="event.stopPropagation();">
 										<span>15</span> <i class="bi bi-heart unLike"></i> <i
 											class="bi bi-chat reply"></i> <i
 											class="bi bi-translate translate"></i>
@@ -218,7 +273,7 @@
 					</div>
 				</div>
 
-				<div class="col-3">
+				<div class="col-lg-3">
 					<!-- 팔로우 목록 영역 시작 -->
 					<div class="row friend-list-row">
 						<div class="col-12">
@@ -234,19 +289,13 @@
 							</div>
 						</div>
 					</div>
-					<!-- 채팅 상자 -->
-					<div class="chat-box" id="chatBox">
-						<div class="chat-messages">123123</div>
-						<input type="text" id="chatInput"
-							placeholder="Type your message...">
-						<button id="sendMessage">Send</button>
-					</div>
-					<!-- 팔로우 목록 영역 끝 -->
 				</div>
 			</div>
 		</main>
 	</section>
+
 	<!-- 모달 -->
+	<!-- 업로드 -->
 	<div class="modal fade" id="uploadModal" tabindex="-1"
 		aria-labelledby="uploadModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -274,7 +323,74 @@
 			</div>
 		</div>
 	</div>
+	<!-- 팔로워 -->
+	<div class="modal fade" id="followerModal" tabindex="-1"
+		aria-labelledby="followerModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="followerModalLabel">팔로워</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-search d-flex justify-content-center">
+					<input type="text" placeholder="검색"
+						class="form-control searchFollower">
+					<button class="btn btn-light" style="margin-left: 5px;">
+						<i class="bi bi-search"></i>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div th:each="follower : ${followers}">
+						<img th:src="@{/img/고양.jpg}" alt="Profile Picture" /> <span
+							th:text="${follower.username}"></span> <img
+							th:src="@{/img/영어.jpg}" alt="Native Language" /> <img
+							th:src="@{/img/일본어.jpg}" alt="Learning Language" />
+						<button type="button" class="btn btn-primary">팔로우</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 팔로우 -->
+	<div class="modal fade" id="followModal" tabindex="-1"
+		aria-labelledby="followModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header text-center">
+					<h1 class="modal-title fs-5" id="followModalLabel">팔로우</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-search d-flex justify-content-center">
+					<input type="text" placeholder="검색"
+						class="form-control searchFollow">
+					<button class="btn btn-light" style="margin-left: 5px;">
+						<i class="bi bi-search"></i>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="modal-body">
+						123
+						<div th:each="follow : ${followe}">
+							<img th:src="@{/img/고양.jpg}" alt="Profile Picture" /> <span
+								th:text="${follow.username}"></span> <img
+								th:src="@{/img/영어.jpg}" alt="Native Language" /> <img
+								th:src="@{/img/일본어.jpg}" alt="Learning Language" />
+							<button type="button" class="btn btn-primary">해제</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
+	<script
+		src="https://cdn.jsdelivr.net/emojione/2.2.7/lib/js/emojione.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
 	<script th:src="@{../js/memberView/sidebar.js}"></script>
 	<script th:src="@{../js/feedMain.js}"></script>
 

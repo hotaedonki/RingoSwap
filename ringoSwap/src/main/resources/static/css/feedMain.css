@@ -20,7 +20,7 @@
 }
 
 main {
-	margin-left: 115px;
+	margin-left: 160px;
 	width:85%;
 }
 
@@ -81,13 +81,6 @@ main {
 	position: relative;
 }
 
-.feed-create-area button {
-	position: absolute;
-	bottom: 27px;
-	right: 25px;
-	z-index: 2;
-}
-
 .feed-create-area textarea {
 	width: 100%;
 	border: none;
@@ -114,12 +107,6 @@ main {
 	font-size: 2rem;
 }
 
-.feed-create-area .bi-image {
-	position: absolute;
-	bottom: 20px;
-	left: 25px;
-}
-
 .feed-card .card-header {
 	display: flex;
 	align-items: center;
@@ -140,34 +127,15 @@ main {
 	gap: 10px;
 }
 
+#backToFeed i {
+    color: black;
+    transform: scaleY(-1);
+}
+
 .friend-list-row .list-group-item img {
 	border-radius: 50%;
 	width: 40px;
 	height: 40px;
-}
-
-.chat-box {
-	opacity: 0;
-	visibility: hidden;
-	transform: scaleY(0);
-	transform-origin: bottom;
-	transition: transform 0.4s, opacity 0.4s;
-	position: fixed;
-	bottom: 10px;
-	right: 10px;
-	width: 300px;
-	height: 200px;
-	background-color: #fff;
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	padding: 15px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.chat-box.show {
-	opacity: 1;
-	visibility: visible;
-	transform: scaleY(1);
 }
 
 .feed-image {
@@ -212,10 +180,41 @@ main {
     text-decoration: none;
 }
 
-.go-profile {
+.go-profile, .feed-header {
 	cursor:pointer;
 }
 
 .profile-card {
 	text-align: center;
+}
+
+.searchFollow, .searchFollower {
+	width: 70%;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+}
+
+.modal-header .modal-title {
+    width: 100%;
+    text-align: center;
+}
+
+.modal-search {
+	margin-top: 10px;
+}
+
+.feed-create-area .icons,
+.feed-create-area .post {
+	display: none;
+}
+
+.replyMargin {
+	margin-top: 20px;
+}
+
+.replyLike {
+	margin-right: 10px;
+	margin-top: 5px;
 }
