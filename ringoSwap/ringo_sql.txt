@@ -67,7 +67,7 @@ CREATE TABLE ringo_tagstorage_member (
 	tag_num		number				primary key,		--태그 번호
 	tag			varchar2(60)	not null					--실제 태그 이름
 );
---회원태그 목록. 아래 insert문을 사용하여 DB에 미리 입력할 것. []로 감싸진 것에 해당하는 정보를 기입하고 사용
+--회원태그 목록. 아래 insert문을 사용하여 DB에 미리 입력할 것.
 INSERT ALL
    INTO ringo_tagstorage_member VALUES (1, 'MBTI')
    INTO ringo_tagstorage_member VALUES (2, '인스타그램')
@@ -137,8 +137,8 @@ CREATE TABLE ringo_notification (
 	inputdate		date					default sysdate,		--작성일
 	modifie_date	date					default sysdate		--수정일
 );
-
-
+--시퀸스
+CREATE SEQUENCE ringo_notification_seq;
 
 
 --피드 관련
@@ -290,6 +290,7 @@ CREATE TABLE ringo_tagstorage (
 	tag_name		varchar2(60)		not null,					--실제 태그 이름
 	tag_bann		char(1)				default 'N' check(tag_bann in('N', 'Y'))		--태그 금지어 설정, 금지어 아님=n, 금지어로 설정=y
 );
+create SEQUENCE ringo_tagstorage_seq;
 
 
 --채팅룸 관련
@@ -332,6 +333,7 @@ CREATE TABLE ringo_chat_common (
 	constraint fk_chatroom_num	foreign key	(chatroom_num) references ringo_chatroom(chatroom_num) on delete cascade,
 	constraint fk_chatphoto_num	foreign key	(chatphoto_num) references ringo_chatphoto(chatphoto_num) on delete cascade
 );
+CREATE SEQUENCE ringo_chat_common_seq;
 
 --라이브 방에서 사용하는 채팅 메세지 테이블. 기본적으로 이미지 업로드 기능은 제외하고 메세지와 이모티콘만 보낼 수 있습니다.
 CREATE TABLE ringo_chat_live (
@@ -343,6 +345,7 @@ CREATE TABLE ringo_chat_live (
 	constraint fk_user_num		foreign key	(user_num) references ringo_member(user_num) on delete cascade,
 	constraint fk_live_num		foreign key	(live_num) references ringo_liveroom(live_num) on delete cascade
 );
+CREATE SEQUENCE ringo_chat_live_seq;
 --멀티게임 채팅메세지 테이블
 CREATE TABLE ringo_chat_multi (
 	multi_chat_num		number				primary key,		--멀티게임 채팅 메세지 기본키
@@ -353,6 +356,7 @@ CREATE TABLE ringo_chat_multi (
 	constraint fk_multi_num foreign key (multi_num) references ringo_multiroom(multi_num) on delete cascade,
 	constraint fk_user_num foreign key (user_num) references ringo_member(user_num) on delete cascade
 );
+CREATE SEQUENCE ringo_chat_multi_seq;
 --음성 채팅방에서 각 회원이 음성 채팅 서비스가 허용되었는지 여부를 기록하는 테이블.
 --일반 사용자는 기본 서비스 비허용 상태이지만 방장은 서비스 허용 상태로 시작하며, 방장은 다른 사용자의 서비스 권한을
 --허용으로 변경할 수 있습니다. 
@@ -372,6 +376,7 @@ CREATE TABLE ringo_directory (
 	dir_name				varchar2(100)		NOT NULL,
 	parent_dir_num		number				default -1		--자신의 상위 경로 폴더를 저장하는 속성
 );
+CREATE SEQUENCE ringo_directory_seq;
 --각 폴더에 저장되는 실제 메모장이나 단어장을 문서 형태로 저장하는 테이블.
 --file_type 속성으로 해당 문서가 메모장(tile)인지 단어장(word)인지 결정합니다.
 CREATE TABLE ringo_file (
@@ -387,6 +392,7 @@ CREATE TABLE ringo_file (
     constraint fk_dir_num_file		FOREIGN KEY (dir_num) REFERENCES ringo_directory(dir_num) ON DELETE CASCADE,
     constraint fk_user_num_file	FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) on delete cascade
 );
+CREATE SEQUENCE ringo_file_seq;
 CREATE TABLE ringo_file_photo(
 	file_num			number		not null,					--file_num과 같이 복합 기본키 
 	photo_num		number		not null,					--photo_num과 같이 복합 기본키
@@ -409,6 +415,7 @@ CREATE TABLE ringo_word (
 	description	varchar2(500)	, 				--단어카드 설명
 	inputdate		timestamp			default sysdate
 );
+CREATE SEQUENCE ringo_word_seq;
 
 --라이브 관련
 --라이브 방 테이블
@@ -464,6 +471,7 @@ CREATE TABLE ringo_alert (
 	constraint fk_receiver_num	foreign key (receiver_num)	references ringo_member(user_num) on delete cascade,
 	constraint fk_sender_num		foreign key (sender_num)	references ringo_member(user_num) on delete cascade
 );
+CREATE SEQUENCE ringo_alert_seq;
 
 --스토어 관련
 --스토어 서비스에서 판매하는 악세서리 아이템들을 기록하는 테이블
@@ -478,6 +486,7 @@ CREATE TABLE ringo_item (
 	item_bann				number(1)		default 0 check(item_bann in(0, 1))
 	--아이템이 스토어에서 내려갔는지 여부/ 0=안 내려감, 1=내려감
 );
+CREATE SEQUENCE ringo_item_seq;
 --어떤 회원이 어떤 아이템을 구매했는지 저장하는 테이블
 CREATE TABLE ringo_item_purchase (
 	purchase_num		number			NOT NULL,		--구매번호, 기본키
@@ -488,6 +497,7 @@ CREATE TABLE ringo_item_purchase (
 	constraint fk_item_num foreign key (item_num) references ringo_item(item_num) on delete set null,
 	constraint fk_user_num foreign key (user_num) references ringo_member(user_num) on delete cascade
 );
+CREATE SEQUENCE ringo_item_purchase_seq;
 --어떤 회원이 어떤 아이템을 장바구니에 담았는지 저장하는 테이블
 CREATE TABLE ringo_item_cart (
 	user_num			number,		--장바구니에 담은 회원 계정 번호, item_num과 복합하여 복합 기본키 구성
@@ -505,6 +515,7 @@ CREATE TABLE ringo_buy_cash (
 	buytext						varchar2(100),				--해당 매매기록의 대략적인 기록을 저장하는 속성
 	inputdate					TIMESTAMP	default sysdate			--해당 매매기록의 발생시각을 저장하는 속성
 );
+CREATE SEQUENCE ringo_buy_cash_seq;
 
 --게임관련
 --멀티게임의 게임방 테이블, 각 게임당 인원수/ 스무고개 4, 끝말잇기2~4, 캐치마인드 3~6, 사천성 1vs1

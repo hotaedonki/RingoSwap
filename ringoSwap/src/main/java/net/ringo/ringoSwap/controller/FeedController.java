@@ -240,30 +240,49 @@ public class FeedController {
 	public String feedDeleteOne(int feed_num, @AuthenticationPrincipal UserDetails user) {
 		String resultMsg = "";		//메서드 결과값에 따라 삭제여부를 기록하여 메서드 종료시 리턴되는 변수
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		log.debug("사용자 ID : {}", user.getUsername());
+		log.debug("사용자 번호 : {}", user_num);
 		
-		
+		/*
+		 * 피드를 삭제하기 전 먼저 해당 피드에 사진이 있는지 검색하고, 사진이 없다면 resultMsg에 "피드 내 사진 없음"을 입력 후 진행합니다.
+		 * 사진이 존재할경우, resultMsg에 "피드 내 사진 존재"를 입력후 해당 사진파일들의 삭제작업을 진행합니다.
+		 * boolean타입 변수 d를 이용하여 삭제 기능 종료후 삭제가 정상적으로 진행되었는지를 확인합니다. 
+		 * 삭제 작업이 정상적으로 진행되었을경우 "피드 내 사진 삭제성공"을, 삭제작업이 시행되지 않았을경우 "피드 내 사진 삭제실패"를
+		 * resultMsg에 입력합니다.
+		 */
 		ArrayList<FeedPhoto> photoList = service.feedPhotoSelectByFeedNum(feed_num);
+		log.debug("사진 : {}", photoList);
+		log.debug("사진 : {}", photoList.isEmpty());
 		if(photoList.isEmpty()) {
 			resultMsg += "피드 내 사진 없음  /  ";
 		}else {
 			resultMsg += "피드 내 사진 존재  /  ";
+			boolean d = false;
 			for(FeedPhoto photo : photoList) {
 				String deletefile = uploadPath + "/" + photo.getSaved_file();
-				boolean d = FileService.deleteFile(deletefile);		//기존 프로필 사진파일 삭제
+				d = FileService.deleteFile(deletefile);		//기존 프로필 사진파일 삭제
+				log.debug("삭제여부 : {}", d);
 			}
 			if(d) {
 				resultMsg += "피드 내 사진 삭제완료  /  ";
+			}else {
+				resultMsg += "피드 내 사진 삭제실패  /  ";
 			}
 		}
+		
+		//사진 삭제 기능 종료후, 해당 피드를 삭제합니다. like, tag등은 전부 cascade로 묶여있으므로 피드 삭제시 같이 삭제됩니다.
+		log.debug("삭제를 시작한다 : {}", user_num);
 		int methodResult = service.feedDeleteByUser(feed_num, user_num);
+		log.debug("삭제여부 : {}", methodResult);
+		
 		if(methodResult == 0) {
-			resultMsg += "피드 삭제 실패  /  ";
+			//삭제기능이 정상적으로 실행되었는지 여부를 확인해, 0이라면 삭제가 실패되었음을 리턴합니다.
+			resultMsg += "피드 삭제 실패";
 			return resultMsg;
 		}
-		resultMsg += "피드 삭제 성공";
+		resultMsg += "피드 삭제 성공";		//0이 아니라면 삭제가 성공되었음을 의미하기에, 해당 문자열을 입력합니다.
 		
-		
-		return resultMsg;
+		return resultMsg;		//현재까지의 삭제 메서드 결과를 리턴합니다.
 	}
 
 	
