@@ -36,4 +36,5 @@ public class PathHandler
 	public final static String LOADCHATROOM = "loadChatRoom";
 	public final static String LOADCHATROOMS = "loadChatRooms";
 	public final static String LOADMESSAGE = "loadMessage";
+	public final static String CREATEROOMPAGE = "createRoomPage";
 }
