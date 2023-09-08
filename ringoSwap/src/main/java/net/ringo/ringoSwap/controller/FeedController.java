@@ -59,17 +59,6 @@ public class FeedController {
 		return "feedMain?feedArrayType=" + feedArrayType; // feedTypeAll 값이 'default' 혹은 'popular'일경우 해당 정렬방식을 피드목록 페이지에
 															// 전달합니다.
 	}
-
-	// 특정 피드 게시글 페이지로 이동하는 controller 메서드
-	@GetMapping("feedRead")
-	public String feedRead(int feed_num, String feedArrayType) {
-		if (feed_num <= 0) { // 잘못된 feed 경로로 진입하면 되돌아가는 메서드
-			return "feedMain?feedArrayType=" + feedArrayType;
-		}
-
-		return "feedRead?feedArrayType=" + feedArrayType + "&feed_num=" + feed_num;
-	}
-
 	// <<<<<<<<<<<------[피드 출력 기능 시작]----------------------
 
 	/*
@@ -89,7 +78,7 @@ public class FeedController {
 
 		// 피드배열방식을 매개변수로 넘기고 배열방식에 따라 정렬된 게시글 목록을 리턴받는 메서드 실행
 		feedList = service.feedSelectAllWithFeedArrayType(feedArrayType);
-
+		log.debug("피드 리스트 확인 : {}", feedList);
 		return feedList;
 	}
 
@@ -175,11 +164,9 @@ public class FeedController {
 				log.debug("사진 데이터 확인 : {}", photoList);
 			}
 		}
-
-		// 파일을 따로 저장받는 코드를 작성해주세요.
-
 		methodResult = service.feedPhotoInsert(photoList);		
 		}
+		
 		return ResponseEntity.ok("Success");
 	}
 
