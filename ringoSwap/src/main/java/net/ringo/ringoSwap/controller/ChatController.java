@@ -61,6 +61,13 @@ public class ChatController
 		return "chat/openChatMain";
 	}
 	
+	@GetMapping(PathHandler.CREATEROOMPAGE)
+	public String createRoomPage()
+	{
+		return "chat/createRoom";
+	}
+	
+	/*	나중엔 Ajax 형태로 받아오도록 하기.
 	@ResponseBody
 	@PostMapping(PathHandler.CREATEOPENCHATROOM)
 	public boolean createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
@@ -82,6 +89,7 @@ public class ChatController
 		return isSuccessCreateRoom;
 		//chatEventHandlers...() 채팅방 서버 기능 관련 함수 추가하기
 	}
+	*/
 	
 	@ResponseBody
 	@PostMapping(PathHandler.LOADCHATROOMS)
@@ -103,6 +111,7 @@ public class ChatController
 		return chatrooms;
 	}
 	
+	/*
 	@ResponseBody
 	@PostMapping(PathHandler.LOADMESSAGE)
 	public ArrayList<ChatCommon> loadMessage(int chatroom_num)
@@ -111,6 +120,7 @@ public class ChatController
 		
 		log.debug("load Messages . . .");
 	}
+	*/
 	
 	@ResponseBody
     @PostMapping(PathHandler.SENDMESSAGE)
