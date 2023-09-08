@@ -96,8 +96,8 @@
 	delete from ringo_taglink_member
 	where user_num = #{user_num}
 		and tag_num IN
-		<foreach collection="list" item="tag_num" open="(" separator=", " close=")">
-			#{tag_num}
+		<foreach collection="tag_num" item="item" open="(" separator=", " close=")">
+			#{item}
 		</foreach>
 	</delete>
 	<!-- [ 멤버태그 관련 기능 종료 ] -->
@@ -115,12 +115,8 @@
 	update ringo_member
 	set target_lang=#{target_lang}, introduction=#{introduction}
         , rewrite_time=sysdate
-        <if test="original_profile == null">
         , original_profile=#{original_profile}
-        </if>
-        <if test="saved_profile == null">
         , saved_profile=#{saved_profile}
-        </if>
 	where user_num = #{user_num}
 	</update>
 	<!-- 사용자의 수정한 계정 정보 매개변수로 가져가 DB를 수정하는 update문 -->

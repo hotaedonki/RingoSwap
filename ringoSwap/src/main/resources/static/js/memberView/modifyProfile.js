@@ -38,18 +38,15 @@ function memberPrint(){
             console.log('member출력');
             $('.nickname').html(member.username);
             $('.introduction').html(member.introduction);
-            $('.follower-cnt').html(member.fr_count);
-            $('.followee-cnt').html(member.fe_count);
+            $('.follower-cnt').text(member.fr_count);
+            $('.followee-cnt').text(member.fe_count);
              let native = printLanguage(member.native_lang);
              let target = printLanguage(member.target_lang);
             let tagArr = member.tagList;
-            //$('.').html(member.user_id);
             $('#profilePicInput').attr('src', './memberProfilePrint?user_id='+member.user_id);
             $('.nativeLanguage').attr('src', native);
             $('.targetLanguage').attr('src', target);
             
-            console.log(member.tagList);
-            console.log(tagArr);
             if(tagArr && Array.isArray(tagArr)){
                 for(let i=0;i<tagArr.length;i++){
                     console.log(tagArr[i]);
@@ -164,7 +161,7 @@ function printLanguage(lang){
 
         let backFileInput = document.querySelector("#backgroundFileInput");           //배경사진
 		updateTags(updatedTags);		//해당 함수로 멤버태그 수정을 실시합니다.
-		
+		let modify = '';
         console.log('태그 : '+updatedTags);
         $.ajax({
             url: 'memberModifyProfile',
@@ -174,12 +171,14 @@ function printLanguage(lang){
             processData: false,
             success: function() {
                 console.log('수정이 완료되었습니다.');
-                window.location.href = "../member/myPage"; 
+                modify = '100';
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(`AJAX call failed: ${textStatus}, ${errorThrown}`);
             }
         });
+            window.location.href = "../member/myPage"; 
+        
     }
 	//클릭한 멤버태그를 전부 수집하는 함수입니다.
     function collectUpdatedTags() {
@@ -187,7 +186,7 @@ function printLanguage(lang){
         let updatedTags = [];
         $('.hobbyButton button').each(function() {
             let tag = $(this).attr('class').split(' ');
-            if(tag[2] === 'btn-primary'){
+            if(tag[1] === 'btn-primary' || tag[2] === 'btn-primary'){
                 console.log($(this).text());
                 updatedTags.push($(this).text());
             }
