@@ -1,13 +1,32 @@
 package net.ringo.ringoSwap.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+/*
+ 채팅 메시지에 대한 정보를 담는 클래스 : 채팅 내용에 대한 DTO
+
+채팅 내용은 크게 들어오는 사람에 대한 환영 메시지에 대한 ENTER과 방에 있는 사람들이 채팅을 칠 때 사용하는 TALK 두 가지로 메시지 타입을 나눕니다. 이때 타입은 ENUM으로 선언합니다.
+
+다음으로 어떤 방에서 채팅이 오가는지 확인하기 위한 방번호,채팅을 보낸 사람,메시지,채팅발송 시간 등을 변수로 선언합니다.
+
+여기서 더 나가면 ENTER,TALK 뿐만 아니라 OUT 으로 메시지 타입을 추가해서 나가는 사람에 대한 메시지를 전달해도 OK.
+ */
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatCommon {
+@Builder
+public class ChatCommon 
+{
+	public enum MessageType
+	{
+		ENTER, TALK
+	}
+	
+	private MessageType type;
 	int chat_num;
 	int user_num;
 	int chatroom_num;
