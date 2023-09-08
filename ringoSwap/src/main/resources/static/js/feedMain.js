@@ -87,10 +87,14 @@ function createPost() {
     for (let i = 0; i < files.length; i++) {
         feedData.append('photos', files[i]);
     }
-	
+    
+    for (let pair of feedData.entries()) {
+    console.log(pair[0]+ ', ' + pair[1]); 
+	}
+
 	$.ajax({
         url: "feedWrite",
-        type: "POST",
+        type: "post",
         processData: false, // 필수: jQuery가 데이터를 처리하지 않도록 설정
         contentType: false, // 필수: Content-Type 헤더를 설정하지 않도록 설정
         data: feedData,     // FormData 객체를 전송합니다
@@ -100,7 +104,7 @@ function createPost() {
             feedPrint();             // 피드를 다시 로드합니다
         },
         error: function(error) {
-            console.log(error);
+            console.error(error);
         }
     });
 }
