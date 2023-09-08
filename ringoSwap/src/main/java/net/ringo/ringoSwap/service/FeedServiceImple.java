@@ -142,4 +142,19 @@ public class FeedServiceImple implements FeedService{
 		//리턴받은 피드 배열을 service에 리턴
 		return feedList;
 	}
+	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
+	
+	
+	//<<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
+	//해당 피드작성자인지를 확인한 후 해당 피드를 삭제하는 메서드
+	@Override
+	public int feedDeleteByUser(int feed_num, int user_num) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("feed_num", feed_num);
+		map.put("user_num", user_num);
+		
+		return dao.feedDeleteByUser(map);
+	}
+	
+	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }
