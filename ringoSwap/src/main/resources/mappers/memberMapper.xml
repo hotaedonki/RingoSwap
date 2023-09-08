@@ -69,7 +69,7 @@
 	select tag_num
 	from ringo_tagstorage_member
 	where tag in
-		<foreach collection="list" item="tag" open="(" separator=", " close=")">
+		<foreach collection="array" item="tag" open="(" separator=", " close=")">
 			#{tag}
 		</foreach>
 	</select>
@@ -77,13 +77,13 @@
 	<select id="memberTagLinkSearch" parameterType="java.util.HashMap">
 	select count(*)
 	from ringo_taglink_member
-	where user_id = #{user_id}
+	where user_num = #{user_num}
 		and tag_num = #{tag_num}
 	</select>
 	<!-- 사용자가 설정한 멤버태그를 member_taglink에 삽입하는 insert문 -->
 	<insert id="memberTagLinkInsert" parameterType="java.util.HashMap">
-	insert into ringo_taglink_member
-	values (#{user_num}, #{tag_num});
+	insert into ringo_taglink_member(user_num, tag_num)
+	values (#{user_num}, #{tag_num})
 	</insert>
 	<!-- 사용자의 user_num을 이용하여 현재 taglink가 걸린 tag_num을 배열로 전부 리턴받는 select문 -->
 	<select id="memberTagLinkSearchAllByUserNum" resultType="Integer">
@@ -113,11 +113,14 @@
 	<!-- 사용자의 수정한 프로필 정보 매개변수로 가져가 DB를 수정하는 update문 -->
 	<update id="memberUpdateProfile" parameterType="Member">
 	update ringo_member
-	set target_lang=#{target_lang}
-        , introduction=#{introduction}
+	set target_lang=#{target_lang}, introduction=#{introduction}
         , rewrite_time=sysdate
+        <if test="original_profile == null">
         , original_profile=#{original_profile}
+        </if>
+        <if test="saved_profile == null">
         , saved_profile=#{saved_profile}
+        </if>
 	where user_num = #{user_num}
 	</update>
 	<!-- 사용자의 수정한 계정 정보 매개변수로 가져가 DB를 수정하는 update문 -->

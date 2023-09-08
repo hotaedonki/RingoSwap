@@ -6,7 +6,6 @@ const languageImages = {
 };
 
  $(document).ready(function() {
-    memberPrint();
 
     $('#profilePicInput').click(profileFileInput);  //프로필 클릭시 원하는 사진을 업로드해서 해당 사진으로 프로필 사진을 변경하는 이벤트
     $('.card-img-top').click(backgroundFileInput);   //배경사진 클릭시 원하는 사진을 업로드해서 해당 사진으로 프로필 사진을 변경하는 이벤트
@@ -27,6 +26,7 @@ const languageImages = {
 
         $(window).on('beforeunload', saveChangesBeforeExit);  // 페이지 종료 전 변경 사항 저장 이벤트
     }
+    memberPrint();
 });
 /* 멤버정보를 출력하는 함수 */
 function memberPrint(){
@@ -43,15 +43,25 @@ function memberPrint(){
              let native = printLanguage(member.native_lang);
              let target = printLanguage(member.target_lang);
             let tagArr = member.tagList;
-            //$('#profilePicInput').html(member.native_lang);
             //$('.').html(member.user_id);
             $('#profilePicInput').attr('src', './memberProfilePrint?user_id='+member.user_id);
-            //console.log('./memberProfilePrint?user_id='+member.user_id);
             $('.nativeLanguage').attr('src', native);
             $('.targetLanguage').attr('src', target);
-            /*for(let i=0;i<tagArr.length;i++){
-                $('.hobbyButton [value="'+tagArr[i]+'"]').click();
-            }*/
+            
+            console.log(member.tagList);
+            console.log(tagArr);
+            if(tagArr && Array.isArray(tagArr)){
+                for(let i=0;i<tagArr.length;i++){
+                    console.log(tagArr[i]);
+                    $(`.hobbyButton button:contains("${tagArr[i]}")`).attr('class', 'btn btn-primary btn-sm');
+                    console.log($(`.hobbyButton button:contains("${tagArr[i]}")`).text());
+                }
+            }else if(tagArr){
+                console.log(tagArr);
+                $(`.hobbyButton button[value="${tagArr}"]`).attr('class', 'btn btn-primary btn-sm');
+                console.log($(`.hobbyButton button[value="${tagArr}"]`).val());
+            }
+            console.log('member출력완료');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('에러남 ㅅㄱ');
@@ -185,11 +195,12 @@ function printLanguage(lang){
         return updatedTags;
     }
     //태그 수정 ajax 실행 함수
-    function updateTags(updateTags){
+    function updateTags(updatedTags){
 		$.ajax({
 			url: 'memberTagLinkInsert',
             type: 'POST',
-            data: {tagNameList : updateTags},
+            contentType: 'application/json',
+            data: JSON.stringify(updatedTags),
             success: function() {
 				console.log("수정성공");
             },

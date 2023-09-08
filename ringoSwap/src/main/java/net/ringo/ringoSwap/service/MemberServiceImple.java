@@ -68,8 +68,9 @@ public class MemberServiceImple implements MemberService
 		ArrayList<Integer> tagList = new ArrayList<>();		//사용자의 모든 지정 태그 배열을 저장하는 변수
 		int methodResult = 0;			//제대로 메서드가 수행되었는지 확인을 위한 체커
 		//태그명으로 태그번호를 배열로 리턴받는 메서드 실행
-		log.debug("태그명 : {}",tagNameList);
-		tag_num.addAll(dao.memberTagSearchByTagNameReturnTagNum(tagNameList));
+		if(tagNameList.length != 0) {
+			tag_num.addAll(dao.memberTagSearchByTagNameReturnTagNum(tagNameList));
+		}
 		log.debug("태그숫자 : {}",tag_num);
 		
 		map.put("user_num", user_num);					//사용자의 회원번호를 미리 집어넣는다
@@ -121,8 +122,10 @@ public class MemberServiceImple implements MemberService
 	@Override
 	public Member memberSearchByMyPage(String user_id) {
 		Member member = dao.memberSearchById(user_id);
+		log.debug("태그숫자 : {}", member.getTag_list());
 		String [] list = member.getTag_list().split(" ");
 	    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));
+		log.debug("태그숫자 : {}",tagList);
 		member.setTagList(tagList);
 		return member;
 	}

@@ -53,62 +53,16 @@ public class Member implements UserDetails
 	public String toString()
 	{
 		return String.format
-				("{%d} : user_num \n"
-				+ "{%s} : user_id \n"
-				+ "{%s} : password \n"
-				+ "{%s} : username \n"
-				+ "{%s} : first_name \n"
-				+ "{%s} : last_name \n"
-				+ "{%s} : gender \n"
-				+ "{%s} : birth_date \n"
-				+ "{%s} : email \n"
-				+ "{%s} : native_lang \n"
-				+ "{%s} : target_lang \n"
-				+ "{%s} : original_profile \n"
-				+ "{%s} : saved_profile \n"
-				+ "{%s} : introduction \n"
-				+ "{%s} : mbti \n"
-				+ "{%d} : point \n"
-				+ "{%d} : cash \n"
-				+ "{%s} : rewrite_time \n"
-				+ "{%s} : role_name \n"
-				+ "{%s} : ranking_open \n"
-				+ "{%s} : email_open \n"
-				+ "{%s} : follow_open \n"
-				+ "{%s} : gps_open \n"
-				+ "{%s} : trans_lang \n"
+				("{%d} : user_num {%s} : user_id {%s} : password {%s} : username {%s} : first_name \n"
+				+ "{%s} : last_name {%s} : gender {%s} : birth_date {%s} : email {%s} : native_lang {%s} : target_lang \n"
+				+ "{%s} : original_profile {%s} : saved_profile {%s} : introduction {%s} : mbti \n"
+				+ "{%d} : point {%d} : cash {%s} : rewrite_time {%s} : role_name \n"
+				+ "{%s} : ranking_open {%s} : email_open {%s} : follow_open {%s} : gps_open {%s} : trans_lang \n"
 				+ "{%b} : enabled \n"
-				+ "{%d} : fr_count \n"
-				+ "{%d} : fe_count \n"
-				+ "{%s} : tag_list \n"
-								, user_num
-								, user_id
-								, password
-								, username
-								, first_name
-								, last_name
-								, gender
-								, birth_date
-								, email
-								, native_lang
-								, target_lang
-								, original_profile
-								, saved_profile
-								, introduction
-								, mbti
-								, point
-								, cash
-								, rewrite_time
-								, role_name
-								, ranking_open
-								, email_open
-								, follow_open
-								, gps_open
-								, trans_lang
-								, enabled
-								, fr_count
-								, fe_count
-								, tag_list);
+				+ "{%d} : fr_count {%d} : fe_count {%s} : tag_list, {%s} : tagList \n"
+						, user_num, user_id, password, username, first_name, last_name, gender, birth_date, email, native_lang, target_lang
+						, original_profile, saved_profile, introduction, mbti, point, cash, rewrite_time, role_name
+						, ranking_open, email_open, follow_open, gps_open, trans_lang, enabled, fr_count, fe_count, tag_list, tagList);
 	}
 	
 	@Override
