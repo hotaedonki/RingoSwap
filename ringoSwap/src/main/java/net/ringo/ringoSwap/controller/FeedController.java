@@ -59,7 +59,6 @@ public class FeedController {
 		return "feedMain?feedArrayType=" + feedArrayType; // feedTypeAll 값이 'default' 혹은 'popular'일경우 해당 정렬방식을 피드목록 페이지에
 															// 전달합니다.
 	}
-	// <<<<<<<<<<<------[피드 출력 기능 시작]----------------------
 
 	/*
 	 * 피드 목록 출력 controller 메서드(정렬방식:최근게시물/인기게시물)
@@ -221,7 +220,47 @@ public class FeedController {
 
 	// ----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 
+	
+	
 	// <<<<<<<<<<<------[검색 관련 기능 시작]----------------------
 
-	// ----------------[검색 관련 기능 종료]----------->>>>>>>>>>>>
+	
+	//----------------[검색 관련 기능 종료]----------->>>>>>>>>>>>
+	
+	
+	
+	//<<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
+	@ResponseBody
+	@PostMapping("feedDeleteOne")
+	public String feedDeleteOne(int feed_num, @AuthenticationPrincipal UserDetails user) {
+		String resultMsg = "";		//메서드 결과값에 따라 삭제여부를 기록하여 메서드 종료시 리턴되는 변수
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		
+		ArrayList<FeedPhoto> photoList = service.feedPhotoSelectByFeedNum(feed_num);
+		if(photoList.isEmpty()) {
+			resultMsg += "피드 내 사진 없음  /  ";
+		}else {
+			resultMsg += "피드 내 사진 존재  /  ";
+			for(FeedPhoto photo : photoList) {
+				String deletefile = uploadPath + "/" + photo.getSaved_file();
+				boolean d = FileService.deleteFile(deletefile);		//기존 프로필 사진파일 삭제
+			}
+			if(d) {
+				resultMsg += "피드 내 사진 삭제완료  /  ";
+			}
+		}
+		int methodResult = service.feedDeleteByUser(feed_num, user_num);
+		if(methodResult == 0) {
+			resultMsg += "피드 삭제 실패  /  ";
+			return resultMsg;
+		}
+		resultMsg += "피드 삭제 성공";
+		
+		
+		return resultMsg;
+	}
+
+	
+	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }

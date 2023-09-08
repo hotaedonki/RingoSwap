@@ -148,8 +148,9 @@ CREATE TABLE ringo_feed (
 	user_num			number				references ringo_member(user_num) on delete cascade,	--유저 키, 피드 작성자
 	contents			varchar2(3000)	NOT NULL,			--내용
 	inputdate			date					default sysdate,		--작성일
-	enabled				number(1)			default 1 check(enabled in	0, 1)		--해당 피드가 삭제대기를 위해 내려갔는지 여부/ 0=피드 내려감, 1=피드 안 내려감
+	enabled				number(1)			default 1 check(enabled in	(0, 1))		--해당 피드가 삭제대기를 위해 내려갔는지 여부/ 0=피드 내려감, 1=피드 안 내려감
 );
+create SEQUENCE ringo_feed_seq;
 --피드 정보+user_id+좋아요 수+태그를 속성으로 갖는 view를 create하는 명령어
 CREATE VIEW ringo_feed_with_likeandtag AS
 SELECT F.feed_num
@@ -169,9 +170,9 @@ left join
 left join
     ringo_taglink_feed TF ON F.feed_num = TF.feed_num
 left join
-    ringo_tagstorage T ON TL.tag_num = T.tag_num
+    ringo_tagstorage T ON TF.tag_num = T.tag_num
 GROUP BY
-    F.feed_num, M.user_id, MP.original_profile, MP.saved_profile	, F.contents, F.inputdate;
+    F.feed_num, M.user_id, M.original_profile, M.saved_profile, F.contents, F.inputdate;
 --view 사용 예시(14일 이내 작성한 글을 좋아요 수가 많은 순으로 정렬해 출력),
 select * from ringo_feed_with_likeandtag
 where (sysdate - inputdate) <= 14
@@ -190,6 +191,7 @@ CREATE TABLE ringo_feed_photo (
 	resolution			varchar2(12),								--사진의 해상도 (예: 1920x1080)
 	constraint	fk_feed_num_ph	foreign key (feed_num) references ringo_feed(feed_num) on delete cascade
 );
+create SEQUENCE ringo_feed_photo_seq;
 
 --피드에 달린 좋아요를 기록하는 테이블. 동일 피드에 동일 회원이 중복해서 좋아요 누르는건 불가능
 CREATE TABLE ringo_feed_like (
@@ -210,10 +212,11 @@ CREATE TABLE ringo_reply (
 	constraint fk_feed_num_reply		foreign key (feed_num) references ringo_feed(feed_num) on delete cascade,
 	constraint fk_user_num_reply		foreign key (user_num) references ringo_member(user_num) on delete set null
 );
+CREATE SEQUENCE ringo_reply_seq;
 --댓글 정보+좋아요 수+태그를 속성으로 갖는 view를 create하는 명령어
 CREATE VIEW ringo_reply_with_likeandtag AS
 	select R.reply_num
-	 	, M.user_ id
+	 	, M.user_id
 		, M.original_profile
 		, M.saved_profile	
 	 	, R.feed_num
@@ -223,15 +226,15 @@ CREATE VIEW ringo_reply_with_likeandtag AS
 		, listagg(T.tag_name, ' ') within group (order by TR.link_num) AS tag_list
 	from ringo_reply R
 	left join
-		ringo_member M ON F.user_num = M.user_num
+		ringo_member M ON R.user_num = M.user_num
 	left join
-	    ringo_reply_like L ON F.reply_num = L.reply_num
+	    ringo_reply_like L ON R.reply_num = L.reply_num
 	left join
-	    ringo_taglink_reply TR ON F.reply_num = TR.reply_num
+	    ringo_taglink_reply TR ON R.reply_num = TR.reply_num
 	left join
-	    ringo_tagstorage T ON TL.tag_num = T.tag_num
+	    ringo_tagstorage T ON TR.tag_num = T.tag_num
 	GROUP BY
-	    R.feed_num, R.user_num, R.contents, R.inputdate;
+	    R.reply_num, M.user_id, R.contents, R.inputdate,M.original_profile, M.saved_profile, R.feed_num;
 --view 사용 예시(14일 이내 작성한 글을 좋아요 수가 많은 순으로 정렬해 출력),
 	select *
 	from ringo_reply_with_likeandtag
@@ -253,33 +256,33 @@ CREATE TABLE ringo_taglink_feed (
 	tag_num		number,			--외래키, 태그 삭제시 같이 삭제됨
 	link_num		number,			--해당 태그가 해당 피드에 몇번째 순으로 배열된 것인지 저장하는 속성.
 	primary key	(feed_num, tag_num),
-	constraint fk_feed_num_tlfeed	foreign key (feed_num)	references ringo_feed(feed_num) on delete cascade,
+	constraint fk_feed_num_tlfeed	 foreign key (feed_num)	references ringo_feed(feed_num) on delete cascade,
 	constraint fk_tag_num_tlfeed	foreign key (tag_num)	references ringo_tagstorage(tag_num) on delete cascade
 );
 --taglink_feed전용 view create문
-CREATE VIEW ringo_taglink_feed_with_tagname AS
+CREATE VIEW ringo_taglink_feed_tagname AS
 	select TF.feed_num
 		, TF.link_num
 		, T.tag_name
 	from ringo_taglink_feed TF
-	left join ringo_tagstorage T ON TF.tag_num = T.tag_num
+	left join ringo_tagstorage T ON TF.tag_num = T.tag_num;
 
 --각 댓글와 해당 댓글에 달리는 태그를 매칭하는 테이블
 CREATE TABLE ringo_taglink_reply (
 	reply_num		number,						--외래키, 글삭제시 같이 삭제됨
 	tag_num		number,						--외래키, 태그 삭제시 같이 삭제됨
 	link_num		number,						--해당 태그가 해당 피드에 몇번째 순으로 배열된 것인지 저장하는 속성.
-	primary key	(feed_num, tag_num),
+	primary key	(reply_num, tag_num),
 	constraint fk_relpy_num_tlreply foreign key (reply_num) references ringo_reply(reply_num) on delete cascade,
 	constraint fk_tag_num_tlreply foreign key (tag_num) references ringo_tagstorage(tag_num) on delete cascade
 );
 --taglink_reply전용 view create문
-CREATE VIEW ringo_taglink_reply_with_tagname AS
+CREATE VIEW ringo_taglink_reply_tagnum AS
 	select TR.reply_num
 		, TR.link_num
 		, T.tag_name
 	from ringo_taglink_reply TR
-	left join ringo_tagstorage T ON TR.tag_num = T.tag_num
+	left join ringo_tagstorage T ON TR.tag_num = T.tag_num;
 
 --피드, 댓글에 달 태그를 실제로 기록하는 테이블
 CREATE TABLE ringo_tagstorage (
