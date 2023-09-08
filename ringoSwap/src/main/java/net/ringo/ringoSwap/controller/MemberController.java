@@ -297,9 +297,7 @@ public class MemberController
 					, @AuthenticationPrincipal UserDetails user) {
 		//현재 사용자 id를 기반으로 사용자의 user_num을 검색해 리턴
 		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
-		log.debug("태그출력 됨?:{}", updatedTags);
 		String[] tagNameList = updatedTags;
-		log.debug("태그출력 됨?:{}", tagNameList);
 		//검색한 user_num을 기반으로 설정한 태그 배열을 매개변수로 DB에 전달한다.
 		int insertResult = service.memberTagLinkInsertArray(tagNameList, user_num);
 	}
@@ -367,12 +365,16 @@ public class MemberController
 	{
 		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
 		Member mem = service.memberSearchById(user.getUsername());
+		log.debug("회원 {}", mem);
 		/*upload가 비어있거나 null이 아닐경우 해당 파일을 업로드 하는 메서드 실행*/
 		if(profileUpload != null && !profileUpload.isEmpty()) {
 			String deletefile = uploadPath + "/" + mem.getSaved_profile();
+			log.debug("삭제경로 {}", deletefile);
 			String savedfile = FileService.saveFile(profileUpload, uploadPath);		//새 프로필 사진파일 저장
+			log.debug("저장경로 {}", savedfile);
 			if(!savedfile.isEmpty()) {
-				FileService.deleteFile(deletefile);		//기존 프로필 사진파일 삭제
+				boolean d = FileService.deleteFile(deletefile);		//기존 프로필 사진파일 삭제
+				log.debug("del여부 {}", d);
 			}
 			mem.setOriginal_profile(profileUpload.getOriginalFilename());
 			mem.setSaved_profile(savedfile);
@@ -380,7 +382,6 @@ public class MemberController
 		mem.setIntroduction(introduction);
 		mem.setTarget_lang(target_lang);
 		mem.setUser_num(user_num);
-		log.debug("{} - upload", profileUpload);
 		log.debug("출력하냔~~~{}", mem);
 		int methodResult = service.memberUpdateProfile(mem);
 		log.debug("출력해~~~{}", mem);

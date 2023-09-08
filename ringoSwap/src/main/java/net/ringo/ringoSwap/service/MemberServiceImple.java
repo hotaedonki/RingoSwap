@@ -83,12 +83,14 @@ public class MemberServiceImple implements MemberService
 			log.debug("태그맵 : {}", map);
 			//해당 유저가 동일한 값을 설정했는지 확인하는 메서드 실행
 			methodResult = dao.memberTagLinkSearch(map);
-			if(methodResult==1) {				
+			if(methodResult==1) {
 				//만약 설정된 값이 존재한다면 이미 설정한 상태이기에 해당 태그에 대한 insert 명령어 취소하고 다음 태그로 넘어간다
+				log.debug("넘어감");
 				continue;
 			}
 			//해당 태그가 설정된 적이 없다면 insert 메서드 실행
 			methodResult = dao.memberTagLinkInsert(map);
+			log.debug("삽입함");
 		}				//for문 종료
 		
 		//insert전부 수행 후, 이번에 insert하지 않은 과거에 insert한 tag삭제작업 실행
@@ -99,12 +101,14 @@ public class MemberServiceImple implements MemberService
 			int no = tag_num.get(i);			//checker와 중복=이번에 선택한 tag값이기에 해당 값을 변수에 저장
 			//변수에 해당하는 tag_num을 tagList에서 제거
 			tagList.remove(Integer.valueOf(no));
+			log.debug("삭제");
 		}				//for문 종료
 		if(!tagList.isEmpty()) {
 			//taglink_member테이블에서 삭제할 값을 hashmap으로 형성
 			map.put("tag_num", tagList);
 			//해당 태그객체를 taglink_member 테이블에서 삭제하는 메서드 실행
 			methodResult = dao.memberTagLinkDelete(map);
+			log.debug("결과 : {}", methodResult);
 		}
 
 		//전 과정 종료
