@@ -2,6 +2,7 @@ let selectedImages = [];
 
 $(document).ready(function() {
 	feedPrint();
+	feedPhotoPrint();
     $(".bi-heart, .bi-heart-fill").click(clickLike);
     $(".feed-header").click(otherUserProfileButton);
     $(".profile-card").click(goToProfile);
@@ -52,16 +53,16 @@ function feedPrint() {
 			feedArrayType: "default"
 		},
 		success: function(feeds) {
-			feeds.forEach(feed => {
+			$(".feed-display-area .col-12").empty();
+			feeds.forEach((feed, index) => {
 				$('.feed-display-area .col-12').append(`
                     <div class="card feed-card collapseFeed">
-                        <div class="card-header feed-header" onclick="event.stopPropagation();">
-                            <img src="${feed.posterImage}" alt="Poster Image" class="posterImage"> 
-                            <span>${feed.title}</span>
+                        <div class="card-header feed-header" onclick="event.stopPropagation();"> 
+                            <span>${feed.user_id}</span>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">${feed.content}</p>
-                            <img src="${feed.feedImage}" alt="Feed Image" class="feed-image">
+                            <p class="card-text">${feed.contents}</p>
+                            <div class="image-list" id="image-list-${index}"></div>
                             <div class="feed-button" onclick="event.stopPropagation();">
                                 <span>${feed.likes}</span> 
                                 <i class="bi bi-heart unLike"></i> 
@@ -71,12 +72,31 @@ function feedPrint() {
                         </div>
                     </div>
                 `);
+                feedPhotoPrint(feed.feed_num, index);
             });
         },
         error: function(error) {
 			console.log(error);
 		}
 	})
+}
+
+function feedPhotoPrint(feed_num, index) {
+    $.ajax({
+        url: "feedPhotoPrintAll",
+        type: "post",
+        data: { feed_num: feed_num },
+        success: function(feedPhotos) {
+            feedPhotos.forEach(feedPhoto => {
+                $(`#image-list-${index}`).append(`
+                    <img src="${feedPhoto.feedImage}" alt="Feed Image" class="feed-image">
+                `);
+            });
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
 }
 
 function createPost() {
@@ -99,7 +119,9 @@ function createPost() {
         contentType: false, // 필수: Content-Type 헤더를 설정하지 않도록 설정
         data: feedData,     // FormData 객체를 전송합니다
         success: function(response) {
-            $('#chatInput').val(''); // 텍스트 입력 영역을 비웁니다
+			console.log("성공");
+            let content = $(".emojionearea-editor").html();
+		    $(".emojionearea-editor").html('');
             $('#imageInput').val(''); // 파일 입력 필드를 비웁니다
             feedPrint();             // 피드를 다시 로드합니다
         },
