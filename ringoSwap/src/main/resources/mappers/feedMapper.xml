@@ -32,7 +32,7 @@
 		ringo_reply_with_likeandtag
 		where feed_num = #{feed_num}
 		order by
-		inputdate desc;
+		inputdate desc
 	</select>
 
 	<!-- feed_num을 매개변수로 해당 피드에 등록된 사진 정보 배열 객체를 불러오는 메서드 -->
@@ -40,7 +40,7 @@
 		select * from
 		ringo_feed_photo
 		where feed_num = #{feed_num}
-		order by photo_num;
+		order by photo_num
 	</select>
 	<!-- 피드 출력 기능 끝 -->
 

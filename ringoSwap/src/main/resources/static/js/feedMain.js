@@ -187,4 +187,22 @@ function otherUserProfileButton(event) {
 	event.preventDefault();
 }
 
-
+function feedDelete(){
+    let num = $(this).data('feed-num');
+    console.log(num);
+    $.ajax({
+        url: "feedDeleteOne",
+        type: "POST",
+        data: {feed_num : num},
+        dataType: 'json',
+        success:function(str){
+            console.log(str);
+            feedPrint();
+        },
+        error: function(error) {
+            // 에러 발생 시 처리
+            console.log('에러');
+            console.log(error);
+        }
+    })
+}
