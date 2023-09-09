@@ -32,15 +32,6 @@ public class FeedServiceImple implements FeedService{
 		}
 		return feedList;
 	}
-	//지정된 피드 목록의 피드 번호 배열을 매개변수로 주고, 그에 따른 피드 사진 배열을 리턴하는 메서드
-	public ArrayList<FeedPhoto> feedPhotoSelectArrayByFeedNum(ArrayList<Integer> feed_num){
-		ArrayList<FeedPhoto> photoList = new ArrayList<>();		//리턴용 배열 변수
-		//지정된 피드 목록을 매개변수로 주고, 그에 따른 사진 배열을 리턴받는 dao 메서드 실행
-		photoList = dao.feedPhotoSelectArrayByFeedNum(feed_num);
-		//리턴
-		return photoList;
-	}
-
 	//feed_num을 매개변수로 특정 feed 게시글 정보를 리턴하는 메서드
 	@Override
 	public Feed feedSelectOneByFeedNum(int feed_num) {

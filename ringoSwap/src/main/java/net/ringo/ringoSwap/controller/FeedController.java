@@ -1,11 +1,17 @@
 package net.ringo.ringoSwap.controller;
 
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,17 +88,6 @@ public class FeedController {
 		return feedList;
 	}
 
-	// 출력된 피드 목록에 따라 각 피드에 연결된 사진배열을 리턴하는 controller 메서드
-	@ResponseBody
-	@PostMapping("feedPhotoPrintAll")
-	public ArrayList<FeedPhoto> feedPhotoPrintAll(ArrayList<Integer> feed_num) {
-		ArrayList<FeedPhoto> photoList = new ArrayList<>();
-		// 지정된 범위의 피드 목록의 사진을 전부 리턴받는 메서드 실행
-		photoList = service.feedPhotoSelectArrayByFeedNum(feed_num);
-		// 해당 사진 배열을 리턴
-		return photoList;
-	}
-
 	// 특정 피드 게시글에서 해당 게시글의 정보를 리턴하는 controller 메서드
 	@ResponseBody
 	@PostMapping("feedPrint")
@@ -101,12 +97,32 @@ public class FeedController {
 	}
 
 	// 특정 피드 게시물 출력시 해당 피드와 같이 등록된 사진을 리턴해 출력하는 controller 메서드
-	@ResponseBody
 	@PostMapping("feedPhotoPrint")
-	public ArrayList<FeedPhoto> feedPhotoPrint(int feed_num) {
-		ArrayList<FeedPhoto> fphotoList = service.feedPhotoSelectByFeedNum(feed_num);
-
-		return fphotoList;
+	public ArrayList<FeedPhoto> feedPhotoPrint(int feed_num
+			, HttpServletRequest request
+			, HttpServletResponse response
+			, int arrayNum) {
+		ArrayList<FeedPhoto> photoList = service.feedPhotoSelectByFeedNum(feed_num);
+		FeedPhoto feedPhoto = photoList.get(arrayNum);
+		String fullPath = uploadPath+"/"+feedPhoto.getSaved_file();
+		
+		try {
+			response.setHeader("Content-Disposition", " attachment;filename="+ 
+			URLEncoder.encode(feedPhoto.getOrigin_file(), "UTF-8"));
+		} catch (UnsupportedEncodingException  e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			FileInputStream in = new FileInputStream(fullPath);
+			ServletOutputStream out = response.getOutputStream();
+			FileCopyUtils.copy(in, out);
+			in.close();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return photoList;
 	}
 
 	// 특정 피드 게시글의 feed_num을 왜래키로 갖는 reply 배열을 리턴하는 controller 메서드

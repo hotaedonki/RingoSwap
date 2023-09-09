@@ -14,9 +14,6 @@ public interface FeedService {
 	//<<<<<<<<<<<------[피드 출력 기능 시작]----------------------
 	//모든 게시물을 매개변수로 받은 배열방식에 따라 최신순, 혹은 인기순(좋아요 순)으로 리턴하는 메서드
 	public ArrayList<Feed> feedSelectAllWithFeedArrayType(String feedArrayType);
-	//지정된 피드 목록의 피드 번호 배열을 매개변수로 주고, 그에 따른 피드 사진 배열을 리턴하는 메서드
-	public ArrayList<FeedPhoto> feedPhotoSelectArrayByFeedNum(ArrayList<Integer> feed_num);
-	
 	//feed_num을 매개변수로 특정 피드 게시글 정보를 리턴하는 메서드
 	public Feed feedSelectOneByFeedNum(int feed_num);
 	//feed_num을 매개변수로 특정 댓글 배열 정보를 리턴하는 메서드

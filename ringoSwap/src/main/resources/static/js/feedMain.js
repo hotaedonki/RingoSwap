@@ -54,7 +54,9 @@ function feedPrint() {
 		},
 		success: function(feeds) {
 			$(".feed-display-area .col-12").empty();
-			feeds.forEach((feed, index) => {
+			feeds.forEach(feed => {
+				feedPhotoPrint(feed.feed_num);
+				console.log(feed.feed_num);
 				$('.feed-display-area .col-12').append(`
                     <div class="card feed-card collapseFeed">
                         <div class="card-header feed-header" onclick="event.stopPropagation();"> 
@@ -62,7 +64,7 @@ function feedPrint() {
                         </div>
                         <div class="card-body">
                             <p class="card-text">${feed.contents}</p>
-                            <div class="image-list" id="image-list-${index}"></div>
+                            <div class="feed-image-list" data-feed-num="${feed.feed_num}"></div>
                             <div class="feed-button" onclick="event.stopPropagation();">
                                 <span>${feed.likes}</span> 
                                 <i class="bi bi-heart unLike"></i> 
@@ -72,7 +74,6 @@ function feedPrint() {
                         </div>
                     </div>
                 `);
-                feedPhotoPrint(feed.feed_num, index);
             });
         },
         error: function(error) {
@@ -81,16 +82,19 @@ function feedPrint() {
 	})
 }
 
-function feedPhotoPrint(feed_num, index) {
+function feedPhotoPrint(feed_num) {
     $.ajax({
-        url: "feedPhotoPrintAll",
+        url: "feedPhotoPrint",
         type: "post",
-        data: { feed_num: feed_num },
-        success: function(feedPhotos) {
-            feedPhotos.forEach(feedPhoto => {
-                $(`#image-list-${index}`).append(`
-                    <img src="${feedPhoto.feedImage}" alt="Feed Image" class="feed-image">
-                `);
+        data: { feed_num: feed_num }, 
+        success: function(photos) {
+            photos.forEach((photo, index) => {
+				console.log(photo, index)
+                const photoElem = document.createElement('img');
+                photoElem.src = './feedPhotoPrint?feed_num=' + feed_num + '&arrayNum=' + index; 
+                photoElem.alt = photo.origin_file; 
+                photoElem.classList.add('feed-photo'); 
+                document.querySelector(`.feed-image-list[data-feed-num="${feed_num}"]`).appendChild(photoElem);
             });
         },
         error: function(error) {
