@@ -153,14 +153,10 @@ main {
 	text-align: center;
 }
 
-.feed-button .bi {
+.feed-button {
 	color: black;
 	transition: all 0.2s;
 	display: inline-block;
-}
-
-.bi-heart-fill {
-	color: red;
 }
 
 .feed-button .bi:hover {
@@ -235,4 +231,8 @@ main {
 .image-preview {
     width: 100px; /* 미리보기 이미지 크기 */
     height: auto; /* 가로 세로 비율 유지 */
+}
+
+.bi-heart-fill {
+	color: red;
 }

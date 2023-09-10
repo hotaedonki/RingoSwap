@@ -1,11 +1,11 @@
 let selectedImages = [];
+let saved_feedNum = 0;
 
 $(document).ready(function() {
 	feedPrint();
     $(".feed-header").click(otherUserProfileButton);
     $(".profile-card").click(goToProfile);
-    $("#backToFeed").click(returnFeed);
-	$(".feed-create-area").blur(collapseFeed);
+	$(".feed-create-area").blur(collapseWrite);
 	$(".post").on('click', createPost);
 	$("#imageIcon").on('click', function() {
 		$("#imageInput").click();
@@ -38,37 +38,73 @@ $(document).ready(function() {
         $(".feed-create-area .post").show();
     });
     $(document).on('click', '.insertReply', replyInsert);
-    $(document).on('click', '.unLike, .like', clickLike)
+    $(document).on('click', '.like-button', clickLike);
 	$(document).on('click', '.collapseFeed', function(event) {
 	    if (!$(event.target).hasClass('bi')) {
 	        feedDetail.call(this, event);
 	    }
 	});
+	$(document).on('click', '#backToFeed', returnFeedMain);
+	$(document).on('click', '.feed-delete-button', feedDelete);
+	
+	window.addEventListener('load', function () {
+        const feedNum = getUrlParam('feed');
+        if (feedNum) {
+            // 파일 번호가 URL에 있을 경우 해당 텍스트 객체 열기
+            saved_feedNum = feedNum;
+            console.log('객체 열기');
+            feedDetail();
+        }
+     });
 
 });
 
+function getUrlParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
 function feedPrint() {
+	console.log("피드프린트")
 	$.ajax({
 		url: "feedPrintAll",
 		type: "post",
 		data: {
 			feedArrayType: "default"
 		},
-		success: function(feeds) {
+		success: function(res) {
+			
+			let feeds = res.feedList;
+			let likeCheck = res.likeCheckMap;
+			
 			$(".feed-display-area .col-12").empty();
+			$("#feedDetail").hide();
+			
+			console.log(feeds);
+			
 			feeds.forEach(feed => {
 				feedPhotoPrint(feed.feed_num);
+				 // 좋아요 체크 값
+			     let isLiked = likeCheck[feed.feed_num];
+			     // 좋아요 버튼의 기본 클래스와 스타일을 설정
+			     let likeButtonClass = "bi-heart";
+			     // 좋아요 체크 값이 1이면, 버튼의 클래스와 스타일을 업데이트
+			     if (isLiked === 1) {
+			        likeButtonClass = "bi-heart-fill";
+			     }
+			     console.log(feed);
 				$('.feed-display-area .col-12').append(`
-                    <div class="card feed-card collapseFeed" data-feed-num="${feed.feed_num}">
-                        <div class="card-header feed-header" onclick="event.stopPropagation();"> 
+                    <div class="card feed-card" data-feed-num="${feed.feed_num}">
+                        <div class="card-header feed-header"> 
                             <span>${feed.user_id}</span>
+                            <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">${feed.contents}</p>
+                            <p class="card-text collapseFeed" data-feed-num="${feed.feed_num}">${feed.contents}</p>
                             <div class="feed-image-list" data-feed-num="${feed.feed_num}"></div>
                             <div class="feed-button">
-                                <span class="like-count" data-feed-num="${feed.feed_num}">${feed.like_num}</span> 
-                                <i class="bi bi-heart unLike" data-feed-num="${feed.feed_num}"></i> 
+                                <span class="like-count" data-feed-num="${feed.feed_num}">${feed.like_count}</span> 
+                                <i class="bi ${likeButtonClass} like-button" data-feed-num="${feed.feed_num}"></i> 
                                 <i class="bi bi-chat reply"></i> 
                                 <i class="bi bi-translate translate"></i>
                             </div>
@@ -76,6 +112,7 @@ function feedPrint() {
                     </div>
                 `);
             });
+            $(".feed-display-area .col-12").show();
         },
         error: function(error) {
 			console.log(error);
@@ -84,31 +121,47 @@ function feedPrint() {
 }
 
 function feedDetail() {
-	const feedNum = $(this).data('feed-num');
+	$('#feedDetail').empty();
+	let feedNum = 0;
+    let num = $(this).data('feed-num');
+    if(num){   //this값이 있을 경우 
+        feedNum = num;
+    }else{
+        feedNum = saved_feedNum;
+    }
 	$.ajax({
 		url: "feedPrint",
 		type: "post",
 		data: {feed_num : feedNum},
-		success: function(clickedFeed) {
-			$(".feed-display-area .col-12").empty();
+		success: function(detail) {
+			//기존 영역 숨기고 feedDetail 표시
+			$(".feed-display-area .col-12").hide();
 			$(".left-area, .middle-area").hide();
-			feedPhotoPrint(clickedFeed.feed_num);
-			replyPrint(clickedFeed.feed_num);
+			//사진과 댓글 출력
+			feedPhotoPrint(detail.feed.feed_num);
+			replyPrint(detail.feed.feed_num);
+			
+		     let likeButtonClass = "bi-heart";
+		     if (detail.likeCheck === 1) {
+		        likeButtonClass = "bi-heart-fill";
+		     }
+			
 			$('#feedDetail').append(`
-                    <div class="card feed-card clickedFeed" data-feed-num="${clickedFeed.feed_num}">
+                    <div class="card feed-card detail.feed" data-feed-num="${detail.feed.feed_num}">
                     <div class="card-header" style="width: 100%;">
                         <img src="../img/고양.jpg" alt="Poster Image" class="posterImage"> 
-                        <span>${clickedFeed.user_id}</span>
-                        <button id="backToFeed" class="btn btn-link">
-                            <i class="bi bi-arrow-return-left"></i>
+                        <span>${detail.feed.user_id}</span>
+                        <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">
+                            <i class="bi bi-arrow-return-left returnFeedMain"></i>
                         </button>
+                        <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-3 me-3">삭제</button>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">${clickedFeed.contents}</p>
-                        <div class="feed-image-list" data-feed-num="${clickedFeed.feed_num}"></div>
+                        <p class="card-text">${detail.feed.contents}</p>
+                        <div class="feed-image-list" data-feed-num="${detail.feed.feed_num}"></div>
                         <div class="feed-button">
-                            <span class="like-count" data-feed-num="${clickedFeed.feed_num}">${clickedFeed.like_num}</span> 
-                            <i class="bi bi-heart unLike" data-feed-num="${clickedFeed.feed_num}"></i> 
+                            <span class="like-count" data-feed-num="${detail.feed.feed_num}">${detail.feed.like_count}</span> 
+                            <i class="bi ${likeButtonClass} like-button" data-feed-num="${detail.feed.feed_num}"></i> 
                             <i class="bi bi-translate translate"></i>
                         </div>
                         <div class="comment-input-section d-flex replyMargin">
@@ -208,7 +261,7 @@ function createPost() {
 
 function replyInsert() {
 	const replyContent = $(".replyContent").val();
-	const feedNum = $(".clickedFeed").data('feed-num');
+	const feedNum = $(".detail.feed").data('feed-num');
 	console.log(replyContent, feedNum);
 	
 	$.ajax({
@@ -260,12 +313,13 @@ function replyPrint(feedNum) {
 	})
 }
 
-//피드 확대 코드
-function collapseFeed() {
+//피드 작성칸 확대
+function collapseWrite() {
 	$(".emojionearea-editor").css("height", "100px");
 	
 	$(".feed-create-area .icons").hide();
 	$(".feed-create-area .post").hide();
+
 }
 
 function clickLike() {
@@ -298,12 +352,10 @@ function goToProfile() {
 	window.location.href = '../member/myPage';
 }
 
-function returnFeed() {
-    // feed-detail 숨기기
-    $("#feedDetail").hide();
-    
-	// 원래의 영역을 다시 표시
-    $(".left-area, .middle-area").show();
+function returnFeedMain() {
+	$(".feed-display-area .col-12").show();
+	$(".left-area, .middle-area").show();
+	$("#feedDetail").hide();
 }
 
 function otherUserProfileButton(event) {
@@ -311,21 +363,23 @@ function otherUserProfileButton(event) {
 }
 
 function feedDelete(){
-    let num = $(this).data('feed-num');
-    console.log(num);
+    let feed_num = $(this).data('feed-num');
+    console.log(feed_num);
     $.ajax({
         url: "feedDeleteOne",
-        type: "POST",
-        data: {feed_num : num},
-        dataType: 'json',
-        success:function(str){
-            console.log(str);
-            feedPrint();
+        type: "post",
+        data: {feed_num : feed_num},
+        success:function(res){
+			if(res === "0") {
+				alert("본인이 작성한 글만 삭제할 수 있습니다.")
+			} else { 
+				confirm("피드를 삭제하시겠습니까?");	
+			}
+			feedPrint();
         },
         error: function(error) {
-            // 에러 발생 시 처리
-            console.log('에러');
             console.log(error);
         }
     })
 }
+

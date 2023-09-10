@@ -1,4 +1,5 @@
 package net.ringo.ringoSwap.controller;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -74,54 +75,78 @@ public class FeedController {
 	 */
 	@ResponseBody
 	@PostMapping("feedPrintAll")
-	public ArrayList<Feed> feedPrintAll(
+	public Map<String, Object> feedPrintAll(
+			@AuthenticationPrincipal UserDetails user,
 			@RequestParam(name = "feedTypeAll", defaultValue = "default") String feedArrayType) {
-		ArrayList<Feed> feedList = new ArrayList<>(); // 피드목록 출력용 배열 변수
+		Map<String, Object> map = new HashMap<>();
+	    ArrayList<Feed> feedList = new ArrayList<>(); // 피드목록 출력용 배열 변수
+	    int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 
-		// 피드배열방식을 매개변수로 넘기고 배열방식에 따라 정렬된 게시글 목록을 리턴받는 메서드 실행
-		feedList = service.feedSelectAllWithFeedArrayType(feedArrayType);
-		log.debug("피드 리스트 확인 : {}", feedList);
-		return feedList;
+	    // 피드배열방식을 매개변수로 넘기고 배열방식에 따라 정렬된 게시글 목록을 리턴받는 메서드 실행
+	    feedList = service.feedSelectAllWithFeedArrayType(feedArrayType);
+
+	    // 각 피드에 대한 좋아요 클릭 여부를 저장할 Map
+	    Map<Integer, Integer> likeCheckMap = new HashMap<>();
+	    for (Feed feed : feedList) {
+	        int feed_num = feed.getFeed_num();
+	        // 현재 피드에 대한 좋아요 클릭 여부를 확인
+	        int likeCheck = service.likePrint(user_num, feed_num);
+	        // 결과를 Map에 저장
+	        likeCheckMap.put(feed_num, likeCheck);
+	    }
+
+	    log.debug("피드 리스트 확인 : {}", feedList);
+	    map.put("feedList", feedList);
+	    map.put("likeCheckMap", likeCheckMap); // 좋아요 클릭 여부 Map을 결과 Map에 추가
+	    return map;
 	}
 
 	// 특정 피드 게시글에서 해당 게시글의 정보를 리턴하는 controller 메서드
 	@ResponseBody
 	@PostMapping("feedPrint")
-	public Feed feedPrint(int feed_num) {
-		Feed feed = service.feedSelectOneByFeedNum(feed_num);
-		return feed;
+	public Map<String, Object> feedPrint(
+	        @AuthenticationPrincipal UserDetails user,
+	        int feed_num) {
+	    int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+	    Feed feed = service.feedSelectOneByFeedNum(feed_num);
+	    
+	    int likeCheck = service.likePrint(user_num, feed_num); // 좋아요 체크 값을 가져옵니다.
+
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("feed", feed);
+	    map.put("likeCheck", likeCheck); // 좋아요 체크 값을 response에 추가합니다.
+
+	    return map;
 	}
 
 	// 특정 피드 게시물 출력시 해당 피드와 같이 등록된 사진을 리턴해 출력하는 controller 메서드
 	@PostMapping("feedPhotoPrint")
 	@ResponseBody
-	public List<Map<String, Object>> feedPhotoPrint(@RequestParam Integer feed_num
-		, HttpServletRequest request
-		, HttpServletResponse response) {
-	    List<FeedPhoto> photoList = service.feedPhotoSelectByFeedNum(feed_num);
-	    List<Map<String, Object>> responseData = new ArrayList<>();
-	    log.debug("피드넘확인 : {}", feed_num);
-	    for (FeedPhoto photo : photoList) {
-	        String fullPath = uploadPath + "/" + photo.getSaved_file();
-	        
-	        File file = new File(fullPath);
-	        if(file.exists()) {
-	            try {
-	                byte[] byteArr = Files.readAllBytes(file.toPath());
-	                Map<String, Object> photoData = new HashMap<>();
-	                photoData.put("fileName", photo.getOrigin_file());
-	                photoData.put("fileData", Base64.getEncoder().encodeToString(byteArr));
-	                
-	                responseData.add(photoData);
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	        log.debug("포토넘확인 : {}", photo.getPhoto_num());
-	    }
-	    
-	    
-	    return responseData;
+	public List<Map<String, Object>> feedPhotoPrint(@RequestParam Integer feed_num, HttpServletRequest request,
+			HttpServletResponse response) {
+		List<FeedPhoto> photoList = service.feedPhotoSelectByFeedNum(feed_num);
+		List<Map<String, Object>> responseData = new ArrayList<>();
+		log.debug("피드넘확인 : {}", feed_num);
+		for (FeedPhoto photo : photoList) {
+			String fullPath = uploadPath + "/" + photo.getSaved_file();
+
+			File file = new File(fullPath);
+			if (file.exists()) {
+				try {
+					byte[] byteArr = Files.readAllBytes(file.toPath());
+					Map<String, Object> photoData = new HashMap<>();
+					photoData.put("fileName", photo.getOrigin_file());
+					photoData.put("fileData", Base64.getEncoder().encodeToString(byteArr));
+
+					responseData.add(photoData);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			log.debug("포토넘확인 : {}", photo.getPhoto_num());
+		}
+
+		return responseData;
 	}
 
 	// 특정 피드 게시글의 feed_num을 왜래키로 갖는 reply 배열을 리턴하는 controller 메서드
@@ -145,8 +170,8 @@ public class FeedController {
 	@ResponseBody
 	@PostMapping("feedWrite")
 	public ResponseEntity<?> feedWrite(@AuthenticationPrincipal UserDetails user,
-			@RequestParam("content") String content
-			, @RequestParam(value = "photos", required = false) MultipartFile[] photos) {
+			@RequestParam("content") String content,
+			@RequestParam(value = "photos", required = false) MultipartFile[] photos) {
 		Feed feed = new Feed();
 		feed.setContents(content);
 		log.debug("피드 데이터 확인 : {}", feed);
@@ -156,33 +181,32 @@ public class FeedController {
 		if (methodResult == 0) {
 			return ResponseEntity.ok("fail");
 		}
-		
+
 		int newFeedNum = feed.getFeed_num();
 		log.debug("새로 생성된 feed_num: {}", newFeedNum);
-
-		for (MultipartFile photo : photos) {
-			if (photo != null && !photo.isEmpty()) {
-				// 파일 메타데이터를 가져와서 FeedPhoto 객체를 생성합니다.
-				FeedPhoto feedPhoto = new FeedPhoto();
-				feedPhoto.setFeed_num(newFeedNum);
-				feedPhoto.setPhoto_size((int) photo.getSize());
-				feedPhoto.setPhoto_format(FilenameUtils.getExtension(photo.getOriginalFilename()));
-				String savedfile = FileService.saveFile(photo, uploadPath);
-				feedPhoto.setOrigin_file(photo.getOriginalFilename());
-				feedPhoto.setSaved_file(savedfile);
-				service.feedPhotoInsert(feedPhoto);
+		if (photos != null && photos.length > 0) {
+			for (MultipartFile photo : photos) {
+				if (photo != null && !photo.isEmpty()) {
+					// 파일 메타데이터를 가져와서 FeedPhoto 객체를 생성합니다.
+					FeedPhoto feedPhoto = new FeedPhoto();
+					feedPhoto.setFeed_num(newFeedNum);
+					feedPhoto.setPhoto_size((int) photo.getSize());
+					feedPhoto.setPhoto_format(FilenameUtils.getExtension(photo.getOriginalFilename()));
+					String savedfile = FileService.saveFile(photo, uploadPath);
+					feedPhoto.setOrigin_file(photo.getOriginalFilename());
+					feedPhoto.setSaved_file(savedfile);
+					service.feedPhotoInsert(feedPhoto);
+				}
 			}
-		}	
-		
+		}
+
 		return ResponseEntity.ok("Success");
 	}
 
 	// 특정 게시물에서 댓글을 작성하여 DB에 전달하는 controller 메서드
 	@ResponseBody
 	@PostMapping("replyInsert")
-	public int replyInsert(@AuthenticationPrincipal UserDetails user
-			, String contents
-			, int feed_num) {
+	public int replyInsert(@AuthenticationPrincipal UserDetails user, String contents, int feed_num) {
 		log.debug("리플내용확인 {} ", contents);
 		log.debug("리플 피드넘 {} ", feed_num);
 		Reply reply = new Reply();
@@ -191,7 +215,7 @@ public class FeedController {
 		reply.setContents(contents);
 		reply.setFeed_num(feed_num);
 		int methodResult = service.replyInsert(reply);
-		
+
 		return reply.getFeed_num();
 	}
 
@@ -206,7 +230,7 @@ public class FeedController {
 		log.debug("좋아요 개수 확인 피드 {}", feed_num);
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		int methodResult = service.feedLikeClick(user_num, feed_num);
-		log.debug("좋아요 개수{}, ", methodResult);
+		log.debug("좋아요 개수 by 컨트롤러 : {}, ", methodResult);
 		return methodResult;
 	}
 
@@ -238,66 +262,58 @@ public class FeedController {
 
 	// ----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 
-	
-	
 	// <<<<<<<<<<<------[검색 관련 기능 시작]----------------------
 
-	
-	//----------------[검색 관련 기능 종료]----------->>>>>>>>>>>>
-	
-	
-	
-	//<<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
+	// ----------------[검색 관련 기능 종료]----------->>>>>>>>>>>>
+
+	// <<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
 	@ResponseBody
 	@PostMapping("feedDeleteOne")
-	public String feedDeleteOne(int feed_num, @AuthenticationPrincipal UserDetails user) {
-		String resultMsg = "";		//메서드 결과값에 따라 삭제여부를 기록하여 메서드 종료시 리턴되는 변수
+	public String feedDeleteOne(int feed_num
+			, @AuthenticationPrincipal UserDetails user) {
+		String resultMsg = ""; // 메서드 결과값에 따라 삭제여부를 기록하여 메서드 종료시 리턴되는 변수
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		log.debug("사용자 ID : {}", user.getUsername());
-		log.debug("사용자 번호 : {}", user_num);
-		
+
 		/*
-		 * 피드를 삭제하기 전 먼저 해당 피드에 사진이 있는지 검색하고, 사진이 없다면 resultMsg에 "피드 내 사진 없음"을 입력 후 진행합니다.
-		 * 사진이 존재할경우, resultMsg에 "피드 내 사진 존재"를 입력후 해당 사진파일들의 삭제작업을 진행합니다.
-		 * boolean타입 변수 d를 이용하여 삭제 기능 종료후 삭제가 정상적으로 진행되었는지를 확인합니다. 
-		 * 삭제 작업이 정상적으로 진행되었을경우 "피드 내 사진 삭제성공"을, 삭제작업이 시행되지 않았을경우 "피드 내 사진 삭제실패"를
-		 * resultMsg에 입력합니다.
+		 * 피드를 삭제하기 전 먼저 해당 피드에 사진이 있는지 검색하고, 사진이 없다면 resultMsg에 "피드 내 사진 없음"을 입력 후
+		 * 진행합니다. 사진이 존재할경우, resultMsg에 "피드 내 사진 존재"를 입력후 해당 사진파일들의 삭제작업을 진행합니다.
+		 * boolean타입 변수 d를 이용하여 삭제 기능 종료후 삭제가 정상적으로 진행되었는지를 확인합니다. 삭제 작업이 정상적으로 진행되었을경우
+		 * "피드 내 사진 삭제성공"을, 삭제작업이 시행되지 않았을경우 "피드 내 사진 삭제실패"를 resultMsg에 입력합니다.
 		 */
 		ArrayList<FeedPhoto> photoList = service.feedPhotoSelectByFeedNum(feed_num);
 		log.debug("사진 : {}", photoList);
 		log.debug("사진 : {}", photoList.isEmpty());
-		if(photoList.isEmpty()) {
+		if (photoList.isEmpty()) {
 			resultMsg += "피드 내 사진 없음  /  ";
-		}else {
+		} else {
 			resultMsg += "피드 내 사진 존재  /  ";
 			boolean d = false;
-			for(FeedPhoto photo : photoList) {
+			for (FeedPhoto photo : photoList) {
 				String deletefile = uploadPath + "/" + photo.getSaved_file();
-				d = FileService.deleteFile(deletefile);		//기존 프로필 사진파일 삭제
+				d = FileService.deleteFile(deletefile); // 기존 프로필 사진파일 삭제
 				log.debug("삭제여부 : {}", d);
 			}
-			if(d) {
+			if (d) {
 				resultMsg += "피드 내 사진 삭제완료  /  ";
-			}else {
+			} else {
 				resultMsg += "피드 내 사진 삭제실패  /  ";
 			}
 		}
-		
-		//사진 삭제 기능 종료후, 해당 피드를 삭제합니다. like, tag등은 전부 cascade로 묶여있으므로 피드 삭제시 같이 삭제됩니다.
+
+		// 사진 삭제 기능 종료후, 해당 피드를 삭제합니다. like, tag등은 전부 cascade로 묶여있으므로 피드 삭제시 같이 삭제됩니다.
 		log.debug("삭제를 시작한다 : {}", user_num);
 		int methodResult = service.feedDeleteByUser(feed_num, user_num);
 		log.debug("삭제여부 : {}", methodResult);
-		
-		if(methodResult == 0) {
-			//삭제기능이 정상적으로 실행되었는지 여부를 확인해, 0이라면 삭제가 실패되었음을 리턴합니다.
-			resultMsg += "피드 삭제 실패";
+
+		if (methodResult == 0) {
+			// 삭제기능이 정상적으로 실행되었는지 여부를 확인해, 0이라면 삭제가 실패되었음을 리턴합니다.
+			resultMsg = "0";
 			return resultMsg;
 		}
-		resultMsg += "피드 삭제 성공";		//0이 아니라면 삭제가 성공되었음을 의미하기에, 해당 문자열을 입력합니다.
-		
-		return resultMsg;		//현재까지의 삭제 메서드 결과를 리턴합니다.
+		resultMsg = "1"; // 0이 아니라면 삭제가 성공되었음을 의미하기에, 해당 문자열을 입력합니다.
+
+		return resultMsg; // 현재까지의 삭제 메서드 결과를 리턴합니다.
 	}
 
-	
-	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
+	// ----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }

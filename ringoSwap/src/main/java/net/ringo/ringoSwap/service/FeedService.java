@@ -36,6 +36,8 @@ public interface FeedService {
 	public int feedLikeClick(int user_num, int feed_num);
 	//특정 댓글의 좋아요 클릭시 해당 댓글에 좋아요를 추가하거나 취소하는 메서드
 	public int replyLikeClick(int user_num, int reply_num);
+	//좋아요 클릭 여부에 따라 그 결과를 출력하는 메서드
+	public int likePrint(int user_num, int feed_num);
 	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------

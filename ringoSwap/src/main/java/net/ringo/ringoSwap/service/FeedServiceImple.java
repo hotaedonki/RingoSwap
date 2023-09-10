@@ -93,7 +93,18 @@ public class FeedServiceImple implements FeedService{
 		log.debug("좋아요 줬는지 확인 : {}", methodResult);
 		//삽입/삭제 메서드 실행후 변동된 좋아요 갯수를 다시 검색하여 리턴받는 메서드 실행
 		int likeCount = dao.feedLikeCountSelectByFeedNum(feed_num);
+		log.debug("좋아요 개수 확인 : {}", likeCount);
 		return likeCount;
+	}
+	//좋아요 여부 표시
+	@Override
+	public int likePrint(int user_num, int feed_num) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("user_num", user_num);
+		map.put("feed_num", feed_num);
+		
+		//해당 사용자가 이미 해당 피드의 좋아요를 준 적이 있는지 확인하는 메서드
+		return dao.feedLikeSelectOneForCheck(map);
 	}
 	//특정 댓글의 좋아요 클릭시 해당 댓글에 좋아요를 추가하거나 취소하는 메서드
 	@Override
@@ -146,6 +157,7 @@ public class FeedServiceImple implements FeedService{
 		
 		return dao.feedDeleteByUser(map);
 	}
+	
 	
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }
