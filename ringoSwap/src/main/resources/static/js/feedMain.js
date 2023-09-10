@@ -2,6 +2,7 @@ let selectedImages = [];
 let saved_feedNum = 0;  //History API를 사용한 피드 번호를 이용한 피드 출력기능에서 피드 번호 전달에 사용하는 전역변수
 
 $(document).ready(function() {
+
 	feedPrint();
     $(".feed-header").click(otherUserProfileButton);
     $(".profile-card").click(goToProfile);
@@ -45,7 +46,6 @@ $(document).ready(function() {
 	        feedDetail.call(this, event);
 	    }
 	});
-
     //History API를 사용한 새로고침시에도 피드가 유지되도록 하는 이벤트
     window.addEventListener('load', function () {
         const feedNum = getUrlParam('feed');
@@ -54,6 +54,18 @@ $(document).ready(function() {
             saved_feedNum = feedNum;
             console.log('객체 열기');
             feedDetail();
+        }
+    });
+    //브라우저에서 뒤로가기 클릭시, History API이 적용된 feedDetail이 아닌 기존 페이지로 이동하는 이벤트
+    window.addEventListener('popstate', function(event) {
+        if (event.state) {
+            // event.state를 기반으로 필요한 작업을 수행합니다.
+            // 예: URL에 따른 페이지 콘텐츠를 로드하거나 특정 동작을 수행합니다.
+            console.log(event.state);
+            history.pushState(null, '', ``);
+        } else{
+            // 페이지가 로드될 때 한 페이지 뒤로 가려면 history.back()을 호출합니다.
+            history.back();
         }
     });
 });
@@ -154,13 +166,14 @@ function feedDetail() {
 }
 
 function feedPhotoPrint(feed_num) {
+    let photoContainer = null;
     $.ajax({
         url: "feedPhotoPrint",
         type: "post",
         data: { feed_num: feed_num }, 
         success: function(photos) {
-			let photoContainer = document.querySelector(`.feed-image-list[data-feed-num="${feed_num}"]`);
-            if (photos.length > 1) {
+			photoContainer = document.querySelector(`.feed-image-list[data-feed-num="${feed_num}"]`);
+            if (photos.length > 1 || photos !== null || photos !== undefined) {
                 photoContainer.classList.add('multi-image'); // 여러 이미지가 있는 경우에 대한 CSS 클래스 추가
             }
             photos.forEach(photo => {
