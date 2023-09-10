@@ -140,23 +140,24 @@
 							<div class="card profile-card">
 								<div class="go-profile">
 									<img th:src="@{../img/5.jpg}" alt="Background Image"
-										class="card-img-top"> <img th:src="@{../img/123.png}"
-										alt="Profile Image" class="profileImage">
+										class="card-img-top"> 
+									<img th:src="@{../img/123.png}" alt="Profile Image" id="profilePicInput" class="profileImage">
 									<div class="card-body"
 										style="padding-top: 55px; margin-bottom: -20px;">
 										<div class="center">
-											<h5 class="card-title">Hotaedonki</h5>
+											<h5 class="card-title nickname">Hotaedonki</h5>
 										</div>
 									</div>
 									<a class="text-primary" data-bs-toggle="modal"
 										data-bs-target="#followerModal"
-										onclick="event.stopPropagation();">팔로워 <span id="fr_count">100</span>
-									</a> <a style="margin-left: 10px;" class="text-primary"
+										onclick="event.stopPropagation();">팔로워 <span class="follower-cnt">100</span>
+									</a> 
+									<a style="margin-left: 10px;" class="text-primary"
 										data-bs-toggle="modal" data-bs-target="#followModal"
-										onclick="event.stopPropagation();">팔로우 <span id="fe_count">150</span>
+										onclick="event.stopPropagation();">팔로우 <span class="followee-cnt">150</span>
 									</a>
 								</div>
-								<p class="card-text" style="margin: 20px 0;">This is a short
+								<p class="card-text introduction" style="margin: 20px 0;">This is a short
 									description about yourself.</p>
 
 							</div>
@@ -344,6 +345,7 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
 	<script th:src="@{../js/memberView/sidebar.js}"></script>
 	<script th:src="@{../js/feedMain.js}"></script>
+	<script th:src="@{../js/memberView/myPage.js}"></script>
 
 </body>
 </html>

@@ -6,34 +6,17 @@
 	<!-- 회원정보를 memberDB로 전송하여 회원정보를 insert하는 코드 -->
 	<insert id="insertMember" parameterType="Member">
 		insert into ringo_member
-			(user_num
-			, user_id
-			, password
-			, username
-			, first_name
-			, last_name
-			, gender
-			, birth_date
-			, email
-			, native_lang
-			, target_lang
-			, introduction)
+			(user_num, user_id, password, username
+			, first_name, last_name, gender, birth_date
+			, email, native_lang, target_lang, introduction)
 		values
-			(ringo_member_seq.nextval
-			, #{user_id}
-			, #{password}
-			, #{username}
-			, #{first_name}
-			, #{last_name}
-			, #{gender}
-			, #{birth_date}
-			, #{email}
-			, #{native_lang}
-			, #{target_lang}
+			(ringo_member_seq.nextval, #{user_id}, #{password}
+			, #{username}, #{first_name}, #{last_name}, #{gender}
+			, #{birth_date}, #{email}, #{native_lang}, #{target_lang}
 			,
 			<!-- 자기소개 값을 입력하지 않은 경우 빈칸으로 대체 --> 
 			<choose>
-            <when test="introduction == null">''</when>
+            <when test="introduction == null">null</when>
             <otherwise>#{introduction}</otherwise>
           </choose>)
 	</insert>
@@ -109,7 +92,6 @@
 	from ringo_member_with_mypage
 	where user_id = #{user_id}
 	</select>
-	
 	<!-- 사용자의 수정한 프로필 정보 매개변수로 가져가 DB를 수정하는 update문 -->
 	<update id="memberUpdateProfile" parameterType="Member">
 	update ringo_member

@@ -1,4 +1,5 @@
 let selectedImages = [];
+let saved_feedNum = 0;  //History API를 사용한 피드 번호를 이용한 피드 출력기능에서 피드 번호 전달에 사용하는 전역변수
 
 $(document).ready(function() {
 	feedPrint();
@@ -45,7 +46,23 @@ $(document).ready(function() {
 	    }
 	});
 
+    //History API를 사용한 새로고침시에도 피드가 유지되도록 하는 이벤트
+    window.addEventListener('load', function () {
+        const feedNum = getUrlParam('feed');
+        if (feedNum) {
+            // 파일 번호가 URL에 있을 경우 해당 텍스트 객체 열기
+            saved_feedNum = feedNum;
+            console.log('객체 열기');
+            feedDetail();
+        }
+    });
 });
+
+//URL로부터 파일 번호를 얻어오는 함수
+function getUrlParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
 
 function feedPrint() {
 	$.ajax({
@@ -84,7 +101,14 @@ function feedPrint() {
 }
 
 function feedDetail() {
-	const feedNum = $(this).data('feed-num');
+    let feedNum = 0;
+    let num = $(this).data('feed-num');
+    if(num){   //this값이 있을 경우 
+	    feedNum = num;
+    }else{
+        feedNum = saved_feedNum;
+    }
+    
 	$.ajax({
 		url: "feedPrint",
 		type: "post",
@@ -119,6 +143,8 @@ function feedDetail() {
                     </div>
                 </div>
             `);
+            
+            history.pushState({ feed_num : clickedFeed.feed_num }, '', `?feed=${clickedFeed.feed_num}`);
 			$("#feedDetail").show();
 		}, 
 		error: function(error) {
