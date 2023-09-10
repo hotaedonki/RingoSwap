@@ -218,3 +218,21 @@ main {
 	margin-right: 10px;
 	margin-top: 5px;
 }
+
+.feed-photo {
+    width: 100px; /* 기본 이미지 크기 설정 */
+    height: auto; /* 가로 세로 비율 유지 */
+    cursor: pointer;
+}
+
+.feed-photo:hover {
+	transform: scale(0.85); /* 마우스 오버 시 아이콘 크기 감소 */
+}
+.feed-photo.multi {
+    width: 50px; /* 여러 이미지가 있을 때의 이미지 크기 */
+    margin-right: 10px;
+}
+.image-preview {
+    width: 100px; /* 미리보기 이미지 크기 */
+    height: auto; /* 가로 세로 비율 유지 */
+}

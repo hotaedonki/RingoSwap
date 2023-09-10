@@ -35,7 +35,7 @@ public interface FeedDAO
 	//작성한 feed 객체를 DB에 매개변수로 전달하는 메서드
 	int feedInsert(Feed feed);
 	//작성한 feedPhoto 배열을 DB에 매개변수로 전달하는 메서드
-	int feedPhotoInsert(ArrayList<FeedPhoto> photo);
+	int feedPhotoInsert(FeedPhoto photo);
 	//작성한 Reply 객체를 DB에 매개변수로 전달하는 메서드
 	int replyInsert(Reply reply);
 	//----------------[피드 작성 기능 종료]----------->>>>>>>>>>>>

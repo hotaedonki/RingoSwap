@@ -26,7 +26,7 @@ public interface FeedService {
 	//작성한 feed 객체를 DB에 매개변수로 전달하는 메서드
 	public int feedInsert(Feed feed);
 	//작성한 feedPhoto 배열을 DB에 매개변수로 전달하는 메서드
-	public int feedPhotoInsert(ArrayList<FeedPhoto> photoList);
+	public int feedPhotoInsert(FeedPhoto feedPhoto);
 	//작성한 Reply 객체를 DB에 매개변수로 전달하는 메서드
 	public int replyInsert(Reply reply);
 	//----------------[피드 작성 기능 종료]----------->>>>>>>>>>>>

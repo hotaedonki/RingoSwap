@@ -8,12 +8,13 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.FeedDAO;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Reply;
 import net.ringo.ringoSwap.util.FeedSort;
-
+@Slf4j
 @Service
 public class FeedServiceImple implements FeedService{
 	@Autowired
@@ -58,7 +59,7 @@ public class FeedServiceImple implements FeedService{
 	}
 	//작성한 feedPhoto 배열을 DB에 매개변수로 전달하는 메서드
 	@Override
-	public int feedPhotoInsert(ArrayList<FeedPhoto> photo) {
+	public int feedPhotoInsert(FeedPhoto photo) {
 		return dao.feedPhotoInsert(photo);
 	}
 	
@@ -89,11 +90,10 @@ public class FeedServiceImple implements FeedService{
 		}else {								//delete메서드를 실행하는 if문
 			methodResult = dao.feedLikeDeleteOne(map);
 		}
-		
+		log.debug("좋아요 줬는지 확인 : {}", methodResult);
 		//삽입/삭제 메서드 실행후 변동된 좋아요 갯수를 다시 검색하여 리턴받는 메서드 실행
-		methodResult = dao.feedLikeCountSelectByFeedNum(feed_num);
-		
-		return methodResult;
+		int likeCount = dao.feedLikeCountSelectByFeedNum(feed_num);
+		return likeCount;
 	}
 	//특정 댓글의 좋아요 클릭시 해당 댓글에 좋아요를 추가하거나 취소하는 메서드
 	@Override

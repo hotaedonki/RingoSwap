@@ -1,15 +1,14 @@
 package net.ringo.ringoSwap.controller;
-
-import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Base64;
 
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
-import net.ringo.ringoSwap.domain.FeedTag;
 import net.ringo.ringoSwap.domain.Reply;
-import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.FeedService;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.util.FileService;
@@ -98,31 +94,34 @@ public class FeedController {
 
 	// 특정 피드 게시물 출력시 해당 피드와 같이 등록된 사진을 리턴해 출력하는 controller 메서드
 	@PostMapping("feedPhotoPrint")
-	public ArrayList<FeedPhoto> feedPhotoPrint(int feed_num
-			, HttpServletRequest request
-			, HttpServletResponse response
-			, int arrayNum) {
-		ArrayList<FeedPhoto> photoList = service.feedPhotoSelectByFeedNum(feed_num);
-		FeedPhoto feedPhoto = photoList.get(arrayNum);
-		String fullPath = uploadPath+"/"+feedPhoto.getSaved_file();
-		
-		try {
-			response.setHeader("Content-Disposition", " attachment;filename="+ 
-			URLEncoder.encode(feedPhoto.getOrigin_file(), "UTF-8"));
-		} catch (UnsupportedEncodingException  e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			FileInputStream in = new FileInputStream(fullPath);
-			ServletOutputStream out = response.getOutputStream();
-			FileCopyUtils.copy(in, out);
-			in.close();
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return photoList;
+	@ResponseBody
+	public List<Map<String, Object>> feedPhotoPrint(@RequestParam Integer feed_num
+		, HttpServletRequest request
+		, HttpServletResponse response) {
+	    List<FeedPhoto> photoList = service.feedPhotoSelectByFeedNum(feed_num);
+	    List<Map<String, Object>> responseData = new ArrayList<>();
+	    log.debug("피드넘확인 : {}", feed_num);
+	    for (FeedPhoto photo : photoList) {
+	        String fullPath = uploadPath + "/" + photo.getSaved_file();
+	        
+	        File file = new File(fullPath);
+	        if(file.exists()) {
+	            try {
+	                byte[] byteArr = Files.readAllBytes(file.toPath());
+	                Map<String, Object> photoData = new HashMap<>();
+	                photoData.put("fileName", photo.getOrigin_file());
+	                photoData.put("fileData", Base64.getEncoder().encodeToString(byteArr));
+	                
+	                responseData.add(photoData);
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	        log.debug("포토넘확인 : {}", photo.getPhoto_num());
+	    }
+	    
+	    
+	    return responseData;
 	}
 
 	// 특정 피드 게시글의 feed_num을 왜래키로 갖는 reply 배열을 리턴하는 controller 메서드
@@ -160,10 +159,6 @@ public class FeedController {
 		
 		int newFeedNum = feed.getFeed_num();
 		log.debug("새로 생성된 feed_num: {}", newFeedNum);
-		
-		if (photos != null) {
-	        ArrayList<FeedPhoto> photoList = new ArrayList<>();
-
 
 		for (MultipartFile photo : photos) {
 			if (photo != null && !photo.isEmpty()) {
@@ -175,12 +170,9 @@ public class FeedController {
 				String savedfile = FileService.saveFile(photo, uploadPath);
 				feedPhoto.setOrigin_file(photo.getOriginalFilename());
 				feedPhoto.setSaved_file(savedfile);
-				photoList.add(feedPhoto);
-				log.debug("사진 데이터 확인 : {}", photoList);
+				service.feedPhotoInsert(feedPhoto);
 			}
-		}
-		methodResult = service.feedPhotoInsert(photoList);		
-		}
+		}	
 		
 		return ResponseEntity.ok("Success");
 	}
@@ -188,9 +180,19 @@ public class FeedController {
 	// 특정 게시물에서 댓글을 작성하여 DB에 전달하는 controller 메서드
 	@ResponseBody
 	@PostMapping("replyInsert")
-	public void replyInsert(@AuthenticationPrincipal UserDetails user, Reply reply) {
-		int methodResult;
-		methodResult = service.replyInsert(reply);
+	public int replyInsert(@AuthenticationPrincipal UserDetails user
+			, String contents
+			, int feed_num) {
+		log.debug("리플내용확인 {} ", contents);
+		log.debug("리플 피드넘 {} ", feed_num);
+		Reply reply = new Reply();
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		reply.setUser_num(user_num);
+		reply.setContents(contents);
+		reply.setFeed_num(feed_num);
+		int methodResult = service.replyInsert(reply);
+		
+		return reply.getFeed_num();
 	}
 
 	// ----------------[피드 작성 기능 종료]----------->>>>>>>>>>>>
@@ -201,10 +203,10 @@ public class FeedController {
 	@ResponseBody
 	@PostMapping("feedLikeClicker")
 	public int feedLikeClicker(@AuthenticationPrincipal UserDetails user, int feed_num) {
+		log.debug("좋아요 개수 확인 피드 {}", feed_num);
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-
 		int methodResult = service.feedLikeClick(user_num, feed_num);
-
+		log.debug("좋아요 개수{}, ", methodResult);
 		return methodResult;
 	}
 
