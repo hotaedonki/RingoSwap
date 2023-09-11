@@ -126,17 +126,17 @@ CREATE VIEW ringo_follower_view AS
 	select F.follower_num, F.followee_num
 		, M.user_id as follower_id
 		, M.original_profile, M.saved_profile
-	from ringo_follow F
+	from ringo_member_follow F
 	left join
-		ringo_member MR	F.follower_num = MR.user_num
+		ringo_member M ON	F.follower_num = M.user_num;
 --
 CREATE VIEW ringo_followee_view AS
 	select F.follower_num, F.followee_num
 		, M.user_id as followee_id
 		, M.original_profile, M.saved_profile
-	from ringo_follow F
+	from ringo_member_follow F
 	left join
-		ringo_member M F.followee_num = M.user_num
+		ringo_member M ON F.followee_num = M.user_num;
 
 
 
