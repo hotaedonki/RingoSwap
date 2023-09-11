@@ -90,7 +90,7 @@ public class FeedController {
 	    for (Feed feed : feedList) {
 	        int feed_num = feed.getFeed_num();
 	        // 현재 피드에 대한 좋아요 클릭 여부를 확인
-	        int likeCheck = service.likePrint(user_num, feed_num);
+	        int likeCheck = service.feedLikePrint(user_num, feed_num);
 	        // 결과를 Map에 저장
 	        likeCheckMap.put(feed_num, likeCheck);
 	    }
@@ -110,7 +110,7 @@ public class FeedController {
 	    int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 	    Feed feed = service.feedSelectOneByFeedNum(feed_num);
 	    
-	    int likeCheck = service.likePrint(user_num, feed_num); // 좋아요 체크 값을 가져옵니다.
+	    int likeCheck = service.feedLikePrint(user_num, feed_num); // 좋아요 체크 값을 가져옵니다.
 
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("feed", feed);
@@ -152,10 +152,22 @@ public class FeedController {
 	// 특정 피드 게시글의 feed_num을 왜래키로 갖는 reply 배열을 리턴하는 controller 메서드
 	@ResponseBody
 	@PostMapping("replyPrint")
-	public ArrayList<Reply> replyPrint(int feed_num) {
-		ArrayList<Reply> replyList = service.replySelectByFeedNum(feed_num);
+	public Map<String, Object> replyPrint(int feed_num, @AuthenticationPrincipal UserDetails user) {
+		ArrayList<Reply> replyList = service.replySelectByFeedNum(feed_num);		//해당 피드의 댓글목록 정보를 담는 변수
+		HashMap<Integer, Integer> likeCheckMap = new HashMap<>();					//각 피트의 좋아요 여부 정보를 담는 변수
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());	//likeCheckMap에 사용할 회원 번호
 
-		return replyList;
+		//likeCheckMap에 replyList배열에 저장된 각 댓글의 사용자의 좋아요 여부 정보를 기록한다.
+		for (Reply reply : replyList) {
+	        int reply_num = reply.getReply_num();
+			int likeCheck = service.replyLikePrint(user_num, reply_num); // 좋아요 체크 값을 가져옵니다.
+			likeCheckMap.put(reply_num, likeCheck);
+		}
+		
+		HashMap<String, Object> map = new HashMap<>();//리턴용 해시맵 변수
+		map.put("replyList", replyList);
+		map.put("likeCheckMap", likeCheckMap);
+		return map;
 	}
 
 	// ----------------[피드 출력 기능 종료]----------->>>>>>>>>>>>
@@ -206,7 +218,8 @@ public class FeedController {
 	// 특정 게시물에서 댓글을 작성하여 DB에 전달하는 controller 메서드
 	@ResponseBody
 	@PostMapping("replyInsert")
-	public int replyInsert(@AuthenticationPrincipal UserDetails user, String contents, int feed_num) {
+	public int replyInsert(@AuthenticationPrincipal UserDetails user, String contents
+				, @RequestParam(name="feed_num", defaultValue ="0") int feed_num) {
 		log.debug("리플내용확인 {} ", contents);
 		log.debug("리플 피드넘 {} ", feed_num);
 		Reply reply = new Reply();
@@ -239,7 +252,8 @@ public class FeedController {
 	@PostMapping("replyLikeClicker")
 	public int replyLikeClicker(@AuthenticationPrincipal UserDetails user, int reply_num) {
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-
+		log.debug("ID번호 {}", user_num);
+		log.debug("댓글번호 {}", reply_num);
 		int methodResult = service.replyLikeClick(user_num, reply_num);
 
 		return methodResult;

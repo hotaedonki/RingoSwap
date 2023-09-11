@@ -39,7 +39,8 @@ $(document).ready(function() {
         $(".feed-create-area .post").show();
     });
     $(document).on('click', '.insertReply', replyInsert);
-    $(document).on('click', '.like-button', clickLike);
+    $(document).on('click', '.like-button', clickLikeFeed);
+    $(document).on('click', '.replyLike', clickLikeReply);
 	$(document).on('click', '.collapseFeed', function(event) {
 	    if (!$(event.target).hasClass('bi')) {
 	        feedDetail.call(this, event);
@@ -48,6 +49,20 @@ $(document).ready(function() {
 	$(document).on('click', '#backToFeed', returnFeedMain);
 	$(document).on('click', '.feed-delete-button', feedDelete);
 	
+    //브라우저에서 뒤로가기 클릭시, History API이 적용된 feedDetail이 아닌 기존 페이지로 이동하는 이벤트
+    window.addEventListener('popstate', function(event) {
+        if (event.state) {
+            // event.state를 기반으로 필요한 작업을 수행합니다.
+            // 예: URL에 따른 페이지 콘텐츠를 로드하거나 특정 동작을 수행합니다.
+            console.log(event.state);
+            history.pushState({ feed_num : event.state.feed_num }, '', `?feed=${event.state.feed_num}`);
+            location.reload();
+        } else{
+            // 페이지가 로드될 때 한 페이지 뒤로 가려면 이전 페이지로 이동해 호출합니다.
+            history.replaceState(null, '', ``);
+            location.reload();
+        }
+    });
     //History API를 사용한 새로고침시에도 피드가 유지되도록 하는 이벤트
     window.addEventListener('load', function () {
         const feedNum = getUrlParam('feed');
@@ -56,18 +71,6 @@ $(document).ready(function() {
             saved_feedNum = feedNum;
             console.log('객체 열기');
             feedDetail();
-        }
-    });
-    //브라우저에서 뒤로가기 클릭시, History API이 적용된 feedDetail이 아닌 기존 페이지로 이동하는 이벤트
-    window.addEventListener('popstate', function(event) {
-        if (event.state) {
-            // event.state를 기반으로 필요한 작업을 수행합니다.
-            // 예: URL에 따른 페이지 콘텐츠를 로드하거나 특정 동작을 수행합니다.
-            console.log(event.state);
-            history.pushState(null, '', ``);
-        } else{
-            // 페이지가 로드될 때 한 페이지 뒤로 가려면 history.back()을 호출합니다.
-            history.back();
         }
     });
 });
@@ -135,7 +138,6 @@ function feedPrint() {
 }
 
 function feedDetail() {
-<<<<<<< HEAD
 	$('#feedDetail').empty();
 	let feedNum = 0;
     let num = $(this).data('feed-num');
@@ -144,16 +146,7 @@ function feedDetail() {
     }else{
         feedNum = saved_feedNum;
     }
-=======
-    let feedNum = 0;
-    let num = $(this).data('feed-num');
-    if(num){   //this값이 있을 경우 
-	    feedNum = num;
-    }else{
-        feedNum = saved_feedNum;
-    }
     
->>>>>>> shl
 	$.ajax({
 		url: "feedPrint",
 		type: "post",
@@ -174,7 +167,7 @@ function feedDetail() {
 			$('#feedDetail').append(`
                     <div class="card feed-card detail.feed" data-feed-num="${detail.feed.feed_num}">
                     <div class="card-header" style="width: 100%;">
-                        <img src="../img/고양.jpg" alt="Poster Image" class="posterImage"> 
+                        <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage"> 
                         <span>${detail.feed.user_id}</span>
                         <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">
                             <i class="bi bi-arrow-return-left returnFeedMain"></i>
@@ -189,7 +182,7 @@ function feedDetail() {
                             <i class="bi ${likeButtonClass} like-button" data-feed-num="${detail.feed.feed_num}"></i> 
                             <i class="bi bi-translate translate"></i>
                         </div>
-                        <div class="comment-input-section d-flex replyMargin">
+                        <div class="comment-input-section d-flex replyMargin" data-feed-num="${detail.feed.feed_num}">
                             <input type="text" class="form-control flex-grow-1 replyContent" placeholder="댓글을 입력하세요..." />
                             <button class="btn btn-primary ml-2 insertReply" style="min-width: 60px;">작성</button>
                         </div>
@@ -198,7 +191,7 @@ function feedDetail() {
                 </div>
             `);
             
-            history.pushState({ feed_num : clickedFeed.feed_num }, '', `?feed=${clickedFeed.feed_num}`);
+            history.pushState({ feed_num : detail.feed.feed_num }, '', `?feed=${detail.feed.feed_num}`);
 			$("#feedDetail").show();
 		}, 
 		error: function(error) {
@@ -288,19 +281,20 @@ function createPost() {
 }
 
 function replyInsert() {
-	const replyContent = $(".replyContent").val();
-	const feedNum = $(".detail.feed").data('feed-num');
+	const replyContent = $(this).closest('.replyMargin').find(".replyContent").val();
+    const feedNum = $(this).closest('.replyMargin').data('feed-num');
 	console.log(replyContent, feedNum);
 	
 	$.ajax({
 		url: "replyInsert",
 		type: "post",
 		data: { feed_num: feedNum, contents: replyContent },
+        dataType:'json',
 		success: function(feedNum) {
 			replyPrint(feedNum);
 		},
 		error: function(error) {
-			console.error(error)
+			console.error(error);
 		}
 	})
 }
@@ -310,14 +304,26 @@ function replyPrint(feedNum) {
 		url: "replyPrint",
 		type: "post",
 		data: {feed_num: feedNum},
-		success: function(replys) {
+		success: function(res) {
 			$(".replyPrint").empty();
+			let replys = res.replyList;
+			let likeCheck = res.likeCheckMap;
 			replys.forEach(reply => {
+                // 좋아요 체크 값
+                let isLiked = likeCheck[reply.reply_num];
+                // 좋아요 버튼의 기본 클래스와 스타일을 설정
+                let likeButtonClass = "bi-heart";
+                // 좋아요 체크 값이 1이면, 버튼의 클래스와 스타일을 업데이트
+                if (isLiked === 1) {
+                   likeButtonClass = "bi-heart-fill";
+                }
+
 				$(".replyPrint").append(`
                 <div class="comment-list replyMargin">
                     <div class="comment-item d-flex">
                         <div class="comment-text flex-grow-1">${reply.contents}</div>
-                        <i class="bi bi-heart unLike replyLike"></i>
+                        <span class="like-count" data-reply-num="${reply.reply_num}">${reply.like_count}</span> 
+                        <i class="bi ${likeButtonClass} unLike replyLike" data-reply-num="${reply.reply_num}"></i>
                         <button class="btn btn-primary reply-btn ml-2">답글</button>
                         <button class="btn btn-primary reply-delete-btn">삭제</button>
                         <div class="reply-input-section" style="display: none;">
@@ -350,7 +356,8 @@ function collapseWrite() {
 
 }
 
-function clickLike() {
+//피드 좋아요 기능
+function clickLikeFeed() {
     const feedNum = $(this).data('feed-num');
     const buttonElement = $(this); // $(this) 참조를 저장
 
@@ -373,7 +380,30 @@ function clickLike() {
         }
     })
 }
+//댓글 좋아요 기능
+function clickLikeReply() {
+    const replyNum = $(this).data('reply-num');
+    const buttonElement = $(this); // $(this) 참조를 저장
 
+    $.ajax({
+        url: "replyLikeClicker",
+        type: "post",
+        data: {reply_num: replyNum},
+        success: function(like) {
+            $('.like-count[data-reply-num="' + replyNum + '"]').text(like); // 좋아요 개수 업데이트
+
+            buttonElement.toggleClass('bi-heart bi-heart-fill');
+            if (buttonElement.hasClass('bi-heart-fill')) {
+                buttonElement.css('color', 'red');
+            } else {
+                buttonElement.css('color', ''); // 기본 색상으로 설정
+            }
+        },
+        error: function(error) {
+            console.error(error);
+        }
+    })
+}
 
 
 function goToProfile() {
@@ -381,6 +411,9 @@ function goToProfile() {
 }
 
 function returnFeedMain() {
+    //pushState를 통해 브라우저에 feedMain초기화면 상태로 새 History 페이지를 추가.
+    history.replaceState(null, '', '?feed=');
+
 	$(".feed-display-area .col-12").show();
 	$(".left-area, .middle-area").show();
 	$("#feedDetail").hide();

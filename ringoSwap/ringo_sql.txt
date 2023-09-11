@@ -207,6 +207,7 @@ CREATE TABLE ringo_reply (
 	reply_num		number			primary key,
 	user_num		number,					--왜래키, 계정 삭제시 cascade 대신 null로 표기
 	feed_num		number,					--외래키, 글 삭제시 cascade 됨
+    parent_reply_num    number  default -1,
 	contents	varchar2(250)	NOT NULL,
 	inputdate		date		default sysdate,
 	constraint fk_feed_num_reply		foreign key (feed_num) references ringo_feed(feed_num) on delete cascade,
@@ -215,14 +216,10 @@ CREATE TABLE ringo_reply (
 CREATE SEQUENCE ringo_reply_seq;
 --댓글 정보+좋아요 수+태그를 속성으로 갖는 view를 create하는 명령어
 CREATE VIEW ringo_reply_with_likeandtag AS
-	select R.reply_num
-	 	, M.user_id
-		, M.original_profile
-		, M.saved_profile	
-	 	, R.feed_num
-	 	, R.contents
-	 	, R.inputdate
-	 	, count(L.user_num) as like_num
+	select R.reply_num, R.parent_reply_num, R.feed_num
+	 	, M.user_id, M.original_profile, M.saved_profile	
+	 	, R.contents, R.inputdate
+	 	, count(L.user_num) as like_count
 		, listagg(T.tag_name, ' ') within group (order by TR.link_num) AS tag_list
 	from ringo_reply R
 	left join
@@ -234,7 +231,7 @@ CREATE VIEW ringo_reply_with_likeandtag AS
 	left join
 	    ringo_tagstorage T ON TR.tag_num = T.tag_num
 	GROUP BY
-	    R.reply_num, M.user_id, R.contents, R.inputdate,M.original_profile, M.saved_profile, R.feed_num;
+	    R.reply_num, R.parent_reply_num, M.user_id, R.contents, R.inputdate,M.original_profile, M.saved_profile, R.feed_num;
 --view 사용 예시(14일 이내 작성한 글을 좋아요 수가 많은 순으로 정렬해 출력),
 	select *
 	from ringo_reply_with_likeandtag

@@ -108,7 +108,7 @@
 		#{feed_num}
 	</select>
 
-	<!-- 사용자가 해당 피드에 좋아요를 줬는지 여부를 확인해 리턴하는 select문 -->
+	<!-- 사용자가 해당 댓글에 좋아요를 줬는지 여부를 확인해 리턴하는 select문 -->
 	<select id="replyLikeSelectOneForCheck"
 		parameterType="java.util.HashMap">
 		select count(*)
@@ -117,20 +117,20 @@
 		#{user_num} and
 		reply_num = #{reply_num}
 	</select>
-	<!-- 해당 피드에 사용자의 좋아요를 삽입하는 insert문 -->
+	<!-- 해당 댓글에 사용자의 좋아요를 삽입하는 insert문 -->
 	<insert id="replyLikeInsertOne"
 		parameterType="java.util.HashMap">
 		insert into ringo_reply_like (user_num, reply_num)
 		values (#{user_num}, #{reply_num})
 	</insert>
-	<!-- 해당 피드에서 사용자의 좋아요를 삭제하는 delete문 -->
+	<!-- 해당 댓글에서 사용자의 좋아요를 삭제하는 delete문 -->
 	<delete id="replyLikeDeleteOne"
 		parameterType="java.util.HashMap">
 		delete ringo_reply_like
 		where user_num = #{user_num} and
 		reply_num = #{reply_num}
 	</delete>
-	<!-- 특정 피드의 현재 좋아요 갯수를 리턴하는 select문 -->
+	<!-- 특정 댓글의 현재 좋아요 갯수를 리턴하는 select문 -->
 	<select id="replyLikeCountSelectByFeedNum">
 		select count(*)
 		from ringo_reply_like
