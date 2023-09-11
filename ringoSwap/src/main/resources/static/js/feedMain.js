@@ -2,7 +2,6 @@ let selectedImages = [];
 let saved_feedNum = 0;  //History API를 사용한 피드 번호를 이용한 피드 출력기능에서 피드 번호 전달에 사용하는 전역변수
 
 $(document).ready(function() {
-
 	feedPrint();
     $(".feed-header").click(otherUserProfileButton);
     $(".profile-card").click(goToProfile);
@@ -38,6 +37,8 @@ $(document).ready(function() {
         $(".feed-create-area .icons").show();
         $(".feed-create-area .post").show();
     });
+
+    
     $(document).on('click', '.insertReply', replyInsert);
     $(document).on('click', '.like-button', clickLikeFeed);
     $(document).on('click', '.replyLike', clickLikeReply);
@@ -159,7 +160,7 @@ function feedDetail() {
 	$('#feedDetail').empty();
 	let feedNum = 0;
     let num = $(this).data('feed-num');
-    if(num){   //this값이 있을 경우 
+    if(num){ 
         feedNum = num;
     }else{
         feedNum = saved_feedNum;
@@ -181,6 +182,8 @@ function feedDetail() {
 		     if (detail.likeCheck === 1) {
 		        likeButtonClass = "bi-heart-fill";
 		     }
+			
+			$('#feedDetail').append(createFeedTemplate(detail.feed));
 			
 			$('#feedDetail').append(`
                     <div class="card feed-card detail.feed" data-feed-num="${detail.feed.feed_num}">
@@ -323,9 +326,11 @@ function replyPrint(feedNum) {
         url: "replyPrint",
         type: "post",
         data: { feed_num: feedNum },
-        success: function(replys) {
+        success: function(replyMap) {
             $(".replyPrint").empty();
-
+			
+			let replys = replyMap.replyList;
+			let replyLike = replyMap.likeCheckMap;
             // 댓글과 답글을 분리
             let comments = replys.filter(reply => reply.parent_reply_num === -1);
             let nestedReplies = replys.filter(reply => reply.parent_reply_num !== -1);
@@ -456,7 +461,6 @@ function collapseWrite() {
 	$(".emojionearea-editor").css("height", "100px");
 	$(".feed-create-area .icons").hide();
 	$(".feed-create-area .post").hide();
-
 }
 
 //피드 좋아요 기능
