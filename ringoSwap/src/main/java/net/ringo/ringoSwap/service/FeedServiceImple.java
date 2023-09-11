@@ -167,7 +167,16 @@ public class FeedServiceImple implements FeedService{
 		
 		return dao.feedDeleteByUser(map);
 	}
-	
+
+	//해당 댓글 작성자인지를 확인 후 해당 댓글을 삭제하는 메서드
+	@Override
+	public int replyDeleteOne(int user_num, int reply_num) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("reply_num", reply_num);
+		map.put("user_num", user_num);
+		
+		return dao.replyDeleteOne(map);
+	}
 	
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }

@@ -110,5 +110,33 @@
 		, follow_open=#{follow_open}, gps_open=#{gps_open}, trans_lang=#{trans_lang}
 	where user_num = #{user_num}
 	</update>
+	<!-- 마이페이지 종료 -->
+	<!-- 팔로우/팔로워 기능 시작 -->
+	<!-- 특정 문자열이 포함된 닉네임을 가진 모든 회원의 회원번호를 리턴하는 select문 -->
+	<select id="memberByUsernameReturnUserNum" parameterType="String">
+	select user_num
+	from ringo_member
+	where username like '%'||#{username}||'%'
+	</select>
 	
+	<select id="followerArraySearch" parameterType="java.util.HashMap">
+	select *
+	from ringo_follower_view
+	where followee_num = #{followee_num}
+		and follower_num in
+		<foreach collection="follower_num" item="follower" open="(" separator=", " close=")">
+			#{follower}
+		</foreach>
+	</select>
+	
+	<select id="followeeArraySearch" parameterType="java.util.HashMap">
+	select *
+	from ringo_followee_view
+	where follower_num = #{follower_num}
+		and followee_num in
+		<foreach collection="followee_num" item="followee" open="(" separator=", " close=")">
+			#{followee}
+		</foreach>
+	</select>
+	<!-- 팔로우/팔로워 기능 종료 -->
 </mapper>

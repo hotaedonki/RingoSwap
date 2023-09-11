@@ -48,6 +48,9 @@ $(document).ready(function() {
 	});
 	$(document).on('click', '#backToFeed', returnFeedMain);
 	$(document).on('click', '.feed-delete-button', feedDelete);
+	$(document).on('click', '.reply-delete-button', replyDelete);
+	$(document).on('click', '.follower-btn', followerSearch);
+	$(document).on('click', '.follow-btn', followeeSearch);
 	
     //브라우저에서 뒤로가기 클릭시, History API이 적용된 feedDetail이 아닌 기존 페이지로 이동하는 이벤트
     window.addEventListener('popstate', function(event) {
@@ -325,7 +328,7 @@ function replyPrint(feedNum) {
                         <span class="like-count" data-reply-num="${reply.reply_num}">${reply.like_count}</span> 
                         <i class="bi ${likeButtonClass} unLike replyLike" data-reply-num="${reply.reply_num}"></i>
                         <button class="btn btn-primary reply-btn ml-2">답글</button>
-                        <button class="btn btn-primary reply-delete-btn">삭제</button>
+                        <button class="btn btn-primary reply-delete-button" data-reply-num="${reply.reply_num}">삭제</button>
                         <div class="reply-input-section" style="display: none;">
                             <input type="text" class="form-control" placeholder="답글을 입력하세요..." />
                             <button class="btn btn-primary">작성</button>
@@ -430,6 +433,7 @@ function feedDelete(){
         url: "feedDeleteOne",
         type: "post",
         data: {feed_num : feed_num},
+        dataType:'json',
         success:function(res){
 			if(res === "0") {
 				alert("본인이 작성한 글만 삭제할 수 있습니다.")
@@ -444,3 +448,64 @@ function feedDelete(){
     })
 }
 
+function replyDelete(){
+    let reply_num = $(this).data('reply-num');
+    let feed_num = $('.replyMargin').data('feed-num');
+    console.log(reply_num);
+	
+    $.ajax({
+        url: "replyDeleteOne",
+        type: "post",
+        data: {reply_num : reply_num},
+        dataType:'json',
+        success:function(res){
+			if(res === "0") {
+				alert("본인이 작성한 글만 삭제할 수 있습니다.")
+			} 
+			replyPrint(feed_num);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    })
+}
+
+/* 팔로워, 팔로우 검색 및 출력기능 */
+function followerSearch(){
+    let username = $('.justify-content-center .searchFollower').val();
+    $.ajax({
+        url: "followerSearch",
+        type: "post",
+        data: {username : username},
+        dataType:'json',
+        success:function(followerList){
+            if(followerList){
+                console.log(followerList);
+            }else{
+                console.log('팔로워 검색');
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+function followeeSearch(){
+    let username = $('.justify-content-center .searchFollow').val();
+    $.ajax({
+        url: "followeeSearch",
+        type: "post",
+        data: {username : username},
+        dataType:'json',
+        success:function(followeeList){
+            if(followeeList){
+                console.log(followeeList);
+            }else{
+                console.log('팔로우 검색');
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}

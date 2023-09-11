@@ -177,9 +177,14 @@
 	<delete id="feedDeleteByUser" parameterType="java.util.HashMap">
 		delete ringo_feed
 		where feed_num = #{feed_num}
-		and user_num =#{user_num}
+			and user_num =#{user_num}
 	</delete>
-	<!-- -->
+	<!-- reply_num과 user_num을 기반으로 댓글의 작성자가 맞는지 확인후, 작성자가 맞다면 해당 댓글을 삭제하는 delete문 -->
+	<delete id="replyDeleteOne" parameterType="java.util.HashMap">
+	delete ringo_reply
+	where reply_num = #{reply_num}
+		and user_num = #{user_num}
+	</delete>
 	<!-- 삭제 관련 기능 끝 -->
 	
 </mapper>

@@ -30,6 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
+import net.ringo.ringoSwap.domain.Member;
+import net.ringo.ringoSwap.domain.MemberFollow;
 import net.ringo.ringoSwap.domain.Reply;
 import net.ringo.ringoSwap.service.FeedService;
 import net.ringo.ringoSwap.service.MemberService;
@@ -276,9 +278,39 @@ public class FeedController {
 
 	// ----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 
-	// <<<<<<<<<<<------[검색 관련 기능 시작]----------------------
+	// <<<<<<<<<<<------[팔로워/팔로우 검색 관련 기능 시작]----------------------
+	//닉네임을 매개변수로 하는 팔로워 검색 메서드
+	@ResponseBody
+	@PostMapping("followerSearch")
+	public ArrayList<MemberFollow> followerSearch(String username
+			, @AuthenticationPrincipal UserDetails user){
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Object> map = new HashMap<>();
+		ArrayList<Integer> followerList = memberService.memberByUsernameReturnUserNum(username); 
+		map.put("followee_num", user_num);
+		map.put("follower_num", followerList);
+		
+		ArrayList<MemberFollow> followerSearch = memberService.followerArraySearch(map);
+		
+		return followerSearch;
+	}
 
-	// ----------------[검색 관련 기능 종료]----------->>>>>>>>>>>>
+	//닉네임을 매개변수로 하는 팔로우 검색 메서드
+	@ResponseBody
+	@PostMapping("followeeSearch")
+	public ArrayList<MemberFollow> followeeSearch(String username
+					, @AuthenticationPrincipal UserDetails user){
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Object> map = new HashMap<>();
+		ArrayList<Integer> followeeList = memberService.memberByUsernameReturnUserNum(username); 
+		map.put("follower_num", user_num);
+		map.put("followee_num", followeeList);
+		
+		ArrayList<MemberFollow> followeeSearch = memberService.followeeArraySearch(map);
+		
+		return followeeSearch;
+	}
+	// ----------------[팔로워/팔로우 검색 관련 기능 종료]----------->>>>>>>>>>>>
 
 	// <<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
 	@ResponseBody
@@ -329,5 +361,23 @@ public class FeedController {
 		return resultMsg; // 현재까지의 삭제 메서드 결과를 리턴합니다.
 	}
 
+	@ResponseBody
+	@PostMapping("replyDeleteOne")
+	public String replyDeleteOne(int reply_num
+					, @AuthenticationPrincipal UserDetails user) {
+		String resultMsg="";		//댓글삭제 메서드 실행결과를 담아 리턴하는 문자열 변수.
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		//삭제 메서드 실행
+		int methodResult = service.replyDeleteOne(user_num, reply_num);
+		
+		if(methodResult == 0) {
+			resultMsg = "댓글 삭제 실패";
+			return resultMsg;
+		}
+		resultMsg = "댓글 삭제 성공";
+		return resultMsg;
+	}
+	
 	// ----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }

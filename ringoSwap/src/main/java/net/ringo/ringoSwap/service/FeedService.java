@@ -53,6 +53,8 @@ public interface FeedService {
 	//<<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
 	//해당 피드작성자인지를 확인한 후 해당 피드를 삭제하는 메서드
 	public int feedDeleteByUser(int feed_num, int user_num);
+	//해당 댓글 작성자인지를 확인 후 해당 댓글을 삭제하는 메서드
+	public int replyDeleteOne(int user_num, int reply_num);
 	
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }
