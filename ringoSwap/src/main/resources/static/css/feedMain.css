@@ -236,3 +236,13 @@ main {
 .bi-heart-fill {
 	color: red;
 }
+
+.reply-input-section, .reply-list {
+    padding-left: 20px;
+}
+
+.user-photo-reply {
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+}

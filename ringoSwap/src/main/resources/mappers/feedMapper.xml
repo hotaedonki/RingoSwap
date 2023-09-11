@@ -28,11 +28,12 @@
 
 	<!-- feed_num을 매개변수로 특정 피드에 달린 reply 배열 정보를 리턴하는 select문 -->
 	<select id="replySelectByFeedNum" resultType="Reply">
-		select * from
-		ringo_reply_with_likeandtag
-		where feed_num = #{feed_num}
-		order by
-		inputdate desc
+	    select 
+	        R.*,
+	        (select count(*) from ringo_reply where parent_reply_num = R.reply_num) as reply_count
+	    from ringo_reply_with_likeandtag R
+	    where feed_num = #{feed_num}
+	    order by inputdate desc
 	</select>
 
 	<!-- feed_num을 매개변수로 해당 피드에 등록된 사진 정보 배열 객체를 불러오는 메서드 -->
@@ -70,9 +71,9 @@
 	<!-- 작성한 Reply 객체를 DB에 매개변수로 전달하는 insert문 -->
 	<insert id="replyInsert" parameterType="Reply">
 		insert into
-		ringo_reply(reply_num, feed_num, user_num, contents)
+		ringo_reply(reply_num, feed_num, user_num, contents, parent_reply_num)
 		values
-		(ringo_reply_seq.nextval, #{feed_num}, #{user_num}, #{contents})
+		(ringo_reply_seq.nextval, #{feed_num}, #{user_num}, #{contents}, #{parent_reply_num})
 	</insert>
 
 	<!-- 피드 작성 기능 끝 -->
