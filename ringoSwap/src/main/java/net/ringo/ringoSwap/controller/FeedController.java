@@ -154,7 +154,7 @@ public class FeedController {
 	@PostMapping("replyPrint")
 	public ArrayList<Reply> replyPrint(int feed_num) {
 		ArrayList<Reply> replyList = service.replySelectByFeedNum(feed_num);
-
+		log.debug("리플라이 리스트 출력 : {}", replyList);
 		return replyList;
 	}
 
@@ -206,7 +206,10 @@ public class FeedController {
 	// 특정 게시물에서 댓글을 작성하여 DB에 전달하는 controller 메서드
 	@ResponseBody
 	@PostMapping("replyInsert")
-	public int replyInsert(@AuthenticationPrincipal UserDetails user, String contents, int feed_num) {
+	public int replyInsert(@AuthenticationPrincipal UserDetails user
+			, String contents
+			, int feed_num
+			, int parent_reply_num) {
 		log.debug("리플내용확인 {} ", contents);
 		log.debug("리플 피드넘 {} ", feed_num);
 		Reply reply = new Reply();
@@ -214,6 +217,7 @@ public class FeedController {
 		reply.setUser_num(user_num);
 		reply.setContents(contents);
 		reply.setFeed_num(feed_num);
+		reply.setParent_reply_num(parent_reply_num);
 		int methodResult = service.replyInsert(reply);
 
 		return reply.getFeed_num();

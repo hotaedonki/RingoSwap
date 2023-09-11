@@ -70,6 +70,9 @@ $(document).ready(function() {
             history.back();
         }
     });
+	
+	$(document).on('click', '.insertNestedReply', insertNestedReply);
+	$(document).on('click', '.write-nested-reply', writeNestedReply);
 });
 
 //URL로부터 파일 번호를 얻어오는 함수
@@ -135,7 +138,6 @@ function feedPrint() {
 }
 
 function feedDetail() {
-<<<<<<< HEAD
 	$('#feedDetail').empty();
 	let feedNum = 0;
     let num = $(this).data('feed-num');
@@ -144,16 +146,6 @@ function feedDetail() {
     }else{
         feedNum = saved_feedNum;
     }
-=======
-    let feedNum = 0;
-    let num = $(this).data('feed-num');
-    if(num){   //this값이 있을 경우 
-	    feedNum = num;
-    }else{
-        feedNum = saved_feedNum;
-    }
-    
->>>>>>> shl
 	$.ajax({
 		url: "feedPrint",
 		type: "post",
@@ -190,15 +182,15 @@ function feedDetail() {
                             <i class="bi bi-translate translate"></i>
                         </div>
                         <div class="comment-input-section d-flex replyMargin">
-                            <input type="text" class="form-control flex-grow-1 replyContent" placeholder="댓글을 입력하세요..." />
-                            <button class="btn btn-primary ml-2 insertReply" style="min-width: 60px;">작성</button>
+                            <input type="text" class="form-control flex-grow-1 replyContent" placeholder="댓글을 입력하세요..." data-feed-num="${detail.feed.feed_num}" />
+                            <button class="btn btn-primary ml-2 insertReply" style="min-width: 60px;" data-feed-num="${detail.feed.feed_num}">작성</button>
                         </div>
-                        <div class="replyPrint"/>
+                        <div class="replyPrint"></div>
                     </div>
                 </div>
             `);
             
-            history.pushState({ feed_num : clickedFeed.feed_num }, '', `?feed=${clickedFeed.feed_num}`);
+            history.pushState({ feed_num : detail.feed.feed_num }, '', `?feed=${detail.feed.feed_num}`);
 			$("#feedDetail").show();
 		}, 
 		error: function(error) {
@@ -288,14 +280,14 @@ function createPost() {
 }
 
 function replyInsert() {
-	const replyContent = $(".replyContent").val();
-	const feedNum = $(".detail.feed").data('feed-num');
+	const replyContent = $(this).closest('.card.feed-card').find(".replyContent").val();
+	const feedNum = $(this).closest('.card.feed-card').data('feed-num');
 	console.log(replyContent, feedNum);
 	
 	$.ajax({
 		url: "replyInsert",
 		type: "post",
-		data: { feed_num: feedNum, contents: replyContent },
+		data: { feed_num: feedNum, contents: replyContent, parent_reply_num: -1},
 		success: function(feedNum) {
 			replyPrint(feedNum);
 		},
@@ -306,45 +298,141 @@ function replyInsert() {
 }
 
 function replyPrint(feedNum) {
-	$.ajax({
-		url: "replyPrint",
-		type: "post",
-		data: {feed_num: feedNum},
-		success: function(replys) {
-			$(".replyPrint").empty();
-			replys.forEach(reply => {
-				$(".replyPrint").append(`
-                <div class="comment-list replyMargin">
-                    <div class="comment-item d-flex">
-                        <div class="comment-text flex-grow-1">${reply.contents}</div>
-                        <i class="bi bi-heart unLike replyLike"></i>
-                        <button class="btn btn-primary reply-btn ml-2">답글</button>
-                        <button class="btn btn-primary reply-delete-btn">삭제</button>
-                        <div class="reply-input-section" style="display: none;">
-                            <input type="text" class="form-control" placeholder="답글을 입력하세요..." />
-                            <button class="btn btn-primary">작성</button>
-                            
-                        </div>
-                        <div class="reply-list replyMargin" style="display: none;">
-                            <div class="reply-item">
-                                <div class="reply-text">임시 답글 내용</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`
-                )
-			})
-		},
-		error : function(error) {
-			console.error(error);
-		}
-	})
+    $.ajax({
+        url: "replyPrint",
+        type: "post",
+        data: { feed_num: feedNum },
+        success: function(replys) {
+            $(".replyPrint").empty();
+
+            // 댓글과 답글을 분리
+            let comments = replys.filter(reply => reply.parent_reply_num === -1);
+            let nestedReplies = replys.filter(reply => reply.parent_reply_num !== -1);
+
+            comments.forEach(comment => {
+				let current_date = new Date();
+				let comment_date = new Date(comment.inputdate);
+				let time_diff_str = timeDifference(current_date, comment_date);
+                let commentElement = $(`
+                    <div class="comment-list replyMargin" data-reply-id="${comment.reply_num}">
+			            <div class="comment-item">
+			                <div class="row">
+			                	<div class="row comment-1 d-flex align-items-center" style="margin-bottom: 0px;">
+				                	<div class="col-1 goToOtherProfile">
+				                        <img src="../member/memberProfilePrint?user_id=${comment.user_id}" alt="User Photo" class="user-photo-reply"> 
+				                    </div>
+				                    <div class="col-3 goToOtherProfile>
+				                        <span class="user-id">${comment.username}</span>
+				                    </div>
+				                    <div class="col-7"> 
+				                        <span class="comment-text nestedReply">${comment.contents}</span>			                        
+				                    </div>
+    				                <div class="col-1 d-flex justify-content-end">
+				                        <i class="bi bi-heart unLike replyLike"></i>                
+				                	</div>
+			                    </div>
+			                    <div class="row comment-2 g-0" style="margin: 0;  font-size:18px;">
+				                    <div class="col-2">
+				                    	<small class="comment-date">${time_diff_str}</small>
+				                    </div>
+				                    <div class="col-2">
+				                        <small class="like-count">좋아요 ${comment.like_count}개</small>
+				                    </div>
+				                    <div class="col-2">
+				                        <small class="write-nested-reply" data-username-id="${comment.username}">답글달기</small>
+				                    </div>
+				                    <div class="col-2">
+				                        <button class="btn btn-primary reply-delete-btn btn-sm ml-2">삭제</button>
+				                    </div>
+				                </div>
+			                </div>
+			            </div>
+			        </div>
+			    `);
+			    
+			    let viewNestedReplyDiv = $('<div class="view-nested-reply"></div>');
+    			commentElement.append(viewNestedReplyDiv);
+
+                // 해당 댓글에 대한 답글을 찾아 출력
+                let commentNestedReplies = nestedReplies.filter(reply => reply.parent_reply_num === comment.reply_num);
+               
+                if (commentNestedReplies.length > 0) {
+			        let viewRepliesButton = $('<button>')
+			            .text('답글 보기')
+			            .on('click', function() {
+			                $(this).closest('.comment-list').find('.nested-reply-list').toggle();
+			            });
+			
+			        viewNestedReplyDiv.append(viewRepliesButton);
+			    }
+			    
+                commentNestedReplies.forEach(nestedReply => {
+				    commentElement.append(`
+				        <div class="comment-list replyMargin nested-reply-list" style="display: none; margin-left: 30px;" data-reply-id="${nestedReply.reply_num}">
+				            <div class="comment-item">
+				                <div class="row">
+				                    <div class="col-7 d-flex align-items-center">
+				                        ${nestedReply.contents}
+				                    </div>
+				                    <div class="col-5 d-flex justify-content-end">
+				                        <i class="bi bi-heart unLike replyLike"></i>
+				                        <button class="btn btn-primary reply-btn ml-2 nestedReply" style="margin-right: 5px;">답글</button>
+				                        <button class="btn btn-primary reply-delete-btn ml-2">삭제</button>
+				                    </div>
+				                </div>
+				                <div class="row">
+				                	<div class="col-9">
+				                    	<input type="text" class="form-control" placeholder="답글을 입력하세요..." />
+			                   		</div>
+			                   		<div class="col-3 d-flex justify-content-end"> 	
+			                   		 	<button class="btn btn-primary insertNestedReply">작성</button>
+				                	</div>
+				                </div>
+				                <div class="row view-nested-reply">
+				                </div>
+				            </div>
+				        </div>
+				    `);
+				});
+
+
+                $(".replyPrint").append(commentElement);
+            });
+        },
+        error: function(error) {
+            console.error(error);
+        }
+    });
+}
+
+
+function insertNestedReply() {
+    const replyContent = $(this).closest('.comment-item').find('input').val();
+    const feedNum = $(this).closest('.card.feed-card').data('feed-num');
+    const parentReplyNum = $(this).closest('.comment-list').data('reply-id');
+    console.log(replyContent, feedNum, parentReplyNum);
+    
+    $.ajax({
+        url: "replyInsert",
+        type: "post",
+        data: { feed_num: feedNum, contents: replyContent, parent_reply_num: parentReplyNum },
+        success: function() {
+            replyPrint(feedNum);
+        },
+        error: function(error) {
+            console.error(error);
+        }
+    });
+}
+
+function writeNestedReply() {
+	const TagUserName = $(this).data('username-id');
+	$(".replyContent").val("@" + TagUserName + " ")
 }
 
 //피드 작성칸 확대
 function collapseWrite() {
 	$(".emojionearea-editor").css("height", "100px");
-	
 	$(".feed-create-area .icons").hide();
 	$(".feed-create-area .post").hide();
 
@@ -373,7 +461,6 @@ function clickLike() {
         }
     })
 }
-
 
 
 function goToProfile() {
@@ -409,5 +496,32 @@ function feedDelete(){
             console.log(error);
         }
     })
+}
+
+
+//글 작성 시간 출력
+function timeDifference(current, previous) {
+    const msPerMinute = 60 * 1000;
+    const msPerHour = msPerMinute * 60;
+    const msPerDay = msPerHour * 24;
+    const msPerMonth = msPerDay * 30;
+    const msPerYear = msPerDay * 365;
+    const elapsed = current - previous;
+    
+	if (elapsed < msPerHour) {
+        return Math.floor(elapsed/msPerMinute) + ' 분 전';   
+    }
+    else if (elapsed < msPerDay) {
+        return Math.floor(elapsed/msPerHour ) + ' 시간 전';   
+    }
+    else if (elapsed < msPerMonth) {
+        return Math.floor(elapsed/msPerDay) + ' 일 전';   
+    }
+    else if (elapsed < msPerYear) {
+        return Math.floor(elapsed/msPerMonth) + ' 달 전';   
+    }
+    else {
+        return Math.floor(elapsed/msPerYear) + ' 년 전';   
+    }
 }
 
