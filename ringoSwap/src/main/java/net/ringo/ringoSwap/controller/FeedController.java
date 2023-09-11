@@ -288,8 +288,13 @@ public class FeedController {
 	public ArrayList<MemberFollow> followerSearch(String username
 			, @AuthenticationPrincipal UserDetails user){
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		HashMap<String, Object> map = new HashMap<>();
+		HashMap<String, Object> map = new HashMap<>();		//followerArraySearch메서드용 해쉬맵 변수
 		ArrayList<Integer> followerList = memberService.memberByUsernameReturnUserNum(username); 
+		if(followerList.isEmpty()) {		//followerList변수가 비어있음 = 검색된 팔로워가 없는 것이므로 이후 검색 메서드 구동은 스킵한다.
+			ArrayList<MemberFollow> none = null;
+			return none;
+		}
+		
 		map.put("followee_num", user_num);
 		map.put("follower_num", followerList);
 		
@@ -304,8 +309,12 @@ public class FeedController {
 	public ArrayList<MemberFollow> followeeSearch(String username
 					, @AuthenticationPrincipal UserDetails user){
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		HashMap<String, Object> map = new HashMap<>();
+		HashMap<String, Object> map = new HashMap<>();		//followerArraySearch메서드용 해쉬맵 변수
 		ArrayList<Integer> followeeList = memberService.memberByUsernameReturnUserNum(username); 
+		if(followeeList.isEmpty()) {		//followeeList변수가 비어있음 = 검색된 팔로우 회원이 없는 것이므로 이후 검색 메서드 구동은 스킵한다.
+			ArrayList<MemberFollow> none = null;
+			return none;
+		}
 		map.put("follower_num", user_num);
 		map.put("followee_num", followeeList);
 		
