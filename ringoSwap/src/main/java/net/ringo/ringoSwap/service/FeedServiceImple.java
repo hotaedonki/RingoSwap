@@ -96,9 +96,9 @@ public class FeedServiceImple implements FeedService{
 		log.debug("좋아요 개수 확인 : {}", likeCount);
 		return likeCount;
 	}
-	//좋아요 여부 표시
+	//피드 좋아요 여부 표시
 	@Override
-	public int likePrint(int user_num, int feed_num) {
+	public int feedLikePrint(int user_num, int feed_num) {
 		HashMap<String, Integer> map = new HashMap<>();
 		map.put("user_num", user_num);
 		map.put("feed_num", feed_num);
@@ -111,7 +111,7 @@ public class FeedServiceImple implements FeedService{
 	public int replyLikeClick(int user_num, int reply_num) {
 		HashMap<String, Integer> map = new HashMap<>();
 		map.put("user_num", user_num);
-		map.put("feed_num", reply_num);
+		map.put("reply_num", reply_num);
 		
 		//해당 사용자가 이미 해당 댓글에 좋아요를 준 적이 있는지 확인하는 메서드
 		int methodResult = dao.replyLikeSelectOneForCheck(map);
@@ -130,6 +130,16 @@ public class FeedServiceImple implements FeedService{
 		methodResult = dao.replyLikeCountSelectByFeedNum(reply_num);
 		
 		return methodResult;
+	}
+	//댓글 좋아요 여부 표시
+	@Override
+	public int replyLikePrint(int user_num, int reply_num) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("user_num", user_num);
+		map.put("reply_num", reply_num);
+		
+		//해당 사용자가 이미 해당 피드의 좋아요를 준 적이 있는지 확인하는 메서드
+		return dao.replyLikeSelectOneForCheck(map);
 	}
 	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
 	
@@ -157,7 +167,16 @@ public class FeedServiceImple implements FeedService{
 		
 		return dao.feedDeleteByUser(map);
 	}
-	
+
+	//해당 댓글 작성자인지를 확인 후 해당 댓글을 삭제하는 메서드
+	@Override
+	public int replyDeleteOne(int user_num, int reply_num) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("reply_num", reply_num);
+		map.put("user_num", user_num);
+		
+		return dao.replyDeleteOne(map);
+	}
 	
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }

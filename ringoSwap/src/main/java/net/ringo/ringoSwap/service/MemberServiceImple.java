@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.MemberDAO;
 import net.ringo.ringoSwap.domain.Member;
+import net.ringo.ringoSwap.domain.MemberFollow;
 
 @Slf4j
 @Service
@@ -143,5 +144,21 @@ public class MemberServiceImple implements MemberService
 	@Override
 	public int memberUpdateAccount(Member m) {
 		return dao.memberUpdateAccount(m);
+	}
+	
+	//특정 유저의 닉네임을 기반으로 검색한 값에서 회원번호만 리턴하는 메서드
+	@Override
+	public ArrayList<Integer> memberByUsernameReturnUserNum(String username){
+		return dao.memberByUsernameReturnUserNum(username);
+	}
+	//특정 사용자의 특정 범위의 팔로워 목록을 리턴하는 메서드
+	@Override
+	public ArrayList<MemberFollow> followerArraySearch(HashMap<String, Object> map){
+		return dao.followerArraySearch(map);
+	}
+	//특정 사용자의 특정 범위의 팔로우 목록을 리턴하는 메서드
+	@Override
+	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map){
+		return dao.followeeArraySearch(map);
 	}
 }

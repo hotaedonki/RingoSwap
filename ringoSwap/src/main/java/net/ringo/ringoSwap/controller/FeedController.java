@@ -30,6 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
+import net.ringo.ringoSwap.domain.Member;
+import net.ringo.ringoSwap.domain.MemberFollow;
 import net.ringo.ringoSwap.domain.Reply;
 import net.ringo.ringoSwap.service.FeedService;
 import net.ringo.ringoSwap.service.MemberService;
@@ -90,7 +92,7 @@ public class FeedController {
 	    for (Feed feed : feedList) {
 	        int feed_num = feed.getFeed_num();
 	        // 현재 피드에 대한 좋아요 클릭 여부를 확인
-	        int likeCheck = service.likePrint(user_num, feed_num);
+	        int likeCheck = service.feedLikePrint(user_num, feed_num);
 	        // 결과를 Map에 저장
 	        likeCheckMap.put(feed_num, likeCheck);
 	    }
@@ -110,7 +112,7 @@ public class FeedController {
 	    int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 	    Feed feed = service.feedSelectOneByFeedNum(feed_num);
 	    
-	    int likeCheck = service.likePrint(user_num, feed_num); // 좋아요 체크 값을 가져옵니다.
+	    int likeCheck = service.feedLikePrint(user_num, feed_num); // 좋아요 체크 값을 가져옵니다.
 
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("feed", feed);
@@ -152,10 +154,22 @@ public class FeedController {
 	// 특정 피드 게시글의 feed_num을 왜래키로 갖는 reply 배열을 리턴하는 controller 메서드
 	@ResponseBody
 	@PostMapping("replyPrint")
-	public ArrayList<Reply> replyPrint(int feed_num) {
-		ArrayList<Reply> replyList = service.replySelectByFeedNum(feed_num);
-		log.debug("리플라이 리스트 출력 : {}", replyList);
-		return replyList;
+	public Map<String, Object> replyPrint(int feed_num, @AuthenticationPrincipal UserDetails user) {
+		ArrayList<Reply> replyList = service.replySelectByFeedNum(feed_num);		//해당 피드의 댓글목록 정보를 담는 변수
+		HashMap<Integer, Integer> likeCheckMap = new HashMap<>();					//각 피트의 좋아요 여부 정보를 담는 변수
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());	//likeCheckMap에 사용할 회원 번호
+
+		//likeCheckMap에 replyList배열에 저장된 각 댓글의 사용자의 좋아요 여부 정보를 기록한다.
+		for (Reply reply : replyList) {
+	        int reply_num = reply.getReply_num();
+			int likeCheck = service.replyLikePrint(user_num, reply_num); // 좋아요 체크 값을 가져옵니다.
+			likeCheckMap.put(reply_num, likeCheck);
+		}
+		
+		HashMap<String, Object> map = new HashMap<>();//리턴용 해시맵 변수
+		map.put("replyList", replyList);
+		map.put("likeCheckMap", likeCheckMap);
+		return map;
 	}
 
 	// ----------------[피드 출력 기능 종료]----------->>>>>>>>>>>>
@@ -243,7 +257,8 @@ public class FeedController {
 	@PostMapping("replyLikeClicker")
 	public int replyLikeClicker(@AuthenticationPrincipal UserDetails user, int reply_num) {
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-
+		log.debug("ID번호 {}", user_num);
+		log.debug("댓글번호 {}", reply_num);
 		int methodResult = service.replyLikeClick(user_num, reply_num);
 
 		return methodResult;
@@ -266,9 +281,39 @@ public class FeedController {
 
 	// ----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 
-	// <<<<<<<<<<<------[검색 관련 기능 시작]----------------------
+	// <<<<<<<<<<<------[팔로워/팔로우 검색 관련 기능 시작]----------------------
+	//닉네임을 매개변수로 하는 팔로워 검색 메서드
+	@ResponseBody
+	@PostMapping("followerSearch")
+	public ArrayList<MemberFollow> followerSearch(String username
+			, @AuthenticationPrincipal UserDetails user){
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Object> map = new HashMap<>();
+		ArrayList<Integer> followerList = memberService.memberByUsernameReturnUserNum(username); 
+		map.put("followee_num", user_num);
+		map.put("follower_num", followerList);
+		
+		ArrayList<MemberFollow> followerSearch = memberService.followerArraySearch(map);
+		
+		return followerSearch;
+	}
 
-	// ----------------[검색 관련 기능 종료]----------->>>>>>>>>>>>
+	//닉네임을 매개변수로 하는 팔로우 검색 메서드
+	@ResponseBody
+	@PostMapping("followeeSearch")
+	public ArrayList<MemberFollow> followeeSearch(String username
+					, @AuthenticationPrincipal UserDetails user){
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Object> map = new HashMap<>();
+		ArrayList<Integer> followeeList = memberService.memberByUsernameReturnUserNum(username); 
+		map.put("follower_num", user_num);
+		map.put("followee_num", followeeList);
+		
+		ArrayList<MemberFollow> followeeSearch = memberService.followeeArraySearch(map);
+		
+		return followeeSearch;
+	}
+	// ----------------[팔로워/팔로우 검색 관련 기능 종료]----------->>>>>>>>>>>>
 
 	// <<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
 	@ResponseBody
@@ -319,5 +364,23 @@ public class FeedController {
 		return resultMsg; // 현재까지의 삭제 메서드 결과를 리턴합니다.
 	}
 
+	@ResponseBody
+	@PostMapping("replyDeleteOne")
+	public String replyDeleteOne(int reply_num
+					, @AuthenticationPrincipal UserDetails user) {
+		String resultMsg="";		//댓글삭제 메서드 실행결과를 담아 리턴하는 문자열 변수.
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		//삭제 메서드 실행
+		int methodResult = service.replyDeleteOne(user_num, reply_num);
+		
+		if(methodResult == 0) {
+			resultMsg = "댓글 삭제 실패";
+			return resultMsg;
+		}
+		resultMsg = "댓글 삭제 성공";
+		return resultMsg;
+	}
+	
 	// ----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }

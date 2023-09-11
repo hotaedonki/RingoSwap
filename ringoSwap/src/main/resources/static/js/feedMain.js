@@ -39,7 +39,8 @@ $(document).ready(function() {
         $(".feed-create-area .post").show();
     });
     $(document).on('click', '.insertReply', replyInsert);
-    $(document).on('click', '.like-button', clickLike);
+    $(document).on('click', '.like-button', clickLikeFeed);
+    $(document).on('click', '.replyLike', clickLikeReply);
 	$(document).on('click', '.collapseFeed', function(event) {
 	    if (!$(event.target).hasClass('bi')) {
 	        feedDetail.call(this, event);
@@ -47,7 +48,24 @@ $(document).ready(function() {
 	});
 	$(document).on('click', '#backToFeed', returnFeedMain);
 	$(document).on('click', '.feed-delete-button', feedDelete);
+	$(document).on('click', '.reply-delete-button', replyDelete);
+	$(document).on('click', '.follower-btn', followerSearch);
+	$(document).on('click', '.follow-btn', followeeSearch);
 	
+    //브라우저에서 뒤로가기 클릭시, History API이 적용된 feedDetail이 아닌 기존 페이지로 이동하는 이벤트
+    window.addEventListener('popstate', function(event) {
+        if (event.state) {
+            // event.state를 기반으로 필요한 작업을 수행합니다.
+            // 예: URL에 따른 페이지 콘텐츠를 로드하거나 특정 동작을 수행합니다.
+            console.log(event.state);
+            history.pushState({ feed_num : event.state.feed_num }, '', `?feed=${event.state.feed_num}`);
+            location.reload();
+        } else{
+            // 페이지가 로드될 때 한 페이지 뒤로 가려면 이전 페이지로 이동해 호출합니다.
+            history.replaceState(null, '', ``);
+            location.reload();
+        }
+    });
     //History API를 사용한 새로고침시에도 피드가 유지되도록 하는 이벤트
     window.addEventListener('load', function () {
         const feedNum = getUrlParam('feed');
@@ -146,6 +164,7 @@ function feedDetail() {
     }else{
         feedNum = saved_feedNum;
     }
+
 	$.ajax({
 		url: "feedPrint",
 		type: "post",
@@ -166,7 +185,7 @@ function feedDetail() {
 			$('#feedDetail').append(`
                     <div class="card feed-card detail.feed" data-feed-num="${detail.feed.feed_num}">
                     <div class="card-header" style="width: 100%;">
-                        <img src="../img/고양.jpg" alt="Poster Image" class="posterImage"> 
+                        <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage"> 
                         <span>${detail.feed.user_id}</span>
                         <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">
                             <i class="bi bi-arrow-return-left returnFeedMain"></i>
@@ -184,6 +203,7 @@ function feedDetail() {
                         <div class="comment-input-section d-flex replyMargin">
                             <input type="text" class="form-control flex-grow-1 replyContent" placeholder="댓글을 입력하세요..." data-feed-num="${detail.feed.feed_num}" />
                             <button class="btn btn-primary ml-2 insertReply" style="min-width: 60px;" data-feed-num="${detail.feed.feed_num}">작성</button>
+
                         </div>
                         <div class="replyPrint"></div>
                     </div>
@@ -280,8 +300,9 @@ function createPost() {
 }
 
 function replyInsert() {
-	const replyContent = $(this).closest('.card.feed-card').find(".replyContent").val();
-	const feedNum = $(this).closest('.card.feed-card').data('feed-num');
+
+	const replyContent = $(this).closest('.replyMargin').find(".replyContent").val();
+    const feedNum = $(this).closest('.replyMargin').data('feed-num');
 	console.log(replyContent, feedNum);
 	
 	$.ajax({
@@ -292,7 +313,7 @@ function replyInsert() {
 			replyPrint(feedNum);
 		},
 		error: function(error) {
-			console.error(error)
+			console.error(error);
 		}
 	})
 }
@@ -438,7 +459,8 @@ function collapseWrite() {
 
 }
 
-function clickLike() {
+//피드 좋아요 기능
+function clickLikeFeed() {
     const feedNum = $(this).data('feed-num');
     const buttonElement = $(this); // $(this) 참조를 저장
 
@@ -461,13 +483,39 @@ function clickLike() {
         }
     })
 }
+//댓글 좋아요 기능
+function clickLikeReply() {
+    const replyNum = $(this).data('reply-num');
+    const buttonElement = $(this); // $(this) 참조를 저장
 
+    $.ajax({
+        url: "replyLikeClicker",
+        type: "post",
+        data: {reply_num: replyNum},
+        success: function(like) {
+            $('.like-count[data-reply-num="' + replyNum + '"]').text(like); // 좋아요 개수 업데이트
+
+            buttonElement.toggleClass('bi-heart bi-heart-fill');
+            if (buttonElement.hasClass('bi-heart-fill')) {
+                buttonElement.css('color', 'red');
+            } else {
+                buttonElement.css('color', ''); // 기본 색상으로 설정
+            }
+        },
+        error: function(error) {
+            console.error(error);
+        }
+    })
+}
 
 function goToProfile() {
 	window.location.href = '../member/myPage';
 }
 
 function returnFeedMain() {
+    //pushState를 통해 브라우저에 feedMain초기화면 상태로 새 History 페이지를 추가.
+    history.replaceState(null, '', '?feed=');
+
 	$(".feed-display-area .col-12").show();
 	$(".left-area, .middle-area").show();
 	$("#feedDetail").hide();
@@ -484,6 +532,7 @@ function feedDelete(){
         url: "feedDeleteOne",
         type: "post",
         data: {feed_num : feed_num},
+        dataType:'json',
         success:function(res){
 			if(res === "0") {
 				alert("본인이 작성한 글만 삭제할 수 있습니다.")
@@ -523,5 +572,67 @@ function timeDifference(current, previous) {
     else {
         return Math.floor(elapsed/msPerYear) + ' 년 전';   
     }
+}
+
+function replyDelete(){
+    let reply_num = $(this).data('reply-num');
+    let feed_num = $('.replyMargin').data('feed-num');
+    console.log(reply_num);
+	
+    $.ajax({
+        url: "replyDeleteOne",
+        type: "post",
+        data: {reply_num : reply_num},
+        dataType:'json',
+        success:function(res){
+			if(res === "0") {
+				alert("본인이 작성한 글만 삭제할 수 있습니다.")
+			} 
+			replyPrint(feed_num);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    })
+}
+
+/* 팔로워, 팔로우 검색 및 출력기능 */
+function followerSearch(){
+    let username = $('.justify-content-center .searchFollower').val();
+    $.ajax({
+        url: "followerSearch",
+        type: "post",
+        data: {username : username},
+        dataType:'json',
+        success:function(followerList){
+            if(followerList){
+                console.log(followerList);
+            }else{
+                console.log('팔로워 검색');
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+function followeeSearch(){
+    let username = $('.justify-content-center .searchFollow').val();
+    $.ajax({
+        url: "followeeSearch",
+        type: "post",
+        data: {username : username},
+        dataType:'json',
+        success:function(followeeList){
+            if(followeeList){
+                console.log(followeeList);
+            }else{
+                console.log('팔로우 검색');
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
 }
 
