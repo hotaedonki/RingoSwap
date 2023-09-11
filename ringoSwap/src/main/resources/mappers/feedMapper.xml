@@ -177,7 +177,7 @@
 	<delete id="feedDeleteByUser" parameterType="java.util.HashMap">
 		delete ringo_feed
 		where feed_num = #{feed_num}
-		and user_num = #{user_num}
+		and user_num =#{user_num}
 	</delete>
 	<!-- -->
 	<!-- 삭제 관련 기능 끝 -->

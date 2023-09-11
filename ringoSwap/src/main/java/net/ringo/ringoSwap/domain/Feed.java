@@ -20,7 +20,7 @@ public class Feed {
 	String[] tagList;
 	public String toString()
 	{
-		return String.format("feed_num : {%d} / user_num : {%d} / user_id : {%s} / contents : {%s} / inputdate : {%s} / like_num : {%d} / tag_list : {%s}"
+		return String.format("feed_num : {%d} / user_num : {%d} / user_id : {%s} / contents : {%s} / inputdate : {%s} / like_count : {%d} / tag_list : {%s}"
 				, feed_num, user_num, user_id, contents, inputdate, like_count, tag_list);
 	}
 }

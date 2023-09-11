@@ -16,7 +16,7 @@ const languageImages = {
 /* 멤버정보를 출력하는 함수 */
 function memberPrint(){
    $.ajax({
-       url: 'myMemberPrint',
+       url: '../member/myMemberPrint',
        type: 'POST',
        dataType: 'json',
        success: function(member) {
@@ -28,7 +28,7 @@ function memberPrint(){
             let native = printLanguage(member.native_lang);
             let target = printLanguage(member.target_lang);
            let tagArr = member.tagList;
-           $('#profilePicInput').attr('src', './memberProfilePrint?user_id='+member.user_id);
+           $('#profilePicInput').attr('src', '../member/memberProfilePrint?user_id='+member.user_id);
            $('.nativeLanguage').attr('src', native);
            $('.targetLanguage').attr('src', target);
            
