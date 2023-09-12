@@ -15,6 +15,11 @@ import lombok.NoArgsConstructor;
 여기서 더 나가면 ENTER,TALK 뿐만 아니라 OUT 으로 메시지 타입을 추가해서 나가는 사람에 대한 메시지를 전달해도 OK.
  */
 
+// 메시지 타입 :  입장 채팅
+// 메시지 타입에 따라서 동작하는 구조가 달라진다.
+// 입장과 퇴장 ENTER 과 LEAVE 의 경우 입장/퇴장 이벤트 처리가 실행되고,
+// TALK 는 말 그대로 해당 채팅방을 sub 하고 있는 모든 클라이언트에게 전달됩니다.
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +28,7 @@ public class ChatCommon
 {
 	public enum MessageType
 	{
-		ENTER, TALK
+		ENTER, TALK, LEAVE
 	}
 	
 	private MessageType type;
