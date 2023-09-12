@@ -22,6 +22,7 @@
 main {
 	margin-left: 160px;
 	width:85%;
+	font-family: 'Roboto', sans-serif;
 }
 
 .container.home {
@@ -68,8 +69,8 @@ main {
 	left: 20px;
 }
 
-.row {
-	margin-bottom: 30px;
+.main-row {
+	margin-top: 30px;
 }
 
 .feed-create-area {
@@ -107,6 +108,10 @@ main {
 	font-size: 2rem;
 }
 
+.card-header, .card-text {
+	font-size: 20px;
+}
+
 .feed-card .card-header {
 	display: flex;
 	align-items: center;
@@ -118,7 +123,6 @@ main {
 
 .feed-card .card-body {
 	margin-top: 10px;
-	font-size: 20px;
 }
 
 .friend-list-row .list-group-item {
@@ -153,14 +157,10 @@ main {
 	text-align: center;
 }
 
-.feed-button .bi {
+.feed-button {
 	color: black;
 	transition: all 0.2s;
 	display: inline-block;
-}
-
-.bi-heart-fill {
-	color: red;
 }
 
 .feed-button .bi:hover {
@@ -217,4 +217,40 @@ main {
 .replyLike {
 	margin-right: 10px;
 	margin-top: 5px;
+}
+
+.feed-photo {
+    width: 100px; /* 기본 이미지 크기 설정 */
+    height: auto; /* 가로 세로 비율 유지 */
+    cursor: pointer;
+}
+
+.feed-photo:hover {
+	transform: scale(0.85); /* 마우스 오버 시 아이콘 크기 감소 */
+}
+.feed-photo.multi {
+    width: 50px; /* 여러 이미지가 있을 때의 이미지 크기 */
+    margin-right: 10px;
+}
+.image-preview {
+    width: 100px; /* 미리보기 이미지 크기 */
+    height: auto; /* 가로 세로 비율 유지 */
+}
+
+.bi-heart-fill {
+	color: red;
+}
+
+.reply-input-section, .reply-list {
+    padding-left: 20px;
+}
+
+.user-photo-reply {
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+}
+
+.feed-card, .notification-card {
+	margin-top: 20px;
 }

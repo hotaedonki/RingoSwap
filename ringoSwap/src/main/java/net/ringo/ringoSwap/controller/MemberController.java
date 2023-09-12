@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -292,11 +293,11 @@ public class MemberController
 	 */
 	@ResponseBody
 	@PostMapping(PathHandler.MEMBERTAGLINKINSERT)
-	public void memberTagLinkInsert(String[] tagNameList
+	public void memberTagLinkInsert(@RequestBody String[] updatedTags
 					, @AuthenticationPrincipal UserDetails user) {
 		//현재 사용자 id를 기반으로 사용자의 user_num을 검색해 리턴
 		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
-		
+		String[] tagNameList = updatedTags;
 		//검색한 user_num을 기반으로 설정한 태그 배열을 매개변수로 DB에 전달한다.
 		int insertResult = service.memberTagLinkInsertArray(tagNameList, user_num);
 	}
@@ -314,7 +315,8 @@ public class MemberController
 	@PostMapping("myMemberPrint")
 	public Member myMemberPrint(@AuthenticationPrincipal UserDetails user) {
 		log.debug("아이디 {}", user.getUsername());
-		Member member = service.memberSearchById(user.getUsername());
+		Member member = service.memberSearchByMyPage(user.getUsername());
+		log.debug("받아오기 {}", member);
 		return member;
 	}
 	//마이페이지의 프로필을 불러오는 메서드
@@ -361,19 +363,26 @@ public class MemberController
 	public void memberModifyProfile(String introduction, String target_lang, MultipartFile profileUpload
 					,@AuthenticationPrincipal UserDetails user)				//MultipartFile profileUpload로 
 	{
-		Member mem = new Member();
+		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
+		Member mem = service.memberSearchById(user.getUsername());
+		log.debug("회원 {}", mem);
 		/*upload가 비어있거나 null이 아닐경우 해당 파일을 업로드 하는 메서드 실행*/
 		if(profileUpload != null && !profileUpload.isEmpty()) {
-			String savedfile = FileService.saveFile(profileUpload, uploadPath);
+			String deletefile = uploadPath + "/" + mem.getSaved_profile();
+			log.debug("삭제경로 {}", deletefile);
+			String savedfile = FileService.saveFile(profileUpload, uploadPath);		//새 프로필 사진파일 저장
+			log.debug("저장경로 {}", savedfile);
+			if(!savedfile.isEmpty()) {
+				boolean d = FileService.deleteFile(deletefile);		//기존 프로필 사진파일 삭제
+				log.debug("del여부 {}", d);
+			}
 			mem.setOriginal_profile(profileUpload.getOriginalFilename());
 			mem.setSaved_profile(savedfile);
 		}
 		mem.setIntroduction(introduction);
 		mem.setTarget_lang(target_lang);
-		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
 		mem.setUser_num(user_num);
-		log.debug("{} - upload", profileUpload);
-		log.debug("출력해~~~{}", mem);
+		log.debug("출력하냔~~~{}", mem);
 		int methodResult = service.memberUpdateProfile(mem);
 		log.debug("출력해~~~{}", mem);
 	}

@@ -6,34 +6,17 @@
 	<!-- 회원정보를 memberDB로 전송하여 회원정보를 insert하는 코드 -->
 	<insert id="insertMember" parameterType="Member">
 		insert into ringo_member
-			(user_num
-			, user_id
-			, password
-			, username
-			, first_name
-			, last_name
-			, gender
-			, birth_date
-			, email
-			, native_lang
-			, target_lang
-			, introduction)
+			(user_num, user_id, password, username
+			, first_name, last_name, gender, birth_date
+			, email, native_lang, target_lang, introduction)
 		values
-			(ringo_member_seq.nextval
-			, #{user_id}
-			, #{password}
-			, #{username}
-			, #{first_name}
-			, #{last_name}
-			, #{gender}
-			, #{birth_date}
-			, #{email}
-			, #{native_lang}
-			, #{target_lang}
+			(ringo_member_seq.nextval, #{user_id}, #{password}
+			, #{username}, #{first_name}, #{last_name}, #{gender}
+			, #{birth_date}, #{email}, #{native_lang}, #{target_lang}
 			,
 			<!-- 자기소개 값을 입력하지 않은 경우 빈칸으로 대체 --> 
 			<choose>
-            <when test="introduction == null">''</when>
+            <when test="introduction == null">null</when>
             <otherwise>#{introduction}</otherwise>
           </choose>)
 	</insert>
@@ -69,7 +52,7 @@
 	select tag_num
 	from ringo_tagstorage_member
 	where tag in
-		<foreach collection="list" item="tag" open="(" separator=", " close=")">
+		<foreach collection="array" item="tag" open="(" separator=", " close=")">
 			#{tag}
 		</foreach>
 	</select>
@@ -77,13 +60,13 @@
 	<select id="memberTagLinkSearch" parameterType="java.util.HashMap">
 	select count(*)
 	from ringo_taglink_member
-	where user_id = #{user_id}
+	where user_num = #{user_num}
 		and tag_num = #{tag_num}
 	</select>
 	<!-- 사용자가 설정한 멤버태그를 member_taglink에 삽입하는 insert문 -->
 	<insert id="memberTagLinkInsert" parameterType="java.util.HashMap">
-	insert into ringo_taglink_member
-	values (#{user_num}, #{tag_num});
+	insert into ringo_taglink_member(user_num, tag_num)
+	values (#{user_num}, #{tag_num})
 	</insert>
 	<!-- 사용자의 user_num을 이용하여 현재 taglink가 걸린 tag_num을 배열로 전부 리턴받는 select문 -->
 	<select id="memberTagLinkSearchAllByUserNum" resultType="Integer">
@@ -96,8 +79,8 @@
 	delete from ringo_taglink_member
 	where user_num = #{user_num}
 		and tag_num IN
-		<foreach collection="list" item="tag_num" open="(" separator=", " close=")">
-			#{tag_num}
+		<foreach collection="tag_num" item="item" open="(" separator=", " close=")">
+			#{item}
 		</foreach>
 	</delete>
 	<!-- [ 멤버태그 관련 기능 종료 ] -->
@@ -109,14 +92,14 @@
 	from ringo_member_with_mypage
 	where user_id = #{user_id}
 	</select>
-	
 	<!-- 사용자의 수정한 프로필 정보 매개변수로 가져가 DB를 수정하는 update문 -->
 	<update id="memberUpdateProfile" parameterType="Member">
 	update ringo_member
-	set target_lang=#{target_lang}
-        , introduction=#{introduction}
+	set target_lang=#{target_lang}, introduction=#{introduction}
         , rewrite_time=sysdate
-	where user_num = #{user_num};
+        , original_profile=#{original_profile}
+        , saved_profile=#{saved_profile}
+	where user_num = #{user_num}
 	</update>
 	<!-- 사용자의 수정한 계정 정보 매개변수로 가져가 DB를 수정하는 update문 -->
 	<update id="memberUpdateAccount" parameterType="Member">
@@ -127,5 +110,39 @@
 		, follow_open=#{follow_open}, gps_open=#{gps_open}, trans_lang=#{trans_lang}
 	where user_num = #{user_num}
 	</update>
+	<!-- 마이페이지 종료 -->
+	<!-- 팔로우/팔로워 기능 시작 -->
+	<!-- 특정 문자열이 포함된 닉네임을 가진 모든 회원의 회원번호를 리턴하는 select문 -->
+	<select id="memberByUsernameReturnUserNum" parameterType="String">
+	select user_num
+	from ringo_member
+	where username like '%'||#{username}||'%'
+	</select>
+	
+	<select id="followerArraySearch" parameterType="java.util.HashMap">
+	select *
+	from ringo_follower_view
+	where followee_num = #{followee_num}
+		and follower_num in
+		<foreach collection="follower_num" item="follower" open="(" separator=", " close=")">
+			#{follower}
+		</foreach>
+	</select>
+	
+	<select id="followeeArraySearch" parameterType="java.util.HashMap">
+	select *
+	from ringo_followee_view
+	where follower_num = #{follower_num}
+		and followee_num in
+		<foreach collection="followee_num" item="followee" open="(" separator=", " close=")">
+			#{followee}
+		</foreach>
+	</select>
+	<!-- 팔로우/팔로워 기능 종료 -->
+	<select id="getUserIdByUsername" parameterType="String" resultType="int">
+		select user_num
+		from ringo_member
+		where username = #{username} 
+	</select>
 	
 </mapper>

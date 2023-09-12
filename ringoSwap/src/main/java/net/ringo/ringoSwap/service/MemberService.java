@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.ringo.ringoSwap.domain.Member;
+import net.ringo.ringoSwap.domain.MemberFollow;
 
 public interface MemberService 
 {
@@ -48,4 +49,13 @@ public interface MemberService
 	//수정한 계정 정보를 담은 member 객체를 매개변수로 보내, DB를 수정하는 메서드
 	public int memberUpdateAccount(Member m);
 
+	//특정 유저의 닉네임을 기반으로 검색한 값에서 회원번호만 리턴하는 메서드
+	public ArrayList<Integer> memberByUsernameReturnUserNum(String username);
+	//특정 사용자의 특정 범위의 팔로워 수를 리턴하는 메서드
+	public ArrayList<MemberFollow> followerArraySearch(HashMap<String, Object> map);
+	//특정 사용자의 특정 범위의 팔로우 수를 리턴하는 메서드
+	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map);
+
+	//@멘션 기능을 위한 username으로 해당 유저의 num값을 가져오는 메서드 
+	public int getUserIdByUsername(String username);
 }

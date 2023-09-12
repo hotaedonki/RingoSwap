@@ -8,12 +8,13 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.FeedDAO;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Reply;
 import net.ringo.ringoSwap.util.FeedSort;
-
+@Slf4j
 @Service
 public class FeedServiceImple implements FeedService{
 	@Autowired
@@ -32,15 +33,6 @@ public class FeedServiceImple implements FeedService{
 		}
 		return feedList;
 	}
-	//지정된 피드 목록의 피드 번호 배열을 매개변수로 주고, 그에 따른 피드 사진 배열을 리턴하는 메서드
-	public ArrayList<FeedPhoto> feedPhotoSelectArrayByFeedNum(ArrayList<Integer> feed_num){
-		ArrayList<FeedPhoto> photoList = new ArrayList<>();		//리턴용 배열 변수
-		//지정된 피드 목록을 매개변수로 주고, 그에 따른 사진 배열을 리턴받는 dao 메서드 실행
-		photoList = dao.feedPhotoSelectArrayByFeedNum(feed_num);
-		//리턴
-		return photoList;
-	}
-
 	//feed_num을 매개변수로 특정 feed 게시글 정보를 리턴하는 메서드
 	@Override
 	public Feed feedSelectOneByFeedNum(int feed_num) {
@@ -67,7 +59,7 @@ public class FeedServiceImple implements FeedService{
 	}
 	//작성한 feedPhoto 배열을 DB에 매개변수로 전달하는 메서드
 	@Override
-	public int feedPhotoInsert(ArrayList<FeedPhoto> photo) {
+	public int feedPhotoInsert(FeedPhoto photo) {
 		return dao.feedPhotoInsert(photo);
 	}
 	
@@ -98,18 +90,28 @@ public class FeedServiceImple implements FeedService{
 		}else {								//delete메서드를 실행하는 if문
 			methodResult = dao.feedLikeDeleteOne(map);
 		}
-		
+		log.debug("좋아요 줬는지 확인 : {}", methodResult);
 		//삽입/삭제 메서드 실행후 변동된 좋아요 갯수를 다시 검색하여 리턴받는 메서드 실행
-		methodResult = dao.feedLikeCountSelectByFeedNum(feed_num);
+		int likeCount = dao.feedLikeCountSelectByFeedNum(feed_num);
+		log.debug("좋아요 개수 확인 : {}", likeCount);
+		return likeCount;
+	}
+	//피드 좋아요 여부 표시
+	@Override
+	public int feedLikePrint(int user_num, int feed_num) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("user_num", user_num);
+		map.put("feed_num", feed_num);
 		
-		return methodResult;
+		//해당 사용자가 이미 해당 피드의 좋아요를 준 적이 있는지 확인하는 메서드
+		return dao.feedLikeSelectOneForCheck(map);
 	}
 	//특정 댓글의 좋아요 클릭시 해당 댓글에 좋아요를 추가하거나 취소하는 메서드
 	@Override
 	public int replyLikeClick(int user_num, int reply_num) {
 		HashMap<String, Integer> map = new HashMap<>();
 		map.put("user_num", user_num);
-		map.put("feed_num", reply_num);
+		map.put("reply_num", reply_num);
 		
 		//해당 사용자가 이미 해당 댓글에 좋아요를 준 적이 있는지 확인하는 메서드
 		int methodResult = dao.replyLikeSelectOneForCheck(map);
@@ -129,6 +131,16 @@ public class FeedServiceImple implements FeedService{
 		
 		return methodResult;
 	}
+	//댓글 좋아요 여부 표시
+	@Override
+	public int replyLikePrint(int user_num, int reply_num) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("user_num", user_num);
+		map.put("reply_num", reply_num);
+		
+		//해당 사용자가 이미 해당 피드의 좋아요를 준 적이 있는지 확인하는 메서드
+		return dao.replyLikeSelectOneForCheck(map);
+	}
 	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
@@ -142,4 +154,29 @@ public class FeedServiceImple implements FeedService{
 		//리턴받은 피드 배열을 service에 리턴
 		return feedList;
 	}
+	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
+	
+	
+	//<<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
+	//해당 피드작성자인지를 확인한 후 해당 피드를 삭제하는 메서드
+	@Override
+	public int feedDeleteByUser(int feed_num, int user_num) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("feed_num", feed_num);
+		map.put("user_num", user_num);
+		
+		return dao.feedDeleteByUser(map);
+	}
+
+	//해당 댓글 작성자인지를 확인 후 해당 댓글을 삭제하는 메서드
+	@Override
+	public int replyDeleteOne(int user_num, int reply_num) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("reply_num", reply_num);
+		map.put("user_num", user_num);
+		
+		return dao.replyDeleteOne(map);
+	}
+	
+	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }

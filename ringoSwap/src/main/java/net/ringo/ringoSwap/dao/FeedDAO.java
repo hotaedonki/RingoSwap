@@ -35,7 +35,7 @@ public interface FeedDAO
 	//작성한 feed 객체를 DB에 매개변수로 전달하는 메서드
 	int feedInsert(Feed feed);
 	//작성한 feedPhoto 배열을 DB에 매개변수로 전달하는 메서드
-	int feedPhotoInsert(ArrayList<FeedPhoto> photo);
+	int feedPhotoInsert(FeedPhoto photo);
 	//작성한 Reply 객체를 DB에 매개변수로 전달하는 메서드
 	int replyInsert(Reply reply);
 	//----------------[피드 작성 기능 종료]----------->>>>>>>>>>>>
@@ -66,4 +66,12 @@ public interface FeedDAO
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
 
+	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
+	
+	//<<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
+	//해당 피드작성자인지를 확인한 후 해당 피드를 삭제하는 메서드
+	int feedDeleteByUser(HashMap<String, Object> map);
+	//해당 댓글의 작성자인지 확인한 후 해당 댓글을 삭제하는 메서드
+	int replyDeleteOne(HashMap<String, Object> map);
+	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }

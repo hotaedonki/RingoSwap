@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.MemberDAO;
 import net.ringo.ringoSwap.domain.Member;
+import net.ringo.ringoSwap.domain.MemberFollow;
 
 @Slf4j
 @Service
@@ -67,11 +68,11 @@ public class MemberServiceImple implements MemberService
 		HashMap<String, Object> map = new HashMap<>();		//insert명령을 수행하기위한 hashmap변수
 		ArrayList<Integer> tagList = new ArrayList<>();		//사용자의 모든 지정 태그 배열을 저장하는 변수
 		int methodResult = 0;			//제대로 메서드가 수행되었는지 확인을 위한 체커
-		
 		//태그명으로 태그번호를 배열로 리턴받는 메서드 실행
-		tag_num.addAll(dao.memberTagSearchByTagNameReturnTagNum(tagNameList));
-		
-		int tagChecker[] = new int[tag_num.size()];				//사용자가 이번에 지정한 tag가 몇개인지, 어떤 것인지 저장하는 변수(이번에 지정안한 tag 삭제 메서드를 위한 변수)
+		if(tagNameList.length != 0) {
+			tag_num.addAll(dao.memberTagSearchByTagNameReturnTagNum(tagNameList));
+		}
+		log.debug("태그숫자 : {}",tag_num);
 		
 		map.put("user_num", user_num);					//사용자의 회원번호를 미리 집어넣는다
 		
@@ -79,35 +80,37 @@ public class MemberServiceImple implements MemberService
 			//taglink_member테이블에 넘길 값을 hashmap으로 형성
 			//hashmap에서 같은 이름을 갖는 변수를 여러번 입력할경우, 이전 값이 삭제되고 가장 최신값으로 update되기에
 			//이 코드에서 remove명령어는 필요없는 것으로 확인했습니다.
-			map.put("tag_num", tag_num);
+			map.put("tag_num", tag_num.get(i));
+			log.debug("태그맵 : {}", map);
 			//해당 유저가 동일한 값을 설정했는지 확인하는 메서드 실행
 			methodResult = dao.memberTagLinkSearch(map);
-			if(methodResult==1) {				//만약 설정된 값이 존재한다면 이미 설정한 상태이기에 해당 태그에 대한 insert 명령어 취소하고 다음 태그로 넘어간다
-				tagChecker[i] = tag_num.get(i);
+			if(methodResult==1) {
+				//만약 설정된 값이 존재한다면 이미 설정한 상태이기에 해당 태그에 대한 insert 명령어 취소하고 다음 태그로 넘어간다
+				log.debug("넘어감");
 				continue;
 			}
 			//해당 태그가 설정된 적이 없다면 insert 메서드 실행
 			methodResult = dao.memberTagLinkInsert(map);
-			if(methodResult ==1) {				//제대로 insert가 수행되었다면 tagChecker에 해당 태그번호 저장
-				tagChecker[i] = tag_num.get(i);
-			}
+			log.debug("삽입함");
 		}				//for문 종료
 		
 		//insert전부 수행 후, 이번에 insert하지 않은 과거에 insert한 tag삭제작업 실행
 		//사용자의 user_num을 이용하여 현재 taglink가 걸린 tag_num을 배열로 전부 리턴받는다.
 		tagList = dao.memberTagLinkSearchAllByUserNum(user_num);
 		
-		for(int i=0; i < tagChecker.length; i++) {		//삭제기능 수행을 위한 for문 시작
-			int no = tagChecker[i];			//checker와 중복=이번에 선택한 tag값이기에 해당 값을 변수에 저장
-			
+		for(int i=0; i < tag_num.size(); i++) {		//삭제기능 수행을 위한 for문 시작
+			int no = tag_num.get(i);			//checker와 중복=이번에 선택한 tag값이기에 해당 값을 변수에 저장
 			//변수에 해당하는 tag_num을 tagList에서 제거
 			tagList.remove(Integer.valueOf(no));
+			log.debug("삭제");
 		}				//for문 종료
-		
-		//taglink_member테이블에서 삭제할 값을 hashmap으로 형성
-		map.put("tag_num", tagList);
-		//해당 태그객체를 taglink_member 테이블에서 삭제하는 메서드 실행
-		methodResult = dao.memberTagLinkDelete(map);
+		if(!tagList.isEmpty()) {
+			//taglink_member테이블에서 삭제할 값을 hashmap으로 형성
+			map.put("tag_num", tagList);
+			//해당 태그객체를 taglink_member 테이블에서 삭제하는 메서드 실행
+			methodResult = dao.memberTagLinkDelete(map);
+			log.debug("결과 : {}", methodResult);
+		}
 
 		//전 과정 종료
 		return methodResult;
@@ -124,8 +127,10 @@ public class MemberServiceImple implements MemberService
 	@Override
 	public Member memberSearchByMyPage(String user_id) {
 		Member member = dao.memberSearchById(user_id);
+		log.debug("태그숫자 : {}", member.getTag_list());
 		String [] list = member.getTag_list().split(" ");
 	    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));
+		log.debug("태그숫자 : {}",tagList);
 		member.setTagList(tagList);
 		return member;
 	}
@@ -139,5 +144,25 @@ public class MemberServiceImple implements MemberService
 	@Override
 	public int memberUpdateAccount(Member m) {
 		return dao.memberUpdateAccount(m);
+	}
+	
+	//특정 유저의 닉네임을 기반으로 검색한 값에서 회원번호만 리턴하는 메서드
+	@Override
+	public ArrayList<Integer> memberByUsernameReturnUserNum(String username){
+		return dao.memberByUsernameReturnUserNum(username);
+	}
+	//특정 사용자의 특정 범위의 팔로워 목록을 리턴하는 메서드
+	@Override
+	public ArrayList<MemberFollow> followerArraySearch(HashMap<String, Object> map){
+		return dao.followerArraySearch(map);
+	}
+	//특정 사용자의 특정 범위의 팔로우 목록을 리턴하는 메서드
+	@Override
+	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map){
+		return dao.followeeArraySearch(map);
+	}
+	@Override
+	public int getUserIdByUsername(String username) {
+		return dao.getUserIdByUsername(username);
 	}
 }
