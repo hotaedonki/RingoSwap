@@ -161,4 +161,8 @@ public class MemberServiceImple implements MemberService
 	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map){
 		return dao.followeeArraySearch(map);
 	}
+	@Override
+	public int getUserIdByUsername(String username) {
+		return dao.getUserIdByUsername(username);
+	}
 }

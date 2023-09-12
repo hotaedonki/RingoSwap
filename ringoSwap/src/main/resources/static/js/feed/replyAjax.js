@@ -29,7 +29,10 @@ function replyPrint(feedNum) {
             // 댓글과 답글을 분리
             let comments = replys.filter(reply => reply.parent_reply_num === -1);
             let nestedReplies = replys.filter(reply => reply.parent_reply_num !== -1);
-
+			
+			console.log("comments : ", comments);
+			console.log("nestedReplies : ", nestedReplies);
+			
             comments.forEach(comment => {
 				let current_date = new Date();
 				let comment_date = new Date(comment.inputdate);
@@ -37,7 +40,7 @@ function replyPrint(feedNum) {
                 let commentElement = $(`
                     <div class="comment-list replyMargin" data-reply-id="${comment.reply_num}">
 			            <div class="comment-item">
-			                <div class="row">
+			                <div class="row comment-area">
 			                	<div class="row comment-1 d-flex align-items-center" style="margin-bottom: 0px;">
 				                	<div class="col-1 goToOtherProfile">
 				                        <img src="../member/memberProfilePrint?user_id=${comment.user_id}" alt="User Photo" class="user-photo-reply"> 
@@ -52,7 +55,7 @@ function replyPrint(feedNum) {
 				                        <i class="bi bi-heart unLike replyLike"></i>                
 				                	</div>
 			                    </div>
-			                    <div class="row comment-2 g-0" style="margin: 0;  font-size:18px;">
+			                    <div class="row comment-2 g-0" style="margin: 0;  font-size:16px;">
 				                    <div class="col-2">
 				                    	<small class="comment-date">${time_diff_str}</small>
 				                    </div>
@@ -67,56 +70,91 @@ function replyPrint(feedNum) {
 				                    </div>
 				                </div>
 			                </div>
-			            </div>
-			        </div>
-			    `);
-			    
-			    let viewNestedReplyDiv = $('<div class="view-nested-reply"></div>');
-    			commentElement.append(viewNestedReplyDiv);
-
-                // 해당 댓글에 대한 답글을 찾아 출력
-                let commentNestedReplies = nestedReplies.filter(reply => reply.parent_reply_num === comment.reply_num);
-               
-                if (commentNestedReplies.length > 0) {
-			        let viewRepliesButton = $('<button>')
-			            .text('답글 보기')
-			            .on('click', function() {
-			                $(this).closest('.comment-list').find('.nested-reply-list').toggle();
-			            });
-			
-			        viewNestedReplyDiv.append(viewRepliesButton);
-			    }
-			    
-                commentNestedReplies.forEach(nestedReply => {
-				    commentElement.append(`
-				        <div class="comment-list replyMargin nested-reply-list" style="display: none; margin-left: 30px;" data-reply-id="${nestedReply.reply_num}">
-				            <div class="comment-item">
-				                <div class="row">
-				                    <div class="col-7 d-flex align-items-center">
-				                        ${nestedReply.contents}
-				                    </div>
-				                    <div class="col-5 d-flex justify-content-end">
-				                        <i class="bi bi-heart unLike replyLike"></i>
-				                        <button class="btn btn-primary reply-btn ml-2 nestedReply" style="margin-right: 5px;">답글</button>
-				                        <button class="btn btn-primary reply-delete-btn ml-2">삭제</button>
-				                    </div>
+			                <div class="row nested-reply-area" style="margin-left: 30px;" data-reply-id="${comment.reply_num}">
+			                	<div class="row nested-reply" style="display: none;">
+				                	<div class="col-7 d-flex align-items-center nested-reply-contents">
+					                        
+					                </div>
+					                    <div class="col-5 d-flex justify-content-end">
+					                        <i class="bi bi-heart unLike replyLike"></i>
+					                        <button class="btn btn-primary reply-btn ml-2 nestedReply" style="margin-right: 5px;">답글</button>
+					                        <button class="btn btn-primary reply-delete-btn ml-2">삭제</button>
+					                    </div>
+					                </div>
 				                </div>
-				                <div class="row">
+				                <div class="row show-nested-reply-form" style="display: none;">
 				                	<div class="col-9">
-				                    	<input type="text" class="form-control" placeholder="답글을 입력하세요..." />
+				                    	<input type="text" class="form-control nested-reply-input" placeholder="답글을 입력하세요..." />
 			                   		</div>
 			                   		<div class="col-3 d-flex justify-content-end"> 	
-			                   		 	<button class="btn btn-primary insertNestedReply">작성</button>
+			                   		 	<button class="btn btn-primary insert-nested-reply">작성</button>
 				                	</div>
 				                </div>
 				                <div class="row view-nested-reply">
+				                    <!-- 답글보기 버튼 -->
 				                </div>
+				                <div class="row nested-reply-list">
+				                	<!-- 대댓글 영역 -->
+				                </div>
+			                </div>
+			            </div>
+			        </div>
+			    `);
+				
+				let commentNestedReplies = nestedReplies.filter(reply => reply.parent_reply_num === comment.reply_num);
+                let nestedReplyToggle = '';
+                console.log("특정 댓글의 답글내역 : ", commentNestedReplies);
+                
+                if(commentNestedReplies.length > 0) {	
+					nestedReplyToggle = $(`
+							<span class="btn btn-link btn-sm view-nested-reply-button col-6" data-reply-id="${comment.reply_num}">---------------답글 보기 (${commentNestedReplies.length}) -------------- </span>
+							`)
+					commentElement.find(".view-nested-reply").append(nestedReplyToggle);	
+						
+	                commentNestedReplies.forEach(nestedReply => {					
+				        let nestedReplyElement = $(`
+				            <div class="nested-reply-item" data-reply-id="${comment.reply_num}" style="display: none; margin-left: 30px;">
+				            	<div class="row nested-reply-1 d-flex align-items-center">
+				            		<div class="col-1 nested-goToOtherProfile">
+				            			<img src="../member/memberProfilePrint?user_id=${comment.user_id}" alt="User Photo" class="user-photo-reply">
+					            	</div>
+					            	<div class="col-2 nested-goToOtherProfile">
+						                <span class="nested-reply-user">${nestedReply.username}</span>
+					            	</div>
+					            	<div class="col-6">
+					            		<span class="nested-reply-text">${nestedReply.contents}</span>
+					            	</div>
+					            	<div class="col-2">
+				                        <i class="bi bi-heart unLike replyLike"></i>                
+				                	</div> 
+					            </div>
+					            <div class="row nested-reply-2 g-0" style="margin: 0; font-size:18px;">
+					            	<div class="col-2">
+				                    	<small class="nested-reply-date">${time_diff_str}</small>
+				                    </div>
+				                    <div class="col-2">
+				                        <small class="nested-reply-like-count">좋아요 ${nestedReply.like_count}개</small>
+				                    </div>
+				                    <div class="col-2">
+				                        <small class="write-nested-nested-reply" data-username-id="${nestedReply.username}">답글달기</small>
+				                    </div>
+				                    <div class="col-2">
+				                        <button class="btn btn-primary nested-reply-delete-btn btn-sm ml-2">삭제</button>
+					            	</div>
+					            </div>
 				            </div>
-				        </div>
-				    `);
-				});
-
-
+				        `);
+				
+				        commentElement.find(".nested-reply-list").append(nestedReplyElement);
+				    });
+				    
+				    nestedReplyToggle.on('click', function(){
+				        let commentId = $(this).data('reply-id');
+				        console.log("답글 보기를 눌렀을 때 해당 댓글의 reply-id : ", commentId)
+				        commentElement.find(`.nested-reply-item[data-reply-id="${commentId}"]`).toggle();
+    					});
+				    }	
+				    
                 $(".replyPrint").append(commentElement);
             });
         },
@@ -130,13 +168,17 @@ function replyPrint(feedNum) {
 function insertNestedReply() {
     const replyContent = $(this).closest('.comment-item').find('input').val();
     const feedNum = $(this).closest('.card.feed-card').data('feed-num');
-    const parentReplyNum = $(this).closest('.comment-list').data('reply-id');
-    console.log(replyContent, feedNum, parentReplyNum);
+    let parentReplyNum = $(this).closest('.comment-item').find('input').data('parent-reply-num');
+
+    //@뒤에 붙어있는 유저 이름 값을 배열로 가져옴.
+    const mentionedUsers = replyContent.match(/@[a-zA-Z0-9_]+/g);
     
+    console.log(replyContent, feedNum, parentReplyNum, mentionedUsers);
+       
     $.ajax({
         url: "replyInsert",
         type: "post",
-        data: { feed_num: feedNum, contents: replyContent, parent_reply_num: parentReplyNum },
+        data: { feed_num: feedNum, contents: replyContent, parent_reply_num: parentReplyNum, mentionedUsers: mentionedUsers },
         success: function() {
             replyPrint(feedNum);
         },
@@ -147,9 +189,17 @@ function insertNestedReply() {
 }
 
 function writeNestedReply() {
-	const TagUserName = $(this).data('username-id');
-	$(".replyContent").val("@" + TagUserName + " ")
+    const TagUserName = $(this).data('username-id');
+    const parentReplyNum = $(this).closest('.comment-list').data('reply-id');
+    
+    console.log("writeNestedReply : ", TagUserName, parentReplyNum)
+    
+    $(this).closest('.comment-list').find(".show-nested-reply-form").toggle();
+    $(this).closest('.comment-list').find(".nested-reply-input")
+    	.val("@" + TagUserName + " ")
+       .data('parent-reply-num', parentReplyNum); // Set the parent reply num in data attribute
 }
+
 
 //댓글 좋아요 기능
 function clickLikeReply() {
