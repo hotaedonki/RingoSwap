@@ -107,6 +107,7 @@
                             <th>host</th>
                         </tr>
                     </thead>
+                    
                     <tbody class="chatroom_list_tbody">
                         <tr>
                             <td>jpn</td>
@@ -115,6 +116,15 @@
                             <td class="text_align_left">일본어잘하고싶다</td><!--보이스룸 호스트 닉네임-->
                         </tr>
                     </tbody>
+                    
+                    <tbody th:each="room : ${chatrooms}" class="chatroom_list_tbody">
+                        <tr>
+                            <td><input type="hidden" th:id="${room.chatroom_num}" th:value="${room.chatroom_num}"><p th:text="${room.lang_category}"></p></td>
+                            <td class="text_align_left"><a th:href="@{/chat/openChatRoomEnter(chatroom_num=${room.chatroom_num})}" th:text=${room.chatroom_num}></a> <!-- <p th:text="${room.title}"> </p> --></td>
+                            <td>3/6</td>
+                            <td class="text_align_left"><p th:text="${room.host_num}"></td><!--보이스룸 호스트 닉네임-->
+                        </tr>
+                    </tbody> 
                 </table>
                 <div class="page_box">
                     <ul class="pagination">
