@@ -31,7 +31,7 @@ function initializeDocumentClickHandlers() {
     $(document).on('click', '.collapseFeed', handleCollapseFeedClick);
     $(document).on('click', '#backToFeed', returnFeedMain);
     $(document).on('click', '.feed-delete-button', feedDelete);
-    $(document).on('click', '.reply-delete-button', replyDelete);
+    $(document).on('click', '.reply-delete-btn', replyDelete);
     $(document).on('click', '.follower-btn', followerSearch);
     $(document).on('click', '.follow-btn', followeeSearch);
     $(document).on('click', '.insertNestedReply', insertNestedReply);
@@ -65,15 +65,17 @@ function handleCollapseFeedClick(event) {
 
 //브라우저에서 뒤로가기 클릭시, History API이 적용된 feedDetail이 아닌 기존 페이지로 이동하는 이벤트
 function handlePopState(event) {
-    if (event.state) {
-        console.log(event.state); // event.state를 기반으로 필요한 작업을 수행합니다.
-            						// 예: URL에 따른 페이지 콘텐츠를 로드하거나 특정 동작을 수행합니다.
-        history.pushState({ feed_num: event.state.feed_num }, '', `?feed=${event.state.feed_num}`);
-        location.reload();
-    } else {
-		// 페이지가 로드될 때 한 페이지 뒤로 가려면 history.back()을 호출합니다.
-        history.replaceState(null, '', ``);
-        location.reload();
+    if (event.state) {//앞으로 가기 버튼 클릭
+        console.log('앞으로 가기 실행');
+        if(event.state.feed_num){
+            saved_feedNum = event.state.feed_num;
+            feedDetail();
+        }
+    } else {//뒤로가기 버튼 클릭
+		// 페이지가 로드될 때 한 페이지 뒤로 가려면 history.back()을 호출합니다
+        console.log('뒤로가기 실행');
+        feedPrint();
+        console.log('뒤로가기 완료');
     }
 }
 
