@@ -8,6 +8,7 @@ function replyInsert() {
 		type: "post",
 		data: { feed_num: feedNum, contents: replyContent, parent_reply_num: -1},
 		success: function(feedNum) {
+			$(".replyContent").val('');
 			replyPrint(feedNum);
 		},
 		error: function(error) {
@@ -34,6 +35,9 @@ function replyPrint(feedNum) {
 			console.log("nestedReplies : ", nestedReplies);
 			
             comments.forEach(comment => {
+				let likeCheck = replyLike[comment.reply_num];
+				let likeButtonClass = likeCheck === 1 ? "bi-heart-fill" : "bi-heart"
+				
 				let current_date = new Date();
 				let comment_date = new Date(comment.inputdate);
 				let time_diff_str = timeDifference(current_date, comment_date);
@@ -52,7 +56,7 @@ function replyPrint(feedNum) {
 				                        <span class="comment-text nestedReply">${comment.contents}</span>			                        
 				                    </div>
     				                <div class="col-1 d-flex justify-content-end">
-				                        <i class="bi bi-heart unLike replyLike"></i>                
+				                        <i class="bi ${likeButtonClass} unLike replyLike" data-reply-num="${comment.reply_num}"></i>                
 				                	</div>
 			                    </div>
 			                    <div class="row comment-2 g-0" style="margin: 0;  font-size:16px;">
@@ -60,16 +64,17 @@ function replyPrint(feedNum) {
 				                    	<small class="comment-date">${time_diff_str}</small>
 				                    </div>
 				                    <div class="col-2">
-				                        <small class="like-count">좋아요 ${comment.like_count}개</small>
+				                        <small>좋아요 <span class="like-count" data-reply-num="${comment.reply_num}">${comment.like_count}</span>개</small>
 				                    </div>
 				                    <div class="col-2">
 				                        <small class="write-nested-reply" data-username-id="${comment.username}">답글달기</small>
 				                    </div>
 				                    <div class="col-2">
-				                        <button class="btn btn-primary reply-delete-btn btn-sm ml-2">삭제</button>
+				                        <button class="btn btn-primary reply-delete-btn btn-sm ml-2" data-reply-num="${comment.reply_num}">삭제</button>
 				                    </div>
 				                </div>
 			                </div>
+
 			                <div class="row nested-reply-area" style="margin-left: 30px;" data-reply-id="${comment.reply_num}">
 			                	<div class="row nested-reply" style="display: none;">
 				                	<div class="col-7 d-flex align-items-center nested-reply-contents">
@@ -180,6 +185,7 @@ function insertNestedReply() {
         type: "post",
         data: { feed_num: feedNum, contents: replyContent, parent_reply_num: parentReplyNum, mentionedUsers: mentionedUsers },
         success: function() {
+			$(".replyContent").val('');
             replyPrint(feedNum);
         },
         error: function(error) {
@@ -228,17 +234,17 @@ function clickLikeReply() {
 
 function replyDelete(){
     let reply_num = $(this).data('reply-num');
-    let feed_num = $('.replyMargin').data('feed-num');
+    let feed_num = $('.feed-card').data('feed-num');
     console.log(reply_num);
 	
     $.ajax({
         url: "replyDeleteOne",
         type: "post",
         data: {reply_num : reply_num},
-        dataType:'json',
         success:function(res){
-			if(res === "0") {
-				alert("본인이 작성한 글만 삭제할 수 있습니다.")
+			if(res) {
+				alert(res);
+				console.log("본인이 작성한 글만 삭제할 수 있습니다.");
 			} 
 			replyPrint(feed_num);
         },
