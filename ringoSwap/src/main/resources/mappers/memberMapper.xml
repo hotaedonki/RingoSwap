@@ -139,4 +139,10 @@
 		</foreach>
 	</select>
 	<!-- 팔로우/팔로워 기능 종료 -->
+	<select id="getUserIdByUsername" parameterType="String" resultType="int">
+		select user_num
+		from ringo_member
+		where username = #{username} 
+	</select>
+	
 </mapper>

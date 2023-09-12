@@ -34,7 +34,7 @@ function initializeDocumentClickHandlers() {
     $(document).on('click', '.reply-delete-btn', replyDelete);
     $(document).on('click', '.follower-btn', followerSearch);
     $(document).on('click', '.follow-btn', followeeSearch);
-    $(document).on('click', '.insertNestedReply', insertNestedReply);
+    $(document).on('click', '.insert-nested-reply', insertNestedReply);
     $(document).on('click', '.write-nested-reply', writeNestedReply);
 }
 
