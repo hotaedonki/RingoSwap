@@ -108,11 +108,6 @@ function connect()
 	// 연결하고자하는 Socket 의 endPoint
     let socket = new SockJS('/ringo/ws-stomp');
     stompClient = Stomp.over(socket);
-    console.log(chatroomInfo);
-    console.log(chatroomNum);
-    console.log(myUserNum);
-    console.log(url);
-    console.log(socket);
     stompClient.connect({}, onConnected, onError);
     
     //alert("연결 완료");
@@ -123,22 +118,20 @@ function onConnected()
 	// ChatCommon 객체를 생성
 	const chatCommon = {
 		type: 'ENTER', // MessageType.ENTER와 동일
-		chat_num: 123, // 채팅 번호 (원하는 값으로 변경)
-		user_num: 456, // 사용자 번호 (원하는 값으로 변경)
-		chatroom_num: 789, // 채팅방 번호 (원하는 값으로 변경)
-		message: "입장합니다", // 메시지 내용 (원하는 내용으로 변경)
-		inputdate: "2023-09-12", // 입력 날짜 (원하는 날짜로 변경)
-		origin_file: "", // 원본 파일 (원하는 값으로 변경)
-		saved_file: "", // 저장된 파일 (원하는 값으로 변경)
-		photo_size: 0 // 사진 크기 (원하는 값으로 변경)
+		chat_num: "", // 채팅 번호
+		user_num: myUserNum, // 사용자 번호
+		chatroom_num: chatroomNum, // 채팅방 번호
+		message: "입장", // 메시지 내용
+		inputdate: "2023-09-12", // 입력 날짜
+		origin_file: "", // 원본 파일
+		saved_file: "", // 저장된 파일
+		photo_size: 0 // 사진 크기
 	};
+	// sub 할 url => /sub/chat/room/openChatRoom 로 구독한다
+	stompClient.subscribe('/sub/chat/openChatRoom/' + chatroomNum, onMessageReceived);
 
 	// stompClient.send()를 사용하여 메시지 전송
-	stompClient.send('/app/chat/openChatRoomEnter/', {}, JSON.stringify(chatCommon));
-
-	
-	// sub 할 url => /sub/chat/room/roomId 로 구독한다
-	stompClient.subscribe('/sub/chat/openChatRoom/' + chatroomNum, onMessageReceived);
+	stompClient.send('/pub/chat/openChatRoomEnter/', {}, JSON.stringify(chatCommon));
 
 	// 서버에 username 을 가진 유저가 들어왔다는 것을 알림
 	// /pub/chat/enterUser 로 메시지를 보냄
@@ -153,8 +146,6 @@ function onConnected()
 		})
 	)
 	*/
-
-
 	//connectingElement.classList.add('hidden');
 }
 
@@ -163,7 +154,10 @@ function onConnected()
 function onMessageReceived(payload) {
     //console.log("payload 들어오냐? :"+payload);
     let chat = JSON.parse(payload.body);
+    console.log("onMessageReceived!");
+    console.log(chat);
 
+/*
     let messageElement = document.createElement('li');
 
     if (chat.type === 'ENTER') {  // chatType 이 enter 라면 아래 내용
@@ -223,6 +217,7 @@ function onMessageReceived(payload) {
 
     messageArea.appendChild(messageElement);
     messageArea.scrollTop = messageArea.scrollHeight;
+    */
 }
 
 

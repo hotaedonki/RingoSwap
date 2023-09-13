@@ -9,8 +9,6 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -228,8 +226,7 @@ public class FeedController {
 	public int replyInsert(@AuthenticationPrincipal UserDetails user
 			, String contents
 			, int feed_num
-			, int parent_reply_num
-			, @RequestParam(value = "mentioned_user_num", required = false) List<String> mentionedUsers) {
+			, int parent_reply_num) {
 		log.debug("리플내용확인 {} ", contents);
 		log.debug("리플 피드넘 {} ", feed_num);
 		Reply reply = new Reply();
@@ -240,20 +237,6 @@ public class FeedController {
 		reply.setParent_reply_num(parent_reply_num);
 		int methodResult = service.replyInsert(reply);
 
-		int replyId = reply.getReply_num();
-		
-		if (mentionedUsers != null && !mentionedUsers.isEmpty()) {
-	        List<Integer> mentionedUserIds = mentionedUsers.stream()
-	                .map(mentionedUser -> mentionedUser.substring(1)) // @ 제거
-	                .map(username -> memberService.getUserIdByUsername(username)) // NAME으로 유저NUM 조회
-	                .filter(Objects::nonNull) //유저 ID가 NULL이 아닌 경우만
-	                .collect(Collectors.toList()); // 결과를 LIST로
-	                
-	        if (!mentionedUserIds.isEmpty()) {
-	            service.saveMention(replyId, mentionedUserIds);
-	        }
-	    }
-		
 		return reply.getFeed_num();
 	}
 

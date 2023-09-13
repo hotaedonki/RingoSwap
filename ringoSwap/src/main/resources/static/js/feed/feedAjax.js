@@ -77,7 +77,7 @@ function feedDetail() {
 			feedPhotoPrint(detail.feed.feed_num);
 			replyPrint(detail.feed.feed_num);
 			
-		    let likeButtonClass = detail.likeCheck === 1 ? "bi-heart-fill" : "bi-heart";
+		    let likeButtonClass = detail.feed.likeCheck === 1 ? "bi-heart-fill" : "bi-heart";
 		     
 			$('#feedDetail').append(`
                     <div class="card feed-card" data-feed-num="${detail.feed.feed_num}">

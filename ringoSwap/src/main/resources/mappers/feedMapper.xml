@@ -197,20 +197,5 @@
 		and user_num = #{user_num}
 	</delete>
 	<!-- 삭제 관련 기능 끝 -->
-	<!-- Mention 기능 시작 -->
-	<insert id="saveMention" parameterType="java.util.Map">
-	    INSERT INTO ringo_reply_mentions (
-	        mentioned_num,
-	        mentioned_username,
-	        reply_num,
-	        mentioned_user_num
-	    )
-	    VALUES (
-	        RINGO_REPLY_MENTIONS_SEQ.NEXTVAL,
-	        #{mentioned_username},
-	        #{reply_num},
-	        #{mentioned_user_num}
-	    )
-	</insert>
-
+	
 </mapper>
