@@ -283,7 +283,7 @@ function followSearchInput() {
 	if (atIndex !== -1) {
 		const username = inputVal.substring(atIndex + 1);
 		
-		if (query.length > 0) {
+		if (username.length > 0) {
 			$.ajax({
 				url: 'followeeSearch'
 				, type: 'post'

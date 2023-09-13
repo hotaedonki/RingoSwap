@@ -327,6 +327,19 @@ public class MemberController
 		log.debug("request 출력 {}", request.getRemoteAddr());
 		//해당글의 첨부파일명 확인
 		Member member = service.memberSearchById(user_id); //글에 대한 정보를 읽어옴(savedfile 포함)
+		
+		if(member == null) {
+	        log.error("Member not found with user_id: {}", user_id);
+	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	        return;
+	    }
+
+	    // member.getOriginal_profile()이 null인 경우 처리
+	    if(member.getOriginal_profile() == null) {
+	        log.error("Original profile is null for user_id: {}", user_id);
+	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	        return;
+	    }
 		//파일의 경로를 이용해서 FileInputStream 객체 생성
 		String fullPath = uploadPath+"/"+member.getSaved_profile(); //전체 경로 생성
 		
@@ -398,7 +411,14 @@ public class MemberController
 	@ResponseBody
 	@PostMapping("nicknamePrint") 
 	public String nicknamePrint(@AuthenticationPrincipal UserDetails user) {
-		return service.usernameByUserId(user.getUsername());
+		
+		if (user == null) {
+	        // 사용자가 로그인하지 않은 경우 로그를 출력하고 메서드를 종료합니다.
+	        System.out.println("User is not logged in");
+	        return null;
+	    }
+
+	    return service.usernameByUserId(user.getUsername());
 		
 	}
 	

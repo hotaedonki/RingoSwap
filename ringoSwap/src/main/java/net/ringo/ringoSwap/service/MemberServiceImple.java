@@ -128,10 +128,12 @@ public class MemberServiceImple implements MemberService
 	public Member memberSearchByMyPage(String user_id) {
 		Member member = dao.memberSearchById(user_id);
 		log.debug("태그숫자 : {}", member.getTag_list());
-		String [] list = member.getTag_list().split(" ");
-	    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));
-		log.debug("태그숫자 : {}",tagList);
-		member.setTagList(tagList);
+		if(member.getTag_list() != null) {
+			String [] list = member.getTag_list().split(" ");
+		    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));
+			log.debug("태그숫자 : {}",tagList);
+			member.setTagList(tagList); 
+		}
 		return member;
 	}
 	//수정한 프로필 정보를 담은 member 객체를 매개변수로 보내, DB를 수정하는 메서드
