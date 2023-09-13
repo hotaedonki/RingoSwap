@@ -72,7 +72,7 @@ function handlePopState(event) {
             feedDetail();
         }
     } else {//뒤로가기 버튼 클릭
-		// 페이지가 로드될 때 한 페이지 뒤로 가려면 history.back()을 호출합니다
+      // 페이지가 로드될 때 한 페이지 뒤로 가려면 history.back()을 호출합니다
         console.log('뒤로가기 실행');
         feedPrint();
         console.log('뒤로가기 완료');
@@ -81,9 +81,10 @@ function handlePopState(event) {
 
 //History API를 사용한 새로고침시에도 피드가 유지되도록 하는 이벤트
 function handleWindowLoad() {
+	console.log("히스토리api")
     const feedNum = getUrlParam('feed');
     if (feedNum) {
-		// 파일 번호가 URL에 있을 경우 해당 텍스트 객체 열기
+      // 파일 번호가 URL에 있을 경우 해당 텍스트 객체 열기
         saved_feedNum = feedNum;
         console.log('객체 열기');
         feedDetail();

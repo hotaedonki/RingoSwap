@@ -59,8 +59,8 @@ function replyPrint(feedNum) {
 				                        <i class="bi ${likeButtonClass} unLike replyLike" data-reply-num="${comment.reply_num}"></i>                
 				                	</div>
 			                    </div>
-			                    <div class="row comment-2 g-0" style="margin: 0;  font-size:16px;">
-				                    <div class="col-2">
+			                    <div class="row comment-2 g-0">
+				                    <div class="col-2" style="margin-left: 13px;">
 				                    	<small class="comment-date">${time_diff_str}</small>
 				                    </div>
 				                    <div class="col-2">
@@ -133,7 +133,7 @@ function replyPrint(feedNum) {
 				                        <i class="bi bi-heart unLike replyLike"></i>                
 				                	</div> 
 					            </div>
-					            <div class="row nested-reply-2 g-0" style="margin: 0; font-size:18px;">
+					            <div class="row nested-reply-2 g-0">
 					            	<div class="col-2">
 				                    	<small class="nested-reply-date">${time_diff_str}</small>
 				                    </div>

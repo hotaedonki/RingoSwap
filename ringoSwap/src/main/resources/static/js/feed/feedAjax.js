@@ -100,6 +100,7 @@ function feedDetail() {
             `);
             
             history.pushState({ feed_num : detail.feed.feed_num }, '', `?feed=${detail.feed.feed_num}`);
+            console.log("히스토리 : ", history);
 			$("#feedDetail").show();
 		}, 
 		error: function(error) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -176,6 +177,12 @@ public class FeedServiceImple implements FeedService{
 		map.put("user_num", user_num);
 		
 		return dao.replyDeleteOne(map);
+	}
+	
+	@Override
+	public void saveMention(int replyId, List<Integer> mentionedUserIds) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
