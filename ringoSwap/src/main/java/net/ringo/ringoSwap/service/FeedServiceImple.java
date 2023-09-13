@@ -30,7 +30,9 @@ public class FeedServiceImple implements FeedService{
 
 		map.put("feedArrayType", feedArrayType);
 		map.put("text", text);
+	    log.debug("확인?{}", map);
 		feedList = dao.feedSelectAll(map);	//피드타입, 검색하는 문자열을 매개변수로 전달해 그에 따른 게시글 배열을 리턴하는 메서드 실행
+	    log.debug("확인완료 {}", feedList);
 	
 		return feedList;
 	}

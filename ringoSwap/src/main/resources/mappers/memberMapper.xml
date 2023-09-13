@@ -142,7 +142,7 @@
 	<select id="getUserIdByUsername" parameterType="String" resultType="int">
 		select user_num
 		from ringo_member
-		where username = #{username} 
+		where username like '%'|| #{username} ||'%'
 	</select>
 	
 </mapper>
