@@ -46,7 +46,8 @@ public interface FeedService {
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
 	//피드, 댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 출력하는
 	public ArrayList<Feed> feedSearchByTagName(String tag_name, String feedArrayType);
-	
+	//피드 작성시 해당 피드에 속한 태그에 대한 태그링크도 DB에 삽입하는 메서드
+	public int feedTagLinkInsert(int newFeedNum, ArrayList<String> tagList);
 	
 	
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>

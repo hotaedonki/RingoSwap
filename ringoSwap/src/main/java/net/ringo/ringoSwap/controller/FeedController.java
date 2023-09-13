@@ -190,7 +190,8 @@ public class FeedController {
 	@PostMapping("feedWrite")
 	public ResponseEntity<?> feedWrite(@AuthenticationPrincipal UserDetails user,
 			@RequestParam("content") String content,
-			@RequestParam(value = "photos", required = false) MultipartFile[] photos) {
+			@RequestParam(value = "photos", required = false) MultipartFile[] photos,
+			@RequestParam("tagList") ArrayList<String> tagList) {
 		Feed feed = new Feed();
 		feed.setContents(content);
 		log.debug("피드 데이터 확인 : {}", feed);
@@ -219,6 +220,11 @@ public class FeedController {
 			}
 		}
 
+		//해당 피트에 속한 태그링크 목록을 생성하는 메서드 실행
+		if(tagList.size() != 0) {
+			methodResult = service.feedTagLinkInsert(newFeedNum, tagList);
+			
+		}
 		return ResponseEntity.ok("Success");
 	}
 

@@ -14,6 +14,7 @@ import net.ringo.ringoSwap.dao.FeedDAO;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Reply;
+import net.ringo.ringoSwap.domain.Tagstorage;
 import net.ringo.ringoSwap.util.FeedSort;
 @Slf4j
 @Service
@@ -156,6 +157,24 @@ public class FeedServiceImple implements FeedService{
 
 		//리턴받은 피드 배열을 service에 리턴
 		return feedList;
+	}
+	//피드 작성시 해당 피드에 속한 태그에 대한 태그링크도 DB에 삽입하는 메서드
+	@Override
+	public int feedTagLinkInsert(int newFeedNum, ArrayList<String> tagList) {
+		HashMap<String, Object> map = new HashMap<>();
+		ArrayList<Integer> tagNum = new ArrayList<>();
+		
+		for(String tag_name : tagList) {
+			int check = dao.tagStorageCheckByTagName(tag_name);
+			if(check == 0) {//check변수의 값이 0일경우, 해당하는 이름의 태그가 존재하지 않는 것이므로  태그삽입 메서드를 실행한다.
+				check = dao.tagStorageInsert(tag_name);
+			}
+			tagNum.add(check);
+		}
+		map.put("feed_num", newFeedNum);
+		map.put("tag_num", tagNum);
+		
+		return dao.feedTagLinkInsert(map);
 	}
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	

@@ -1,5 +1,4 @@
 function getUrlParam(param) {
-	console.log("파람 : ", param);
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
 }
@@ -16,6 +15,11 @@ function goToProfile() {
 
 function otherUserProfileButton(event) {
 	event.preventDefault();
+}
+
+function feedSearch(){
+    //id값이 searchInput인 검색창에서 커서가 벗어났을때 실행되는 피드목록 검색 함수
+    feedPrint();
 }
 
 function returnFeedMain() {

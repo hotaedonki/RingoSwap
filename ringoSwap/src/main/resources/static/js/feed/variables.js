@@ -38,6 +38,7 @@ function initializeDocumentClickHandlers() {
     $(document).on('click', '.insert-nested-reply', insertNestedReply);
     $(document).on('click', '.write-nested-reply', writeNestedReply);
     $(document).on('input', '.follow-search-input', followSearchInput);
+    $(document).on('input', '#searchInput', feedSearch);
 }
 
 function initializeWindowEventHandlers() {
