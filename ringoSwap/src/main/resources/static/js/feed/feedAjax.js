@@ -11,6 +11,7 @@ function feedPrint() {
 			let likeCheck = res.likeCheckMap;
 			
 			$(".feed-display-area .col-12").empty();
+            $(".left-area, .middle-area").show();
 			$("#feedDetail").hide();
 			
 			console.log(feeds);
@@ -56,6 +57,11 @@ function feedDetail() {
     }else{
         feedNum = saved_feedNum;
     }
+    /*
+    history api를 사용한 히스토리 스택 기능에 feedDetail로 호출된 URL이 중복해서 입력되지 않도록 하기위한 변수 2개
+    */
+    const currentUrl = window.location.href;
+    const newUrl = 'http://localhost:8888/ringo/feed/feedMain?feed='+feedNum;
 
 	$.ajax({
 		url: "feedPrint",
@@ -102,6 +108,9 @@ function feedDetail() {
             history.pushState({ feed_num : detail.feed.feed_num }, '', `?feed=${detail.feed.feed_num}`);
             console.log("히스토리 : ", history);
 			$("#feedDetail").show();
+            if(currentUrl !== newUrl){
+                history.pushState({ feed_num : detail.feed.feed_num, url: newUrl }, '', `?feed=${detail.feed.feed_num}`);
+            }
 		}, 
 		error: function(error) {
 			console.error(error);

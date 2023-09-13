@@ -20,7 +20,7 @@ function otherUserProfileButton(event) {
 
 function returnFeedMain() {
     //pushState를 통해 브라우저에 feedMain초기화면 상태로 새 History 페이지를 추가.
-    history.pushState(null, '', '?feed=');
+    history.pushState({url: window.location.href}, '', 'feedMain');
 	$(".feed-display-area .col-12").show();
 	$(".left-area, .middle-area").show();
 	$("#feedDetail").hide();

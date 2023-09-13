@@ -1,5 +1,6 @@
 let selectedImages = [];
 let saved_feedNum = 0;  //History API를 사용한 피드 번호를 이용한 피드 출력기능에서 피드 번호 전달에 사용하는 전역변수
+let previousUrl = null;  //handlePopState에서 사용할 뒤로가기/앞으로가기 판별용 전역변수. 현재 주소를 담는다.
 
 function initializeEventHandlers() {
     $(".feed-header").click(otherUserProfileButton);
@@ -65,18 +66,24 @@ function handleCollapseFeedClick(event) {
 
 //브라우저에서 뒤로가기 클릭시, History API이 적용된 feedDetail이 아닌 기존 페이지로 이동하는 이벤트
 function handlePopState(event) {
-    if (event.state) {//앞으로 가기 버튼 클릭
-        console.log('앞으로 가기 실행');
-        if(event.state.feed_num){
-            saved_feedNum = event.state.feed_num;
-            feedDetail();
-        }
-    } else {//뒤로가기 버튼 클릭
-      // 페이지가 로드될 때 한 페이지 뒤로 가려면 history.back()을 호출합니다
-        console.log('뒤로가기 실행');
-        feedPrint();
-        console.log('뒤로가기 완료');
+    let newUrl = window.location.href;
+
+    if(previousUrl === newUrl){
+        return; //현재 url과 이전 url이 동일할경우, 아무 작업도 수행하지 않도록 리턴
     }
+    
+    if (event.state && event.state.feed_num) {
+        // 이전 URL이 존재하고 현재 URL과 다른 경우, 앞으로 가기 작업을 실행
+        console.log('앞으로 가기');
+        saved_feedNum = event.state.feed_num;
+        feedDetail();
+    } else {
+        // 이전 URL이 없으면서 현재 URL과 다른 경우, 뒤로가기 작업
+        console.log('뒤로 가기');
+        feedPrint();
+    }
+    
+    previousUrl = newUrl; // 현재 URL을 이전 URL로 저장합니다.
 }
 
 //History API를 사용한 새로고침시에도 피드가 유지되도록 하는 이벤트
@@ -88,6 +95,7 @@ function handleWindowLoad() {
         saved_feedNum = feedNum;
         console.log('객체 열기');
         feedDetail();
+        
     }
 }
 

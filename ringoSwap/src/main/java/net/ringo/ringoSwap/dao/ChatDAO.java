@@ -33,4 +33,10 @@ public interface ChatDAO
 	public ArrayList<Chatroom> loadChatRooms(ArrayList<ChatroomLink> chatroomLinks);
 
 	public ArrayList<ChatCommon> loadMessage(int chatroom_num);
+
+	public Chatroom getChatroomById(int chatroom_num);
+
+	public ArrayList<ChatroomLink> getChatroomLinksByChatroomNum(int chatroom_num);
+
+	public ChatroomLink getChatroomLinkByUserNum(int userNum);
 }
