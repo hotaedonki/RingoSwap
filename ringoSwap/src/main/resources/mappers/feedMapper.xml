@@ -9,12 +9,12 @@
 		select * from
 		ringo_feed_with_likeandtag
 		<where>
-			<if test="text != null">
+			<if test="text != 'null'">
 			user_id like '%'||#{text}||'%'
 				and contents like '%'||#{text}||'%'
 				and tag_list like '%'||#{text}||'%'
 			</if>
-			<if test="feedArrayType == 'popular' and text != null">
+			<if test="feedArrayType == 'popular' and text != 'null'">
 				and
 			</if>
 			<if test="feedArrayType == 'popular' ">

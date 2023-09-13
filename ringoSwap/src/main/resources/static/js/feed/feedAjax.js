@@ -1,9 +1,12 @@
 function feedPrint() {
+    let text = $('#searchInput').val();
+    console.log(text);
 	$.ajax({
-		url: "feedPrintAll",
+		url: "../feed/feedPrintAll",
 		type: "post",
 		data: {
-			feedArrayType: "default"
+			feedArrayType: "default",
+            text : text
 		},
 		success: function(res) {	
 			let feeds = res.feedList;
@@ -40,6 +43,7 @@ function feedPrint() {
                 `);
             });
             $(".feed-display-area .col-12").show();
+            console.log('완성');
         },
         error: function(error) {
 			console.log(error);
