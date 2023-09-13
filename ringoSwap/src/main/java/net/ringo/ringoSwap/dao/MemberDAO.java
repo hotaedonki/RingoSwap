@@ -55,4 +55,7 @@ public interface MemberDAO
 	public ArrayList<MemberFollow> followerArraySearch(HashMap<String, Object> map);
 	//특정 사용자의 특정 범위의 팔로우 회원 목록을 리턴하는 메서드
 	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map);
+	//@멘션 기능을 위한 username으로 해당 유저의 num값을 가져오는 메서드 
+	public int getUserIdByUsername(String username);
+	public String usernameByUserId(String userId);
 }

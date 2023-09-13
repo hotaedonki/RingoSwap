@@ -56,4 +56,8 @@ public interface MemberService
 	//특정 사용자의 특정 범위의 팔로우 수를 리턴하는 메서드
 	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map);
 
+	//@멘션 기능을 위한 username으로 해당 유저의 num값을 가져오는 메서드 
+	public int getUserIdByUsername(String username);
+	//홈에 닉네임 띄우기
+	public String usernameByUserId(String userId);
 }

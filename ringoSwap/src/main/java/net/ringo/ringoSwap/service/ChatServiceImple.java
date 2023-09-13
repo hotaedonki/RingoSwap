@@ -1,22 +1,42 @@
 package net.ringo.ringoSwap.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.ChatDAO;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
+import net.ringo.ringoSwap.websocket.ChatHandler;
+
+/*
+	채팅 서비스 클래스 : 여기서 사용되는 findAllRoom, createRoom,findRoomById 등은 사실상 DB와 연결되는 순간 DAO로 넘어가야 합니다.
+	지금은 DB와 연결없이 만들 예정이기 때문에 우선 Service에 넣어두었습니다.
+	DB 와 연결이 없기 때문에 일단 채팅방 정보가 HashMap안에 저장되어 있습니다.
+	createRoom : UUID를 통해 랜덤으로 생성된 UUID값으로 채팅방 아이디를 정하고, NAME으로 채팅방 이름을 정해서 채팅방을 생성합니다.
+	sendMessage : 지정된 세션에 메시지를 발송합니다.
+	findOOOORoom : roomId를 기준으로 map에 담긴 채팅방 정보를 조회합니다.
+*/
 
 @Slf4j
+@Data
 @Service
 public class ChatServiceImple implements ChatService
 {
+	private final ObjectMapper mapper;
+	
 	@Autowired
 	private ChatDAO dao;
+	
 
 	@Override
 	public ArrayList<Integer> getChatroomNums(int userNum) 
@@ -61,7 +81,7 @@ public class ChatServiceImple implements ChatService
 			log.debug("채팅방 링크 생성 실패");
 			return false;
 		}
-		
+				
 		return true;
 	}
 
@@ -88,7 +108,7 @@ public class ChatServiceImple implements ChatService
 	{
 		return dao.deleteMessage(cc);
 	}
-
+	
 	@Override
 	public ArrayList<ChatroomLink> getChatroomLinks(int userNum) 
 	{
@@ -105,5 +125,42 @@ public class ChatServiceImple implements ChatService
 	public ArrayList<ChatCommon> loadMessage(int chatroom_num) 
 	{
 		return dao.loadMessage(chatroom_num);
+	}
+
+	@Override
+	public void sendMessageWeb(WebSocketSession session, ChatCommon message) 
+	{
+		try
+		{
+			session.sendMessage(new TextMessage(mapper.writeValueAsString(message)));
+		}
+		catch (IOException e)
+		{
+			log.error(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public Chatroom getChatroomById(int chatroom_num) 
+	{
+		return dao.getChatroomById(chatroom_num);
+	}
+
+	@Override
+	public ArrayList<ChatroomLink> getChatroomLinksByChatroomNum(int chatroom_num) 
+	{
+		return dao.getChatroomLinksByChatroomNum(chatroom_num);
+	}
+
+	@Override
+	public ChatroomLink getChatroomLinkByUserNum(int userNum) 
+	{
+		return dao.getChatroomLinkByUserNum(userNum);
+	}
+
+	@Override
+	public void sendMessageWeb(WebSocketSession session, ChatCommon message) {
+		// TODO Auto-generated method stub
+		
 	}
 }

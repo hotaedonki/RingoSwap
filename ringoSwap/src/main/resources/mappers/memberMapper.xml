@@ -138,5 +138,18 @@
 			#{followee}
 		</foreach>
 	</select>
+	
 	<!-- 팔로우/팔로워 기능 종료 -->
+	<select id="getUserIdByUsername" parameterType="String" resultType="int">
+		select user_num
+		from ringo_member
+		where username like '%'|| #{username} ||'%'
+	</select>
+	
+	<select id="usernameByUserId" parameterType="String" resultType="String">
+		select username
+		from ringo_member
+		where user_id = #{user_id}
+	</select>
+	
 </mapper>
