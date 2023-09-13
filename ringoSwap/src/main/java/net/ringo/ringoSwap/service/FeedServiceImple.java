@@ -24,14 +24,14 @@ public class FeedServiceImple implements FeedService{
 	//<<<<<<<<<<<------[피드 출력 기능 시작]----------------------
 	//모든 게시물을 최신순으로 리턴하는 메서드
 	@Override
-	public ArrayList<Feed> feedSelectAllWithFeedArrayType(String feedArrayType){
+	public ArrayList<Feed> feedSelectAllWithFeedArrayType(String feedArrayType, String text){
+		HashMap<String, Object> map = new HashMap<>();	//매개변수 전달용 해시맵 변수
 		ArrayList<Feed> feedList = new ArrayList<>();			//피드목록 출력용 배열 변수
 
-		if(feedArrayType.equals("default")) {					//피드타입이 'default'인 경우, 모든 게시글을 최신순으로 출력
-			feedList = dao.feedSelectDefaultAll();
-		} else if(feedArrayType.equals("popular")) {			//피드타입이 'interest'인 경우, 모든 게시글을 인기순으로 출력
-			feedList = dao.feedSelectPopularAll();
-		}
+		map.put("feedArrayType", feedArrayType);
+		map.put("text", text);
+		feedList = dao.feedSelectAll(map);	//피드타입, 검색하는 문자열을 매개변수로 전달해 그에 따른 게시글 배열을 리턴하는 메서드 실행
+	
 		return feedList;
 	}
 	//feed_num을 매개변수로 특정 feed 게시글 정보를 리턴하는 메서드

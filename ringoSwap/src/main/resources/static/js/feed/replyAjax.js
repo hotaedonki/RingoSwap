@@ -280,4 +280,6 @@ function followSearchInput() {
 	} 		
 }
 
-function createDropdownList(follewee_name)
+function createDropdownList(follewee_name) {
+	
+}

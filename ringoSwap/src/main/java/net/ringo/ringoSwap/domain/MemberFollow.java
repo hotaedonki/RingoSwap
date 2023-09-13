@@ -16,6 +16,7 @@ public class MemberFollow {
 	String saved_profile;
 	public String toString()
 	{
+
 		return String.format("follower_num : {%d} / followee_num : {%d} / follower_name : {%s} / followee_name {%s} / original_profile {%s} / saved_profile {%s}"
 				,follower_num ,followee_num ,follower_name, followee_name, original_profile, saved_profile);
 	}
