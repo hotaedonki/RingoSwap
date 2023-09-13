@@ -268,7 +268,9 @@ public class ChatController
 	public void enterUser(@Payload ChatCommon chat, SimpMessageHeaderAccessor headerccessor)
 	{
 		chat.setMessage(chat.getChat_num() + "님이 입장하셨습니다.");
-		template.convertAndSend("/sub/chat/openChatroom" + chat.getChatroom_num(), chat);
+		log.debug("openChatRoomEnter : {}", chat.getChatroom_num());
+		log.debug(chat.getMessage());
+		template.convertAndSend("/sub/chat/openChatroom/" + chat.getChatroom_num(), chat);
 	}
 	
 	@MessageMapping(PathHandler.MM_SENDMESSAGE)
