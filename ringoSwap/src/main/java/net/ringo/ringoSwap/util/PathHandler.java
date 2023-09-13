@@ -1,3 +1,4 @@
+
 package net.ringo.ringoSwap.util;
 
 public class PathHandler
@@ -40,5 +41,7 @@ public class PathHandler
 	public final static String CREATEROOMPAGE = "createRoomPage";
 	public final static String MM_OPENCHATROOMENTER = "/chat/openChatRoomEnter/";
 	public final static String MM_SENDMESSAGE = "/chat/sendMessage";
-	public final static String WS_STOMP = "/ws-stomp"; 
+
+	// Web socket, stomp, sockjs . . .
+	public final static String WS_STOMP = "/ws-stomp";
 }

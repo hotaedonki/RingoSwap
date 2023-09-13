@@ -1,3 +1,4 @@
+
 package net.ringo.ringoSwap.websocket;
 
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +43,6 @@ public class SpringConfig implements WebSocketMessageBrokerConfigurer
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) 
 	{
-		log.debug("configureMessageBroker active");
 		// 메시지를 구독하는 요청 url -> 메시지를 받을 때
         registry.enableSimpleBroker("/sub");
         // 메시지를 발행하는 요청 url -> 메시지를 보낼 때

@@ -158,9 +158,4 @@ public class ChatServiceImple implements ChatService
 		return dao.getChatroomLinkByUserNum(userNum);
 	}
 
-	@Override
-	public void sendMessageWeb(WebSocketSession session, ChatCommon message) {
-		// TODO Auto-generated method stub
-		
-	}
 }
