@@ -32,7 +32,7 @@ public interface ChatService
 
 	public ArrayList<ChatCommon> loadMessage(int chatroom_num);
 
-	public void sendMessage(WebSocketSession session, ChatCommon message);
+	public void sendMessageWeb(WebSocketSession session, ChatCommon message);
 
 	public Chatroom getChatroomById(int chatroom_num);
 

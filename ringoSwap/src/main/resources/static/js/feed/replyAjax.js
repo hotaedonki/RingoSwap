@@ -3,13 +3,22 @@ function replyInsert() {
     const feedNum = $(this).closest('.feed-card').data('feed-num');
 	console.log(replyContent, feedNum);
 	
+	const hashtags = replyContent.match(/#\w+/g) || [];
+    console.log(hashtags);
+	
 	$.ajax({
 		url: "replyInsert",
 		type: "post",
-		data: { feed_num: feedNum, contents: replyContent, parent_reply_num: -1},
+		data: { feed_num: feedNum, contents: replyContent, parent_reply_num: -1, hashtags: hashtags},
 		success: function(feedNum) {
 			$(".replyContent").val('');
 			replyPrint(feedNum);
+			
+			hashtags.forEach(function(tag) {
+                $(`.replyContent:contains("${tag}")`).html(function(_, html) {
+                    return html.replace(tag, `<a href="search?tag=${tag.slice(1)}">${tag}</a>`);
+                });
+            });
 		},
 		error: function(error) {
 			console.error(error);
@@ -59,8 +68,8 @@ function replyPrint(feedNum) {
 				                        <i class="bi ${likeButtonClass} unLike replyLike" data-reply-num="${comment.reply_num}"></i>                
 				                	</div>
 			                    </div>
-			                    <div class="row comment-2 g-0" style="margin: 0;  font-size:16px;">
-				                    <div class="col-2">
+			                    <div class="row comment-2 g-0">
+				                    <div class="col-2" style="margin-left: 13px;">
 				                    	<small class="comment-date">${time_diff_str}</small>
 				                    </div>
 				                    <div class="col-2">
@@ -89,7 +98,7 @@ function replyPrint(feedNum) {
 				                </div>
 				                <div class="row show-nested-reply-form" style="display: none;">
 				                	<div class="col-9">
-				                    	<input type="text" class="form-control nested-reply-input" placeholder="답글을 입력하세요..." />
+				                    	<input type="text" class="form-control follow-search-input" placeholder="답글을 입력하세요..." />
 			                   		</div>
 			                   		<div class="col-3 d-flex justify-content-end"> 	
 			                   		 	<button class="btn btn-primary insert-nested-reply">작성</button>
@@ -116,7 +125,8 @@ function replyPrint(feedNum) {
 							`)
 					commentElement.find(".view-nested-reply").append(nestedReplyToggle);	
 						
-	                commentNestedReplies.forEach(nestedReply => {					
+	                commentNestedReplies.forEach(nestedReply => {
+						console.log("nestedReply 각 개체의 값: ", `${nestedReply.reply_num}`)					
 				        let nestedReplyElement = $(`
 				            <div class="nested-reply-item" data-reply-id="${comment.reply_num}" style="display: none; margin-left: 30px;">
 				            	<div class="row nested-reply-1 d-flex align-items-center">
@@ -130,21 +140,21 @@ function replyPrint(feedNum) {
 					            		<span class="nested-reply-text">${nestedReply.contents}</span>
 					            	</div>
 					            	<div class="col-2">
-				                        <i class="bi bi-heart unLike replyLike"></i>                
+				                        <i class="bi bi-heart unLike replyLike" data-reply-num="${nestedReply.reply_num}"></i>                
 				                	</div> 
 					            </div>
-					            <div class="row nested-reply-2 g-0" style="margin: 0; font-size:18px;">
+					            <div class="row nested-reply-2 g-0">
 					            	<div class="col-2">
 				                    	<small class="nested-reply-date">${time_diff_str}</small>
 				                    </div>
 				                    <div class="col-2">
-				                        <small class="nested-reply-like-count">좋아요 ${nestedReply.like_count}개</small>
+				                        <small>좋아요 <span class="like-count" data-reply-num="${nestedReply.reply_num}">${nestedReply.like_count}</span>개</small>
 				                    </div>
 				                    <div class="col-2">
-				                        <small class="write-nested-nested-reply" data-username-id="${nestedReply.username}">답글달기</small>
+				                        <small class="write-nested-reply" data-username-id="${nestedReply.username}">답글달기</small>
 				                    </div>
 				                    <div class="col-2">
-				                        <button class="btn btn-primary nested-reply-delete-btn btn-sm ml-2">삭제</button>
+				                        <button class="btn btn-primary reply-delete-btn btn-sm ml-2" data-reply-num="${nestedReply.reply_num}">삭제</button>
 					            	</div>
 					            </div>
 				            </div>
@@ -161,6 +171,16 @@ function replyPrint(feedNum) {
 				    }	
 				    
                 $(".replyPrint").append(commentElement);
+                
+                $('.replyContent').each(function() {
+			        const content = $(this).text();
+			        const hashtags = content.match(/#\w+/g) || [];
+			        hashtags.forEach(function(tag) {
+			            $(this).html(function(_, html) {
+			                return html.replace(tag, `<a href="search?tag=${encodeURIComponent(tag.slice(1))}">${tag}</a>`);
+			            });
+			        }, this);
+			    });
             });
         },
         error: function(error) {
@@ -201,7 +221,7 @@ function writeNestedReply() {
     console.log("writeNestedReply : ", TagUserName, parentReplyNum)
     
     $(this).closest('.comment-list').find(".show-nested-reply-form").toggle();
-    $(this).closest('.comment-list').find(".nested-reply-input")
+    $(this).closest('.comment-list').find(".follow-search-input")
     	.val("@" + TagUserName + " ")
        .data('parent-reply-num', parentReplyNum); // Set the parent reply num in data attribute
 }
@@ -211,7 +231,9 @@ function writeNestedReply() {
 function clickLikeReply() {
     const replyNum = $(this).data('reply-num');
     const buttonElement = $(this); // $(this) 참조를 저장
-
+	
+	console.log("댓글 좋아요 기능: ", replyNum, buttonElement)
+	
     $.ajax({
         url: "replyLikeClicker",
         type: "post",
@@ -252,4 +274,46 @@ function replyDelete(){
             console.log(error);
         }
     })
+}
+
+function followSearchInput() {
+	const inputVal = $(this).val();
+	const atIndex = inputVal.lastIndexOf('@');
+	
+	if (atIndex !== -1) {
+		const username = inputVal.substring(atIndex + 1);
+		
+		if (query.length > 0) {
+			$.ajax({
+				url: 'followeeSearch'
+				, type: 'post'
+				, data: {username: username}
+				, success: function(followee) {
+					createDropdownList(followee)
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			})
+		}
+	} 		
+}
+
+function createDropdownList(followee) {
+    const dropdownMenu = $('<div class="dropdown-menu"></div>');
+
+    followee.forEach(item => {
+        const dropdownItem = $(`<a class="dropdown-item" href="#">${item.followee_name}</a>`);
+        dropdownItem.on('click', function() {
+            const username = $(this).text();
+            const inputField = $('.your-input-class');
+            const currentValue = inputField.val();
+            const newValue = currentValue.replace(/@[a-zA-Z0-9_]+$/, '@' + username);
+            inputField.val(newValue);
+        });
+        dropdownMenu.append(dropdownItem);
+    });
+
+    $('.follow-search-input').after(dropdownMenu);
+    dropdownMenu.show(); 
 }

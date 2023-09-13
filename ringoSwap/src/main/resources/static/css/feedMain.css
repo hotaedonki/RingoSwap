@@ -254,3 +254,7 @@ main {
 .feed-card, .notification-card {
 	margin-top: 20px;
 }
+
+.comment-2, .nested-reply-2 {
+	font-size: 16px;
+}

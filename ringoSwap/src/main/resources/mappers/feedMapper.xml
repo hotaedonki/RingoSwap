@@ -5,18 +5,28 @@
 <mapper namespace="net.ringo.ringoSwap.dao.FeedDAO">
 	<!-- 피드 출력 기능 시작 -->
 	<!-- 모든 게시물을 최신순으로 리턴하는 select문 -->
-	<select id="feedSelectDefaultAll" resultType="Feed">
+	<select id="feedSelectAll" parameterType="java.util.HashMap" resultType="Feed">
 		select * from
 		ringo_feed_with_likeandtag
+		<where>
+			<if test="text != 'null'">
+			user_id like '%'||#{text}||'%'
+				and contents like '%'||#{text}||'%'
+				and tag_list like '%'||#{text}||'%'
+			</if>
+			<if test="feedArrayType == 'popular' and text != 'null'">
+				and
+			</if>
+			<if test="feedArrayType == 'popular' ">
+				where (sysdate - inputdate) &lt;= 14
+			</if>
+		</where>
+		<if test="feedArrayType == 'default' ">
 		order by inputdate desc
-	</select>
-	<!-- 최근 게시물들을 인기순(좋아요 순)으로 리턴하는 select문, <는 &lt;로, >는 &gt;로 적습니다(기억할 것) -->
-	<select id="feedSelectPopularAll" resultType="Feed">
-		select * from
-		ringo_feed_with_likeandtag
-		where (sysdate - inputdate) &lt;= 14
-		order by
-		like_count DESC
+		</if>
+		<if test="feedArrayType == 'popular' ">
+		order by like_count DESC
+		</if>
 	</select>
 
 	<!-- feed_num을 매개변수로 특정 feed 게시글 정보를 리턴하는 select문 -->

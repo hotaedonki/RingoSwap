@@ -80,14 +80,17 @@ public class FeedController {
 	@ResponseBody
 	@PostMapping("feedPrintAll")
 	public Map<String, Object> feedPrintAll(
-			@AuthenticationPrincipal UserDetails user,
-			@RequestParam(name = "feedTypeAll", defaultValue = "default") String feedArrayType) {
+			@AuthenticationPrincipal UserDetails user
+			, @RequestParam(name = "feedArrayType", defaultValue = "default") String feedArrayType
+			, @RequestParam(name="text", defaultValue = "null") String text) {
 		Map<String, Object> map = new HashMap<>();
 	    ArrayList<Feed> feedList = new ArrayList<>(); // 피드목록 출력용 배열 변수
 	    int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 
 	    // 피드배열방식을 매개변수로 넘기고 배열방식에 따라 정렬된 게시글 목록을 리턴받는 메서드 실행
-	    feedList = service.feedSelectAllWithFeedArrayType(feedArrayType);
+	    log.debug("확인?{}");
+	    feedList = service.feedSelectAllWithFeedArrayType(feedArrayType, text);
+	    log.debug("확인완료 {}", feedList);
 
 	    // 각 피드에 대한 좋아요 클릭 여부를 저장할 Map
 	    Map<Integer, Integer> likeCheckMap = new HashMap<>();

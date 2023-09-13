@@ -128,7 +128,7 @@ public class ChatServiceImple implements ChatService
 	}
 
 	@Override
-	public void sendMessage(WebSocketSession session, ChatCommon message) 
+	public void sendMessageWeb(WebSocketSession session, ChatCommon message) 
 	{
 		try
 		{
@@ -156,5 +156,11 @@ public class ChatServiceImple implements ChatService
 	public ChatroomLink getChatroomLinkByUserNum(int userNum) 
 	{
 		return dao.getChatroomLinkByUserNum(userNum);
+	}
+
+	@Override
+	public void sendMessageWeb(WebSocketSession session, ChatCommon message) {
+		// TODO Auto-generated method stub
+		
 	}
 }
