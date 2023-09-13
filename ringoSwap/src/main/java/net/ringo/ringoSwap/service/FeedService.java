@@ -2,6 +2,7 @@ package net.ringo.ringoSwap.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,6 +56,8 @@ public interface FeedService {
 	public int feedDeleteByUser(int feed_num, int user_num);
 	//해당 댓글 작성자인지를 확인 후 해당 댓글을 삭제하는 메서드
 	public int replyDeleteOne(int user_num, int reply_num);
+	//
+	public void saveMention(int replyId, List<Integer> mentionedUserIds);
 	
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }

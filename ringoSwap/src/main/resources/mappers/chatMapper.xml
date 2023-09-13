@@ -37,6 +37,7 @@
 	    	ringo_chatroom
     </select>
     
+    <!-- 유저 고유 번호로 채팅방 링크를 가져옴 -->
     <select id="getChatroomLinks" parameterType="int" resultType="ChatroomLink">
     	select
     		*
@@ -44,6 +45,16 @@
     		ringo_chatroom_link
     	where
     		user_num = #{user_num}
+    </select>
+    
+    <!-- 방 고유 번호로 채팅방 링크를 가져옴 -->
+    <select id="getChatroomLinksByChatroomNum" parameterType="int" resultType="ChatroomLink">
+	   	select
+	    	*
+	    from
+	    	ringo_chatroom_link
+	    where
+	    	chatroom_num = #{Chatroom_num} 
     </select>
     
     <!-- 메시지들을 DB에서 삭제함 -->
@@ -139,5 +150,21 @@
 			ringo_chat_common
 		where
 			chatroom_num = #{chatroom_num}
+	</select>
+	
+	<select id="getChatroomById" parameterType="int" resultType="Chatroom">
+		select * from
+			ringo_chatroom
+		where
+			chatroom_num = #{chatroom_num}
+	</select>
+	
+	<select id="getChatroomLinkByUserNum" parameterType="int" resultType="ChatroomLink">
+		select
+			*
+		from
+			ringo_chatroom_link
+		where
+			user_num = #{user_num}
 	</select>
 </mapper>
