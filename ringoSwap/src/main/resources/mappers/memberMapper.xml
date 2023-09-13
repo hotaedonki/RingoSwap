@@ -146,4 +146,10 @@
 		where username = #{username} 
 	</select>
 	
+	<select id="usernameByUserId" parameterType="String" resultType="String">
+		select username
+		from ringo_member
+		where user_id = #{user_id}
+	</select>
+	
 </mapper>

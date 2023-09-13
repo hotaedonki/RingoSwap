@@ -1,5 +1,4 @@
 function feedPrint() {
-	console.log("피드프린트")
 	$.ajax({
 		url: "feedPrintAll",
 		type: "post",

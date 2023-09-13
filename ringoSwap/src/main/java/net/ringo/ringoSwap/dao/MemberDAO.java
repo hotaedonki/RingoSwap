@@ -57,4 +57,5 @@ public interface MemberDAO
 	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map);
 	//@멘션 기능을 위한 username으로 해당 유저의 num값을 가져오는 메서드 
 	public int getUserIdByUsername(String username);
+	public String usernameByUserId(String userId);
 }
