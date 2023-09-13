@@ -55,13 +55,12 @@ function feedPrint() {
 
 function feedDetail() {
 	$('#feedDetail').empty();
-	let feedNum = 0;
     let num = $(this).data('feed-num');
     if(num){ 
         feedNum = num;
-    }else{
-        feedNum = saved_feedNum;
-    }
+    } else {
+		feedNum = saved_feedNum;
+	}
     /*
     history api를 사용한 히스토리 스택 기능에 feedDetail로 호출된 URL이 중복해서 입력되지 않도록 하기위한 변수 2개
     */
@@ -101,7 +100,7 @@ function feedDetail() {
                             <i class="bi bi-translate translate"></i>
                         </div>
                         <div class="comment-input-section d-flex replyMargin">
-                            <input type="text" class="form-control flex-grow-1 replyContent" placeholder="댓글을 입력하세요..." data-feed-num="${detail.feed.feed_num}" />
+                            <input type="text" class="form-control flex-grow-1 replyContent follow-search-input" placeholder="댓글을 입력하세요..." data-feed-num="${detail.feed.feed_num}" />
                             <button class="btn btn-primary ml-2 insertReply" style="min-width: 60px;" data-feed-num="${detail.feed.feed_num}">작성</button>
 
                         </div>
@@ -109,11 +108,9 @@ function feedDetail() {
                     </div>
                 </div>
             `);
-            
-            history.pushState({ feed_num : detail.feed.feed_num }, '', `?feed=${detail.feed.feed_num}`);
             console.log("히스토리 : ", history);
 			$("#feedDetail").show();
-            if(currentUrl !== newUrl){
+			if(currentUrl !== newUrl){
                 history.pushState({ feed_num : detail.feed.feed_num, url: newUrl }, '', `?feed=${detail.feed.feed_num}`);
             }
 		}, 
