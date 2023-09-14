@@ -159,8 +159,8 @@ public class ChatServiceImple implements ChatService
 	}
 
 	@Override
-	public void sendMessageWeb(WebSocketSession session, ChatCommon message) {
+	public Object sendMessage(WebSocketSession sessions, ChatCommon message) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 }

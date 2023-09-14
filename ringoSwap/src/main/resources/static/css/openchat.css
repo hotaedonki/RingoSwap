@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
 }
 body {
   display: flex;
@@ -20,9 +20,9 @@ body {
 /* 채팅 목록 */
 .container .leftside {
   position: relative;
-  flex: 30%;
+  flex: 1;
   background: #fff;
-  border-right: #e5ddd5;
+  border: 1px rgba(0, 0, 0, 0.06) solid;
 }
 .container .leftside.active {
   width: 0;
@@ -30,16 +30,16 @@ body {
 /* 채팅창 */
 .container .rightside {
   position: relative;
-  flex: 70%;
-  background: #fdfafa;
+  flex: 3;
+  background: #f8f6f6;
 }
 .container .rightside::before {
   content: '';
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: url(채팅창배경하고싶은사진.jpg);
   opacity: 0.06;
 }
 .container .rightside.active {
@@ -48,10 +48,10 @@ body {
 .header {
   position: relative;
   width: 100%;
-  height: 80px;
+  height: 60px;
   background: #f1f3f3;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   padding: 0 15px;
 }
@@ -209,7 +209,7 @@ body {
 .chatbox {
   position: relative;
   width: 100%;
-  height: calc(100% - 120Px);
+  height: calc(100% - 140px);
   padding: 50px;
   overflow-y: auto;
 }
@@ -273,7 +273,7 @@ body {
   position: relative;
   width: 100%;
   height: 60px;
-  background: #f0f0f0;
+  background: #fbf8f8;
   padding: 15px;
   display: flex;
   justify-content: space-between;
@@ -322,7 +322,6 @@ body {
   font-size: 13px;
 }
 
-
 .right.header {
     display: flex;
     position: relative;
@@ -331,80 +330,7 @@ body {
     min-height: 100px;
     background: #222327;
   }
-  .nav_body {
-    font-family: 'Open Sans', sans-serif;
-    display: flex;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    background-color: #111;
-  }
-  nav {
-    position: absolute;
-    padding-top: 0;
-    width: 590px;
-    height: 50px;
-    background: #f8fcfc;
-    border-radius: 8px;
-    font-size: 0;
-    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
-  }
-  nav a{
-    font-size: 15px;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: #34495e;
-    text-decoration: none;
-    line-height: 50px;
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    text-align: center;
-  }
-  nav .animation {
-    position: absolute;
-    height: 100%;
-    top: 0;
-    z-index: 0;
-    background: #9fe9da;
-    border-radius: 8px;
-    transition: all .5s ease 0s;
-  }
-  a:nth-child(1){
-    width: 100px;
-  }
-  nav .start_home, a:nth-child(1):hover~.animation{
-    width: 100px;
-    left: 0;
-  }
-  a:nth-child(2){
-    width: 110px;
-  }
-  nav .start_language, a:nth-child(2):hover~.animation{
-    width: 110px;
-    left: 100px;
-  }
-  a:nth-child(3){
-    width: 100px;
-  }
-  nav .start_category, a:nth-child(3):hover~.animation{
-    width: 100px;
-    left: 210px;
-  }
-  a:nth-child(4){
-    width: 160px;
-    }
-  nav .start_new, a:nth-child(4):hover~.animation{
-    width: 160px;
-    left: 310px;
-  }
-  a:nth-child(5){
-    width: 120px;
-  }
-  nav .start_setting, a:nth-child(5):hover~.animation{
-    width: 120px;
-    left: 470px;
-  }
+
   .chatroom_list_box {
     padding: 5%;
     margin-top: 10px;
@@ -474,4 +400,47 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.page_box {
+  display: flex;
+  position: relative;
+  text-align: center;
+  justify-content: center;
+}
+.pagination {
+  position: absolute;
+  justify-content: space-around;
+}
+
+/* openchat 참가자 목록 */
+.container .participants_list_box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: flex-start;
+  background: #fff;
+}
+.voice_participation {
+  display: flex-start;
+  align-items:flex-start;
+  background-color: #fff;
+  padding: 20px;
+}
+#voice_request {
+  font-size: 13px;
+} 
+
+.toggle {
+  margin-top: 12px;
+  position: absolute;
+  background-color: #cdf1ea;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.7em;
+  border-radius: 0.3em;
+  padding: 2px;
+  cursor: pointer;
 }

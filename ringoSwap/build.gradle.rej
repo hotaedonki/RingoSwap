@@ -1,0 +1,24 @@
+diff a/ringoSwap/build.gradle b/ringoSwap/build.gradle	(rejected hunks)
+@@ -43,21 +43,11 @@
+ 	implementation 'org.springframework.boot:spring-boot-starter-security'
+ 	
+ 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+-	
+-	// websocket
+-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+-    // sockjs
+-	implementation 'org.webjars:sockjs-client:1.5.1'
+-	//stomp
+-	implementation 'org.webjars:stomp-websocket:2.3.4'
+-	//gson
+-	implementation 'com.google.code.gson:gson:2.9.0'
+-	
+     implementation 'javax.mail:mail:1.4.7'
+     
++    //사진 여러장 한번에 받기
+     implementation 'commons-io:commons-io:2.8.0'
+ 
+-   	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.2'
+ }
+ 
+ tasks.named('test') {

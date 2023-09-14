@@ -394,6 +394,13 @@ public class MemberController
 		log.debug("{} - modifyProfile", m);
 	}
 	//----------------[마이페이지 기능 종료]----------->>>>>>>>>>>>
-
+	
+	@ResponseBody
+	@PostMapping("nicknamePrint") 
+	public String nicknamePrint(@AuthenticationPrincipal UserDetails user) {
+		return service.usernameByUserId(user.getUsername());
+		
+	}
+	
 	//<<<<<<<<<<<------[ 시작]----------------------
 }

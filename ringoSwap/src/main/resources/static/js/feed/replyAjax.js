@@ -3,13 +3,22 @@ function replyInsert() {
     const feedNum = $(this).closest('.feed-card').data('feed-num');
 	console.log(replyContent, feedNum);
 	
+	const hashtags = replyContent.match(/#\w+/g) || [];
+    console.log(hashtags);
+	
 	$.ajax({
 		url: "replyInsert",
 		type: "post",
-		data: { feed_num: feedNum, contents: replyContent, parent_reply_num: -1},
+		data: { feed_num: feedNum, contents: replyContent, parent_reply_num: -1, hashtags: hashtags},
 		success: function(feedNum) {
 			$(".replyContent").val('');
 			replyPrint(feedNum);
+			
+			hashtags.forEach(function(tag) {
+                $(`.replyContent:contains("${tag}")`).html(function(_, html) {
+                    return html.replace(tag, `<a href="search?tag=${tag.slice(1)}">${tag}</a>`);
+                });
+            });
 		},
 		error: function(error) {
 			console.error(error);
@@ -162,6 +171,16 @@ function replyPrint(feedNum) {
 				    }	
 				    
                 $(".replyPrint").append(commentElement);
+                
+                $('.replyContent').each(function() {
+			        const content = $(this).text();
+			        const hashtags = content.match(/#\w+/g) || [];
+			        hashtags.forEach(function(tag) {
+			            $(this).html(function(_, html) {
+			                return html.replace(tag, `<a href="search?tag=${encodeURIComponent(tag.slice(1))}">${tag}</a>`);
+			            });
+			        }, this);
+			    });
             });
         },
         error: function(error) {
@@ -270,7 +289,7 @@ function followSearchInput() {
 				, type: 'post'
 				, data: {username: username}
 				, success: function(followee) {
-					createDropdownList(followee.follewee_name)
+					createDropdownList(followee)
 				},
 				error: function(error) {
 					console.log(error);
@@ -280,6 +299,21 @@ function followSearchInput() {
 	} 		
 }
 
-function createDropdownList(follewee_name) {
-	
+function createDropdownList(followee) {
+    const dropdownMenu = $('<div class="dropdown-menu"></div>');
+
+    followee.forEach(item => {
+        const dropdownItem = $(`<a class="dropdown-item" href="#">${item.followee_name}</a>`);
+        dropdownItem.on('click', function() {
+            const username = $(this).text();
+            const inputField = $('.your-input-class');
+            const currentValue = inputField.val();
+            const newValue = currentValue.replace(/@[a-zA-Z0-9_]+$/, '@' + username);
+            inputField.val(newValue);
+        });
+        dropdownMenu.append(dropdownItem);
+    });
+
+    $('.follow-search-input').after(dropdownMenu);
+    dropdownMenu.show(); 
 }

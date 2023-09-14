@@ -1,8 +1,6 @@
 function feedPrint() {
-	console.log("피드프린트")
     let text = $('#searchInput').val();
     console.log(text);
-
 	$.ajax({
 		url: "feedPrintAll",
 		type: "post",

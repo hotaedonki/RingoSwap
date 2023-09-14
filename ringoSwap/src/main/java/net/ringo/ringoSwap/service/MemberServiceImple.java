@@ -165,4 +165,8 @@ public class MemberServiceImple implements MemberService
 	public int getUserIdByUsername(String username) {
 		return dao.getUserIdByUsername(username);
 	}
+	@Override
+	public String usernameByUserId(String userId) {
+		return dao.usernameByUserId(userId);
+	}
 }
