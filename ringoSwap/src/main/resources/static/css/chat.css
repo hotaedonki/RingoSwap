@@ -18,20 +18,21 @@ body {
   display: flex;
 }
 /* 채팅 목록 */
-.container .leftside {
+.container .leftSide {
   position: relative;
   flex: 30%;
-  background: #fff;
-  border-right: #e5ddd5;
+  background: #fefbfb;
+  border: 1px rgba(0, 0, 0, 0.06) solid;
 }
 /* 채팅창 */
-.container .rightside {
+.container .rightSide {
   position: relative;
   flex: 70%;
   background: #f4f0ec;
 }
-.container .rightside::before {
+.container  .rightSide::before {
   content: '';
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -42,10 +43,10 @@ body {
 .header {
   position: relative;
   width: 100%;
-  height: 80px;
-  background: #eaecec;
+  height: 60px;
+  background: #f1f3f3;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   padding: 0 15px;
 }
@@ -106,7 +107,7 @@ body {
 .search_chat div ion-icon {
   position: absolute;
   left: 30px;
-  top:14px;
+  top: 14px;
   font-size: 1.2em;
 }
 .chatlist {
@@ -203,7 +204,7 @@ body {
 .chatbox {
   position: relative;
   width: 100%;
-  height: calc(100% - 120Px);
+  height: calc(100% - 130px);
   padding: 50px;
   overflow-y: auto;
 }
@@ -316,86 +317,3 @@ body {
   font-size: 13px;
 }
 
-/* open chat list */
-.right.header {
-  display: flex;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  min-height: 100px;
-  background: #222327;
-}
-.nav_body {
-  font-family: 'Open Sans', sans-serif;
-  display: flex;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  background-color: #111;
-}
-nav {
-  position: absolute;
-  padding-top: 0;
-  width: 590px;
-  height: 50px;
-  background: #f8fcfc;
-  border-radius: 8px;
-  font-size: 0;
-  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
-}
-nav a{
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #34495e;
-  text-decoration: none;
-  line-height: 50px;
-  position: relative;
-  z-index: 1;
-  display: inline-block;
-  text-align: center;
-}
-nav .animation {
-  position: absolute;
-  height: 100%;
-  top: 0;
-  z-index: 0;
-  background: #9fe9da;
-  border-radius: 8px;
-  transition: all .5s ease 0s;
-}
-a:nth-child(1){
-  width: 100px;
-}
-nav .start_home, a:nth-child(1):hover~.animation{
-  width: 100px;
-  left: 0;
-}
-a:nth-child(2){
-  width: 110px;
-}
-nav .start_language, a:nth-child(2):hover~.animation{
-  width: 110px;
-  left: 100px;
-}
-a:nth-child(3){
-  width: 100px;
-}
-nav .start_category, a:nth-child(3):hover~.animation{
-  width: 100px;
-  left: 210px;
-}
-a:nth-child(4){
-  width: 160px;
-  }
-nav .start_new, a:nth-child(4):hover~.animation{
-  width: 160px;
-  left: 310px;
-}
-a:nth-child(5){
-  width: 120px;
-}
-nav .start_setting, a:nth-child(5):hover~.animation{
-  width: 120px;
-  left: 470px;
-}
