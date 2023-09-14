@@ -29,12 +29,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.MemberFollow;
 import net.ringo.ringoSwap.domain.Reply;
+import net.ringo.ringoSwap.domain.Tagstorage;
 import net.ringo.ringoSwap.service.FeedService;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.util.FileService;
@@ -190,7 +194,8 @@ public class FeedController {
 	@PostMapping("feedWrite")
 	public ResponseEntity<?> feedWrite(@AuthenticationPrincipal UserDetails user,
 			@RequestParam("content") String content,
-			@RequestParam(value = "photos", required = false) MultipartFile[] photos) {
+			@RequestParam(value = "photos", required = false) MultipartFile[] photos, 
+			@RequestParam(value = "hashtagsJson", required = false) String hashtagsJson) {
 		Feed feed = new Feed();
 		feed.setContents(content);
 		log.debug("피드 데이터 확인 : {}", feed);
@@ -200,9 +205,27 @@ public class FeedController {
 		if (methodResult == 0) {
 			return ResponseEntity.ok("fail");
 		}
-
+		
 		int newFeedNum = feed.getFeed_num();
-		log.debug("새로 생성된 feed_num: {}", newFeedNum);
+		
+		log.debug("해시태그 값: {}", hashtagsJson);
+		
+		//해시태그 저장
+		if (hashtagsJson != null && !hashtagsJson.trim().isEmpty()) {
+			//Json 문자열을 Java객체로 변환함, 첫번째 객체를 두번째 객체로 변환
+	        String[] hashtags = new Gson().fromJson(hashtagsJson, String[].class);
+	        log.debug("존슨에 들어왔는지: {}", hashtags[0]);
+	        int linkNum = 0;
+	        for (String hashtag : hashtags) {
+	        	hashtag = hashtag.substring(1);
+	        	int insertHashtag = service.insertHashtag(hashtag); // 해시태그가 DB에 없으면 삽입
+	            int tagNum = service.getTagNumByTagName(hashtag); // 해시태그 번호 가져오기
+	            int linkHashtag = service.linkHashtagToFeed(newFeedNum, tagNum, linkNum); // 해시태그와 피드 연결
+	            linkNum++;
+	        	log.debug("해시태그: 입력 성공: {}, 해시태그 넘버: {}, 피드랑 연동됐는지: {}", insertHashtag, tagNum, linkHashtag, linkNum);
+	            }
+	        }
+
 		if (photos != null && photos.length > 0) {
 			for (MultipartFile photo : photos) {
 				if (photo != null && !photo.isEmpty()) {

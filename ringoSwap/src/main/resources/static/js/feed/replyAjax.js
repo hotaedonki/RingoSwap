@@ -9,7 +9,7 @@ function replyInsert() {
 	$.ajax({
 		url: "replyInsert",
 		type: "post",
-		data: { feed_num: feedNum, contents: replyContent, parent_reply_num: -1, hashtags: hashtags},
+		data: { feed_num: feedNum, contents: replyContent, parent_reply_num: -1, hashtags: JSON.stringify(hashtags)},
 		success: function(feedNum) {
 			$(".replyContent").val('');
 			replyPrint(feedNum);

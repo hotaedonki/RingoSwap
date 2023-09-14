@@ -157,6 +157,20 @@ public class FeedServiceImple implements FeedService{
 		//리턴받은 피드 배열을 service에 리턴
 		return feedList;
 	}
+	
+	@Override
+	public int insertHashtag(String hashtag) {
+		return dao.insertHashtag(hashtag);
+		
+	}
+	@Override
+	public int getTagNumByTagName(String hashtag) {
+		return dao.getTagNumByTagName(hashtag);
+	}
+	@Override
+	public int linkHashtagToFeed(int newFeedNum, int tagNum, int linkNum) {
+		return dao.linkHashtagToFeed(newFeedNum, tagNum, linkNum);
+	}
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	
 	
@@ -182,10 +196,11 @@ public class FeedServiceImple implements FeedService{
 	}
 	
 	@Override
-	public void saveMention(int replyId, List<Integer> mentionedUserIds) {
-		// TODO Auto-generated method stub
+	public int saveMention(int replyId, List<Integer> mentionedUserIds) {
+		return 1;
 		
 	}
+	
 	
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }

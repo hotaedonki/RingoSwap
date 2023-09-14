@@ -16,14 +16,12 @@ function setBackgroundImage() {
 // usernamePrint 함수 안에서 username을 가져온 후 밑줄 길이를 조절하는 코드 추가
 function usernamePrint() {
     const kiminonawaInput = $("#kiminonawa");
-    kiminonawaInput.prop('readonly', true);
 
     $.ajax({
         url: 'nicknamePrint',
         type: 'post',
         success: function(username) {
-            kiminonawaInput.val(username);
-            adjustUnderlineLength(kiminonawaInput, username);
+            kiminonawaInput.text(" " + username);
         },
         error: function(error) {
             console.error(error);
@@ -31,20 +29,6 @@ function usernamePrint() {
     });
 }
 
-// 밑줄 길이를 조절하는 함수
-function adjustUnderlineLength(inputField, text) {
-    const textWidth = getTextWidth(text, inputField.css('font'));
-    inputField.css('width', textWidth + 'px');
-}
-
-// 텍스트의 너비를 계산하는 함수
-function getTextWidth(text, font) {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    context.font = font;
-    const metrics = context.measureText(text);
-    return metrics.width;
-}
 
 // 페이지 로드 후 실행
 $(document).ready(function() {

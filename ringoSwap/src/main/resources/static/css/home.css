@@ -23,20 +23,6 @@ section {
 	  padding: 10px 20px;
 }
 
-#kiminonawa {
-    padding: 5px 0;
-    font-size: 1.2rem;
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid white;
-    outline: none;
-    font-family: 'Roboto', sans-serif;
-    font-size: 41px;
-    box-sizing: border-box;    /* padding과 border를 너비와 높이에 포함 */
-    width: auto;
-    min-width: 30px;           
-    color:white;
-}
 
 #toDo {
     position: absolute;
@@ -107,4 +93,27 @@ section {
     align-items: center;
     justify-content: center;
 }
+#greeting-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; /* 필요에 따라 색상을 조정하세요 */
+}
 
+#greeting {
+    font-size: 64px;
+    font-family: 'Roboto', sans-serif;
+    margin: 0; /* margin을 제거하여 불필요한 공간을 없앱니다 */
+}
+
+#kiminonawa {
+    padding: 5px 0;
+    font-size: 41px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+    color: white; /* 필요에 따라 색상을 조정하세요 */
+    margin: 0 0 0 10px; /* margin을 추가하여 "Welcome" 텍스트와 간격을 만듭니다 */
+}

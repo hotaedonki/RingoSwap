@@ -168,7 +168,13 @@ function feedPhotoPrint(feed_num) {
 
 function createPost() {
 	let feedData = new FormData();
-	feedData.append('content', $('#chatInput').val());
+	const content = $('#chatInput').val();
+	feedData.append('content', content);
+	
+	const hashtags = content.match(/#[^\s#]+/g) || [];
+	feedData.append('hashtagsJson', JSON.stringify(hashtags));
+	
+	console.log("피드 데이터와 해시태그 값 : ", $('#chatInput').val(), hashtags);
 	
     for (let i = 0; i < selectedImages.length; i++) {
         feedData.append('photos', selectedImages[i]);

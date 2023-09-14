@@ -182,6 +182,21 @@
 			</otherwise>
 		</choose>
 	</select>
+	
+	<insert id="insertHashtag">
+		INSERT INTO ringo_tagstorage (tag_name)
+	    VALUES (#{hashtag})
+	    ON DUPLICATE KEY UPDATE tag_name = tag_name;
+	</insert>
+	
+	<select id="getTagNumByTagName" resultType="int">
+		SELECT tag_num FROM ringo_tagstorage WHERE tag_name = #{hashtag};
+	</select>
+	
+	<insert id="linkHashtagToFeed">
+		INSERT INTO ringo_taglink_feed (feed_num, tag_num, link_num)
+        VALUES (#{feedNum}, #{tagNum}, #{linkNum});
+	</insert>
 	<!-- 태그 관련 기능 끝 -->
 
 	<!-- 삭제 관련 기능 시작 -->

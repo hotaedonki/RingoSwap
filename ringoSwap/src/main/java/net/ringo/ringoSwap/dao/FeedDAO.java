@@ -64,7 +64,11 @@ public interface FeedDAO
 	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
-
+	int insertHashtag(String hashtag);
+	
+	int getTagNumByTagName(String hashtag);
+	
+	int linkHashtagToFeed(int newFeedNum, int tagNum, int linkNum);
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
