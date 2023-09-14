@@ -348,6 +348,33 @@ public class FeedController {
 		
 		return followeeSearch;
 	}
+	
+	@ResponseBody
+	@PostMapping("userFollowInsert")
+	public ResponseEntity<?> userFollowInsert(int user_num
+					, @AuthenticationPrincipal UserDetails user) {
+		int follower_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		int methodResult = memberService.followInsert(user_num, follower_num);		//팔로우 추가 메서드 실행
+		if(methodResult == 0) {
+			return ResponseEntity.ok("fail");
+		}
+		
+		return ResponseEntity.ok("success");
+	}
+	@ResponseBody
+	@PostMapping("userFollowDelete")
+	public ResponseEntity<?> userFollowDelete(int user_num
+					, @AuthenticationPrincipal UserDetails user) {
+		int follower_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		int methodResult = memberService.followDelete(user_num, follower_num);		//팔로우 해제 메서드 실행
+		if(methodResult == 0) {
+			return ResponseEntity.ok("fail");
+		}
+		
+		return ResponseEntity.ok("success");
+	}
 	// ----------------[팔로워/팔로우 검색 관련 기능 종료]----------->>>>>>>>>>>>
 
 	// <<<<<<<<<<<------[삭제 관련 기능 시작]----------------------

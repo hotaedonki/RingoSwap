@@ -117,6 +117,7 @@ values  ([tag_num], [tag]);
 CREATE TABLE ringo_member_follow(
 	follower_num			number,
 	followee_num		number,
+	friend_check			number(1)		default 0 check(friend_check in(0, 1)),		--친구인지 여부: 0=친구아님 1=친구임
 	primary key(follower_num, followee_num),
 	constraint fk_follower_num		foreign key (follower_num) references ringo_member(user_num) on delete cascade,
 	constraint fk_followee_num		foreign key (follower_num) references ringo_member(user_num) on delete cascade
@@ -137,8 +138,6 @@ CREATE VIEW ringo_followee_view AS
 	from ringo_member_follow F
 	left join
 		ringo_member M ON F.followee_num = M.user_num;
-
-
 
 
 --공지관련

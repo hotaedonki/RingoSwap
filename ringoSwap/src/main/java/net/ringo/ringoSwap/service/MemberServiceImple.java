@@ -161,6 +161,49 @@ public class MemberServiceImple implements MemberService
 	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map){
 		return dao.followeeArraySearch(map);
 	}
+	//사용자가 특정 회원을 팔로우 하는 메서드
+	@Override
+	public int followInsert(int user_num, int follower_num) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("followee_num", user_num);
+		map.put("follower_num", follower_num);
+		int methodResult = dao.followInsert(map);		//팔로우 메서드 실행
+
+		//상대가 자신을 팔로우 했는지 확인하기위한 맵 변수 구성
+		HashMap<String, Object> fmap = new HashMap<>();
+		fmap.put("followee_num", follower_num);
+		fmap.put("follower_num", user_num);
+		
+		int check = dao.followSearch(fmap);		//상대도 자신을 팔로우했는지 확인하는 메서드 실행
+		
+		if(check !=0) {	//상대도 자신을 팔로우했을 경우, 자신과 상대의 관계를 친구상태로 변경하는 메서드 실행
+			methodResult = dao.followFriendUpdate(map);
+			methodResult = dao.followFriendUpdate(fmap);
+		}
+		return methodResult;
+	}
+	//사용자가 특정 회원을 언팔로우 하는 메서드
+	@Override
+	public int followDelete(int user_num, int follower_num) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("followee_num", user_num);
+		map.put("follower_num", follower_num);
+		int methodResult = dao.followInsert(map);
+		//해당 회원과 친구상태였는지 확인하는 메서드
+		int check = dao.followSearchReturnFriendCheck(map);
+
+		if(check !=0) {	//상대와 친구상태일경우, 친구상태를 해제하는 메서드 실행
+			HashMap<String, Object> fmap = new HashMap<>();
+			fmap.put("followee_num", follower_num);
+			fmap.put("follower_num", user_num);
+			
+			methodResult = dao.followFriendRelease(map);
+			methodResult = dao.followFriendRelease(fmap);
+		}
+		
+		return methodResult;
+	}
+	
 	@Override
 	public int getUserIdByUsername(String username) {
 		return dao.getUserIdByUsername(username);
