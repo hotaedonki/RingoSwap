@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Reply;
+import net.ringo.ringoSwap.domain.Tagstorage;
 
 
 @Mapper
@@ -61,13 +62,12 @@ public interface FeedDAO
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
 	//피드에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드와 태그가 달린 댓글이 달린 피드를 검색해서 리턴하는 메서드
 	ArrayList<Feed> feedArraySearchByTagName(HashMap<String, String> map);
-	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
-	
-	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
+
+	//해당하는 태그명이 존재하는지 DB에서 확인하는 메서드.
 	int insertHashtag(String hashtag);
-	
+	//해당하는 태그명으로 태그를 DB에 삽입하는 메서드
 	int getTagNumByTagName(String hashtag);
-	
+	//매개변수를 기반으로 DB에 태그링크를 삽입하는 메서드
 	int linkHashtagToFeed(int newFeedNum, int tagNum, int linkNum);
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	

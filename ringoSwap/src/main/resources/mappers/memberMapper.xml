@@ -139,7 +139,46 @@
 		</foreach>
 	</select>
 	
+	<!-- 사용자가 특정 회원의 user_num을 매개변수로 해당 회원을 팔로우하는 insert문 -->
+	<insert id="followInsert" parameterType="java.util.HashMap">
+	insert into ringo_member_follow(follower_num, followee_num)
+	values (#{follower_num}, #{followee_num})
+	</insert>
+	<!-- 사용자가 특정 회원의 user_num을 매개변수로 해당 회원을 언팔로우하는 delete문 -->
+	<delete id="followDelete" parameterType="java.util.HashMap">
+	delete ringo_member_follow
+	where follower_num = #{follower_num} and followee_num = #{followee_num}
+	</delete>
+	<!-- 특정 회원이 다른 회원을 팔로우 했는지 확인하는 select문 -->
+	<select id="followSearch" parameterType="java.util.HashMap">
+	select count(*)
+	from ringo_member_follow
+	where follower_num = #{follower_num}
+		and followee_num = #{followee_num}
+	</select>
+	<!-- 특정 회원이 다른 회원과 친구상태인지 확인하는 select문 -->
+	<select id="followSearchReturnFriendCheck" parameterType="java.util.HashMap">
+	select friend_check
+	from ringo_member_follow
+	where follower_num = #{follower_num}
+		and followee_num = #{followee_num}
+	</select>
+	<!-- 친구 상태임을 업데이트하는 update문 -->
+	<update id="followFriendUpdate" parameterType="java.util.HashMap">
+		update ringo_member_follow
+		set friend_check = 1
+		where follower_num = #{follower_num} 
+			and followee_num = #{followee_num} 
+	</update>
+	<!-- 친구 상태가 아님을 업데이트하는 update문 -->
+	<update id="followFriendRelease" parameterType="java.util.HashMap">
+		update ringo_member_follow
+		set friend_check = 0
+		where follower_num = #{follower_num} 
+			and followee_num = #{followee_num} 
+	</update>
 	<!-- 팔로우/팔로워 기능 종료 -->
+	
 	<select id="getUserIdByUsername" parameterType="String" resultType="int">
 		select user_num
 		from ringo_member

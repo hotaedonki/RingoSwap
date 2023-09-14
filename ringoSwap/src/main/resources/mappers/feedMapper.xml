@@ -12,8 +12,8 @@
 		<where>
 			<if test="text != 'null'">
 			user_id like '%'||#{text}||'%'
-				and contents like '%'||#{text}||'%'
-				and tag_list like '%'||#{text}||'%'
+				or contents like '%'||#{text}||'%'
+				or tag_list like '%'||#{text}||'%'
 			</if>
 			<if test="feedArrayType == 'popular' and text != 'null'">
 				and
