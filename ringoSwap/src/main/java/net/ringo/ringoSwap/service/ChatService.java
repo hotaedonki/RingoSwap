@@ -37,4 +37,6 @@ public interface ChatService
 	public Chatroom getChatroomById(int chatroom_num);
 
 	public ChatroomLink getChatroomLinkByUserNum(int userNum);
+
+	public Object sendMessage(WebSocketSession sessions, ChatCommon message);
 }
