@@ -365,7 +365,7 @@ public class FeedController {
 		
 		return followeeSearch;
 	}
-	
+	//사용자가 특정 회원을 팔로우 하는 기능
 	@ResponseBody
 	@PostMapping("userFollowInsert")
 	public ResponseEntity<?> userFollowInsert(int user_num
@@ -379,6 +379,7 @@ public class FeedController {
 		
 		return ResponseEntity.ok("success");
 	}
+	//사용자가 특정 회원을 언팔로우 하는 기능
 	@ResponseBody
 	@PostMapping("userFollowDelete")
 	public ResponseEntity<?> userFollowDelete(int user_num
