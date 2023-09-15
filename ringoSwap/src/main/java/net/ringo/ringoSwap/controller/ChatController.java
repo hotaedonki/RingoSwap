@@ -92,30 +92,6 @@ public class ChatController
 		return "redirect:/";
 	}
 	
-	/*	나중엔 Ajax 형태로 받아오도록 하기.
-	@ResponseBody
-	@PostMapping(PathHandler.CREATEOPENCHATROOM)
-	public boolean createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
-	{
-		log.debug("create open chat room . . .");
-		
-		if (chatRoom == null)
-		{
-			log.debug("chatRoom is null!");
-			return false;
-		}
-		
-		log.debug(chatRoom.toString());
-		
-		chatRoom.setHost_num(mService.memberSearchByIdReturnUserNum(user.getUsername()));
-		
-		boolean isSuccessCreateRoom = service.createOpenChatroom(chatRoom);
-		
-		return isSuccessCreateRoom;
-		//chatEventHandlers...() 채팅방 서버 기능 관련 함수 추가하기
-	}
-	*/
-	
 	@ResponseBody
 	@PostMapping(PathHandler.LOADCHATROOMS)
 	public ArrayList<Chatroom> loadChatRooms(@AuthenticationPrincipal UserDetails user)
@@ -211,59 +187,6 @@ public class ChatController
 		return "chat/openChatRoom";
 	}
 	
-	/*
-	@ResponseBody
-    @PostMapping(PathHandler.SENDMESSAGE)
-    public Boolean sendMessage(ChatCommon cc, @AuthenticationPrincipal UserDetails user, MultipartFile upload) 
-    {
-		log.debug("send Message . . .");
-		
-    	// 채팅방의 고유 번호가 없는 경우 메시지를 보낼 수 없다.
-    	if (cc.getChatroom_num() <= 0)
-    	{
-    		log.debug("채팅방의 고유 번호가 필요합니다.");
-    		return false;
-    	}
-    	
-    	// 채팅 메시지 값이 없으면 메시지를 보낼 수 없다.
-    	if (cc.getMessage() == null || cc.getMessage().length() <= 0)
-    	{
-    		log.debug("채팅방 메시지가 비어있습니다.");
-    		return false;
-    	}
-    	
-    	cc.setUser_num(mService.memberSearchByIdReturnUserNum(user.getUsername()));
-    	
-    	if (upload != null && !upload.isEmpty())	// 사진이 있을때
-    	{
-    		String savedFile = FileService.saveFile(upload, uploadPath);
-    		cc.setOrigin_file(upload.getOriginalFilename());
-    		cc.setSaved_file(savedFile);
-    	}
-		
-    	log.debug("{}", cc.toString());
-    	
-    	int isSended = service.sendMessage(cc);
-    	
-    	if (isSended <= 0)
-    	{
-    		log.debug("메시지 정보 DB에 삽입 실패");
-    		return false;
-    	}
-		
-        return true;
-    }
-    */
-	
-	/*
-	@MessageMapping(PathHandler.MM_OPENCHATROOMENTER)
-	public void enterUser(@Payload ChatCommon chat, SimpMessageHeaderAccessor headerccessor)
-	{
-		chat.setMessage(chat.getChat_num() + "님이 입장하셨습니다.");
-		template.convertAndSend("/sub/chat/openChatroom" + chat.getChatroom_num(), chat);
-	}
-	*/
-	
 	@MessageMapping("/chat/openChatRoomEnter/")
 	public void enterUser(@Payload ChatCommon chat, SimpMessageHeaderAccessor headerccessor)
 	{
@@ -322,49 +245,5 @@ public class ChatController
         String roomId = (String) headerAccessor.getSessionAttributes().get("roomId");
 
         log.info("headAccessor : {}",headerAccessor);
-        
-        /*
-        // 채팅방 유저 -1
-        repository.decreaseUser(roomId);
-
-        //채팅방 유저 리스트에서 UUID 유저 닉네임 조회 및 리스트에서 유저 삭제
-        String userName = repository.getUserName(roomId, userUUID);
-        repository.deleteUser(roomId,userUUID);
-
-        if(userName != null){
-            log.info("User Disconnected : " + userName);
-
-            ChatDto chat = ChatDto.builder()
-                    .type(ChatDto.MessageType.LEAVE)
-                    .sender(userName)
-                    .message(userName + "님이 퇴장하였습니다.")
-                    .build();
-
-            template.convertAndSend("/sub/chat/room/" + roomId,chat);
-            */
 	}
-	
-	/*
-	 // 채팅에 참여한 유저 리스트 반환
-    @GetMapping("/chat/uselist")
-    @ResponseBody
-    public List<String> userList(String roomId){
-
-        return repository.getUserList(roomId);
-    }
-    */
-
-	/*
-    // 채팅에 참여한 유저 닉네임 중복 확인
-    @GetMapping("/chat/duplicateName")
-    @ResponseBody
-    public String isDuplicateName(@RequestParam("roomId")String roomId ,
-                                  @RequestParam("username")String username){
-
-        String userName = repository.isDuplicateName(roomId, username);
-        log.info("DuplicateName : {}", userName);
-
-        return userName;
-    }
-    */
 }
