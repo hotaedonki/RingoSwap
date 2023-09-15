@@ -39,6 +39,7 @@ function initializeDocumentClickHandlers() {
     $(document).on('click', '.write-nested-reply', writeNestedReply);
     $(document).on('input', '.follow-search-input', followSearchInput);
     $(document).on('click', '.hashtag', hashtagSearch);
+    $(document).on('input', '#searchInput', feedSearch);
 }
 
 function initializeWindowEventHandlers() {

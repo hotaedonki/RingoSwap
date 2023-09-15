@@ -15,6 +15,7 @@ import net.ringo.ringoSwap.dao.FeedDAO;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Reply;
+import net.ringo.ringoSwap.domain.Tagstorage;
 import net.ringo.ringoSwap.util.FeedSort;
 @Slf4j
 @Service

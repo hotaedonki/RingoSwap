@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Reply;
+import net.ringo.ringoSwap.domain.Tagstorage;
 
 
 @Mapper
@@ -66,9 +67,8 @@ public interface FeedDAO
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
 	int insertHashtag(String hashtag);
-	
+	//해당하는 태그명으로 태그를 DB에 삽입하는 메서드
 	int getTagNumByTagName(String hashtag);
-	
 	int linkHashtagToFeed(Map<String, Object> hashtagLinkMap);
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	
