@@ -428,8 +428,9 @@ public class FeedController {
 	
 	@ResponseBody
 	@PostMapping("showOffcanvasWithUserData")
-	public Member showOffcanvasWithUserData(String user_id) {
+	public Member showOffcanvasWithUserData(String username) {
 		Member member = new Member();
+		member = service.memberInformationByusername(username);
 		
 		return member;
 	}
