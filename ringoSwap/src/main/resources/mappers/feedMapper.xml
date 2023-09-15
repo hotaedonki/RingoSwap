@@ -183,14 +183,17 @@
 		</choose>
 	</select>
 	
-	<insert id="insertHashtag">
-		INSERT INTO ringo_tagstorage (tag_name)
-	    VALUES (#{hashtag})
-	    ON DUPLICATE KEY UPDATE tag_name = tag_name;
-	</insert>
+	 <insert id="insertHashtag" parameterType="String">
+       MERGE INTO ringo_tagstorage d
+       USING (SELECT #{hashtag} AS tag_name FROM dual) s
+       ON (d.tag_name = s.tag_name)
+       WHEN NOT MATCHED THEN
+           INSERT (tag_num, tag_name)
+           VALUES (tag_num_seq.NEXTVAL, s.tag_name)
+   </insert>
 	
 	<select id="getTagNumByTagName" resultType="int">
-		SELECT tag_num FROM ringo_tagstorage WHERE tag_name = #{hashtag};
+		SELECT tag_num FROM ringo_tagstorage WHERE tag_name = #{hashtag}
 	</select>
 	
 	<insert id="linkHashtagToFeed">

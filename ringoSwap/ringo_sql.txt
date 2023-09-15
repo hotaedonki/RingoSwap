@@ -229,7 +229,7 @@ CREATE SEQUENCE ringo_reply_seq;
 --댓글 정보+좋아요 수+태그를 속성으로 갖는 view를 create하는 명령어
 CREATE VIEW ringo_reply_with_likeandtag AS
 	select R.reply_num, R.parent_reply_num, R.feed_num
-	 	, M.user_id, M.original_profile, M.saved_profile	
+	 	, M.user_id, M.username, M.original_profile, M.saved_profile	
 	 	, R.contents, R.inputdate
 	 	, count(L.user_num) as like_count
 		, listagg(T.tag_name, ' ') within group (order by TR.link_num) AS tag_list
@@ -243,7 +243,7 @@ CREATE VIEW ringo_reply_with_likeandtag AS
 	left join
 	    ringo_tagstorage T ON TR.tag_num = T.tag_num
 	GROUP BY
-	    R.reply_num, R.parent_reply_num, M.user_id, R.contents, R.inputdate,M.original_profile, M.saved_profile, R.feed_num;
+	    R.reply_num, R.parent_reply_num, M.user_id, M.username, R.contents, R.inputdate,M.original_profile, M.saved_profile, R.feed_num;
 --view 사용 예시(14일 이내 작성한 글을 좋아요 수가 많은 순으로 정렬해 출력),
 	select *
 	from ringo_reply_with_likeandtag

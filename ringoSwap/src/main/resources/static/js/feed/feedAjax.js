@@ -26,7 +26,7 @@ function feedPrint() {
 				$('.feed-display-area .col-12').append(`
                     <div class="card feed-card" data-feed-num="${feed.feed_num}">
                         <div class="card-header feed-header"> 
-                            <span class="feedUser">${feed.user_id}</span>
+                            <span class="feedUser" data-username="${detail.feed.username}">${feed.username}</span>
                             <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
                         </div>
                         <div class="card-body">
@@ -82,8 +82,8 @@ function feedDetail() {
 			$('#feedDetail').append(`
                     <div class="card feed-card" data-feed-num="${detail.feed.feed_num}">
                     <div class="card-header" style="width: 100%;">
-                        <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage"> 
-                        <span>${detail.feed.user_id}</span>
+                        <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage feedUser" data-username="${detail.feed.username}"> 
+                        <span class="feedUser" data-username="${detail.feed.username}">${detail.feed.username}</span>
                         <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">
                             <i class="bi bi-arrow-return-left returnFeedMain"></i>
                         </button>
