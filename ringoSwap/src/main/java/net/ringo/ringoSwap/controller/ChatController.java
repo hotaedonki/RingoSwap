@@ -9,7 +9,6 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -185,12 +184,50 @@ public class ChatController
 		return "chat/openChatRoom";
 	}
 	
-	// 채팅방에 입장했을시의 ID
+	// 채팅방에 입장했을때
 	@MessageMapping("/chat/openChatRoomEnter/{chatroomID}")
 	@SendTo("/sub/chat/openChatRoom/message/{chatroomID}")
 	public String enterUser(@DestinationVariable int chatroomID, @Payload ChatCommon chat)
 	{
-		return chat.getChat_num() + "님이 입장하셨습니다!";
+		log.debug("enterUser . . . ");
+		
+		// payload 체크
+		if (chat == null)
+		{
+			log.debug("enterUser - Payload 확인!");
+			return "접속 정보를 가져오는데 실패하였습니다";
+		}
+		
+		// 유저 이름 가져오기
+		String nickName = mService.getUsernameByUserNum(chat.getUser_num());
+		
+		if (nickName == null || nickName == "")
+		{
+			log.debug("유저이름 정보를 가져오는데 실패하였습니다");
+			return "유저이름 정보를 가져오는데 실패하였습니다";
+		}
+		
+		// 채팅방 링크가 존재하는지 확인하기 위해 가져옴
+		ChatroomLink isExistChatroomlink = service.getChatroomLinkByUserNum(chat.getUser_num());
+		
+		// 없으면 새로운 링크를 만듬
+		if (isExistChatroomlink == null)
+		{
+			ChatroomLink newChatroomLink = new ChatroomLink();
+			newChatroomLink.setChatroom_num(chat.getChatroom_num());
+			newChatroomLink.setUser_num(chat.getUser_num());
+			
+			// 채팅방 링크를 성공적으로 만들었는가?
+			int isSuccessCreateChatroomLink = service.createChatroomLink(newChatroomLink);
+			
+			if (isSuccessCreateChatroomLink <= 0)
+			{
+				log.debug("채팅룸 링크 생성 실패!");
+				return "채팅룸 링크 생성 실패!";
+			}
+		}
+		
+		return nickName + "님이 입장하셨습니다!";
 	}
 	
 	@MessageMapping(PathHandler.MM_SENDMESSAGE)
