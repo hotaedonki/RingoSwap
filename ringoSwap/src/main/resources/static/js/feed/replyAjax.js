@@ -128,7 +128,7 @@ function replyPrint(feedNum) {
 	                commentNestedReplies.forEach(nestedReply => {
 						console.log("nestedReply 각 개체의 값: ", `${nestedReply.reply_num}`)					
 				        let nestedReplyElement = $(`
-				            <div class="nested-reply-item" data-reply-id="${comment.reply_num}" style="display: none; margin-left: 30px;">
+				            <div class="nested-reply-item" data-reply-id="${comment.reply_num}" data-user-id="${comment.user_id}" style="display: none; margin-left: 30px;">
 				            	<div class="row nested-reply-1 d-flex align-items-center">
 				            		<div class="col-1 nested-goToOtherProfile">
 				            			<img src="../member/memberProfilePrint?user_id=${comment.user_id}" alt="User Photo" class="user-photo-reply">
@@ -283,7 +283,7 @@ function followSearchInput() {
 	if (atIndex !== -1) {
 		const username = inputVal.substring(atIndex + 1);
 		
-		if (query.length > 0) {
+		if (username.length > 0) {
 			$.ajax({
 				url: 'followeeSearch'
 				, type: 'post'

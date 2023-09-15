@@ -3,6 +3,7 @@ function feedPrint(optionalRes) {
     console.log(text);
     
     if (optionalRes) {
+		console.log("해시태그 클릭 후 feedPrint 반환 값 ", optionalRes)
         renderFeeds(optionalRes);
         return;
     }
@@ -25,6 +26,7 @@ function feedPrint(optionalRes) {
 
 
 function renderFeeds(res) {
+	console.log("renderFeeds의 res값: ", res)
 	let feeds = res.feedList;
 	let likeCheck = res.likeCheckMap;
 	
@@ -42,14 +44,14 @@ function renderFeeds(res) {
 	     console.log(feed);
 		$('.feed-display-area .col-12').append(`
             <div class="card feed-card" data-feed-num="${feed.feed_num}">
-                <div class="card-header feed-header"> 
-                    <span  class="feedUser" data-username="${feed.username}">${feed.username}</span>
+                <div class="card-header feed-header goToOtherProfile" data-user-name="${feed.username}"> 
+                	<img src="../member/memberProfilePrint?user_id=${feed.user_id}" alt="Poster Image" class="posterImage"> 
+                    <span class="feedUser" data-username="${feed.username}">${feed.username}</span>
                     <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
                 </div>
                 <div class="card-body">
-                    <p class="card-text collapseFeed" data-feed-num="${feed.feed_num}">${feed.contents}</p>
-                    <div class="feed-image-list" data-feed-num="${feed.feed_num}"></div>
                     <p class="card-text collapseFeed" data-feed-num="${feed.feed_num}">${styledContent}</p>
+                    <div class="feed-image-list" data-feed-num="${feed.feed_num}"></div>
                     <div class="feed-button">
                         <span class="like-count" data-feed-num="${feed.feed_num}">${feed.like_count}</span> 
                         <i class="bi ${likeButtonClass} like-button" data-feed-num="${feed.feed_num}"></i> 
@@ -92,18 +94,20 @@ function feedDetail() {
 			
 		    let likeButtonClass = detail.likeCheck === 1 ? "bi-heart-fill" : "bi-heart";
 		     
-			$('#feedDetail').append(`
+			let styledContent = hashtagHighlightAndClick(detail.feed.contents);
+             
+            $('#feedDetail').append(`
                     <div class="card feed-card" data-feed-num="${detail.feed.feed_num}">
-                    <div class="card-header" style="width: 100%;">
-                        <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage feedUser" data-username="${detail.feed.username}"> 
-                        <span class="feedUser" data-username="${detail.feed.username}">${detail.feed.username}</span>
+                    <div class="card-header goToOtherProfile" style="width: 100%;" data-user-id="${detail.feed.user_id}">
+                        <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage"> 
+                        <span>${detail.feed.user_id}</span>
                         <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">
                             <i class="bi bi-arrow-return-left returnFeedMain"></i>
                         </button>
-                        <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-3 me-3">삭제</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-3 me-3" data-feed-num="${detail.feed.feed_num}">삭제</button>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">${detail.feed.contents}</p>
+                        <p class="card-text">${styledContent}</p>
                         <div class="feed-image-list" data-feed-num="${detail.feed.feed_num}"></div>
                         <div class="feed-button">
                             <span class="like-count" data-feed-num="${detail.feed.feed_num}">${detail.feed.like_count}</span> 
@@ -113,7 +117,6 @@ function feedDetail() {
                         <div class="comment-input-section d-flex replyMargin">
                             <input type="text" class="form-control flex-grow-1 replyContent follow-search-input" placeholder="댓글을 입력하세요..." data-feed-num="${detail.feed.feed_num}" />
                             <button class="btn btn-primary ml-2 insertReply" style="min-width: 60px;" data-feed-num="${detail.feed.feed_num}">작성</button>
-
                         </div>
                         <div class="replyPrint"></div>
                     </div>
