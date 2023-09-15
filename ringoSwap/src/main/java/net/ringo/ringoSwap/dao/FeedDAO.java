@@ -69,6 +69,7 @@ public interface FeedDAO
 	int insertHashtag(String hashtag);
 	//해당하는 태그명으로 태그를 DB에 삽입하는 메서드
 	int getTagNumByTagName(String hashtag);
+	//태그 링크
 	int linkHashtagToFeed(Map<String, Object> hashtagLinkMap);
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	

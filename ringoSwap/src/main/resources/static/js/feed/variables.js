@@ -3,7 +3,7 @@ let saved_feedNum = 0;  //History API를 사용한 피드 번호를 이용한 �
 let previousUrl = null;  //handlePopState에서 사용할 뒤로가기/앞으로가기 판별용 전역변수. 현재 주소를 담는다.
 
 function initializeEventHandlers() {
-    $(".feed-header").click(otherUserProfileButton);
+   // $(".goToOtherProfile").click(showOffcanvasWithUserData);
     $(".profile-card").click(goToProfile);
     $(".feed-create-area").blur(collapseWrite);
     $(".post").on('click', createPost);
@@ -123,8 +123,9 @@ function hashtagSearch() {
 		url: 'feedTagSearch'
 		, type: 'get'
 		, data: {tag_name: hashtag, feedArrayType: 'default'}
+		, dataType: 'json'
 		, success: function(res) {
-			console.log("해시태그 클릭 성공")
+			console.log("해시태그 클릭 성공", res)
 			feedPrint(res)
 		},
 		error: function(error) {

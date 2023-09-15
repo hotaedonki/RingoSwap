@@ -133,15 +133,15 @@
 			</div>
 		</div>
 		<main>
-			<div class="row main-row">				
+			<div class="row main-row">
 				<div class="col-lg-3 left-area">
 					<div class="row profile-area">
 						<div class="col-12">
 							<div class="card profile-card">
 								<div class="go-profile">
 									<img th:src="@{../img/5.jpg}" alt="Background Image"
-										class="card-img-top"> 
-									<img th:src="@{../img/123.png}" alt="Profile Image" id="profilePicInput" class="profileImage">
+										class="card-img-top"> <img th:src="@{../img/123.png}"
+										alt="Profile Image" id="profilePicInput" class="profileImage">
 									<div class="card-body"
 										style="padding-top: 55px; margin-bottom: -20px;">
 										<div class="center">
@@ -150,15 +150,16 @@
 									</div>
 									<a class="text-primary" data-bs-toggle="modal"
 										data-bs-target="#followerModal"
-										onclick="event.stopPropagation();">팔로워 <span class="follower-cnt">100</span>
-									</a> 
-									<a style="margin-left: 10px;" class="text-primary"
+										onclick="event.stopPropagation();">팔로워 <span
+										class="follower-cnt">100</span>
+									</a> <a style="margin-left: 10px;" class="text-primary"
 										data-bs-toggle="modal" data-bs-target="#followModal"
-										onclick="event.stopPropagation();">팔로우 <span class="followee-cnt">150</span>
+										onclick="event.stopPropagation();">팔로우 <span
+										class="followee-cnt">150</span>
 									</a>
 								</div>
-								<p class="card-text introduction" style="margin: 20px 0;">This is a short
-									description about yourself.</p>
+								<p class="card-text introduction" style="margin: 20px 0;">This
+									is a short description about yourself.</p>
 
 							</div>
 						</div>
@@ -179,7 +180,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="col-lg-8" id="feedDetail" style="display: none;">
 				</div>
 				<div class="col-lg-5 middle-area">
@@ -277,7 +278,8 @@
 				<div class="modal-search d-flex justify-content-center">
 					<input type="text" placeholder="검색"
 						class="form-control searchFollower">
-					<button class="btn btn-light follower-btn" style="margin-left: 5px;">
+					<button class="btn btn-light follower-btn"
+						style="margin-left: 5px;">
 						<i class="bi bi-search"></i>
 					</button>
 				</div>
@@ -336,6 +338,24 @@
 			</div>
 		</div>
 	</div>
+	<!-- 다른 회원의 정보를 표시하는 오프캔버스 -->
+	<div class="offcanvas offcanvas-start" data-bs-scroll="true"
+		tabindex="-1" id="offcanvasWithBothOptions"
+		aria-labelledby="offcanvasWithBothOptionsLabel">
+		<div class="offcanvas-header">
+			<h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">User
+				Profile</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+				aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+			<div id="userProfileContent">
+				<!-- User data will be inserted here -->
+			</div>
+		</div>
+	</div>
+
+
 
 
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>

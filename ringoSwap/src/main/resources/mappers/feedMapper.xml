@@ -156,7 +156,7 @@
 	<!-- 태그 검색시 해당 태그가 달린 피드, 그리고 해당 태그가 달린 댓글이 달린 피드를 검색범위로 하고, 주어진 정렬방식 feedArrayType에 
 		따라 검색한 feed배열을 정렬하는 select문 -->
 	<select id="feedArraySearchByTagName"
-        parameterType="java.util.HashMap" resultType="Feed">
+        parameterType="map" resultType="Feed">
 	    select feed_num, user_id, original_profile
 	    , saved_profile, contents,
 	    inputdate
@@ -168,7 +168,7 @@
 	    select distinct
 	    feed_num
 	    from ringo_reply_with_likeandtag R
-	    where tag_name like '%' || #{tag_name} || '%'
+	    where tag_list like '%' || #{tag_name} || '%'
 	    )
 	    <choose>
 	        <when test="feedArrayType == 'default' ">
