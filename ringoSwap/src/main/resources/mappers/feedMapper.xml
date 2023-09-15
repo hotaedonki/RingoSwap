@@ -182,7 +182,6 @@
 	    </choose>
 	</select>
 
-	
 	<!-- 해당 해시태그가 이미 존재하는 경우 아무런 작업을 하지 않음 -->
 	<insert id="insertHashtag" parameterType="String">
 	    MERGE INTO ringo_tagstorage d

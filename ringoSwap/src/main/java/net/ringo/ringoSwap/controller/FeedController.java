@@ -388,7 +388,16 @@ public class FeedController {
 		
 		return followeeSearch;
 	}
-	
+	//팔로우 했는지 여부를 확인하는 메서드
+	@ResponseBody
+	@PostMapping("followCheck")
+	public ResponseEntity<?> followCheck(@AuthenticationPrincipal UserDetails user
+					, String username){
+		int user_num = memberService.getUserIdByUsername(username);
+		HashMap<String, Object> map = new HashMap<>();
+		return ResponseEntity.ok("success");
+	}
+	//사용자가 특정 회원을 팔로우 하는 기능
 	@ResponseBody
 	@PostMapping("userFollowInsert")
 	public ResponseEntity<?> userFollowInsert(int user_num
@@ -402,6 +411,7 @@ public class FeedController {
 		
 		return ResponseEntity.ok("success");
 	}
+	//사용자가 특정 회원을 언팔로우 하는 기능
 	@ResponseBody
 	@PostMapping("userFollowDelete")
 	public ResponseEntity<?> userFollowDelete(int user_num
