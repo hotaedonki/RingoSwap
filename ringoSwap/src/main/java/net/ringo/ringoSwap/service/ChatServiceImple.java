@@ -32,11 +32,6 @@ import net.ringo.ringoSwap.domain.ChatroomLink;
 @Service
 public class ChatServiceImple implements ChatService
 {	
-    @Autowired
-    private SimpMessageSendingOperations simpMessageSendingOperations;
-
-	private final ObjectMapper mapper;
-	
 	@Autowired
 	private ChatDAO dao;
 	
@@ -101,12 +96,6 @@ public class ChatServiceImple implements ChatService
 	}
 
 	@Override
-	public int sendMessage(ChatCommon cc) 
-	{
-		return dao.sendMessage(cc);
-	}
-
-	@Override
 	public int deleteMessage(ArrayList<ChatCommon> cc) 
 	{
 		return dao.deleteMessage(cc);
@@ -131,19 +120,6 @@ public class ChatServiceImple implements ChatService
 	}
 
 	@Override
-	public void sendMessageWeb(WebSocketSession session, ChatCommon message) 
-	{
-		try
-		{
-			session.sendMessage(new TextMessage(mapper.writeValueAsString(message)));
-		}
-		catch (IOException e)
-		{
-			log.error(e.getMessage(), e);
-		}
-	}
-
-	@Override
 	public Chatroom getChatroomById(int chatroom_num) 
 	{
 		return dao.getChatroomById(chatroom_num);
@@ -159,11 +135,5 @@ public class ChatServiceImple implements ChatService
 	public ChatroomLink getChatroomLinkByUserNum(int userNum) 
 	{
 		return dao.getChatroomLinkByUserNum(userNum);
-	}
-
-	@Override
-	public void sendMessage(WebSocketSession sessions, ChatCommon message) {
-		
-		return;
 	}
 }

@@ -20,8 +20,6 @@ public interface ChatService
 
 	public int getMaxChatroomNum();
 
-	public int sendMessage(ChatCommon cc);
-
 	public int deleteMessage(ArrayList<ChatCommon> cc);
 
 	public ArrayList<ChatroomLink> getChatroomLinks(int userNum);
@@ -32,11 +30,7 @@ public interface ChatService
 
 	public ArrayList<ChatCommon> loadMessage(int chatroom_num);
 
-	public void sendMessageWeb(WebSocketSession session, ChatCommon message);
-
 	public Chatroom getChatroomById(int chatroom_num);
 
 	public ChatroomLink getChatroomLinkByUserNum(int userNum);
-
-	public void sendMessage(WebSocketSession sessions, ChatCommon message);
 }
