@@ -44,4 +44,5 @@ public class PathHandler
 
 	// Web socket, stomp, sockjs . . .
 	public final static String WS_STOMP = "/ws-stomp";
+	public final static String RINGO_WS_STOMP= "/ringo/ws-stomp";
 }
