@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -16,7 +17,6 @@ import net.ringo.ringoSwap.dao.ChatDAO;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
-import net.ringo.ringoSwap.websocket.ChatHandler;
 
 /*
 	채팅 서비스 클래스 : 여기서 사용되는 findAllRoom, createRoom,findRoomById 등은 사실상 DB와 연결되는 순간 DAO로 넘어가야 합니다.
@@ -31,7 +31,10 @@ import net.ringo.ringoSwap.websocket.ChatHandler;
 @Data
 @Service
 public class ChatServiceImple implements ChatService
-{
+{	
+    @Autowired
+    private SimpMessageSendingOperations simpMessageSendingOperations;
+
 	private final ObjectMapper mapper;
 	
 	@Autowired
@@ -159,8 +162,9 @@ public class ChatServiceImple implements ChatService
 	}
 
 	@Override
-	public Object sendMessage(WebSocketSession sessions, ChatCommon message) {
-		// TODO Auto-generated method stub
-		return null;
+	public void sendMessage(WebSocketSession sessions, ChatCommon message) {
+		
+		return;
 	}
+
 }

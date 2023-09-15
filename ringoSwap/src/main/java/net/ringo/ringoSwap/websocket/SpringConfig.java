@@ -33,11 +33,6 @@ public class SpringConfig implements WebSocketMessageBrokerConfigurer
 		
 		registry.addEndpoint(PathHandler.WS_STOMP)
 				.withSockJS();
-		
-		
-		registry.addEndpoint("/ws-stomp/chat")
-				.withSockJS();
-	    
 	}
 	
 	@Override
