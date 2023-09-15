@@ -59,6 +59,7 @@ function connect()
     //alert("연결 완료");
 }
 
+// 접속할 시에 보낼 함수 
 function onConnected() 
 {
 	// ChatCommon 객체를 생성
@@ -75,12 +76,11 @@ function onConnected()
 		photo_size: 0 // 사진 크기
 	};
 
-	// stompClient.send()를 사용하여 메시지 전송
-	stompClient.send('/pub/chat/openChatRoomEnter/', {}, JSON.stringify(chatCommon));
-
+	// Type을 Enter로 
+	stompClient.send('/pub/chat/openChatRoomEnter/' + chatroomNum, {}, JSON.stringify(chatCommon));
 	
-	// sub 할 url => /sub/chat/room/roomId 로 구독한다
-	stompClient.subscribe('/sub/chat/openChatRoom/' + chatroomNum, onMessageReceived);
+	// sub 할 url => /sub/chat/openChatRoom/message/채팅방번호 로 구독한다
+	stompClient.subscribe('/sub/chat/openChatRoom/message/' + chatroomNum, onMessageReceived);
 }
 
 // 접속 실패 후, 에러 발생시 실행하는 함수
@@ -88,6 +88,11 @@ function onError(error)
 {
     connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
     connectingElement.style.color = 'red';
+}
+
+function onMessageReceived(message)
+{
+	console.log(message);
 }
 
 // 메시지 전송때는 JSON 형식을 메시지를 전달한다.
@@ -110,3 +115,24 @@ function sendMessage(event)
     }
     event.preventDefault();
 }
+
+/*
+	참고 - 메시지 보내는 예시
+	
+	// ChatCommon 객체를 생성
+	const chatCommon = 
+	{
+		type: 'ENTER', // MessageType.ENTER와 동일
+		chat_num: "", // 채팅 번호
+		user_num: myUserNum, // 사용자 번호
+		chatroom_num: chatroomNum, // 채팅방 번호
+		message: "", // 메시지 내용
+		inputdate: "", // 입력 날짜
+		origin_file: "", // 원본 파일
+		saved_file: "", // 저장된 파일
+		photo_size: 0 // 사진 크기
+	};
+
+	// stompClient.send()를 사용하여 메시지 전송
+	stompClient.send('/pub/chat/openChatRoomEnter/' + chatroomNum, {}, JSON.stringify(chatCommon));
+*/
