@@ -13,6 +13,7 @@ public class Feed {
 	String contents;
 	String inputdate;
 	String user_id;
+	String username;
 	String original_profile;
 	String saved_profile;	
 	int like_count;								//각 피드당 좋아요 수를 기록하기위한 추가 변수

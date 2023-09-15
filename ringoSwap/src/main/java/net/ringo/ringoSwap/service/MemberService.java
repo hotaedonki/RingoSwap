@@ -55,6 +55,8 @@ public interface MemberService
 	public ArrayList<MemberFollow> followerArraySearch(HashMap<String, Object> map);
 	//특정 사용자의 특정 범위의 팔로우 수를 리턴하는 메서드
 	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map);
+	//사용자가 특정 회원을 팔로우한 상태인지 확인하는 메서드
+	public int followCheck(HashMap<String, Object> map);
 	//사용자가 특정 회원을 팔로우 하는 메서드
 	public int followInsert(int user_num, int follower_num);
 	//사용자가 특정 회원을 언팔로우 하는 메서드

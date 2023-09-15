@@ -43,7 +43,7 @@ function renderFeeds(res) {
 		$('.feed-display-area .col-12').append(`
             <div class="card feed-card" data-feed-num="${feed.feed_num}">
                 <div class="card-header feed-header"> 
-                    <span  class="feedUser" data-username="${detail.feed.username}">${feed.username}</span>
+                    <span  class="feedUser" data-username="${feed.username}">${feed.username}</span>
                     <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
                 </div>
                 <div class="card-body">
@@ -310,4 +310,48 @@ function hashtagHighlightAndClick(content) {
         content = content.replace(new RegExp(hashtag, 'g'), styledHashtag);
     });
     return content;
+}
+
+function followCheck(){
+    let name = $(this).data('username');
+    $.ajax({
+        url: "followCheck",
+        type: "post",
+        data: {username : name},
+        dataType:'json',
+        success:function(result){
+            if(result == 0){
+                console.log('팔로우');
+                followInsert(name);
+            }else{
+                console.log('언팔로우');
+                followDelete(name);
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+function followInsert(name){
+    $.ajax({
+        url:'userFollowInsert',
+        type: "post",
+        data: {username : name},
+        dataType:'json',
+        success:function(result){
+            console.log(result);
+        },
+    })
+}
+function followDelete(name){
+    $.ajax({
+        url:'userFollowDelete',
+        type: "post",
+        data: {username : name},
+        dataType:'json',
+        success:function(result){
+            console.log(result);
+        },
+    })
 }
