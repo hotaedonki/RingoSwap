@@ -1,6 +1,5 @@
 package net.ringo.ringoSwap.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,8 +34,6 @@ import net.ringo.ringoSwap.util.PathHandler;
 @RequiredArgsConstructor
 public class ChatController 
 {	
-	private final SimpMessageSendingOperations template;
-	
 	@Autowired
 	ChatService service;
 	
@@ -193,7 +189,6 @@ public class ChatController
 		chat.setMessage(chat.getChat_num() + "님이 입장하셨습니다.");
 		log.debug("openChatRoomEnter : {}", chat.getChatroom_num());
 		log.debug(chat.getMessage());
-		template.convertAndSend("/sub/chat/openChatroom/" + chat.getChatroom_num(), chat);
 	}
 	
 	@MessageMapping(PathHandler.MM_SENDMESSAGE)
@@ -201,7 +196,6 @@ public class ChatController
 	{
 		log.info("chat : {}", chat.toString());
 		chat.setMessage(chat.getMessage());
-		template.convertAndSend("/sub/chat/openChatroom" + chat.getChatroom_num(), chat);;
 	}
 	
 	@ResponseBody
