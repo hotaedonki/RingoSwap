@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -183,12 +185,12 @@ public class ChatController
 		return "chat/openChatRoom";
 	}
 	
-	@MessageMapping("/chat/openChatRoomEnter/")
-	public void enterUser(@Payload ChatCommon chat, SimpMessageHeaderAccessor headerccessor)
+	// 채팅방에 입장했을시의 ID
+	@MessageMapping("/chat/openChatRoomEnter/{chatroomID}")
+	@SendTo("/sub/chat/openChatRoom/message/{chatroomID}")
+	public String enterUser(@DestinationVariable int chatroomID, @Payload ChatCommon chat)
 	{
-		chat.setMessage(chat.getChat_num() + "님이 입장하셨습니다.");
-		log.debug("openChatRoomEnter : {}", chat.getChatroom_num());
-		log.debug(chat.getMessage());
+		return chat.getChat_num() + "님이 입장하셨습니다!";
 	}
 	
 	@MessageMapping(PathHandler.MM_SENDMESSAGE)
