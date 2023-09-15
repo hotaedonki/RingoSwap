@@ -52,11 +52,6 @@ function connect()
 	// 연결하고자하는 Socket 의 endPoint
     let socket = new SockJS('/ringo/ws-stomp');
     stompClient = Stomp.over(socket);
-    console.log(chatroomInfo);
-    console.log(chatroomNum);
-    console.log(myUserNum);
-    console.log(url);
-    console.log(socket);
     stompClient.connect({}, onConnected, onError);
     
     //alert("연결 완료");
