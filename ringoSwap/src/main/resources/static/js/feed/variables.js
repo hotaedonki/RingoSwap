@@ -40,6 +40,7 @@ function initializeDocumentClickHandlers() {
     $(document).on('input', '.follow-search-input', followSearchInput);
     $(document).on('click', '.hashtag', hashtagSearch);
     $(document).on('input', '#searchInput', feedSearch);
+    $(document).on('click', '.feedUser', followCheck);
 }
 
 function initializeWindowEventHandlers() {
