@@ -1,54 +1,67 @@
-function feedPrint() {
+function feedPrint(optionalRes) {
     let text = $('#searchInput').val();
     console.log(text);
-	$.ajax({
-		url: "../feed/feedPrintAll",
-		type: "post",
-		data: {
-			feedArrayType: "default",
-            text : text
-		},
-		success: function(res) {	
-			let feeds = res.feedList;
-			let likeCheck = res.likeCheckMap;
-			
-			$(".feed-display-area .col-12").empty();
-            $(".left-area, .middle-area").show();
-			$("#feedDetail").hide();
-			
-			console.log(feeds);
-			
-			feeds.forEach(feed => {
-				feedPhotoPrint(feed.feed_num);
-			     let likeButtonClass = likeCheck[feed.feed_num] === 1 ? "bi-heart-fill" : "bi-heart";
+    
+    if (optionalRes) {
+        renderFeeds(optionalRes);
+        return;
+    }
 
-			     console.log(feed);
-				$('.feed-display-area .col-12').append(`
-                    <div class="card feed-card" data-feed-num="${feed.feed_num}">
-                        <div class="card-header feed-header"> 
-                            <span>${feed.user_id}</span>
-                            <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text collapseFeed" data-feed-num="${feed.feed_num}">${feed.contents}</p>
-                            <div class="feed-image-list" data-feed-num="${feed.feed_num}"></div>
-                            <div class="feed-button">
-                                <span class="like-count" data-feed-num="${feed.feed_num}">${feed.like_count}</span> 
-                                <i class="bi ${likeButtonClass} like-button" data-feed-num="${feed.feed_num}"></i> 
-                                <i class="bi bi-chat reply"></i> 
-                                <i class="bi bi-translate translate"></i>
-                            </div>
-                        </div>
-                    </div>
-                `);
-            });
-            $(".feed-display-area .col-12").show();
-            console.log('완성');
+    $.ajax({
+        url: "../feed/feedPrintAll",
+        type: "post",
+        data: {
+            feedArrayType: "default",
+            text : text
+        },
+        success: function(res) {	
+            renderFeeds(res);
         },
         error: function(error) {
-			console.log(error);
-		}
-	})
+            console.log(error);
+        }
+    })
+}
+
+
+function renderFeeds(res) {
+	let feeds = res.feedList;
+	let likeCheck = res.likeCheckMap;
+	
+	$(".feed-display-area .col-12").empty();
+    $(".left-area, .middle-area").show();
+	$("#feedDetail").hide();
+	
+	console.log(feeds);
+	
+	feeds.forEach(feed => {
+		feedPhotoPrint(feed.feed_num);
+	     let likeButtonClass = likeCheck[feed.feed_num] === 1 ? "bi-heart-fill" : "bi-heart";
+		 //해시태그에 css적용
+		 let styledContent = hashtagHighlightAndClick(feed.contents);
+	     console.log(feed);
+		$('.feed-display-area .col-12').append(`
+            <div class="card feed-card" data-feed-num="${feed.feed_num}">
+                <div class="card-header feed-header"> 
+                    <span>${feed.user_id}</span>
+                    <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
+                </div>
+                <div class="card-body">
+                    <p class="card-text collapseFeed" data-feed-num="${feed.feed_num}">${feed.contents}</p>
+                    <div class="feed-image-list" data-feed-num="${feed.feed_num}"></div>
+                    <p class="card-text collapseFeed" data-feed-num="${feed.feed_num}">${styledContent}</p>
+                    <div class="feed-button">
+                        <span class="like-count" data-feed-num="${feed.feed_num}">${feed.like_count}</span> 
+                        <i class="bi ${likeButtonClass} like-button" data-feed-num="${feed.feed_num}"></i> 
+                        <i class="bi bi-chat reply"></i> 
+                        <i class="bi bi-translate translate"></i>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
+    $(".feed-display-area .col-12").show();
+    console.log('완성');
 }
 
 function feedDetail() {
@@ -70,7 +83,7 @@ function feedDetail() {
 		type: "post",
 		data: {feed_num : feedNum},
 		success: function(detail) {
-			//기존 영역 숨기고 feedDetail 표시
+			console.log(detail.feed);
 			$(".feed-display-area .col-12").hide();
 			$(".left-area, .middle-area").hide();
 			//사진과 댓글 출력
@@ -288,4 +301,13 @@ function followeeSearch(){
             console.log(error);
         }
     });
+}
+
+function hashtagHighlightAndClick(content) {
+    let hashtags = content.match(/#[^\s#]+/g) || [];
+    hashtags.forEach(hashtag => {
+        const styledHashtag = `<span class="hashtag" style="color: black; cursor: pointer;">${hashtag}</span>`;
+        content = content.replace(new RegExp(hashtag, 'g'), styledHashtag);
+    });
+    return content;
 }

@@ -38,6 +38,7 @@ function initializeDocumentClickHandlers() {
     $(document).on('click', '.insert-nested-reply', insertNestedReply);
     $(document).on('click', '.write-nested-reply', writeNestedReply);
     $(document).on('input', '.follow-search-input', followSearchInput);
+    $(document).on('click', '.hashtag', hashtagSearch);
 }
 
 function initializeWindowEventHandlers() {
@@ -60,7 +61,20 @@ function handleImageInputChange(event) {
 }
 
 function handleCollapseFeedClick(event) {
-    if (!$(event.target).hasClass('bi')) {
+    // 누르지 않아야 하는 요소 목록을 정의합니다.
+    const nonClickableSelectors = [
+        '.like-button', 
+        '.hashtag', 
+        '.posterImage', 
+    ];
+
+    // 클릭된 요소가 nonClickableSelectors 중 하나에 해당하는지 확인합니다.
+    const clickedOnNonClickableElement = nonClickableSelectors.some(
+        selector => $(event.target).closest(selector).length > 0
+    );
+
+    // 클릭된 요소가 nonClickableSelectors 중 하나에 해당하면 feedDetail 함수를 호출하지 않습니다.
+    if (!clickedOnNonClickableElement && !$(event.target).hasClass('bi')) {
         feedDetail.call(this, event);
     }
 }
@@ -98,6 +112,24 @@ function handleWindowLoad() {
         feedDetail();
         
     }
+}
+
+function hashtagSearch() {
+	const hashtag = $(this).text().substring(1);
+	console.log("해시태그 클릭: ", hashtag);
+	
+	$.ajax({
+		url: 'feedTagSearch'
+		, type: 'get'
+		, data: {tag_name: hashtag, feedArrayType: 'default'}
+		, success: function(res) {
+			console.log("해시태그 클릭 성공")
+			feedPrint(res)
+		},
+		error: function(error) {
+			console.error(error);
+		}
+	});
 }
 
 $(document).ready(function() {

@@ -3,6 +3,7 @@ package net.ringo.ringoSwap.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -60,7 +61,7 @@ public interface FeedDAO
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
 	//피드에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드와 태그가 달린 댓글이 달린 피드를 검색해서 리턴하는 메서드
-	ArrayList<Feed> feedArraySearchByTagName(HashMap<String, String> map);
+	ArrayList<Feed> feedArraySearchByTagName(Map<String, String> tagMap);
 	//----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
@@ -68,7 +69,7 @@ public interface FeedDAO
 	
 	int getTagNumByTagName(String hashtag);
 	
-	int linkHashtagToFeed(int newFeedNum, int tagNum, int linkNum);
+	int linkHashtagToFeed(Map<String, Object> hashtagLinkMap);
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[삭제 관련 기능 시작]----------------------

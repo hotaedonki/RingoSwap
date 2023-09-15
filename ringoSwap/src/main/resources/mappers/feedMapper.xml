@@ -156,46 +156,50 @@
 	<!-- 태그 검색시 해당 태그가 달린 피드, 그리고 해당 태그가 달린 댓글이 달린 피드를 검색범위로 하고, 주어진 정렬방식 feedArrayType에 
 		따라 검색한 feed배열을 정렬하는 select문 -->
 	<select id="feedArraySearchByTagName"
-		parameterType="java.util.HashMap" resultType="Feed">
-		select feed_num, user_id, original_profile
-		, saved_profile, contents,
-		inputdate
-		, like_count, tag_list
-		from ringo_feed_with_likeandtag F
-		where
-		tag_list like '%' || #{tag_name} || '%'
-		or feed_num in (
-		select distinct
-		feed_num
-		from ringo_reply_with_likeandtag R
-		where tag_list like '%' ||
-		#{tag_name} || '%'
-		)
-		<choose>
-			<when test="feedArrayType == 'default' ">
-				order by inputdate desc
-			</when>
-			<when test="feedArrayType == 'popular' ">
-				order bylike_count desc
-			</when>
-			<otherwise>
-			</otherwise>
-		</choose>
+        parameterType="java.util.HashMap" resultType="Feed">
+	    select feed_num, user_id, original_profile
+	    , saved_profile, contents,
+	    inputdate
+	    , like_count, tag_list
+	    from ringo_feed_with_likeandtag F
+	    where
+	    tag_list like '%' || #{tag_name} || '%'
+	    or feed_num in (
+	    select distinct
+	    feed_num
+	    from ringo_reply_with_likeandtag R
+	    where tag_name like '%' || #{tag_name} || '%'
+	    )
+	    <choose>
+	        <when test="feedArrayType == 'default' ">
+	            order by inputdate desc
+	        </when>
+	        <when test="feedArrayType == 'popular' ">
+	            order by like_count desc
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
 	</select>
+
 	
-	<insert id="insertHashtag">
-		INSERT INTO ringo_tagstorage (tag_name)
-	    VALUES (#{hashtag})
-	    ON DUPLICATE KEY UPDATE tag_name = tag_name;
+	<!-- 해당 해시태그가 이미 존재하는 경우 아무런 작업을 하지 않음 -->
+	<insert id="insertHashtag" parameterType="String">
+	    MERGE INTO ringo_tagstorage d
+	    USING (SELECT #{hashtag} AS tag_name FROM dual) s
+	    ON (d.tag_name = s.tag_name)
+	    WHEN NOT MATCHED THEN
+	        INSERT (tag_num, tag_name)
+	        VALUES (tag_num_seq.NEXTVAL, s.tag_name)
 	</insert>
-	
-	<select id="getTagNumByTagName" resultType="int">
-		SELECT tag_num FROM ringo_tagstorage WHERE tag_name = #{hashtag};
+
+	<select id="getTagNumByTagName" parameterType="String" resultType="int">
+		SELECT tag_num FROM ringo_tagstorage WHERE tag_name = #{hashtag}
 	</select>
 	
-	<insert id="linkHashtagToFeed">
-		INSERT INTO ringo_taglink_feed (feed_num, tag_num, link_num)
-        VALUES (#{feedNum}, #{tagNum}, #{linkNum});
+	<insert id="linkHashtagToFeed" parameterType="map">
+	    INSERT INTO ringo_taglink_feed (feed_num, tag_num, link_num)
+	    VALUES (#{newFeedNum}, #{tagNum}, link_num_seq.nextval)
 	</insert>
 	<!-- 태그 관련 기능 끝 -->
 

@@ -3,6 +3,7 @@ package net.ringo.ringoSwap.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,13 +46,13 @@ public interface FeedService {
 	
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
 	//피드, 댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 출력하는
-	public ArrayList<Feed> feedSearchByTagName(String tag_name, String feedArrayType);
+	public ArrayList<Feed> feedSearchByTagName(Map<String, String> tagMap);
 	//해시태그 입력
 	public int insertHashtag(String hashtag);
 	//해시태그 번호 가져오기 
 	public int getTagNumByTagName(String hashtag);
 	//태그랑 피드 연결
-	public int linkHashtagToFeed(int newFeedNum, int tagNum, int linkNum);
+	public int linkHashtagToFeed(Map<String, Object> hashtagLinkMap);
 	
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 

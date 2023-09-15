@@ -126,15 +126,16 @@ public class FeedController {
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("feed", feed);
 	    map.put("likeCheck", likeCheck); // 좋아요 체크 값을 response에 추가합니다.
-
+	    log.debug("피드값 : {}", feed);
 	    return map;
 	}
 
 	// 특정 피드 게시물 출력시 해당 피드와 같이 등록된 사진을 리턴해 출력하는 controller 메서드
 	@PostMapping("feedPhotoPrint")
 	@ResponseBody
-	public List<Map<String, Object>> feedPhotoPrint(@RequestParam Integer feed_num, HttpServletRequest request,
-			HttpServletResponse response) {
+	public List<Map<String, Object>> feedPhotoPrint(@RequestParam Integer feed_num
+			, HttpServletRequest request
+			, HttpServletResponse response) {
 		List<FeedPhoto> photoList = service.feedPhotoSelectByFeedNum(feed_num);
 		List<Map<String, Object>> responseData = new ArrayList<>();
 		log.debug("피드넘확인 : {}", feed_num);
@@ -215,14 +216,16 @@ public class FeedController {
 			//Json 문자열을 Java객체로 변환함, 첫번째 객체를 두번째 객체로 변환
 	        String[] hashtags = new Gson().fromJson(hashtagsJson, String[].class);
 	        log.debug("존슨에 들어왔는지: {}", hashtags[0]);
-	        int linkNum = 0;
 	        for (String hashtag : hashtags) {
+	        	Map<String, Object> hashtagLinkMap = new HashMap<>();
 	        	hashtag = hashtag.substring(1);
 	        	int insertHashtag = service.insertHashtag(hashtag); // 해시태그가 DB에 없으면 삽입
 	            int tagNum = service.getTagNumByTagName(hashtag); // 해시태그 번호 가져오기
-	            int linkHashtag = service.linkHashtagToFeed(newFeedNum, tagNum, linkNum); // 해시태그와 피드 연결
-	            linkNum++;
-	        	log.debug("해시태그: 입력 성공: {}, 해시태그 넘버: {}, 피드랑 연동됐는지: {}", insertHashtag, tagNum, linkHashtag, linkNum);
+	            hashtagLinkMap.put("newFeedNum", newFeedNum);
+	            hashtagLinkMap.put("tagNum", tagNum);
+	            log.debug("해시태그링크 피드넘 : {}, 태그넘 : {}", newFeedNum, tagNum);
+	            int linkHashtag = service.linkHashtagToFeed(hashtagLinkMap); // 해시태그와 피드 연결
+	        	log.debug("해시태그: 입력 성공: {}, 해시태그 넘버: {}", insertHashtag, tagNum, linkHashtag);
 	            }
 	        }
 
@@ -314,9 +317,13 @@ public class FeedController {
 	// 피드, 댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 출력하는 controller메서드
 	@GetMapping("feedTagSearch")
 	public ArrayList<Feed> feedTagSearch(String tag_name, String feedArrayType) {
+		
+		log.debug("태그 클릭 후 정렬 : {}", tag_name);
 		// service단에 검색한 태그명과 현재 정렬방식을 인계후 계산결과를 feed 배열로 리턴
-		ArrayList<Feed> feedList = service.feedSearchByTagName(tag_name, feedArrayType);
-
+		Map<String, String> tagMap = new HashMap<>();
+		tagMap.put("tag_name", tag_name);
+		tagMap.put("feedArrayType", feedArrayType);
+		ArrayList<Feed> feedList = service.feedSearchByTagName(tagMap);
 		return feedList;
 	}
 

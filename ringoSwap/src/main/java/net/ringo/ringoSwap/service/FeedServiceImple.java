@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -149,13 +150,9 @@ public class FeedServiceImple implements FeedService{
 	//<<<<<<<<<<<------[태그 관련 기능 시작]----------------------
 	//피드, 댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 출력하는 메서드
 	@Override
-	public ArrayList<Feed> feedSearchByTagName(String tag_name, String feedArrayType){
-		HashMap<String, String> map = new HashMap<>();				//배열 출력을 위한 조건을 전달할때 사용하는 hashmap변수
-		//검색조건이 담긴 변수 map을 매개변수로 DB에 전달해, db로부터 해당 조건을 만족하는 피드 배열을 리턴받는 메서드 실행
-		ArrayList<Feed> feedList = dao.feedArraySearchByTagName(map);
-
+	public ArrayList<Feed> feedSearchByTagName(Map<String, String> tagMap){	
 		//리턴받은 피드 배열을 service에 리턴
-		return feedList;
+		return dao.feedArraySearchByTagName(tagMap);
 	}
 	
 	@Override
@@ -168,8 +165,8 @@ public class FeedServiceImple implements FeedService{
 		return dao.getTagNumByTagName(hashtag);
 	}
 	@Override
-	public int linkHashtagToFeed(int newFeedNum, int tagNum, int linkNum) {
-		return dao.linkHashtagToFeed(newFeedNum, tagNum, linkNum);
+	public int linkHashtagToFeed(Map<String, Object> hashtagLinkMap) {
+		return dao.linkHashtagToFeed(hashtagLinkMap);
 	}
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	
