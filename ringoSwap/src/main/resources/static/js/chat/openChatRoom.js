@@ -56,7 +56,34 @@ function connect()
     let socket = new SockJS('/ringo/ws-stomp');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, onConnected, onError);
-    //alert("연결 완료");
+    
+    if (stompClient == null)
+    {	
+		console.log("연결 실패. client를 찾을 수 없습니다.");
+    	return false;
+    }
+    
+    // 메시지 보내는 것 이벤트 연결
+    document.getElementById("msg_submit").addEventListener("click", function() 
+    {
+		const chatCommon = 
+		{
+			type: 'TALK', // MessageType.ENTER와 동일
+			chat_num: "", // 채팅 번호
+			user_num: myUserNum, // 사용자 번호
+			chatroom_num: chatroomNum, // 채팅방 번호
+			message: document.getElementById("msg_input").value, // 메시지 내용
+			inputdate: "", // 입력 날짜
+			origin_file: "", // 원본 파일
+			saved_file: "", // 저장된 파일
+			photo_size: 0 // 사진 크기
+		};
+			
+        stompClient.send('/pub/chat/openChatRoom/message/' + chatroomNum, {}, JSON.stringify(chatCommon));
+        document.getElementById("msg_input").value = '';
+    });
+    
+    return true;
 }
 
 // 접속할 시에 보낼 함수 
@@ -76,7 +103,6 @@ function onConnected()
 		photo_size: 0 // 사진 크기
 	};
 
-	// Type을 Enter로 
 	stompClient.send('/pub/chat/openChatRoomEnter/' + chatroomNum, {}, JSON.stringify(chatCommon));
 	
 	// sub 할 url => /sub/chat/openChatRoom/message/채팅방번호 로 구독한다
@@ -93,27 +119,6 @@ function onError(error)
 function onMessageReceived(message)
 {
 	console.log(message);
-}
-
-// 메시지 전송때는 JSON 형식을 메시지를 전달한다.
-function sendMessage(event) 
-{
-    let messageContent = messageInput.value.trim();
-
-    if (messageContent && stompClient) 
-    {
-        let chatMessage = 
-        {
-            "roomId": roomId,
-            sender: username,
-            message: messageInput.value,
-            type: 'TALK'
-        };
-
-        stompClient.send("/pub/chat/sendMessage", {}, JSON.stringify(chatMessage));
-        messageInput.value = '';
-    }
-    event.preventDefault();
 }
 
 /*

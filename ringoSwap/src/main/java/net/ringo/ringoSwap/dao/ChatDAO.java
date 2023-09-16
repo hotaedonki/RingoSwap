@@ -39,4 +39,6 @@ public interface ChatDAO
 	public ArrayList<ChatroomLink> getChatroomLinksByChatroomNum(int chatroom_num);
 
 	public ChatroomLink getChatroomLinkByUserNum(int userNum);
+
+	public int insertChatCommon(ChatCommon chat);
 }

@@ -185,8 +185,8 @@ public class ChatController
 	}
 	
 	// 채팅방에 입장했을때
-	@MessageMapping("/chat/openChatRoomEnter/{chatroomID}")
-	@SendTo("/sub/chat/openChatRoom/message/{chatroomID}")
+	@MessageMapping(PathHandler.MM_OPENCHATROOMENTER)
+	@SendTo(PathHandler.ST_OPENCHATROOMMESSAGE)
 	public String enterUser(@DestinationVariable int chatroomID, @Payload ChatCommon chat)
 	{
 		log.debug("enterUser . . . ");
@@ -230,11 +230,22 @@ public class ChatController
 		return nickName + "님이 입장하셨습니다!";
 	}
 	
-	@MessageMapping(PathHandler.MM_SENDMESSAGE)
-	public void sendMessage(@Payload ChatCommon chat)
+	@MessageMapping(PathHandler.MM_OPENCHATROOMMESSAGE)
+	@SendTo(PathHandler.ST_OPENCHATROOMMESSAGE)
+	public boolean sendMessage(@DestinationVariable int chatroomID, @Payload ChatCommon chat)
 	{
 		log.info("chat : {}", chat.toString());
-		chat.setMessage(chat.getMessage());
+		
+		
+		int isSuccessedSaveChat = service.insertChatCommon(chat);
+				
+		if(isSuccessedSaveChat <= 0)
+		{
+			log.debug("chatroom ID - {} / 해당 메시지 저장을 실패했습니다.", chatroomID);
+			return false;
+		}
+		
+		return true;
 	}
 	
 	@ResponseBody

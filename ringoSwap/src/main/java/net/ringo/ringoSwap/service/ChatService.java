@@ -33,4 +33,6 @@ public interface ChatService
 	public Chatroom getChatroomById(int chatroom_num);
 
 	public ChatroomLink getChatroomLinkByUserNum(int userNum);
+
+	public int insertChatCommon(ChatCommon chat);
 }

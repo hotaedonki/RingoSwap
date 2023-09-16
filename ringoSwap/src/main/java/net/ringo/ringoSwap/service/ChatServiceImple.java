@@ -136,4 +136,10 @@ public class ChatServiceImple implements ChatService
 	{
 		return dao.getChatroomLinkByUserNum(userNum);
 	}
+
+	@Override
+	public int insertChatCommon(ChatCommon chat) 
+	{
+		return dao.insertChatCommon(chat);
+	}
 }

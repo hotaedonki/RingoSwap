@@ -3,82 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="net.ringo.ringoSwap.dao.ChatDAO">
-	<!-- 채팅방 링크 가져오기 -->
-	<select id="getChatroomNums" parameterType="int" resultType="int">
-		select
-			chatroom_num
-		from
-			ringo_chatroom_link
-		where
-			user_num = #{user_num}
-	</select>
-	
-	<!-- 
-		내가 참여한 채팅방 리스트 가져오기
-		* 주의 : 가져오려면 ringo_chatroom_link에서 chatroom_num을 ArrayList<int>로 담아오고,
-	 			담아온 ArrayList<int>를 parameter에 넣고 getChatrooms에서 ArrayList<Chatroom>으로 가져오기.
-	-->
-	<select id="getChatrooms" parameterType="int" resultType="Chatroom">
-	    select * from 
-	    	ringo_chatroom
-	    where 
-	    	chatroom_num in
-	    	<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
-	        	#{chatroom_num}
-	    	</foreach>
-	  		order by modifie_date desc
-	</select>
-	
-
-	<select id="getMaxChatroomNum">
-	    select
-	    	max(chatroom_num) as chatroom_num
-	    from 
-	    	ringo_chatroom
-    </select>
-    
-    <!-- 유저 고유 번호로 채팅방 링크를 가져옴 -->
-    <select id="getChatroomLinks" parameterType="int" resultType="ChatroomLink">
-    	select
-    		*
-    	from
-    		ringo_chatroom_link
-    	where
-    		user_num = #{user_num}
-    </select>
-    
-    <!-- 방 고유 번호로 채팅방 링크를 가져옴 -->
-    <select id="getChatroomLinksByChatroomNum" parameterType="int" resultType="ChatroomLink">
-	   	select
-	    	*
-	    from
-	    	ringo_chatroom_link
-	    where
-	    	chatroom_num = #{Chatroom_num} 
-    </select>
-    
-    <!-- 메시지들을 DB에서 삭제함 -->
-    <delete id="deleteMessage" parameterType="ChatCommon">
-    	delete 
-    		ringo_chat_common
-		
-		where
-			chat_num in 
-			<foreach collection="list" item="chat_num" open="(" separator="," close=")">
-				#{chat_num}
-			</foreach>
-			
-			user_num in 
-			<foreach collection="list" item="user_num" open="(" separator="," close=")">
-				#{user_num}
-			</foreach>
-			
-			chatroom_num in
-			<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
-				#{chatroom_num}
-			</foreach>
-    </delete>
-	
 	<!-- 오픈 채팅방 만들기 -->
 	<insert id="createOpenChatroom" parameterType="Chatroom">
 		insert into ringo_chatroom
@@ -135,6 +59,106 @@
 			}
 	</insert>
 	
+	<!-- 메시지를 보낼 경우 DB(ChatCommon 형태)에 기록 -->
+	<insert id="insertChatCommon" parameterType="ChatCommon">
+		insert into ringo_chat_common
+			(
+				chat_num
+				, user_num
+				, chatroom_num
+				, message
+				, origin_file
+				, saved_file
+			)
+			values
+			(
+				ringo_chat_common_seq.nextval
+				, #{user_num}
+				, #{chatroom_num}
+				, #{message}
+				, #{origin_file}
+				, #{saved_file}
+			)
+
+	</insert>
+	
+	<!-- 메시지들을 DB에서 삭제함 -->
+    <delete id="deleteMessage" parameterType="ChatCommon">
+    	delete 
+    		ringo_chat_common
+		
+		where
+			chat_num in 
+			<foreach collection="list" item="chat_num" open="(" separator="," close=")">
+				#{chat_num}
+			</foreach>
+			
+			user_num in 
+			<foreach collection="list" item="user_num" open="(" separator="," close=")">
+				#{user_num}
+			</foreach>
+			
+			chatroom_num in
+			<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
+				#{chatroom_num}
+			</foreach>
+    </delete>
+
+	<!-- 채팅방 링크 가져오기 -->
+	<select id="getChatroomNums" parameterType="int" resultType="int">
+		select
+			chatroom_num
+		from
+			ringo_chatroom_link
+		where
+			user_num = #{user_num}
+	</select>
+	
+	<!-- 
+		내가 참여한 채팅방 리스트 가져오기
+		* 주의 : 가져오려면 ringo_chatroom_link에서 chatroom_num을 ArrayList<int>로 담아오고,
+	 			담아온 ArrayList<int>를 parameter에 넣고 getChatrooms에서 ArrayList<Chatroom>으로 가져오기.
+	-->
+	<select id="getChatrooms" parameterType="int" resultType="Chatroom">
+	    select * from 
+	    	ringo_chatroom
+	    where 
+	    	chatroom_num in
+	    	<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
+	        	#{chatroom_num}
+	    	</foreach>
+	  		order by modifie_date desc
+	</select>
+	
+	<!-- 채팅방의 가장 큰 순 -->
+	<select id="getMaxChatroomNum">
+	    select
+	    	max(chatroom_num) as chatroom_num
+	    from 
+	    	ringo_chatroom
+    </select>
+    
+    <!-- 유저 고유 번호로 채팅방 링크를 가져옴 -->
+    <select id="getChatroomLinks" parameterType="int" resultType="ChatroomLink">
+    	select
+    		*
+    	from
+    		ringo_chatroom_link
+    	where
+    		user_num = #{user_num}
+    </select>
+    
+    <!-- 방 고유 번호로 채팅방 링크를 가져옴 -->
+    <select id="getChatroomLinksByChatroomNum" parameterType="int" resultType="ChatroomLink">
+	   	select
+	    	*
+	    from
+	    	ringo_chatroom_link
+	    where
+	    	chatroom_num = #{Chatroom_num} 
+    </select>
+    
+    <!-- 채팅방 정보를 채팅방 링크로 가져온다. -->
 	<select id = "loadChatRooms" parameterType="ChatroomLink" resultType="Chatroom">
 		select * from
 			ringo_chatroom
@@ -145,6 +169,7 @@
 			</foreach>
 	</select>
 	
+	<!-- 챗 커먼(메시지)들을 가져온다 -->
 	<select id="loadMessage" parameterType="int" resultType="ChatCommon">
 		select * from
 			ringo_chat_common
@@ -152,6 +177,7 @@
 			chatroom_num = #{chatroom_num}
 	</select>
 	
+	<!-- 채팅방 번호를 가져온다. -->
 	<select id="getChatroomById" parameterType="int" resultType="Chatroom">
 		select * from
 			ringo_chatroom
@@ -159,6 +185,7 @@
 			chatroom_num = #{chatroom_num}
 	</select>
 	
+	<!-- 채팅방 링크를 유저 고유번호로 가져옴. -->
 	<select id="getChatroomLinkByUserNum" parameterType="int" resultType="ChatroomLink">
 		select
 			*
