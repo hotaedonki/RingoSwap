@@ -161,6 +161,11 @@ public class MemberServiceImple implements MemberService
 	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map){
 		return dao.followeeArraySearch(map);
 	}
+	//사용자가 특정 회원을 팔로우한 상태인지 확인하는 메서드
+	@Override
+	public int followCheck(HashMap<String, Object> map) {
+		return dao.followSearch(map);
+	}
 	//사용자가 특정 회원을 팔로우 하는 메서드
 	@Override
 	public int followInsert(int user_num, int follower_num) {

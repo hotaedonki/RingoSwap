@@ -42,8 +42,8 @@ CREATE VIEW ringo_member_with_mypage AS
 		, M.native_lang, M.target_lang
 		, M.introduction
 		, M.original_profile, M.saved_profile
-		, count(FW.follower_num) as fr_count				--팔로워 수를 기록하는 속성
-		, count(FE.followee_num) as fe_count				--팔로우 수를 기록하는 속성
+		, count(FE.followee_num) as fr_count					--팔로워 수를 기록하는 속성
+		, count(FW.follower_num) as fe_count				--팔로우 수를 기록하는 속성
 		, listagg(T.tag, ' ') within group (order by TL.tag_num) as tag_list
 	from ringo_member M
 	left join ringo_member_follow FW ON M.user_num = FW.follower_num
@@ -126,6 +126,7 @@ CREATE TABLE ringo_member_follow(
 CREATE VIEW ringo_follower_view AS
 	select F.follower_num, F.followee_num
 		, M.username as follower_name
+		,
 		, M.original_profile, M.saved_profile
 	from ringo_member_follow F
 	left join
@@ -167,7 +168,7 @@ CREATE TABLE ringo_feed (
 create SEQUENCE ringo_feed_seq;
 --피드 정보+user_id+좋아요 수+태그를 속성으로 갖는 view를 create하는 명령어
 CREATE VIEW ringo_feed_with_likeandtag AS
-SELECT F.feed_num
+SELECT F.feed_num, F.user_num
 	, M.user_id, M.username
 	, M.original_profile, M.saved_profile	
 	, F.contents, F.inputdate
@@ -184,7 +185,7 @@ left join
 left join
     ringo_tagstorage T ON TF.tag_num = T.tag_num
 GROUP BY
-    F.feed_num, M.user_id, M.username, M.original_profile, M.saved_profile, F.contents, F.inputdate;
+    F.feed_num, F.user_num, M.user_id, M.username, M.original_profile, M.saved_profile, F.contents, F.inputdate;
 --view 사용 예시(14일 이내 작성한 글을 좋아요 수가 많은 순으로 정렬해 출력),
 select * from ringo_feed_with_likeandtag
 where (sysdate - inputdate) <= 14

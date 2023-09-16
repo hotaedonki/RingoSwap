@@ -355,7 +355,9 @@ public class FeedController {
 			, @AuthenticationPrincipal UserDetails user){
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		HashMap<String, Object> map = new HashMap<>();		//followerArraySearch메서드용 해쉬맵 변수
+		log.debug("번호 {}", user_num);
 		ArrayList<Integer> followerList = memberService.memberByUsernameReturnUserNum(username); 
+		log.debug("리스트 {}",followerList);
 		if(followerList.isEmpty()) {		//followerList변수가 비어있음 = 검색된 팔로워가 없는 것이므로 이후 검색 메서드 구동은 스킵한다.
 			ArrayList<MemberFollow> none = null;
 			return none;
@@ -363,7 +365,8 @@ public class FeedController {
 		
 		map.put("followee_num", user_num);
 		map.put("follower_num", followerList);
-		
+
+		log.debug("맵 {}",map);
 		ArrayList<MemberFollow> followerSearch = memberService.followerArraySearch(map);
 		
 		return followerSearch;
@@ -391,19 +394,27 @@ public class FeedController {
 	//팔로우 했는지 여부를 확인하는 메서드
 	@ResponseBody
 	@PostMapping("followCheck")
-	public ResponseEntity<?> followCheck(@AuthenticationPrincipal UserDetails user
+	public int followCheck(@AuthenticationPrincipal UserDetails user
 					, String username){
-		int user_num = memberService.getUserIdByUsername(username);
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		int followee_num = memberService.getUserIdByUsername(username);
 		HashMap<String, Object> map = new HashMap<>();
-		return ResponseEntity.ok("success");
+		map.put("follower_num", user_num);
+		map.put("followee_num", followee_num);
+		int methodResult = memberService.followCheck(map);
+		
+		return methodResult;
 	}
 	//사용자가 특정 회원을 팔로우 하는 기능
 	@ResponseBody
 	@PostMapping("userFollowInsert")
-	public ResponseEntity<?> userFollowInsert(int user_num
+	public ResponseEntity<?> userFollowInsert(String username
 					, @AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.getUserIdByUsername(username);
 		int follower_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		
+		if(user_num == follower_num) {
+			return ResponseEntity.ok("fail");
+		}
 		int methodResult = memberService.followInsert(user_num, follower_num);		//팔로우 추가 메서드 실행
 		if(methodResult == 0) {
 			return ResponseEntity.ok("fail");
@@ -414,10 +425,13 @@ public class FeedController {
 	//사용자가 특정 회원을 언팔로우 하는 기능
 	@ResponseBody
 	@PostMapping("userFollowDelete")
-	public ResponseEntity<?> userFollowDelete(int user_num
+	public ResponseEntity<?> userFollowDelete(String username
 					, @AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.getUserIdByUsername(username);
 		int follower_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		
+		if(user_num == follower_num) {
+			return ResponseEntity.ok("fail");
+		}
 		int methodResult = memberService.followDelete(user_num, follower_num);		//팔로우 해제 메서드 실행
 		if(methodResult == 0) {
 			return ResponseEntity.ok("fail");
@@ -430,8 +444,8 @@ public class FeedController {
 	@PostMapping("showOffcanvasWithUserData")
 	public Member showOffcanvasWithUserData(String username) {
 		Member member = new Member();
-		member = service.memberInformationByusername(username);
-		
+		member = service.showOffcanvasWithUserData(username);
+		log.debug("오프캔버스 멤버 정보 : {}", member);
 		return member;
 	}
 	// ----------------[팔로워/팔로우 검색 관련 기능 종료]----------->>>>>>>>>>>>

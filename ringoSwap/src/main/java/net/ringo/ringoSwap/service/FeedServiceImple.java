@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.FeedDAO;
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
+import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.Reply;
 import net.ringo.ringoSwap.domain.Tagstorage;
 import net.ringo.ringoSwap.util.FeedSort;
@@ -169,6 +170,12 @@ public class FeedServiceImple implements FeedService{
 	public int linkHashtagToFeed(Map<String, Object> hashtagLinkMap) {
 		return dao.linkHashtagToFeed(hashtagLinkMap);
 	}
+	@Override
+	public Member showOffcanvasWithUserData(String username) {
+		return dao.memberInformationByusername(username);
+	}
+	
+	
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	
 	
@@ -198,7 +205,7 @@ public class FeedServiceImple implements FeedService{
 		return 1;
 		
 	}
-	
+
 	
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 }

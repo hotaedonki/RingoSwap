@@ -46,7 +46,7 @@ function renderFeeds(res) {
             <div class="card feed-card" data-feed-num="${feed.feed_num}">
                 <div class="card-header feed-header goToOtherProfile" data-user-name="${feed.username}"> 
                 	<img src="../member/memberProfilePrint?user_id=${feed.user_id}" alt="Poster Image" class="posterImage"> 
-                    <span >${feed.username}</span>
+                    <span class="feedUser" data-username="${feed.username}">${feed.username}</span>
                     <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
                 </div>
                 <div class="card-body">
@@ -98,7 +98,7 @@ function feedDetail() {
              
             $('#feedDetail').append(`
                     <div class="card feed-card" data-feed-num="${detail.feed.feed_num}">
-                    <div class="card-header goToOtherProfile" style="width: 100%;" data-user-id="${detail.feed.user_id}">
+                    <div class="card-header goToOtherProfile" style="width: 100%;" data-user-id="${detail.feed.username}">
                         <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage"> 
                         <span>${detail.feed.user_id}</span>
                         <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">
@@ -276,6 +276,18 @@ function followerSearch(){
         success:function(followerList){
             if(followerList){
                 console.log(followerList);
+                followerList.forEach(follower => {
+                    $('.followBox').html('');
+                    $('.followerBox').append(`
+                    <div><img src="" alt="Poster Image" class="posterImage feedUser" data-username="${follower.follower_name}"> 
+                        <img src="../member/memberProfilePrint?user_id=${follower.follower_id}" style="width:25px; height:25px; border-radius:12px;" alt="Profile Picture" />
+                        <span >${follower.follower_name}</span>
+                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" />
+                        <img src="../img/일본어.jpg" alt="Learning Language" style="width:25px; height:25px; border-radius:12px;" />
+                        <button type="button" class="btn btn-primary">팔로우</button>
+                    </div>
+                    `);
+                })
             }else{
                 console.log('팔로워 검색');
             }
@@ -295,6 +307,18 @@ function followeeSearch(){
         dataType:'json',
         success:function(followeeList){
             if(followeeList){
+                followeeList.forEach(followee => {
+                    $('.followBox').html('');
+                    $('.followBox').append(`
+                    <div><img src="" alt="Poster Image" class="posterImage feedUser" data-username="${followee.followee_name}"> 
+                        <img src="../member/memberProfilePrint?user_id=${followee.followee_id}" alt="Profile Picture" style="width:25px; height:25px; border-radius:12px;" />
+                        <span >${followee.followee_name}</span>
+                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" />
+                        <img src="../img/일본어.jpg" alt="Learning Language" style="width:25px; height:25px; border-radius:12px;" />
+                        <button type="button" class="btn btn-primary">팔로우</button>
+                    </div>
+                    `);
+                })
                 console.log(followeeList);
             }else{
                 console.log('팔로우 검색');
@@ -313,4 +337,48 @@ function hashtagHighlightAndClick(content) {
         content = content.replace(new RegExp(hashtag, 'g'), styledHashtag);
     });
     return content;
+}
+
+function followCheck(){
+    let name = $(this).data('username');
+    $.ajax({
+        url: "followCheck",
+        type: "post",
+        data: {username : name},
+        dataType:'json',
+        success:function(result){
+            if(result == 0){
+                console.log('팔로우');
+                followInsert(name);
+            }else{
+                console.log('언팔로우');
+                followDelete(name);
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+function followInsert(name){
+    $.ajax({
+        url:'userFollowInsert',
+        type: "post",
+        data: {username : name},
+        dataType:'json',
+        success:function(result){
+            console.log(result);
+        },
+    })
+}
+function followDelete(name){
+    $.ajax({
+        url:'userFollowDelete',
+        type: "post",
+        data: {username : name},
+        dataType:'json',
+        success:function(result){
+            console.log(result);
+        },
+    })
 }
