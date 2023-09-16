@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
+import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.Reply;
 
 public interface FeedService {
@@ -53,6 +54,9 @@ public interface FeedService {
 	public int getTagNumByTagName(String hashtag);
 	//태그랑 피드 연결
 	public int linkHashtagToFeed(Map<String, Object> hashtagLinkMap);
+	// 오프캔버스
+	public Member showOffcanvasWithUserData(String username);
+	
 	
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 

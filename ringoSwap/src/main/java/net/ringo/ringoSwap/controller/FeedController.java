@@ -403,7 +403,6 @@ public class FeedController {
 	public ResponseEntity<?> userFollowInsert(int user_num
 					, @AuthenticationPrincipal UserDetails user) {
 		int follower_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		
 		int methodResult = memberService.followInsert(user_num, follower_num);		//팔로우 추가 메서드 실행
 		if(methodResult == 0) {
 			return ResponseEntity.ok("fail");
@@ -417,7 +416,6 @@ public class FeedController {
 	public ResponseEntity<?> userFollowDelete(int user_num
 					, @AuthenticationPrincipal UserDetails user) {
 		int follower_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		
 		int methodResult = memberService.followDelete(user_num, follower_num);		//팔로우 해제 메서드 실행
 		if(methodResult == 0) {
 			return ResponseEntity.ok("fail");
@@ -430,7 +428,8 @@ public class FeedController {
 	@PostMapping("showOffcanvasWithUserData")
 	public Member showOffcanvasWithUserData(String username) {
 		Member member = new Member();
-		member = service.memberInformationByusername(username);
+		member = service.showOffcanvasWithUserData(username);
+		
 		
 		return member;
 	}
