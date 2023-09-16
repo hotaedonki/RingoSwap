@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 public class MemberFollow {
 	int follower_num;			//자신을 팔로잉한 팔로워의 회원번호
 	int followee_num;			//자신이 팔로우한 팔로위의 회원번호
-	String follower_name;			//tagstorage에서 tag값을 담는 변수 / 미리 지정된 20개 전후의 변수가 담겨져 있고 유저는 수정/추가/삭제 불가.
+	String follower_name;
 	String followee_name;
+	String follower_id;
+	String followee_id;
 	String original_profile;
 	String saved_profile;
 	public String toString()
