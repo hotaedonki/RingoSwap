@@ -114,12 +114,6 @@ public class ChatServiceImple implements ChatService
 	}
 
 	@Override
-	public ArrayList<ChatCommon> loadMessage(int chatroom_num) 
-	{
-		return dao.loadMessage(chatroom_num);
-	}
-
-	@Override
 	public Chatroom getChatroomById(int chatroom_num) 
 	{
 		return dao.getChatroomById(chatroom_num);
@@ -142,4 +136,11 @@ public class ChatServiceImple implements ChatService
 	{
 		return dao.insertChatCommon(chat);
 	}
+
+	@Override
+	public ArrayList<ChatCommon> loadMessageByChatroomNum(int chatroom_num) {
+		// TODO Auto-generated method stub
+		return dao.loadMessageByChatroomNum(chatroom_num);
+	}
+
 }

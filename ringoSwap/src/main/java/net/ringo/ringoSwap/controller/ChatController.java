@@ -109,17 +109,6 @@ public class ChatController
 		return chatrooms;
 	}
 	
-	@ResponseBody
-	@PostMapping(PathHandler.LOADMESSAGE)
-	public ArrayList<ChatCommon> loadMessage(int chatroom_num)
-	{
-		ArrayList<ChatCommon> chatCommons = service.loadMessage(chatroom_num);
-		
-		log.debug("load Messages . . .");
-		
-		return chatCommons;
-	}
-	
 	@GetMapping(PathHandler.OPENCHATROOMENTER)
 	public String openChatRoomEnter(int chatroom_num, @AuthenticationPrincipal UserDetails user, Model model)
 	{
@@ -169,7 +158,7 @@ public class ChatController
 		
 		
 		// 해당 채팅방에서 메시지들 가져오기
-		ArrayList<ChatCommon> messages = service.loadMessage(chatroom.getChatroom_num());		
+		ArrayList<ChatCommon> messages = service.loadMessageByChatroomNum(chatroom.getChatroom_num());		
 		
 		if (messages != null)
 			log.debug("total messages : {}", messages.size());

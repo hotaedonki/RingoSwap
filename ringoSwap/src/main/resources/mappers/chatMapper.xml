@@ -37,28 +37,6 @@
 			)
 	</insert>
 	
-	<!-- 메시지를 보낼 경우 DB에 기록 -->
-	<insert id="sendMessage" parameterType="ChatCommon">
-		insert into ringo_chat_common
-			(
-				chat_num
-				, user_num
-				, chatroom_num
-				, message
-				, origin_file
-				, saved_file
-			)
-			values
-			{
-				#{chat_num}
-				, #{user_num}
-				, #{chatroom_num}
-				, #{message}
-				, #{origin_file}
-				, #{saved_file}
-			}
-	</insert>
-	
 	<!-- 메시지를 보낼 경우 DB(ChatCommon 형태)에 기록 -->
 	<insert id="insertChatCommon" parameterType="ChatCommon">
 		insert into ringo_chat_common
@@ -169,14 +147,6 @@
 			</foreach>
 	</select>
 	
-	<!-- 챗 커먼(메시지)들을 가져온다 -->
-	<select id="loadMessage" parameterType="int" resultType="ChatCommon">
-		select * from
-			ringo_chat_common
-		where
-			chatroom_num = #{chatroom_num}
-	</select>
-	
 	<!-- 채팅방 번호를 가져온다. -->
 	<select id="getChatroomById" parameterType="int" resultType="Chatroom">
 		select * from
@@ -193,5 +163,15 @@
 			ringo_chatroom_link
 		where
 			user_num = #{user_num}
+	</select>
+	
+	<!-- 해당 채팅방에서 메시지들을 가져온다. -->
+	<select id="loadMessageByChatroomNum" parameterType="int" resultType="ChatCommon">
+		select
+			*
+		from
+			ringo_chat_common
+		where
+			chatroom_num = #{chatroom_num}
 	</select>
 </mapper>

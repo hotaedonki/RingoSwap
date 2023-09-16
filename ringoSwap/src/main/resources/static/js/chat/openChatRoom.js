@@ -63,7 +63,7 @@ function connect()
     	return false;
     }
     
-    // 메시지 보내는 것 이벤트 연결
+    // 메시지 보내는 버튼에 이벤트 연결
     document.getElementById("msg_submit").addEventListener("click", function() 
     {
 		const chatCommon = 
