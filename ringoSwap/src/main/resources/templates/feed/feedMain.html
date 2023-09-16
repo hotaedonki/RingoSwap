@@ -283,7 +283,7 @@
 						<i class="bi bi-search"></i>
 					</button>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body followerBox">
 					<div th:each="follower : ${followers}">
 						<img th:src="@{/img/고양.jpg}" alt="Profile Picture" /> <span
 							th:text="${follower.username}"></span> <img
@@ -313,7 +313,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="modal-body">
+					<div class="modal-body followBox">
 						123
 						<div th:each="follow : ${followe}">
 							<img th:src="@{/img/고양.jpg}" alt="Profile Picture" /> <span
@@ -368,7 +368,7 @@
 	<script th:src="@{../js/feed/utilities.js}"></script>
 	<script th:src="@{../js/feed/feedAjax.js}"></script>
 	<script th:src="@{../js/feed/replyAjax.js}"></script>
-	<script th:src="@{../js/feed/offcanvas.js}"></script>	
+	<script th:src="@{../js/feed/offcanvas.js}"></script>
 	<script th:src="@{../js/memberView/myPage.js}"></script>
 
 </body>
