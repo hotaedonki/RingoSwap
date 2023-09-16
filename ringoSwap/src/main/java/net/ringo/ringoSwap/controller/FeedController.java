@@ -447,7 +447,7 @@ public class FeedController {
 	@PostMapping("showOffcanvasWithUserData")
 	public Member showOffcanvasWithUserData(String username) {
 		Member member = new Member();
-		member = service.memberInformationByusername(username);
+		member = service.showOffcanvasWithUserData(username);
 		
 		return member;
 	}
