@@ -279,10 +279,10 @@ function followerSearch(){
                 followerList.forEach(follower => {
                     $('.followerBox').append(`
                     <div><img src="" alt="Poster Image" class="posterImage feedUser" data-username="${follower.follower_name}"> 
-                        <img th:src="../member/memberProfilePrint?user_id=${follower.follower_num}" alt="Profile Picture" />
+                        <img src="../member/memberProfilePrint?user_id=${follower.follower_num}" alt="Profile Picture" />
                         <span >${follower.follower_name}</span>
-                        <img th:src="@{/img/영어.jpg}" alt="Native Language" />
-                        <img th:src="@{/img/일본어.jpg}" alt="Learning Language" />
+                        <img src=".../img/영어.jpg" alt="Native Language" />
+                        <img src=".../img/일본어.jpg" alt="Learning Language" />
                         <button type="button" class="btn btn-primary">팔로우</button>
                     </div>
                     `);
@@ -309,10 +309,10 @@ function followeeSearch(){
                 followeeList.forEach(followee => {
                     $('.followBox').append(`
                     <div><img src="" alt="Poster Image" class="posterImage feedUser" data-username="${followee.followee_name}"> 
-                        <img th:src="../member/memberProfilePrint?user_id=${followee.followee_id}" alt="Profile Picture" />
+                        <img src="../member/memberProfilePrint?user_id=${followee.followee_id}" alt="Profile Picture" />
                         <span >${followee.followee_name}</span>
-                        <img th:src="@{/img/영어.jpg}" alt="Native Language" />
-                        <img th:src="@{/img/일본어.jpg}" alt="Learning Language" />
+                        <img th:src=".../img/영어.jpg" alt="Native Language" />
+                        <img th:src=".../img/일본어.jpg" alt="Learning Language" />
                         <button type="button" class="btn btn-primary">팔로우</button>
                     </div>
                     `);
