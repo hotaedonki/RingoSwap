@@ -233,7 +233,7 @@
 	</insert>
 	
 	<select id="memberInformationByusername" parameterType="String" resultType="Member">
-		select username, native_lang, target_lang, original_profile, introduction
+		select user_id, username, native_lang, target_lang, original_profile, introduction
 		from ringo_member
 		where username = #{username}
 	</select>

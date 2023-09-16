@@ -98,7 +98,7 @@ function feedDetail() {
              
             $('#feedDetail').append(`
                     <div class="card feed-card" data-feed-num="${detail.feed.feed_num}">
-                    <div class="card-header goToOtherProfile" style="width: 100%;" data-user-id="${detail.feed.user_id}">
+                    <div class="card-header goToOtherProfile" style="width: 100%;" data-user-id="${detail.feed.username}">
                         <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage"> 
                         <span>${detail.feed.user_id}</span>
                         <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">

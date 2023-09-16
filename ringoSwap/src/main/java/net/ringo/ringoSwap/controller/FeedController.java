@@ -445,6 +445,7 @@ public class FeedController {
 	public Member showOffcanvasWithUserData(String username) {
 		Member member = new Member();
 		member = service.showOffcanvasWithUserData(username);
+		log.debug("오프캔버스 멤버 정보 : {}", member);
 		return member;
 	}
 	// ----------------[팔로워/팔로우 검색 관련 기능 종료]----------->>>>>>>>>>>>
