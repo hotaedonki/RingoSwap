@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
+import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.Reply;
 import net.ringo.ringoSwap.domain.Tagstorage;
 
@@ -71,6 +72,8 @@ public interface FeedDAO
 	int getTagNumByTagName(String hashtag);
 	//태그 링크
 	int linkHashtagToFeed(Map<String, Object> hashtagLinkMap);
+	// 오프캔버스
+	Member memberInformationByusername(String username);
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
@@ -79,4 +82,5 @@ public interface FeedDAO
 	//해당 댓글의 작성자인지 확인한 후 해당 댓글을 삭제하는 메서드
 	int replyDeleteOne(HashMap<String, Object> map);
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
+	
 }

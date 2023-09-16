@@ -415,7 +415,6 @@ public class FeedController {
 		if(user_num == follower_num) {
 			return ResponseEntity.ok("fail");
 		}
-		
 		int methodResult = memberService.followInsert(user_num, follower_num);		//팔로우 추가 메서드 실행
 		if(methodResult == 0) {
 			return ResponseEntity.ok("fail");
@@ -430,11 +429,9 @@ public class FeedController {
 					, @AuthenticationPrincipal UserDetails user) {
 		int user_num = memberService.getUserIdByUsername(username);
 		int follower_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		
 		if(user_num == follower_num) {
 			return ResponseEntity.ok("fail");
 		}
-		
 		int methodResult = memberService.followDelete(user_num, follower_num);		//팔로우 해제 메서드 실행
 		if(methodResult == 0) {
 			return ResponseEntity.ok("fail");
@@ -447,8 +444,7 @@ public class FeedController {
 	@PostMapping("showOffcanvasWithUserData")
 	public Member showOffcanvasWithUserData(String username) {
 		Member member = new Member();
-		member = service.memberInformationByusername(username);
-		
+		member = service.showOffcanvasWithUserData(username);
 		return member;
 	}
 	// ----------------[팔로워/팔로우 검색 관련 기능 종료]----------->>>>>>>>>>>>
