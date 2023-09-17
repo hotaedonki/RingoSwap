@@ -40,8 +40,9 @@ function initializeDocumentClickHandlers() {
     $(document).on('click', '.hashtag', hashtagSearch);
     $(document).on('input', '#searchInput', feedSearch);
     $(document).on('click', '.feedUser', followCheck);
-    $(document).on('click', '.goToOtherProfile', showOffcanvasWithUserData);
-}
+    $(document).on('click', '.showOffcanvasWithUserData', showOffcanvasWithUserData);
+    $(document).on('click', '.goToOtherProfile', goToOtherProfile);
+    }
 
 function initializeWindowEventHandlers() {
     window.addEventListener('popstate', handlePopState);

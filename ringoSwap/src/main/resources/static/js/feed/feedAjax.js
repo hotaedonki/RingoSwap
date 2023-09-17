@@ -44,7 +44,7 @@ function renderFeeds(res) {
 	     console.log(feed);
 		$('.feed-display-area .col-12').append(`
             <div class="card feed-card" data-feed-num="${feed.feed_num}">
-                <div class="card-header feed-header goToOtherProfile" data-user-name="${feed.username}"> 
+                <div class="card-header feed-header showOffcanvasWithUserData" data-user-name="${feed.username}"> 
                 	<img src="../member/memberProfilePrint?user_id=${feed.user_id}" alt="Poster Image" class="posterImage"> 
                     <span class="feedUser" data-username="${feed.username}">${feed.username}</span>
                     <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
@@ -98,7 +98,7 @@ function feedDetail() {
              
             $('#feedDetail').append(`
                     <div class="card feed-card" data-feed-num="${detail.feed.feed_num}">
-                    <div class="card-header goToOtherProfile" style="width: 100%;" data-user-id="${detail.feed.username}">
+                    <div class="card-header showOffcanvasWithUserData" style="width: 100%;" data-user-id="${detail.feed.username}">
                         <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage"> 
                         <span>${detail.feed.user_id}</span>
                         <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">
