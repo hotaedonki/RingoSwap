@@ -6,14 +6,17 @@
 <mapper namespace="net.ringo.ringoSwap.dao.FeedDAO">
 	<!-- 피드 출력 기능 시작 -->
 	<!-- 모든 게시물을 최신순으로 리턴하는 select문 -->
-	<select id="feedSelectAll" parameterType="java.util.HashMap" resultType="Feed">
-		select * from
-		ringo_feed_with_likeandtag
+	<select id="feedSelectAll" parameterType="java.util.HashMap"
+		resultType="Feed">
+		select * from (
+		select rownum rnum, a.* from (
+		select * from ringo_feed_with_likeandtag
 		<where>
 			<if test="text != 'null'">
-			user_id like '%'||#{text}||'%'
+				user_id like '%'||#{text}||'%'
 				or contents like '%'||#{text}||'%'
-				or tag_list like '%'||#{text}||'%'
+				or tag_list
+				like '%'||#{text}||'%'
 			</if>
 			<if test="feedArrayType == 'popular' and text != 'null'">
 				and
@@ -23,12 +26,15 @@
 			</if>
 		</where>
 		<if test="feedArrayType == 'default' ">
-		order by inputdate desc
+			order by inputdate desc
 		</if>
 		<if test="feedArrayType == 'popular' ">
-		order by like_count DESC
+			order by like_count DESC
 		</if>
+		) a where rownum &lt;= #{limit}+#{offset}
+	) where rnum > #{offset}
 	</select>
+
 
 	<!-- feed_num을 매개변수로 특정 feed 게시글 정보를 리턴하는 select문 -->
 	<select id="feedSelectOneByFeedNum" resultType="Feed">
@@ -39,12 +45,13 @@
 
 	<!-- feed_num을 매개변수로 특정 피드에 달린 reply 배열 정보를 리턴하는 select문 -->
 	<select id="replySelectByFeedNum" resultType="Reply">
-	    select 
-	        R.*,
-	        (select count(*) from ringo_reply where parent_reply_num = R.reply_num) as reply_count
-	    from ringo_reply_with_likeandtag R
-	    where feed_num = #{feed_num}
-	    order by inputdate desc
+		select
+		R.*,
+		(select count(*) from ringo_reply where parent_reply_num = R.reply_num) as
+		reply_count
+		from ringo_reply_with_likeandtag R
+		where feed_num = #{feed_num}
+		order by inputdate desc
 	</select>
 
 	<!-- feed_num을 매개변수로 해당 피드에 등록된 사진 정보 배열 객체를 불러오는 메서드 -->
@@ -67,16 +74,16 @@
 	</insert>
 	<!-- 작성한 feedPhoto 배열을 DB에 매개변수로 전달하는 메서드 -->
 	<insert id="feedPhotoInsert" parameterType="FeedPhoto">
-	    INSERT INTO ringo_feed_photo(
-        photo_num, feed_num, origin_file, 
-        saved_file, description, photo_size, 
-        photo_format
-    ) 
-    VALUES (
-        ringo_feed_photo_seq.nextval, #{feed_num}, 
-        #{origin_file}, #{saved_file}, NULL, 
-        #{photo_size}, #{photo_format}
-    )
+		INSERT INTO ringo_feed_photo(
+		photo_num, feed_num, origin_file,
+		saved_file, description, photo_size,
+		photo_format
+		)
+		VALUES (
+		ringo_feed_photo_seq.nextval, #{feed_num},
+		#{origin_file}, #{saved_file}, NULL,
+		#{photo_size}, #{photo_format}
+		)
 	</insert>
 
 	<!-- 작성한 Reply 객체를 DB에 매개변수로 전달하는 insert문 -->
@@ -84,7 +91,8 @@
 		insert into
 		ringo_reply(reply_num, feed_num, user_num, contents, parent_reply_num)
 		values
-		(ringo_reply_seq.nextval, #{feed_num}, #{user_num}, #{contents}, #{parent_reply_num})
+		(ringo_reply_seq.nextval, #{feed_num}, #{user_num}, #{contents},
+		#{parent_reply_num})
 	</insert>
 
 	<!-- 피드 작성 기능 끝 -->
@@ -155,50 +163,52 @@
 
 	<!-- 태그 검색시 해당 태그가 달린 피드, 그리고 해당 태그가 달린 댓글이 달린 피드를 검색범위로 하고, 주어진 정렬방식 feedArrayType에 
 		따라 검색한 feed배열을 정렬하는 select문 -->
-	<select id="feedArraySearchByTagName"
-        parameterType="map" resultType="Feed">
-	    select feed_num, user_id, original_profile
-	    , saved_profile, contents,
-	    inputdate
-	    , like_count, tag_list
-	    from ringo_feed_with_likeandtag F
-	    where
-	    tag_list like '%' || #{tag_name} || '%'
-	    or feed_num in (
-	    select distinct
-	    feed_num
-	    from ringo_reply_with_likeandtag R
-	    where tag_list like '%' || #{tag_name} || '%'
-	    )
-	    <choose>
-	        <when test="feedArrayType == 'default' ">
-	            order by inputdate desc
-	        </when>
-	        <when test="feedArrayType == 'popular' ">
-	            order by like_count desc
-	        </when>
-	        <otherwise>
-	        </otherwise>
-	    </choose>
+	<select id="feedArraySearchByTagName" parameterType="map"
+		resultType="Feed">
+		select feed_num, user_id, original_profile
+		, saved_profile, contents,
+		inputdate
+		, like_count, tag_list
+		from ringo_feed_with_likeandtag F
+		where
+		tag_list like '%' || #{tag_name} || '%'
+		or feed_num in (
+		select distinct
+		feed_num
+		from ringo_reply_with_likeandtag R
+		where tag_list like '%' || #{tag_name} || '%'
+		)
+		<choose>
+			<when test="feedArrayType == 'default' ">
+				order by inputdate desc
+			</when>
+			<when test="feedArrayType == 'popular' ">
+				order by like_count desc
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
 	</select>
 
 	<!-- 해당 해시태그가 이미 존재하는 경우 아무런 작업을 하지 않음 -->
 	<insert id="insertHashtag" parameterType="String">
-	    MERGE INTO ringo_tagstorage d
-	    USING (SELECT #{hashtag} AS tag_name FROM dual) s
-	    ON (d.tag_name = s.tag_name)
-	    WHEN NOT MATCHED THEN
-	        INSERT (tag_num, tag_name)
-	        VALUES (tag_num_seq.NEXTVAL, s.tag_name)
+		MERGE INTO ringo_tagstorage d
+		USING (SELECT #{hashtag} AS tag_name FROM dual) s
+		ON (d.tag_name = s.tag_name)
+		WHEN NOT MATCHED THEN
+		INSERT (tag_num, tag_name)
+		VALUES (tag_num_seq.NEXTVAL, s.tag_name)
 	</insert>
 
-	<select id="getTagNumByTagName" parameterType="String" resultType="int">
-		SELECT tag_num FROM ringo_tagstorage WHERE tag_name = #{hashtag}
+	<select id="getTagNumByTagName" parameterType="String"
+		resultType="int">
+		SELECT tag_num FROM ringo_tagstorage WHERE tag_name =
+		#{hashtag}
 	</select>
-	
+
 	<insert id="linkHashtagToFeed" parameterType="map">
-	    INSERT INTO ringo_taglink_feed (feed_num, tag_num, link_num)
-	    VALUES (#{newFeedNum}, #{tagNum}, link_num_seq.nextval)
+		INSERT INTO ringo_taglink_feed (feed_num, tag_num, link_num)
+		VALUES (#{newFeedNum}, #{tagNum}, link_num_seq.nextval)
 	</insert>
 	<!-- 태그 관련 기능 끝 -->
 
@@ -207,35 +217,38 @@
 	<delete id="feedDeleteByUser" parameterType="java.util.HashMap">
 		delete ringo_feed
 		where feed_num = #{feed_num}
-			and user_num =#{user_num}
+		and user_num =#{user_num}
 	</delete>
 	<!-- reply_num과 user_num을 기반으로 댓글의 작성자가 맞는지 확인후, 작성자가 맞다면 해당 댓글을 삭제하는 delete문 -->
 	<delete id="replyDeleteOne" parameterType="java.util.HashMap">
-	delete ringo_reply
-	where reply_num = #{reply_num}
+		delete ringo_reply
+		where reply_num = #{reply_num}
 		and user_num = #{user_num}
 	</delete>
 	<!-- 삭제 관련 기능 끝 -->
 	<!-- Mention 기능 시작 -->
 	<insert id="saveMention" parameterType="java.util.Map">
-	    INSERT INTO ringo_reply_mentions (
-	        mentioned_num,
-	        mentioned_username,
-	        reply_num,
-	        mentioned_user_num
-	    )
-	    VALUES (
-	        RINGO_REPLY_MENTIONS_SEQ.NEXTVAL,
-	        #{mentioned_username},
-	        #{reply_num},
-	        #{mentioned_user_num}
-	    )
+		INSERT INTO ringo_reply_mentions (
+		mentioned_num,
+		mentioned_username,
+		reply_num,
+		mentioned_user_num
+		)
+		VALUES (
+		RINGO_REPLY_MENTIONS_SEQ.NEXTVAL,
+		#{mentioned_username},
+		#{reply_num},
+		#{mentioned_user_num}
+		)
 	</insert>
-	
-	<select id="memberInformationByusername" parameterType="String" resultType="Member">
-		select user_id, username, native_lang, target_lang, original_profile, introduction
+
+	<select id="memberInformationByusername" parameterType="String"
+		resultType="Member">
+		select user_id, username, native_lang, target_lang,
+		original_profile, introduction
 		from ringo_member
-		where username = #{username}
+		where username =
+		#{username}
 	</select>
 
 </mapper>

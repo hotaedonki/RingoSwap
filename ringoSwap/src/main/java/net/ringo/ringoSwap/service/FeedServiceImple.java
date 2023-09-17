@@ -27,12 +27,14 @@ public class FeedServiceImple implements FeedService{
 	//<<<<<<<<<<<------[피드 출력 기능 시작]----------------------
 	//모든 게시물을 최신순으로 리턴하는 메서드
 	@Override
-	public ArrayList<Feed> feedSelectAllWithFeedArrayType(String feedArrayType, String text){
+	public ArrayList<Feed> feedSelectAllWithFeedArrayType(String feedArrayType, String text, int offset, int limit){
 		HashMap<String, Object> map = new HashMap<>();	//매개변수 전달용 해시맵 변수
 		ArrayList<Feed> feedList = new ArrayList<>();			//피드목록 출력용 배열 변수
 
 		map.put("feedArrayType", feedArrayType);
 		map.put("text", text);
+		map.put("offset", offset);
+		map.put("limit", limit);
 	    log.debug("확인?{}", map);
 		feedList = dao.feedSelectAll(map);	//피드타입, 검색하는 문자열을 매개변수로 전달해 그에 따른 게시글 배열을 리턴하는 메서드 실행
 	    log.debug("확인완료 {}", feedList);

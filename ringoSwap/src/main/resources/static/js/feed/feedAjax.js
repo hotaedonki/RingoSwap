@@ -1,10 +1,13 @@
-function feedPrint(optionalRes) {
+let offset = 0;
+const limit = 5;
+
+function feedPrint(optionalRes, newLoad = true) {
     let text = $('#searchInput').val();
     console.log(text);
     
     if (optionalRes) {
 		console.log("해시태그 클릭 후 feedPrint 반환 값 ", optionalRes)
-        renderFeeds(optionalRes);
+        renderFeeds(optionalRes, newLoad);
         return;
     }
 
@@ -13,10 +16,13 @@ function feedPrint(optionalRes) {
         type: "post",
         data: {
             feedArrayType: "default",
-            text : text
+            text : text,
+            offset: offset,
+            limit: limit
         },
         success: function(res) {	
-            renderFeeds(res);
+			console.log(res)
+            renderFeeds(res, newLoad);
         },
         error: function(error) {
             console.log(error);
@@ -25,12 +31,14 @@ function feedPrint(optionalRes) {
 }
 
 
-function renderFeeds(res) {
+function renderFeeds(res, newLoad) {
+	if(newLoad) {
+		$(".feed-display-area .col-12").empty();
+	}
+	
 	console.log("renderFeeds의 res값: ", res)
 	let feeds = res.feedList;
 	let likeCheck = res.likeCheckMap;
-	
-	$(".feed-display-area .col-12").empty();
     $(".left-area, .middle-area").show();
 	$("#feedDetail").hide();
 	
@@ -63,7 +71,33 @@ function renderFeeds(res) {
         `);
     });
     $(".feed-display-area .col-12").show();
+    $('#load-more').remove();
     console.log('완성');
+        
+    if (feeds.length < limit) {
+        $(".feed-display-area .col-12").append(`
+            <div id="end-message" style="text-align: center; margin: 10px 0; color: gray;">마지막입니다</div>
+        `);
+    } else {
+        $(".feed-display-area .col-12").append(`
+            <button id="load-more" style="display: inline-block; width: 100%; padding: 10px; margin: 10px 0; border: none; background-color: #f0f0f0; cursor: pointer;">더 보기</button>
+        `);
+
+        // "더 보기" 버튼 클릭 이벤트 핸들러
+        $('#load-more').off('click').on('click', function() {
+            offset += limit;  // offset 업데이트
+            feedPrint(null, false);  // 추가 피드 로드
+
+            // 로딩 표시 추가
+            $(".feed-display-area .col-12").append(`
+                <div class="spinner-border text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            `);
+        });
+    }
+
+    $(".feed-display-area .col-12 .spinner-border").remove();
 }
 
 function feedDetail() {

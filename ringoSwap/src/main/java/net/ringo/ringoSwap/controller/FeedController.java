@@ -86,14 +86,16 @@ public class FeedController {
 	public Map<String, Object> feedPrintAll(
 			@AuthenticationPrincipal UserDetails user
 			, @RequestParam(name = "feedArrayType", defaultValue = "default") String feedArrayType
-			, @RequestParam(name="text", defaultValue = "null") String text) {
+			, @RequestParam(name="text", defaultValue = "null") String text
+			, @RequestParam(defaultValue = "0") int offset
+	        , @RequestParam(defaultValue = "5") int limit) {
 		Map<String, Object> map = new HashMap<>();
 	    ArrayList<Feed> feedList = new ArrayList<>(); // 피드목록 출력용 배열 변수
 	    int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 
 	    // 피드배열방식을 매개변수로 넘기고 배열방식에 따라 정렬된 게시글 목록을 리턴받는 메서드 실행
 	    log.debug("확인?{}");
-	    feedList = service.feedSelectAllWithFeedArrayType(feedArrayType, text);
+	    feedList = service.feedSelectAllWithFeedArrayType(feedArrayType, text, offset, limit);
 	    log.debug("확인완료 {}", feedList);
 
 	    // 각 피드에 대한 좋아요 클릭 여부를 저장할 Map
@@ -215,7 +217,6 @@ public class FeedController {
 		if (hashtagsJson != null && !hashtagsJson.trim().isEmpty()) {
 			//Json 문자열을 Java객체로 변환함, 첫번째 객체를 두번째 객체로 변환
 	        String[] hashtags = new Gson().fromJson(hashtagsJson, String[].class);
-	        log.debug("존슨에 들어왔는지: {}", hashtags[0]);
 	        for (String hashtag : hashtags) {
 	        	Map<String, Object> hashtagLinkMap = new HashMap<>();
 	        	hashtag = hashtag.substring(1);
