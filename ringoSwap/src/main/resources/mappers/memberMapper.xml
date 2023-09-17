@@ -191,4 +191,9 @@
 		where user_id = #{user_id}
 	</select>
 	
+	<select id="getUsernameByUserNum" parameterType="int" resultType="String">
+		select username
+		from ringo_member
+		where user_num = #{user_num}
+	</select>
 </mapper>

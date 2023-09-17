@@ -66,4 +66,7 @@ public interface MemberService
 	public int getUserIdByUsername(String username);
 	//홈에 닉네임 띄우기
 	public String usernameByUserId(String userId);
+
+	//유저의 고유번호로 닉네임을 가져옴
+	public String getUsernameByUserNum(int user_num);
 }

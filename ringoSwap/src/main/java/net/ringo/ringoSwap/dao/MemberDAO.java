@@ -68,4 +68,7 @@ public interface MemberDAO
 	//@멘션 기능을 위한 username으로 해당 유저의 num값을 가져오는 메서드 
 	public int getUserIdByUsername(String username);
 	public String usernameByUserId(String userId);
+	
+	// 유저 고유 번호로 닉네임을 가져온다.
+	public String getUsernameByUserNum(int user_num);
 }

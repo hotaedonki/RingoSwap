@@ -217,4 +217,11 @@ public class MemberServiceImple implements MemberService
 	public String usernameByUserId(String userId) {
 		return dao.usernameByUserId(userId);
 	}
+	
+	// 유저 고유 번호로 닉네임을 가져온다.
+	@Override
+	public String getUsernameByUserNum(int user_num) 
+	{
+		return dao.getUsernameByUserNum(user_num);
+	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -16,7 +17,6 @@ import net.ringo.ringoSwap.dao.ChatDAO;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
-import net.ringo.ringoSwap.websocket.ChatHandler;
 
 /*
 	채팅 서비스 클래스 : 여기서 사용되는 findAllRoom, createRoom,findRoomById 등은 사실상 DB와 연결되는 순간 DAO로 넘어가야 합니다.
@@ -31,9 +31,7 @@ import net.ringo.ringoSwap.websocket.ChatHandler;
 @Data
 @Service
 public class ChatServiceImple implements ChatService
-{
-	private final ObjectMapper mapper;
-	
+{	
 	@Autowired
 	private ChatDAO dao;
 	
@@ -98,12 +96,6 @@ public class ChatServiceImple implements ChatService
 	}
 
 	@Override
-	public int sendMessage(ChatCommon cc) 
-	{
-		return dao.sendMessage(cc);
-	}
-
-	@Override
 	public int deleteMessage(ArrayList<ChatCommon> cc) 
 	{
 		return dao.deleteMessage(cc);
@@ -119,25 +111,6 @@ public class ChatServiceImple implements ChatService
 	public ArrayList<Chatroom> loadChatRooms(ArrayList<ChatroomLink> chatroomLinks) 
 	{
 		return dao.loadChatRooms(chatroomLinks);
-	}
-
-	@Override
-	public ArrayList<ChatCommon> loadMessage(int chatroom_num) 
-	{
-		return dao.loadMessage(chatroom_num);
-	}
-
-	@Override
-	public void sendMessageWeb(WebSocketSession session, ChatCommon message) 
-	{
-		try
-		{
-			session.sendMessage(new TextMessage(mapper.writeValueAsString(message)));
-		}
-		catch (IOException e)
-		{
-			log.error(e.getMessage(), e);
-		}
 	}
 
 	@Override
@@ -159,8 +132,15 @@ public class ChatServiceImple implements ChatService
 	}
 
 	@Override
-	public Object sendMessage(WebSocketSession sessions, ChatCommon message) {
-		// TODO Auto-generated method stub
-		return null;
+	public int insertChatCommon(ChatCommon chat) 
+	{
+		return dao.insertChatCommon(chat);
 	}
+
+	@Override
+	public ArrayList<ChatCommon> loadMessageByChatroomNum(int chatroom_num) {
+		// TODO Auto-generated method stub
+		return dao.loadMessageByChatroomNum(chatroom_num);
+	}
+
 }

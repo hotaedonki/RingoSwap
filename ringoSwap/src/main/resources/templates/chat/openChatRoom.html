@@ -132,7 +132,7 @@
           <div class="block">
             <!--채팅목록 프로필사진-->
             <div class="imgbx">
-              <img src="../img/img1.jpg" class="cover">
+              <!-- <img src="../img/img1.jpg" class="cover"> -->
             </div>
             <div class="details">
               <div class="listHead">
@@ -155,15 +155,18 @@
           <ion-icon name="menu-outline"></ion-icon>
         </div>
       </div>
-      <!-- chatbox -->
+	  <!-- chatbox -->
       <ul class="chatbox">
         <li class="msg_content">
-          <div class="chat incoming">
-            <p>Hi<br><span>12:15</span></p>
+		  <div th:each="msg, i : ${messages}">
+		  	<div th:if="${msg.user_num == myChatroomLink.user_num}" class="chat outcoming">
+		  		<p th:text="${msg.message}"></p>
+		  	</div>
+		  	
+		  	<div th:if="${msg.user_num != myChatroomLink.user_num}" class="chat outcoming">
+		  		<p th:text="${msg.message}"></p>
+		  	</div>
           </div>
-          <li class="chat outcoming">
-              <p>Hello. Nice to meet you<br><span>12:16</span></p>
-          </li>
         </li>
       </ul>
         <!-- chat input -->
@@ -171,7 +174,7 @@
           <ion-icon name="happy-outline"></ion-icon>
           <ion-icon name="attach-outline"></ion-icon>
           <ion-icon name="mic"></ion-icon>
-          <input type="text" class="msg_input" placeholder="메세지를 입력하세요">
+          <input type="text" id="msg_input" class="msg_input" placeholder="메세지를 입력하세요">
           <button type="submit" id="msg_submit" class="btn btn-primary">Send</button>
         </div>
       </div>
