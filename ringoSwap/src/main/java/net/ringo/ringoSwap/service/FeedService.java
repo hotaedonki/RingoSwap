@@ -55,7 +55,7 @@ public interface FeedService {
 	//태그랑 피드 연결
 	public int linkHashtagToFeed(Map<String, Object> hashtagLinkMap);
 	// 오프캔버스
-	public Member showOffcanvasWithUserData(String username);
+	public Member showOffcanvasWithUserData(String nickname);
 	
 	
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>

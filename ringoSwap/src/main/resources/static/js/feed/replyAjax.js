@@ -55,11 +55,11 @@ function replyPrint(feedNum) {
 			            <div class="comment-item">
 			                <div class="row comment-area">
 			                	<div class="row comment-1 d-flex align-items-center" style="margin-bottom: 0px;">
-				                	<div class="col-1 showOffcanvasWithUserData" data-user-name="${comment.username}">
+				                	<div class="col-1 showOffcanvasWithUserData" data-user-name="${comment.nickname}">
 				                        <img src="../member/memberProfilePrint?user_id=${comment.user_id}" alt="User Photo" class="user-photo-reply"> 
 				                    </div>
-				                    <div class="col-3 showOffcanvasWithUserData" data-user-name="${comment.username}">
-				                        <span class="user-id">${comment.username}</span>
+				                    <div class="col-3 showOffcanvasWithUserData" data-user-name="${comment.nickname}">
+				                        <span class="user-id">${comment.nickname}</span>
 				                    </div>
 				                    <div class="col-7"> 
 				                        <span class="comment-text nestedReply">${comment.contents}</span>			                        
@@ -76,7 +76,7 @@ function replyPrint(feedNum) {
 				                        <small>좋아요 <span class="like-count" data-reply-num="${comment.reply_num}">${comment.like_count}</span>개</small>
 				                    </div>
 				                    <div class="col-2">
-				                        <small class="write-nested-reply" data-username-id="${comment.username}">답글달기</small>
+				                        <small class="write-nested-reply" data-nickname-id="${comment.nickname}">답글달기</small>
 				                    </div>
 				                    <div class="col-2">
 				                        <button class="btn btn-primary reply-delete-btn btn-sm ml-2" data-reply-num="${comment.reply_num}">삭제</button>
@@ -134,7 +134,7 @@ function replyPrint(feedNum) {
 				            			<img src="../member/memberProfilePrint?user_id=${comment.user_id}" alt="User Photo" class="user-photo-reply">
 					            	</div>
 					            	<div class="col-2 nested-goToOtherProfile">
-						                <span class="nested-reply-user">${nestedReply.username}</span>
+						                <span class="nested-reply-user">${nestedReply.nickname}</span>
 					            	</div>
 					            	<div class="col-6">
 					            		<span class="nested-reply-text">${nestedReply.contents}</span>
@@ -151,7 +151,7 @@ function replyPrint(feedNum) {
 				                        <small>좋아요 <span class="like-count" data-reply-num="${nestedReply.reply_num}">${nestedReply.like_count}</span>개</small>
 				                    </div>
 				                    <div class="col-2">
-				                        <small class="write-nested-reply" data-username-id="${nestedReply.username}">답글달기</small>
+				                        <small class="write-nested-reply" data-nickname-id="${nestedReply.nickname}">답글달기</small>
 				                    </div>
 				                    <div class="col-2">
 				                        <button class="btn btn-primary reply-delete-btn btn-sm ml-2" data-reply-num="${nestedReply.reply_num}">삭제</button>
@@ -215,14 +215,14 @@ function insertNestedReply() {
 }
 
 function writeNestedReply() {
-    const TagUserName = $(this).data('username-id');
+    const TagNickname = $(this).data('nickname-id');
     const parentReplyNum = $(this).closest('.comment-list').data('reply-id');
     
-    console.log("writeNestedReply : ", TagUserName, parentReplyNum)
+    console.log("writeNestedReply : ", TagNickname, parentReplyNum)
     
     $(this).closest('.comment-list').find(".show-nested-reply-form").toggle();
     $(this).closest('.comment-list').find(".follow-search-input")
-    	.val("@" + TagUserName + " ")
+    	.val("@" + TagNickname + " ")
        .data('parent-reply-num', parentReplyNum); // Set the parent reply num in data attribute
 }
 
@@ -281,13 +281,13 @@ function followSearchInput() {
 	const atIndex = inputVal.lastIndexOf('@');
 	
 	if (atIndex !== -1) {
-		const username = inputVal.substring(atIndex + 1);
+		const nickname = inputVal.substring(atIndex + 1);
 		
-		if (username.length > 0) {
+		if (nickname.length > 0) {
 			$.ajax({
 				url: 'followeeSearch'
 				, type: 'post'
-				, data: {username: username}
+				, data: {nickname: nickname}
 				, success: function(followee) {
 					createDropdownList(followee)
 				},
@@ -305,10 +305,10 @@ function createDropdownList(followee) {
     followee.forEach(item => {
         const dropdownItem = $(`<a class="dropdown-item" href="#">${item.followee_name}</a>`);
         dropdownItem.on('click', function() {
-            const username = $(this).text();
+            const nickname = $(this).text();
             const inputField = $('.your-input-class');
             const currentValue = inputField.val();
-            const newValue = currentValue.replace(/@[a-zA-Z0-9_]+$/, '@' + username);
+            const newValue = currentValue.replace(/@[a-zA-Z0-9_]+$/, '@' + nickname);
             inputField.val(newValue);
         });
         dropdownMenu.append(dropdownItem);
