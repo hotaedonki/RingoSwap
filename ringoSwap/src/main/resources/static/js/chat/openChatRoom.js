@@ -26,6 +26,8 @@ function init()
 	myChatroomLinkInfo = document.getElementById("myChatroomLink").value;
 	myUserNum = findValueByKey("user_num", myChatroomLinkInfo);
 	url = new URL(location.href).searchParams;
+	
+	ScrollDown();
 }
 
 // 원하는 키 값을 getElementById('E_ID').value 형태로 받아오는 경우 value 안에 키를 찾아줌
@@ -149,6 +151,7 @@ function onMessageReceived(message)
 				// case가 TALK인 경우에는 새 메시지를 추가해서 붙혀준다.
 				case 'TALK':
 					console.log("메시지:", messageValue);
+					ScrollDown();
 					break;
 			}
         } 
@@ -161,6 +164,12 @@ function onMessageReceived(message)
     {
         console.error("body가 존재하지 않습니다.");
     }
+}
+
+function ScrollDown()
+{
+	let chatBox = document.querySelector('.chatbox'); // 채팅 박스에 대한 참조
+    chatBox.scrollTop = chatBox.scrollHeight; // 스크롤을 맨 아래로 이동
 }
 
 /*
