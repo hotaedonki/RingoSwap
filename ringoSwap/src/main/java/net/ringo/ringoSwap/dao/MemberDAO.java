@@ -57,6 +57,8 @@ public interface MemberDAO
 	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map);
 	//사용자가 특정 회원을 팔로우하는 메서드
 	public int followInsert(HashMap<String, Object> map);
+	//해당 팔로우를 삭제해 언팔로우하는 메서드
+	public int followDelete(HashMap<String, Object> map);
 	//특정 회원이 다른 회원을 팔로우 했는지 확인하는 메서드
 	public int followSearch(HashMap<String, Object> map);
 	//특정 회원이 다른 회원과 친구상태인지 확인하는 메서드
