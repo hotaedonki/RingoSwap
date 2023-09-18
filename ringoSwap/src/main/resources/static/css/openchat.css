@@ -415,15 +415,17 @@ body {
 
 /* openchat 참가자 목록 */
 .container .participants_list_box {
-  display: flex;
+  position: relative; /* 상대 위치 지정 */
   flex-direction: column;
-  justify-content: space-between;
   text-align: flex-start;
   background: #fff;
+  width: 12em;
 }
 .voice_participation {
-  display: flex-start;
-  align-items:flex-start;
+  position: absolute; /* 절대 위치 지정 */
+  bottom: 0;  /* 하단에 위치 */
+  left: 50%;  /* 가로 방향 중앙에 위치 */
+  transform: translateX(-50%);  /* 정확히 중앙에 오도록 좌표 조정 */
   background-color: #fff;
   padding: 20px;
 }
@@ -432,7 +434,7 @@ body {
 } 
 
 .toggle {
-  margin-top: 12px;
+  margin-top: 20px;
   position: absolute;
   background-color: #cdf1ea;
   top: 0;
@@ -444,3 +446,4 @@ body {
   padding: 2px;
   cursor: pointer;
 }
+
