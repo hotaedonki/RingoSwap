@@ -17,6 +17,7 @@ import net.ringo.ringoSwap.dao.ChatDAO;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
+import net.ringo.ringoSwap.enums.webService.MessageType;
 
 /*
 	채팅 서비스 클래스 : 여기서 사용되는 findAllRoom, createRoom,findRoomById 등은 사실상 DB와 연결되는 순간 DAO로 넘어가야 합니다.
@@ -83,64 +84,110 @@ public class ChatServiceImple implements ChatService
 		return true;
 	}
 
+	// 채팅방 링크를 DB에 저장한다.
 	@Override
 	public int createChatroomLink(ChatroomLink chatroomLink) 
 	{
 		return dao.createChatroomLink(chatroomLink);
 	}
-
+	
+	// 채팅방의 nextval 최대값을 가져온다.
 	@Override
 	public int getMaxChatroomNum() 
 	{
 		return dao.getMaxChatroomNum();
 	}
 
+	// 메세지를 지운다
 	@Override
 	public int deleteMessage(ArrayList<ChatCommon> cc) 
 	{
 		return dao.deleteMessage(cc);
 	}
 	
+	// 채팅방 링크를 해당 유저 기준으로 가져온다.
 	@Override
 	public ArrayList<ChatroomLink> getChatroomLinks(int userNum) 
 	{
 		return dao.getChatroomLinks(userNum);
 	}
 
+	// 채팅방들을 채팅방 링크들 기준을 가져온다.
 	@Override
 	public ArrayList<Chatroom> loadChatRooms(ArrayList<ChatroomLink> chatroomLinks) 
 	{
 		return dao.loadChatRooms(chatroomLinks);
 	}
 
+	// 채팅방을 채팅 고유 번호 기준으로 가져온다.
 	@Override
 	public Chatroom getChatroomById(int chatroom_num) 
 	{
 		return dao.getChatroomById(chatroom_num);
 	}
 
+	// 채팅방 링크들을 채팅방 고유 번호 기준을 가져온다.
 	@Override
 	public ArrayList<ChatroomLink> getChatroomLinksByChatroomNum(int chatroom_num) 
 	{
 		return dao.getChatroomLinksByChatroomNum(chatroom_num);
 	}
-
+	
+	// 해당 유저의 채팅방 링크를 가져온다.
 	@Override
 	public ChatroomLink getChatroomLinkByUserNum(int userNum) 
 	{
 		return dao.getChatroomLinkByUserNum(userNum);
 	}
-
+	
+	// 채팅 메시지(ChatCommon)를 저장한다.
 	@Override
 	public int insertChatCommon(ChatCommon chat) 
 	{
 		return dao.insertChatCommon(chat);
 	}
 
+	// 해당 채팅방 번호 기준을 메세지들을 가져온다.
 	@Override
 	public ArrayList<ChatCommon> loadMessageByChatroomNum(int chatroom_num) {
 		// TODO Auto-generated method stub
 		return dao.loadMessageByChatroomNum(chatroom_num);
 	}
 
+	// 현재 열려있는 모든 채팅방을 가져온다.
+	@Override
+	public ArrayList<Chatroom> getOpenChatrooms() 
+	{
+		return dao.getOpenChatrooms();
+	}
+
+	@Override
+	public ChatCommon insertChatCommonAndGetChatCommon(ChatCommon chat) 
+	{
+        int isSuccessedSaveChat = dao.insertChatCommon(chat);
+        
+        if (isSuccessedSaveChat <= 0)
+        {
+        	log.debug("DB에 ChatCommon 저장 실패");
+        	return null;
+        }
+        
+        ChatCommon dbChat = dao.getChatCommonLatest();
+        
+        if (dbChat == null)
+        {
+        	log.debug("dbChat 불러오기 실패");
+        	return null;
+        }
+        
+        dbChat.setType(MessageType.TALK);
+        
+        return dbChat;
+	}
+
+	@Override
+	public int getMaxChatNum() 
+	{
+		return dao.getMaxChatNum();
+	}
 }

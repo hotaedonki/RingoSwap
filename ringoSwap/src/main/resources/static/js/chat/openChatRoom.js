@@ -68,7 +68,7 @@ function connect()
     {
 		const chatCommon = 
 		{
-			type: 'TALK', // MessageType.ENTER와 동일
+			type: 'TALK', // 메시지 타입
 			chat_num: "", // 채팅 번호
 			user_num: myUserNum, // 사용자 번호
 			chatroom_num: chatroomNum, // 채팅방 번호
@@ -105,7 +105,9 @@ function onConnected()
 
 	stompClient.send('/pub/chat/openChatRoomEnter/' + chatroomNum, {}, JSON.stringify(chatCommon));
 	
-	// sub 할 url => /sub/chat/openChatRoom/message/채팅방번호 로 구독한다
+	// 입장, 퇴장 관련 메시지를 받는 이벤트
+	stompClient.subscribe('/sub/chat/openChatRoom/message/state/' + chatroomNum, onMessageForState)
+	// 메시지를 받는 이벤트 => /sub/chat/openChatRoom/message/채팅방번호 로 구독한다
 	stompClient.subscribe('/sub/chat/openChatRoom/message/' + chatroomNum, onMessageReceived);
 }
 
@@ -116,9 +118,49 @@ function onError(error)
     connectingElement.style.color = 'red';
 }
 
-function onMessageReceived(message)
+// 입장, 퇴장 시에 실행하는 함수
+function onMessageForState(message)
 {
 	console.log(message);
+}
+
+// 채팅 메시지를 받을때 실행하는 함수
+function onMessageReceived(message) 
+{
+    //console.log(message);
+    
+    // message의 body 속성을 가져와서 파싱
+    const bodyString = message.body;
+    if (bodyString) 
+    {
+        try 
+        {
+            const bodyObj = JSON.parse(bodyString);
+            const messageValue = bodyObj.message;  // "message" 키의 값을 가져옴
+            const type = bodyObj.type;  // "message" 키의 값을 가져옴
+            //console.log("메시지 :", messageValue);
+            //console.log("타입 :", type);  //
+            
+            if (type == null)
+            	return;
+            	
+            switch (type)
+            {
+				// case가 TALK인 경우에는 새 메시지를 추가해서 붙혀준다.
+				case 'TALK':
+					console.log("메시지:", messageValue);
+					break;
+			}
+        } 
+        catch (error) 
+        {
+            console.error("JSON 파싱 에러:", error);
+        }
+    } 
+    else 
+    {
+        console.error("body가 존재하지 않습니다.");
+    }
 }
 
 /*

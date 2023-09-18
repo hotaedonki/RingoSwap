@@ -216,15 +216,17 @@
                             <th>host</th>
                         </tr>
                     </thead>
+                    
+                    <!--
                     <tbody class="chatroom_list_tbody">
                         <tr>
                             <td>jpn</td>
                             <td class="text_align_left">only use japanese</td>
                             <td>3/6</td>
-                            <td class="text_align_left">일본어잘하고싶다</td><!--보이스룸 호스트 닉네임-->
+                            <td class="text_align_left">일본어잘하고싶다</td>
                         </tr>
                     </tbody>
-
+                    -->
                     <tbody th:each="room : ${chatrooms}" class="chatroom_list_tbody">
                         <tr>
                             <td><input type="hidden" th:id="${room.chatroom_num}" th:value="${room.chatroom_num}"><p th:text="${room.lang_category}"></p></td>

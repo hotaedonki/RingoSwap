@@ -173,5 +173,41 @@
 			ringo_chat_common
 		where
 			chatroom_num = #{chatroom_num}
+		order by
+			INPUTDATE
+	</select>
+	
+	<!-- 오픈 채팅방들 목록을 가져온다 -->
+	<select id="getOpenChatrooms" resultType="Chatroom">
+		select
+			*
+		from
+			ringo_chatroom
+		where
+			gen_category = 'voice'
+		order by
+			modifie_date desc
+	</select>
+	
+	<!-- 챗커먼의 Chat_num 최대 값을 가져온다 -->
+	<select id="getMaxChatNum" resultType="int">
+		select
+			max(chat_num) as chat_num
+		from
+			ringo_chat_common
+	</select>
+	
+	<!-- Chat_num의 MAX 값으로 챗커먼을 가져옴(가장 최신순) -->
+	<select id="getChatCommonLatest" resultType="ChatCommon">
+	SELECT *
+		FROM (
+				SELECT 
+					*
+				FROM 
+					ringo_chat_common
+				ORDER BY 
+					INPUTDATE DESC
+			)
+		WHERE ROWNUM = 1
 	</select>
 </mapper>
