@@ -173,8 +173,8 @@ public class FeedServiceImple implements FeedService{
 		return dao.linkHashtagToFeed(hashtagLinkMap);
 	}
 	@Override
-	public Member showOffcanvasWithUserData(String username) {
-		return dao.memberInformationByusername(username);
+	public Member showOffcanvasWithUserData(String nickname) {
+		return dao.memberInformationByNickname(nickname);
 	}
 	
 	
