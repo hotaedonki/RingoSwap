@@ -398,7 +398,7 @@ public class MemberController
 	@ResponseBody
 	@PostMapping("nicknamePrint") 
 	public String nicknamePrint(@AuthenticationPrincipal UserDetails user) {
-		return service.usernameByUserId(user.getUsername());
+		return service.nicknameByUserId(user.getUsername());
 		
 	}
 	

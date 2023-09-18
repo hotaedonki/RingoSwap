@@ -52,9 +52,9 @@ function renderFeeds(res, newLoad) {
 	     console.log(feed);
 		$('.feed-display-area .col-12').append(`
             <div class="card feed-card" data-feed-num="${feed.feed_num}">
-                <div class="card-header feed-header showOffcanvasWithUserData" data-user-name="${feed.username}"> 
+                <div class="card-header feed-header showOffcanvasWithUserData" data-user-name="${feed.nickname}"> 
                 	<img src="../member/memberProfilePrint?user_id=${feed.user_id}" alt="Poster Image" class="posterImage"> 
-                    <span class="feedUser">${feed.username}</span>
+                    <span class="feedUser">${feed.nickname}</span>
                     <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
                 </div>
                 <div class="card-body">
@@ -132,9 +132,11 @@ function feedDetail() {
              
             $('#feedDetail').append(`
                     <div class="card feed-card" data-feed-num="${detail.feed.feed_num}">
-                    <div class="card-header showOffcanvasWithUserData" style="width: 100%;" data-user-name="${detail.feed.username}">
-                        <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage"> 
-                        <span class="feedUser">${detail.feed.user_id}</span>
+                    <div class="card-header" style="width: 100%;">
+                        <div class="showOffcanvasWithUserData" data-user-name="${detail.feed.nickname}">
+                            <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage"> 
+                            <span class="feedUser">${detail.feed.nickname}</span>
+                        </div>
                         <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">
                             <i class="bi bi-arrow-return-left returnFeedMain"></i>
                         </button>
@@ -301,11 +303,11 @@ function feedDelete(){
 }
 
 function followerSearch(){
-    let username = $('.justify-content-center .searchFollower').val();
+    let nickname = $('.justify-content-center .searchFollower').val();
     $.ajax({
         url: "followerSearch",
         type: "post",
-        data: {username : username},
+        data: {nickname : nickname},
         dataType:'json',
         success:function(followerList){
             if(followerList){
@@ -313,7 +315,7 @@ function followerSearch(){
                 console.log(followerList);
                 followerList.forEach(follower => {
                     $('.followerBox').append(`
-                    <div><img src="" alt="Poster Image" class="posterImage feedUser" data-username="${follower.follower_name}"> 
+                    <div><img src="" alt="Poster Image" class="posterImage feedUser" data-nickname="${follower.follower_name}"> 
                         <img src="../member/memberProfilePrint?user_id=${follower.follower_id}" style="width:25px; height:25px; border-radius:12px;" alt="Profile Picture" />
                         <span >${follower.follower_name}</span>
                         <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" />
@@ -333,11 +335,11 @@ function followerSearch(){
 }
 
 function followeeSearch(){
-    let username = $('.justify-content-center .searchFollow').val();
+    let nickname = $('.justify-content-center .searchFollow').val();
     $.ajax({
         url: "followeeSearch",
         type: "post",
-        data: {username : username},
+        data: {nickname : nickname},
         dataType:'json',
         success:function(followeeList){
             console.log(followeeList);
@@ -346,7 +348,7 @@ function followeeSearch(){
                 followeeList.forEach(followee => {
                     console.log(followee);
                     $('.followBox').append(`
-                    <div><img src="" alt="Poster Image" class="posterImage feedUser" data-username="${followee.followee_name}"> 
+                    <div><img src="" alt="Poster Image" class="posterImage feedUser" data-nickname="${followee.followee_name}"> 
                         <img src="../member/memberProfilePrint?user_id=${followee.followee_id}" alt="Profile Picture" style="width:25px; height:25px; border-radius:12px;" />
                         <span >${followee.followee_name}</span>
                         <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" />
@@ -376,11 +378,11 @@ function hashtagHighlightAndClick(content) {
 }
 
 function followInsert(){
-    let name = document.getElementById('username').textContent;
+    let name = document.getElementById('nickname').textContent;
     $.ajax({
         url:'userFollowInsert',
         type: "post",
-        data: {username : name},
+        data: {nickname : name},
         dataType:'json',
         success:function(result){
             console.log(result);
@@ -389,12 +391,12 @@ function followInsert(){
     })
 }
 function followDelete(){
-    let name = document.getElementById('username').textContent;
+    let name = document.getElementById('nickname').textContent;
     console.log(name);
     $.ajax({
         url:'userFollowDelete',
         type: "post",
-        data: {username : name},
+        data: {nickname : name},
         dataType:'json',
         success:function(result){
             console.log(result);
