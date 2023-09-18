@@ -177,25 +177,25 @@ function scrollDown()
 // user_num이 자신의 아이디면 
 function createChatMsgBox(userNum, message)
 {
-	const divElement = document.createElement('div');
+	const liElement = document.createElement('li');
 	const pElement = document.createElement('p');
 
 	if (userNum == myUserNum)
 	{
-		divElement.classList.add('chat', 'outcoming');
+		liElement.classList.add('chat', 'outcoming');
 	}
 	else
 	{
-		divElement.classList.add('chat', 'incoming');
+		liElement.classList.add('chat', 'incoming');
 	}
 	pElement.setAttribute('text', message);
 	pElement.textContent = message;  // 실제 텍스트 내용도 '안녕'으로 설정
 
 	// 3. div의 자식으로 p를 추가
-	divElement.appendChild(pElement);
+	liElement.appendChild(pElement);
 
 	// 4. 부모 태그에 div 추가 (예를 들어, body 태그가 부모일 경우)
-	document.getElementById('msg_chatBoxArea').appendChild(divElement);
+	document.getElementById('msg_chatBoxArea').appendChild(liElement);
 }
 /*
 	참고 - 메시지 보내는 예시
