@@ -39,8 +39,9 @@ function initializeDocumentClickHandlers() {
     $(document).on('input', '.follow-search-input', followSearchInput);
     $(document).on('click', '.hashtag', hashtagSearch);
     $(document).on('input', '#searchInput', feedSearch);
-    $(document).on('click', '.feedUser', followCheck);
     $(document).on('click', '.goToOtherProfile', showOffcanvasWithUserData);
+    $(document).on('click', '#follow_button', followInsert);
+    $(document).on('click', '#unfollow_button', followDelete);
 }
 
 function initializeWindowEventHandlers() {

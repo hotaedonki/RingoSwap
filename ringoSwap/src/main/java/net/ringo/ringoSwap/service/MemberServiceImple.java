@@ -193,7 +193,7 @@ public class MemberServiceImple implements MemberService
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("followee_num", user_num);
 		map.put("follower_num", follower_num);
-		int methodResult = dao.followInsert(map);
+		int methodResult;		//메서드의 정상동작 여부를 확인하는 변수
 		//해당 회원과 친구상태였는지 확인하는 메서드
 		int check = dao.followSearchReturnFriendCheck(map);
 
@@ -201,10 +201,11 @@ public class MemberServiceImple implements MemberService
 			HashMap<String, Object> fmap = new HashMap<>();
 			fmap.put("followee_num", follower_num);
 			fmap.put("follower_num", user_num);
-			
-			methodResult = dao.followFriendRelease(map);
+
 			methodResult = dao.followFriendRelease(fmap);
 		}
+		//해당 회원과의 팔로우 상태를 해제한다.
+		methodResult = dao.followDelete(map);
 		
 		return methodResult;
 	}
