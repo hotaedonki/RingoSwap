@@ -135,7 +135,7 @@ function feedDetail() {
                     <div class="card-header" style="width: 100%;">
                         <div class="showOffcanvasWithUserData" data-user-name="${detail.feed.nickname}">
                             <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage"> 
-                            <span class="feedUser">${detail.feed.user_id}</span>
+                            <span class="feedUser">${detail.feed.nickname}</span>
                         </div>
                         <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">
                             <i class="bi bi-arrow-return-left returnFeedMain"></i>
