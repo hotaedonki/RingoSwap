@@ -27,7 +27,7 @@ function init()
 	myUserNum = findValueByKey("user_num", myChatroomLinkInfo);
 	url = new URL(location.href).searchParams;
 	
-	ScrollDown();
+	scrollDown();
 }
 
 // 원하는 키 값을 getElementById('E_ID').value 형태로 받아오는 경우 value 안에 키를 찾아줌
@@ -138,8 +138,9 @@ function onMessageReceived(message)
         try 
         {
             const bodyObj = JSON.parse(bodyString);
-            const messageValue = bodyObj.message;  // "message" 키의 값을 가져옴
-            const type = bodyObj.type;  // "message" 키의 값을 가져옴
+            const messageValue = bodyObj.message;
+            const type = bodyObj.type;
+            const userNumData = bodyObj.user_num;
             //console.log("메시지 :", messageValue);
             //console.log("타입 :", type);  //
             
@@ -151,7 +152,8 @@ function onMessageReceived(message)
 				// case가 TALK인 경우에는 새 메시지를 추가해서 붙혀준다.
 				case 'TALK':
 					console.log("메시지:", messageValue);
-					ScrollDown();
+					createChatMsgBox(userNumData, JSON.stringify(messageValue));
+					scrollDown();
 					break;
 			}
         } 
@@ -166,12 +168,35 @@ function onMessageReceived(message)
     }
 }
 
-function ScrollDown()
+function scrollDown()
 {
 	let chatBox = document.querySelector('.chatbox'); // 채팅 박스에 대한 참조
     chatBox.scrollTop = chatBox.scrollHeight; // 스크롤을 맨 아래로 이동
 }
 
+// user_num이 자신의 아이디면 
+function createChatMsgBox(userNum, message)
+{
+	const divElement = document.createElement('div');
+	const pElement = document.createElement('p');
+
+	if (userNum == myUserNum)
+	{
+		divElement.classList.add('chat', 'outcoming');
+	}
+	else
+	{
+		divElement.classList.add('chat', 'incoming');
+	}
+	pElement.setAttribute('text', message);
+	pElement.textContent = message;  // 실제 텍스트 내용도 '안녕'으로 설정
+
+	// 3. div의 자식으로 p를 추가
+	divElement.appendChild(pElement);
+
+	// 4. 부모 태그에 div 추가 (예를 들어, body 태그가 부모일 경우)
+	document.getElementById('msg_chatBoxArea').appendChild(divElement);
+}
 /*
 	참고 - 메시지 보내는 예시
 	

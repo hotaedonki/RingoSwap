@@ -158,9 +158,8 @@
 	  <!-- chatbox -->
       <ul class="chatbox">
         <li class="msg_content">
-		  <div th:each="msg, i : ${messages}">
+		  <div th:each="msg, i : ${messages}" id="msg_chatBoxArea">
 		  
-		  	
 		  	<div th:switch="${msg.user_num}">
 		  		<div th:case="${myChatroomLink.user_num}" class="chat outcoming"><p th:text="${msg.message}"></p></div>
 		  		<div th:case="*" class="chat incoming"><p th:text="${msg.message}"></p></div>
@@ -175,7 +174,6 @@
 		  		<p th:text="${msg.message}"></p>
 		  	</div>
 		  	-->
-		  	
           </div>
         </li>
       </ul>
