@@ -283,7 +283,7 @@
 						<i class="bi bi-search"></i>
 					</button>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body followerBox">
 					<div th:each="follower : ${followers}">
 						<img th:src="@{/img/고양.jpg}" alt="Profile Picture" /> <span
 							th:text="${follower.username}"></span> <img
@@ -313,7 +313,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="modal-body">
+					<div class="modal-body followBox">
 						123
 						<div th:each="follow : ${followe}">
 							<img th:src="@{/img/고양.jpg}" alt="Profile Picture" /> <span
@@ -342,15 +342,37 @@
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true"
 		tabindex="-1" id="offcanvasWithBothOptions"
 		aria-labelledby="offcanvasWithBothOptionsLabel">
-		<div class="offcanvas-header">
+		<div class="offcanvas-header text-center my-3">
 			<h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">User
 				Profile</h5>
 			<button type="button" class="btn-close" data-bs-dismiss="offcanvas"
 				aria-label="Close"></button>
 		</div>
-		<div class="offcanvas-body">
+		<div class="offcanvas-body text-center">
 			<div id="userProfileContent">
-				<!-- User data will be inserted here -->
+				<!-- 프로필 사진과 사용자 이름 -->
+				<div class="d-flex align-items-center mb-3 my-3 justify-content-center ">
+					<img id="original_profile" src="" alt="User Profile Picture"
+						class="posterImage rounded-circle me-3" style="width: 90px; height: 90px;">
+					<h5 id="username" class="mb-0 fs-3"></h5>
+				</div>
+
+				<!-- 타겟 언어와 모국어 -->
+				<div class="d-flex align-items-center mb-3 my-4 justify-content-center" >
+					<img id="target_lang_img" src="" alt="Target Language" class="me-4" style="width: 50px; height: 50px;">
+					 <p class="my-auto mx-1" style="margin: 0;"><--></p>
+					<img id="native_lang_img" src="" alt="Native Language" class="ms-4" style="width: 50px; height: 50px;">
+				</div>
+
+				<!-- 팔로우 및 메시지 버튼 -->
+				<div class="d-flex mb-3 my-4 justify-content-center">
+					<button type="button" id="follow_button"
+						class="btn btn-primary me-3" style="width: 96.63px;">Follow</button>
+					<button type="button" id="message_button" class="btn btn-primary ms-3">Message</button>
+				</div>
+
+				<!-- 사용자 소개 -->
+				<p id="introduction" class="my-4"></p>
 			</div>
 		</div>
 	</div>
@@ -368,7 +390,7 @@
 	<script th:src="@{../js/feed/utilities.js}"></script>
 	<script th:src="@{../js/feed/feedAjax.js}"></script>
 	<script th:src="@{../js/feed/replyAjax.js}"></script>
-	<!-- <script th:src="@{../js/feedMain.js}"></script> -->
+	<script th:src="@{../js/feed/offcanvas.js}"></script>
 	<script th:src="@{../js/memberView/myPage.js}"></script>
 
 </body>

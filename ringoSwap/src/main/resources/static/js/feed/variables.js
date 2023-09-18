@@ -3,7 +3,6 @@ let saved_feedNum = 0;  //History API를 사용한 피드 번호를 이용한 �
 let previousUrl = null;  //handlePopState에서 사용할 뒤로가기/앞으로가기 판별용 전역변수. 현재 주소를 담는다.
 
 function initializeEventHandlers() {
-   // $(".goToOtherProfile").click(showOffcanvasWithUserData);
     $(".profile-card").click(goToProfile);
     $(".feed-create-area").blur(collapseWrite);
     $(".post").on('click', createPost);
@@ -41,7 +40,9 @@ function initializeDocumentClickHandlers() {
     $(document).on('click', '.hashtag', hashtagSearch);
     $(document).on('input', '#searchInput', feedSearch);
     $(document).on('click', '.feedUser', followCheck);
-}
+    $(document).on('click', '.showOffcanvasWithUserData', showOffcanvasWithUserData);
+    //$(document).on('click', '.goToOtherProfile', goToOtherProfile);
+    }
 
 function initializeWindowEventHandlers() {
     window.addEventListener('popstate', handlePopState);
@@ -137,5 +138,5 @@ function hashtagSearch() {
 
 $(document).ready(function() {
     feedPrint();
-    initializeEventHandlers();
+    initializeEventHandlers();   
 });

@@ -9,13 +9,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import net.ringo.ringoSwap.domain.Feed;
 import net.ringo.ringoSwap.domain.FeedPhoto;
+import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.Reply;
 
 public interface FeedService {
 
 	//<<<<<<<<<<<------[피드 출력 기능 시작]----------------------
 	//모든 게시물을 매개변수로 받은 배열방식에 따라 최신순, 혹은 인기순(좋아요 순)으로 리턴하는 메서드
-	public ArrayList<Feed> feedSelectAllWithFeedArrayType(String feedArrayType, String text);
+	public ArrayList<Feed> feedSelectAllWithFeedArrayType(String feedArrayType, String text, int offset, int limit);
 	//feed_num을 매개변수로 특정 피드 게시글 정보를 리턴하는 메서드
 	public Feed feedSelectOneByFeedNum(int feed_num);
 	//feed_num을 매개변수로 특정 댓글 배열 정보를 리턴하는 메서드
@@ -53,6 +54,9 @@ public interface FeedService {
 	public int getTagNumByTagName(String hashtag);
 	//태그랑 피드 연결
 	public int linkHashtagToFeed(Map<String, Object> hashtagLinkMap);
+	// 오프캔버스
+	public Member showOffcanvasWithUserData(String username);
+	
 	
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 

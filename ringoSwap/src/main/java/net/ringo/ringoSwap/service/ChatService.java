@@ -19,8 +19,8 @@ public interface ChatService
 	public int createChatroomLink(ChatroomLink chatroomLink);
 
 	public int getMaxChatroomNum();
-
-	public int sendMessage(ChatCommon cc);
+	
+	public int getMaxChatNum();
 
 	public int deleteMessage(ArrayList<ChatCommon> cc);
 
@@ -30,13 +30,17 @@ public interface ChatService
 
 	public ArrayList<Chatroom> loadChatRooms(ArrayList<ChatroomLink> chatroomLinks);
 
-	public ArrayList<ChatCommon> loadMessage(int chatroom_num);
-
-	public void sendMessageWeb(WebSocketSession session, ChatCommon message);
-
 	public Chatroom getChatroomById(int chatroom_num);
 
 	public ChatroomLink getChatroomLinkByUserNum(int userNum);
 
-	public Object sendMessage(WebSocketSession sessions, ChatCommon message);
+	public int insertChatCommon(ChatCommon chat);
+
+	public ArrayList<ChatCommon> loadMessageByChatroomNum(int chatroom_num);
+
+	// 채팅방 리스트 가져오기
+	public ArrayList<Chatroom> getOpenChatrooms();
+
+	// ChatCommon 저장 후, 성공적으로 저장하면 다시 채팅방에 전달하기 위해 ChatCommon을 반환
+	public ChatCommon insertChatCommonAndGetChatCommon(ChatCommon chat);
 }

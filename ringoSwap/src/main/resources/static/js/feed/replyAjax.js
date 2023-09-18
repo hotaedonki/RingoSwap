@@ -55,10 +55,10 @@ function replyPrint(feedNum) {
 			            <div class="comment-item">
 			                <div class="row comment-area">
 			                	<div class="row comment-1 d-flex align-items-center" style="margin-bottom: 0px;">
-				                	<div class="col-1 goToOtherProfile">
+				                	<div class="col-1 showOffcanvasWithUserData" data-user-name="${comment.username}">
 				                        <img src="../member/memberProfilePrint?user_id=${comment.user_id}" alt="User Photo" class="user-photo-reply"> 
 				                    </div>
-				                    <div class="col-3 goToOtherProfile>
+				                    <div class="col-3 showOffcanvasWithUserData" data-user-name="${comment.username}">
 				                        <span class="user-id">${comment.username}</span>
 				                    </div>
 				                    <div class="col-7"> 

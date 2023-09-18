@@ -39,9 +39,12 @@ public class PathHandler
 	public final static String LOADCHATROOMS = "loadChatRooms";
 	public final static String LOADMESSAGE = "loadMessage";
 	public final static String CREATEROOMPAGE = "createRoomPage";
-	public final static String MM_OPENCHATROOMENTER = "/chat/openChatRoomEnter/";
-	public final static String MM_SENDMESSAGE = "/chat/sendMessage";
-
-	// Web socket, stomp, sockjs . . .
+	public final static String MM_OPENCHATROOMENTER = "/chat/openChatRoomEnter/{chatroomID}";
+	public final static String MM_OPENCHATROOMMESSAGE = "/chat/openChatRoom/message/{chatroomID}";
+	public final static String ST_OPENCHATROOMMESSAGE = "/sub/chat/openChatRoom/message/{chatroomID}";
+	public final static String ST_OPENCHATROOMMESSAGESTATE = "/sub/chat/openChatRoom/message/state/{chatroomID}";
+	
+	// Setting for Web socket, stomp, sockjs . . .
 	public final static String WS_STOMP = "/ws-stomp";
+	public final static String RINGO_WS_STOMP= "/ringo/ws-stomp";
 }

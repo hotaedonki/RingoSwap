@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.ringo.ringoSwap.enums.webService.MessageType;
 
 /*
  채팅 메시지에 대한 정보를 담는 클래스 : 채팅 내용에 대한 DTO
@@ -26,11 +27,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ChatCommon 
 {
-	public enum MessageType
-	{
-		ENTER, TALK, LEAVE
-	}
-	
 	private MessageType type;
 	int chat_num;
 	int user_num;

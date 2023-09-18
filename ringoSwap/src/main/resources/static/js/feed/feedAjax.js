@@ -1,10 +1,13 @@
-function feedPrint(optionalRes) {
+let offset = 0;
+const limit = 5;
+
+function feedPrint(optionalRes, newLoad = true) {
     let text = $('#searchInput').val();
     console.log(text);
     
     if (optionalRes) {
 		console.log("해시태그 클릭 후 feedPrint 반환 값 ", optionalRes)
-        renderFeeds(optionalRes);
+        renderFeeds(optionalRes, newLoad);
         return;
     }
 
@@ -13,10 +16,13 @@ function feedPrint(optionalRes) {
         type: "post",
         data: {
             feedArrayType: "default",
-            text : text
+            text : text,
+            offset: offset,
+            limit: limit
         },
         success: function(res) {	
-            renderFeeds(res);
+			console.log(res)
+            renderFeeds(res, newLoad);
         },
         error: function(error) {
             console.log(error);
@@ -25,12 +31,14 @@ function feedPrint(optionalRes) {
 }
 
 
-function renderFeeds(res) {
+function renderFeeds(res, newLoad) {
+	if(newLoad) {
+		$(".feed-display-area .col-12").empty();
+	}
+	
 	console.log("renderFeeds의 res값: ", res)
 	let feeds = res.feedList;
 	let likeCheck = res.likeCheckMap;
-	
-	$(".feed-display-area .col-12").empty();
     $(".left-area, .middle-area").show();
 	$("#feedDetail").hide();
 	
@@ -44,14 +52,9 @@ function renderFeeds(res) {
 	     console.log(feed);
 		$('.feed-display-area .col-12').append(`
             <div class="card feed-card" data-feed-num="${feed.feed_num}">
-<<<<<<< HEAD
-                <div class="card-header feed-header goToOtherProfile" data-user-id="${feed.user_id}"> 
+                <div class="card-header feed-header showOffcanvasWithUserData" data-user-name="${feed.username}"> 
                 	<img src="../member/memberProfilePrint?user_id=${feed.user_id}" alt="Poster Image" class="posterImage"> 
-                    <span >${feed.user_id}</span>
-=======
-                <div class="card-header feed-header"> 
-                    <span  class="feedUser" data-username="${detail.feed.username}">${feed.username}</span>
->>>>>>> c461079861cdfcca95dc313078a42e61a1b64d0e
+                    <span class="feedUser" data-username="${feed.username}">${feed.username}</span>
                     <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
                 </div>
                 <div class="card-body">
@@ -68,7 +71,33 @@ function renderFeeds(res) {
         `);
     });
     $(".feed-display-area .col-12").show();
+    $('#load-more').remove();
     console.log('완성');
+        
+    if (feeds.length < limit) {
+        $(".feed-display-area .col-12").append(`
+            <div id="end-message" style="text-align: center; margin: 10px 0; color: gray;">마지막입니다</div>
+        `);
+    } else {
+        $(".feed-display-area .col-12").append(`
+            <button id="load-more" style="display: inline-block; width: 100%; padding: 10px; margin: 10px 0; border: none; background-color: #f0f0f0; cursor: pointer;">더 보기</button>
+        `);
+
+        // "더 보기" 버튼 클릭 이벤트 핸들러
+        $('#load-more').off('click').on('click', function() {
+            offset += limit;  // offset 업데이트
+            feedPrint(null, false);  // 추가 피드 로드
+
+            // 로딩 표시 추가
+            $(".feed-display-area .col-12").append(`
+                <div class="spinner-border text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            `);
+        });
+    }
+
+    $(".feed-display-area .col-12 .spinner-border").remove();
 }
 
 function feedDetail() {
@@ -103,15 +132,9 @@ function feedDetail() {
              
             $('#feedDetail').append(`
                     <div class="card feed-card" data-feed-num="${detail.feed.feed_num}">
-<<<<<<< HEAD
-                    <div class="card-header goToOtherProfile" style="width: 100%;" data-user-id="${detail.feed.user_id}">
+                    <div class="card-header showOffcanvasWithUserData" style="width: 100%;" data-user-id="${detail.feed.username}">
                         <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage"> 
                         <span>${detail.feed.user_id}</span>
-=======
-                    <div class="card-header" style="width: 100%;">
-                        <img src="../member/memberProfilePrint?user_id=${detail.feed.user_id}" alt="Poster Image" class="posterImage feedUser" data-username="${detail.feed.username}"> 
-                        <span class="feedUser" data-username="${detail.feed.username}">${detail.feed.username}</span>
->>>>>>> c461079861cdfcca95dc313078a42e61a1b64d0e
                         <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">
                             <i class="bi bi-arrow-return-left returnFeedMain"></i>
                         </button>
@@ -287,6 +310,18 @@ function followerSearch(){
         success:function(followerList){
             if(followerList){
                 console.log(followerList);
+                followerList.forEach(follower => {
+                    $('.followBox').html('');
+                    $('.followerBox').append(`
+                    <div><img src="" alt="Poster Image" class="posterImage feedUser" data-username="${follower.follower_name}"> 
+                        <img src="../member/memberProfilePrint?user_id=${follower.follower_id}" style="width:25px; height:25px; border-radius:12px;" alt="Profile Picture" />
+                        <span >${follower.follower_name}</span>
+                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" />
+                        <img src="../img/일본어.jpg" alt="Learning Language" style="width:25px; height:25px; border-radius:12px;" />
+                        <button type="button" class="btn btn-primary">팔로우</button>
+                    </div>
+                    `);
+                })
             }else{
                 console.log('팔로워 검색');
             }
@@ -306,6 +341,18 @@ function followeeSearch(){
         dataType:'json',
         success:function(followeeList){
             if(followeeList){
+                followeeList.forEach(followee => {
+                    $('.followBox').html('');
+                    $('.followBox').append(`
+                    <div><img src="" alt="Poster Image" class="posterImage feedUser" data-username="${followee.followee_name}"> 
+                        <img src="../member/memberProfilePrint?user_id=${followee.followee_id}" alt="Profile Picture" style="width:25px; height:25px; border-radius:12px;" />
+                        <span >${followee.followee_name}</span>
+                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" />
+                        <img src="../img/일본어.jpg" alt="Learning Language" style="width:25px; height:25px; border-radius:12px;" />
+                        <button type="button" class="btn btn-primary">팔로우</button>
+                    </div>
+                    `);
+                })
                 console.log(followeeList);
             }else{
                 console.log('팔로우 검색');
@@ -324,4 +371,48 @@ function hashtagHighlightAndClick(content) {
         content = content.replace(new RegExp(hashtag, 'g'), styledHashtag);
     });
     return content;
+}
+
+function followCheck(){
+    let name = $(this).data('username');
+    $.ajax({
+        url: "followCheck",
+        type: "post",
+        data: {username : name},
+        dataType:'json',
+        success:function(result){
+            if(result == 0){
+                console.log('팔로우');
+                followInsert(name);
+            }else{
+                console.log('언팔로우');
+                followDelete(name);
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+function followInsert(name){
+    $.ajax({
+        url:'userFollowInsert',
+        type: "post",
+        data: {username : name},
+        dataType:'json',
+        success:function(result){
+            console.log(result);
+        },
+    })
+}
+function followDelete(name){
+    $.ajax({
+        url:'userFollowDelete',
+        type: "post",
+        data: {username : name},
+        dataType:'json',
+        success:function(result){
+            console.log(result);
+        },
+    })
 }

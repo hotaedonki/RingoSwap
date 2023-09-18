@@ -1,21 +1,112 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <!----======== CSS ======== -->
-    <link rel="stylesheet" type="text/css" href="../css/openchat.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/openchat.css}">
     <link rel="stylesheet" th:href="@{../css/sidebar.css}">
-    <link rel="stylesheet"
-	th:href="@{/bootstrap-5.3.1-dist/css/bootstrap.min.css}" />
-	<!-- JS -->
-	<script th:src="@{/js/jquery-3.7.0.js}"></script>
-    <script src="./js/chat.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'
+	rel='stylesheet'>
+    <!-- ======== JS ======== -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/jquery-3.7.0.js}"></script>
+    <script>
+        const myModal = new bootstrap.Modal(document.getElementById('myModal'), options);
+    </script>
 </head>
 <body>
+	<div class="sidebar-container" style="position: relative;">
+		<nav class="sidebar close">
+			<header>
+				<div class="image-text">
+					<span class="image"> <img th:src="@{../img/sidebar.png}"
+						alt="">
+					</span>
+
+					<div class="text logo-text">
+						<span class="name">LingoSwap</span>
+					</div>
+				</div>
+				<i class='bx bx-chevron-right toggle'></i>
+			</header>
+
+			<div class="menu-bar">
+				<div class="menu">
+					<ul class="menu-ul">
+						<li><a th:href="@{/member/home}"> <i
+								class='bx bx-home-alt icon'></i> <span class="text nav-text">Home</span>
+						</a></li>
+
+						<li><a th:href="@{/feed/feedMain}"> <i
+								class='bx bx-detail icon'></i> <span class="text nav-text">Feed</span>
+						</a></li>
+
+						<li><a th:href="@{/note/noteMain}"> <i
+								class='bx bx-edit icon'></i> <span class="text nav-text">Note</span>
+						</a></li>
+
+						<li><a th:href="@{/message/messageMain}"> <i
+								class='bx bx-message-square-dots icon'></i> <span
+								class="text nav-text">Message</span>
+						</a></li>
+
+						<li><a th:href="@{/game/gameMain}"> <i
+								class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
+						</a></li>
+
+						<li><a th:href="@{/live/liveMain}"> <i
+								class='bx bx-tv icon'></i> <span class="text nav-text">Live</span>
+						</a></li>
+
+					</ul>
+				</div>
+				<!-- ========================사이드바 하단=========================== -->
+				<div class="bottom-content">
+					<ul class="menu-ul">
+						<li class="">
+							<div sec:authorize="isAuthenticated()">
+								<a th:href="@{/member/logout}"> <i
+									class='bx bx-log-out icon'></i> <span class="text nav-text">Logout</span>
+								</a>
+							</div>
+						</li>
+
+						<li class=""><a th:href="@{/notification/notificationMain}">
+								<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
+						</a></li>
+						<li class=""><a th:href="@{/store/storeMain}"> <i
+								class='bx bx-shopping-bag icon'></i> <span class="text nav-text">Store</span>
+						</a></li>
+						<li class="">
+							<div sec:authorize="isAuthenticated()">
+								<a th:href="@{/member/myPage}"> <span class="profile-pic-li"
+									data-tooltip="프로필 사진으로 이동합니다."> <span
+										class="profile-pic"> <img th:src="@{../img/2.jpg}"
+											alt="Your Profile Picture">
+									</span>
+								</span> <span class="text nav-text">Profile</span>
+								</a>
+							</div>
+						</li>
+						<li class="mode">
+							<div class="sun-moon">
+								<i class='bx bx-moon icon moon'></i> <i
+									class='bx bx-sun icon sun'></i>
+							</div> <span class="mode-text text">Dark mode</span>
+							<div class="toggle-switch">
+								<span class="switch"></span>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
     <div class="container">
         <div class="leftside">
             <div class="header">
@@ -24,12 +115,14 @@
                 <button type="button" class="btn btn-primary" style="background-color: #f4faf9; border-color: #a8e9dc; color: #1f2e3d; font-size: 18px; font-weight: 500; box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);">Open Chat</button>
                 <div></div>
             </div>
+            <!-- search -->
             <div class="search_chat">
                 <div>
                     <input type="text" placeholder="Search or start new chat">
                     <ion-icon name="search-outline"></ion-icon>
                 </div>
             </div>
+            <!-- chatlist -->
             <div class="chatlist">
                 <div class="block">
                     <div class="details">
@@ -78,27 +171,36 @@
             </div>
         </div>
         <div class="rightside">
+            <!-- side navbar -->
             <div class="header">
-                <div class="nav_body">      
-                    <nav>
-                        <a href="#">
-                            home
-                        </a>
-                        <a href="#">
-                            lang
-                        </a>
-                        <a href="#">
-                            category
-                        </a>
-                        <a th:href="@{/chat/createRoomPage}">
-                            new room
-                        </a>
-                        <a href="#">
-                            setting
-                        </a>
-                        <div class="animation start_home"></div>
-                    </nav>
-                </div>
+                <nav class="navbar navbar-expand-lg bg-body-tertiary" style= "font-weight:bold; border-radius: 0.8rem;" >
+                    <div class="container-fluid">
+                      <a class="navbar-brand" href="#"></a>
+                      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                      </button>
+                      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav">
+                          <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modal1">New Room</a>
+                          </li>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Language
+                            </a>
+                            <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="#" name="korean">Korean</a></li>
+                              <li><a class="dropdown-item" href="#" name="english">English</a></li>
+                              <li><a class="dropdown-item" href="#" name="japanese">Japanese</a></li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </nav>
             </div>
             <!-- 보이스룸 목록 -->
             <div class="chatroom_list_box">
@@ -115,15 +217,16 @@
                         </tr>
                     </thead>
                     
+                    <!--
                     <tbody class="chatroom_list_tbody">
                         <tr>
                             <td>jpn</td>
                             <td class="text_align_left">only use japanese</td>
                             <td>3/6</td>
-                            <td class="text_align_left">일본어잘하고싶다</td><!--보이스룸 호스트 닉네임-->
+                            <td class="text_align_left">일본어잘하고싶다</td>
                         </tr>
                     </tbody>
-                    
+                    -->
                     <tbody th:each="room : ${chatrooms}" class="chatroom_list_tbody">
                         <tr>
                             <td><input type="hidden" th:id="${room.chatroom_num}" th:value="${room.chatroom_num}"><p th:text="${room.lang_category}"></p></td>
@@ -133,34 +236,102 @@
                         </tr>
                     </tbody> 
                 </table>
-                <div class="page_box">
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                        <a class="page-link" href="#">&laquo;</a>
-                        </li>
-                        <li class="page-item active">
-                        <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                        <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                        <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                        <a class="page-link" href="#">4</a>
-                        </li>
-                        <li class="page-item">
-                        <a class="page-link" href="#">5</a>
-                        </li>
-                        <li class="page-item">
-                        <a class="page-link" href="#">&raquo;</a>
-                        </li>
-                    </ul>
+            </div>
+            <!-- pagination -->
+            <div class="page_box">
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                    <a class="page-link" href="#">&laquo;</a>
+                    </li>
+                    <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                    <a class="page-link" href="#">4</a>
+                    </li>
+                    <li class="page-item">
+                    <a class="page-link" href="#">5</a>
+                    </li>
+                    <li class="page-item">
+                    <a class="page-link" href="#">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Room modal -->
+    <div class="modal fade" id="modal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Chatting Room</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            <div class="modal-body">
+                <table class="create_room_box">
+                    <tr>
+                        <th>title</th>
+                        <td><input type="text" placeholder="15자 이내로 입력해주세요"></td>
+                    </tr>
+                    <tr>
+                        <th>language</th>
+                        <td>
+                            <select autofocus>
+                                <option>Korean</option>
+                                <option>English</option>
+                                <option>Japanese</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>personnel</th>
+                        <td>
+                            <select autofocus>
+                                <option value="5" checked>5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>use voice</th>
+                        <td>
+                            <label><input type="radio" name="voice_use" value="yes"> yes &nbsp;</label>
+                            <label><input type="radio" name="voice_use" value="no"> no</label>
+                        </td>
+                    </tr>
+                    <tr class="tag_box">
+                        <th>tag</th>
+                        <td>
+                            <label><input type="checkbox" name="tag" value="trip"> 여행</label>
+                            <label><input type="checkbox" name="tag" value="book"> 책</label>
+                            <label><input type="checkbox" name="tag" value="animal"> 동물</label>
+                            <label><input type="checkbox" name="tag" value="Celebrity"> 연예인</label>
+                            <br>
+                            <label><input type="checkbox" name="tag" value="study"> 공부</label>
+                            <label><input type="checkbox" name="tag" value="movie"> 영화</label>
+                            <label><input type="checkbox" name="tag" value="tvdrama"> 드라마</label>
+                            <label><input type="checkbox" name="tag" value="exercise"> 운동</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
+
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>

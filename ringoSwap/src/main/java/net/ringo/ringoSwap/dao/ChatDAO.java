@@ -24,19 +24,28 @@ public interface ChatDAO
 
 	public int getMaxChatroomNum();
 
-	public int sendMessage(ChatCommon cc);
-
 	public int deleteMessage(ArrayList<ChatCommon> cc);
 
 	public ArrayList<ChatroomLink> getChatroomLinks(int userNum);
 
 	public ArrayList<Chatroom> loadChatRooms(ArrayList<ChatroomLink> chatroomLinks);
 
-	public ArrayList<ChatCommon> loadMessage(int chatroom_num);
-
 	public Chatroom getChatroomById(int chatroom_num);
 
 	public ArrayList<ChatroomLink> getChatroomLinksByChatroomNum(int chatroom_num);
 
 	public ChatroomLink getChatroomLinkByUserNum(int userNum);
+
+	public int insertChatCommon(ChatCommon chat);
+
+	public ArrayList<ChatCommon> loadMessageByChatroomNum(int chatroom_num);
+
+	// 모든 채팅방을 가져옴
+	public ArrayList<Chatroom> getOpenChatrooms();
+
+	public int getMaxChatNum();
+
+	public ChatCommon getChatCommonByMaxChatNum(int getMaxChatNum);
+
+	public ChatCommon getChatCommonLatest();
 }
