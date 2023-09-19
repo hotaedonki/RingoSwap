@@ -12,6 +12,7 @@
 				, title
 				, lang_category
 				, gen_category
+				, capacity
 			)
 			values
 			(
@@ -19,7 +20,8 @@
 				, #{host_num}
 				, #{title}
 				, #{lang_category}
-				, #{gen_category}
+				, 'voice'
+				, #{capacity}
 			)
 	</insert>
 	
