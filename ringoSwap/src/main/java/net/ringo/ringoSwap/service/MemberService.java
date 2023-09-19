@@ -51,6 +51,9 @@ public interface MemberService
 
 	//특정 유저의 닉네임을 기반으로 검색한 값에서 회원번호만 리턴하는 메서드
 	public ArrayList<Integer> memberByNicknameReturnUserNum(String nickname);
+	//----------------[ 기능 종료]----------->>>>>>>>>>>>
+
+	//<<<<<<<<<<<------[ 팔로우 관련 기능 시작]----------------------
 	//특정 사용자의 특정 범위의 팔로워 수를 리턴하는 메서드
 	public ArrayList<MemberFollow> followerArraySearch(HashMap<String, Object> map);
 	//특정 사용자의 특정 범위의 팔로우 수를 리턴하는 메서드
@@ -61,6 +64,9 @@ public interface MemberService
 	public int followInsert(int user_num, int follower_num);
 	//사용자가 특정 회원을 언팔로우 하는 메서드
 	public int followDelete(int user_num, int follower_num);
+	//회원번호를 매개변수로 해당 회원과 친구관계인 팔로워 목록을 출력
+	public ArrayList<MemberFollow> friendSelectByUserNum(int user_num);
+	//----------------[ 팔로우 관련 기능 종료]----------->>>>>>>>>>>>
 
 	//@멘션 기능을 위한 nickname으로 해당 유저의 num값을 가져오는 메서드 
 	public int getUserIdByNickname(String nickname);

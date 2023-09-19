@@ -140,5 +140,6 @@ function hashtagSearch() {
 
 $(document).ready(function() {
     feedPrint();
+    friendPrint();
     initializeEventHandlers();   
 });

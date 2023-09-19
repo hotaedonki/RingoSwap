@@ -218,6 +218,12 @@ public class MemberServiceImple implements MemberService
 		
 		return methodResult;
 	}
+
+	//회원번호를 매개변수로 해당 회원과 친구관계인 팔로워 목록을 출력
+	@Override
+	public ArrayList<MemberFollow> friendSelectByUserNum(int user_num){
+		return dao.friendSelectByUserNum(user_num);
+	}
 	
 	@Override
 	public int getUserIdByNickname(String nickname) {

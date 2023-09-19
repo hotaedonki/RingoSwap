@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Member;
+import net.ringo.ringoSwap.domain.MemberFollow;
 import net.ringo.ringoSwap.service.EmailService;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.util.FileService;
@@ -422,5 +423,16 @@ public class MemberController
 	    return member;
 	}
 	
-	//<<<<<<<<<<<------[ 시작]----------------------
+	//<<<<<<<<<<<------[ 친구관련 시작]----------------------
+	//사용자의 회원번호를 매개변수로 해당 회원과 친구관계인 회원의 follow정보를 전부 가져와 리턴하는 메서드
+	@ResponseBody
+	@PostMapping("friendPrint")
+	public ArrayList<MemberFollow> friendPrint(@AuthenticationPrincipal UserDetails user){
+		log.debug("유저 {}", user.getUsername());
+		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
+		log.debug("유저번호 {}", user_num);
+		ArrayList<MemberFollow> friendList = service.friendSelectByUserNum(user_num);
+		log.debug("친구목록 {}", friendList);
+		return friendList;
+	}
 }

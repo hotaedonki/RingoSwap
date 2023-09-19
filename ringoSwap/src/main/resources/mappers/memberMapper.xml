@@ -185,6 +185,12 @@
 		where follower_num = #{follower_num} 
 			and followee_num = #{followee_num} 
 	</update>
+	<!-- 회원번호를 매개변수로 해당 회원과 친구관계인 회원목록을 리턴하는 select문 -->
+	<select id="friendSelectByUserNum" resultType="MemberFollow">
+	select * 
+	from ringo_followee_view
+	where friend_check = 1 and follower_num = #{user_num}
+	</select>
 	<!-- 팔로우/팔로워 기능 종료 -->
 	
 	<select id="getUserIdByNickname" parameterType="String" resultType="int">

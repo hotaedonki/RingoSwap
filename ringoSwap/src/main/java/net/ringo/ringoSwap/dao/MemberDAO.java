@@ -69,6 +69,8 @@ public interface MemberDAO
 	public int followFriendUpdate(HashMap<String, Object> map);
 	//친구상태를 해제하는 메서드
 	public int followFriendRelease(HashMap<String, Object> map);
+	//회원번호를 매개변수로 해당 회원과 친구관계인 회원목록을 리턴하는 메서드
+	public ArrayList<MemberFollow> friendSelectByUserNum(int user_num);
 	//@멘션 기능을 위한 nickname으로 해당 유저의 num값을 가져오는 메서드 
 	public int getUserIdByNickname(String nickname);
 	public String nicknameByUserId(String userId);

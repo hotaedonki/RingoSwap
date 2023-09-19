@@ -283,7 +283,10 @@ function clickLikeFeed() {
 function feedDelete(){
     let feed_num = $(this).data('feed-num');
     console.log(feed_num);
-	confirm("피드를 삭제하시겠습니까?");	
+	let call = confirm("피드를 삭제하시겠습니까?");
+    if(!call){
+        return;
+    }
     $.ajax({
         url: "feedDeleteOne",
         type: "post",
@@ -412,6 +415,31 @@ function followDelete(){
                 alert('자기자신을 팔로우할 수 없습니다.');
             }
             memberPrint();
+        },
+        error:function(e){
+            console.log('eee');
+        }
+    })
+}
+
+function friendPrint(){
+    console.log('친구출력 시작');
+    $.ajax({
+        url:'../member/friendPrint',
+        type: "post",
+        dataType:'json',
+        success:function(friendList){
+            $('.friend-list').html('');
+            console.log('출력되냐?');
+            friendList.forEach(friend =>{
+                $('.friend-list').append(`
+                <li class="list-group-item open-chatbox" data-chat-target="#chatBox">
+                    <img src="../member/memberProfilePrint?user_id=${friend.followee_id}" alt="Profile Picture" style="width:25px; height:25px; border-radius:12px;" />
+                    <span>${friend.followee_name}</span>
+                </li>
+                `);
+            });
+
         },
         error:function(e){
             console.log('eee');
