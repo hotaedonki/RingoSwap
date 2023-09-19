@@ -83,6 +83,14 @@
 			#{item}
 		</foreach>
 	</delete>
+	<!-- 특정 사용자의 회원번호를 매개변수로 검색하여 해당 회원의 회원태그 목록을 출력하는 select문 -->
+	<select id="memberTagSelectByUserNum" resultType="String">
+	select t.tag 
+	from ringo_member M, ringo_taglink_member TL, ringo_tagstorage_member T
+	where M.user_num = TL.user_num 
+		and tl.tag_num = t.tag_num 
+		and M.user_num = #{user_num}
+	</select>
 	<!-- [ 멤버태그 관련 기능 종료 ] -->
 
 	<!-- [ 마이페이지 시작 ] -->

@@ -121,17 +121,18 @@ public class MemberServiceImple implements MemberService
 	//일반 검색
 	@Override
 	public Member memberSearchById(String user_id) {
+		//이 검색으로 회원태그는 출력되지 않습니다.
 		return dao.memberSearchById(user_id);
 	}
 	//마이페이지 검색
 	@Override
 	public Member memberSearchByMyPage(String user_id) {
+		//이 검색으로 회원태그 목록이 같이 출력됩니다.
 		Member member = dao.memberSearchById(user_id);
-		log.debug("태그숫자 : {}", member.getTag_list());
-		String [] list = member.getTag_list().split(" ");
-	    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));
-		log.debug("태그숫자 : {}",tagList);
-		member.setTagList(tagList);
+		//태그정보를 추가로 입력
+		member.setTagList(dao.memberTagSelectByUserNum(member.getUser_num()));
+		log.debug("태그숫자 : {}", member.getTagList());
+		
 		return member;
 	}
 	//수정한 프로필 정보를 담은 member 객체를 매개변수로 보내, DB를 수정하는 메서드
