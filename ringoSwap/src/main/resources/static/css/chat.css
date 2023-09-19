@@ -21,7 +21,7 @@ body {
 .container .leftSide {
   position: relative;
   flex: 30%;
-  background: #fefbfb;
+  background: #fff;
   border: 1px rgba(0, 0, 0, 0.06) solid;
 }
 /* 채팅창 */
