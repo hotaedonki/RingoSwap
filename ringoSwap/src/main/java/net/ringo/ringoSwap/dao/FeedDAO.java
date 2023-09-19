@@ -72,8 +72,7 @@ public interface FeedDAO
 	int getTagNumByTagName(String hashtag);
 	//태그 링크
 	int linkHashtagToFeed(Map<String, Object> hashtagLinkMap);
-	// 오프캔버스
-	Member memberInformationByNickname(String nickname);
+
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[삭제 관련 기능 시작]----------------------
@@ -82,5 +81,11 @@ public interface FeedDAO
 	//해당 댓글의 작성자인지 확인한 후 해당 댓글을 삭제하는 메서드
 	int replyDeleteOne(HashMap<String, Object> map);
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
+	
+	//---------------[기타 기능]----------------->>>>>>>>>>>>>>>>>>>
+	// 오프캔버스
+	Member memberInformationByNickname(String nickname);
+	//
+	int replyCountByFeedNum(int feed_num);
 	
 }

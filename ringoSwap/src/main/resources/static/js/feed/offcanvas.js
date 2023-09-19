@@ -4,11 +4,11 @@ const offcanvaslanguage = {
    "영어": "../img/영어.jpg"
 };
 
-let username
+let nickname
 
 function showOffcanvasWithUserData() {
-	const nickname = $(this).closest('[data-user-name]').data('user-name');
-	username = nickname
+	const name = $(this).data('user-name');
+	nickname = name
 	const offcanvsElement = document.getElementById('offcanvasWithBothOptions');
 	const offcanvas = new bootstrap.Offcanvas(offcanvsElement);
 	
@@ -19,7 +19,7 @@ function showOffcanvasWithUserData() {
 		, type: 'post'
 		, data: { nickname: nickname }
 		, success: function(userInfo) {
-			document.getElementById('username').textContent = userInfo.nickname;
+			document.getElementById('nickname').textContent = userInfo.nickname;
 		    document.getElementById('original_profile').src = "../member/memberProfilePrint?user_id=" + userInfo.user_id;
 		    document.getElementById('target_lang_img').src = userInfo.target_lang; 
 		    document.getElementById('native_lang_img').src = userInfo.native_lang; 
@@ -52,15 +52,12 @@ function printLanguage(lang){
 }
 
 function goToOtherProfile(){
-	const url = `../member/otherPage?username=${encodeURIComponent(username)}`;
-	alert(url);
+	const url = `../member/otherPage?nickname=${encodeURIComponent(nickname)}`;
 	window.location.href = url;
 }
 
-
 function followCheck(nickname){
 	//해당 회원을 팔로우 했는지 여부를 체크하여, 오프캔버스의 팔로우 관련 버튼 중 해당하는 기능의 버튼을 출력하는 함수
-
     $.ajax({
         url: "followCheck",
         type: "post",

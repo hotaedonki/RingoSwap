@@ -121,17 +121,18 @@ public class MemberServiceImple implements MemberService
 	//일반 검색
 	@Override
 	public Member memberSearchById(String user_id) {
+		//이 검색으로 회원태그는 출력되지 않습니다.
 		return dao.memberSearchById(user_id);
 	}
 	//마이페이지 검색
 	@Override
 	public Member memberSearchByMyPage(String user_id) {
+		//이 검색으로 회원태그 목록이 같이 출력됩니다.
 		Member member = dao.memberSearchById(user_id);
-		log.debug("태그숫자 : {}", member.getTag_list());
-		String [] list = member.getTag_list().split(" ");
-	    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));
-		log.debug("태그숫자 : {}",tagList);
-		member.setTagList(tagList);
+		//태그정보를 추가로 입력
+		member.setTagList(dao.memberTagSelectByUserNum(member.getUser_num()));
+		log.debug("태그숫자 : {}", member.getTagList());
+		
 		return member;
 	}
 	//수정한 프로필 정보를 담은 member 객체를 매개변수로 보내, DB를 수정하는 메서드
@@ -217,6 +218,12 @@ public class MemberServiceImple implements MemberService
 		
 		return methodResult;
 	}
+
+	//회원번호를 매개변수로 해당 회원과 친구관계인 팔로워 목록을 출력
+	@Override
+	public ArrayList<MemberFollow> friendSelectByUserNum(int user_num){
+		return dao.friendSelectByUserNum(user_num);
+	}
 	
 	@Override
 	public int getUserIdByNickname(String nickname) {
@@ -234,8 +241,8 @@ public class MemberServiceImple implements MemberService
 		return dao.getNicknameByUserNum(user_num);
 	}
 	@Override
-	public Member memberSearchByUsername(String username) {
-		Member member = dao.memberSearchByUsername(username);
+	public Member memberSearchByUsername(String nickname) {
+		Member member = dao.memberSearchByUsername(nickname);
 		log.debug("다른 사람의 페이지 태그숫자 : {}", member.getTag_list());
 		String [] list = member.getTag_list().split(" ");
 	    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));

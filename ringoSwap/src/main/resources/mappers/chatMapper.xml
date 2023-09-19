@@ -12,6 +12,7 @@
 				, title
 				, lang_category
 				, gen_category
+				, capacity
 			)
 			values
 			(
@@ -19,7 +20,8 @@
 				, #{host_num}
 				, #{title}
 				, #{lang_category}
-				, #{gen_category}
+				, 'voice'
+				, #{capacity}
 			)
 	</insert>
 	
@@ -117,7 +119,7 @@
     </select>
     
     <!-- 유저 고유 번호로 채팅방 링크를 가져옴 -->
-    <select id="getChatroomLinks" parameterType="int" resultType="ChatroomLink">
+    <select id="getChatroomLinksByUserNum" parameterType="int" resultType="ChatroomLink">
     	select
     		*
     	from
@@ -133,7 +135,7 @@
 	    from
 	    	ringo_chatroom_link
 	    where
-	    	chatroom_num = #{Chatroom_num} 
+	    	chatroom_num = #{chatroom_num} 
     </select>
     
     <!-- 채팅방 정보를 채팅방 링크로 가져온다. -->
@@ -156,13 +158,15 @@
 	</select>
 	
 	<!-- 채팅방 링크를 유저 고유번호로 가져옴. -->
-	<select id="getChatroomLinkByUserNum" parameterType="int" resultType="ChatroomLink">
+	<select id="getChatroomLinkByUserNum" parameterType="ChatroomLink" resultType="ChatroomLink">
 		select
 			*
 		from
 			ringo_chatroom_link
 		where
 			user_num = #{user_num}
+			and
+			chatroom_num = #{chatroom_num}
 	</select>
 	
 	<!-- 해당 채팅방에서 메시지들을 가져온다. -->

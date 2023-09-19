@@ -14,12 +14,13 @@ public class MemberFollow {
 	String followee_name;
 	String follower_id;
 	String followee_id;
+	boolean friend_check;		//친구관계 확인용 변수. true일경우 친구관계
 	String original_profile;
 	String saved_profile;
 	public String toString()
 	{
 
-		return String.format("follower_num : {%d} / followee_num : {%d} / follower_name : {%s} / followee_name {%s} / original_profile {%s} / saved_profile {%s}"
-				,follower_num ,followee_num ,follower_name, followee_name, original_profile, saved_profile);
+		return String.format("follower_num : {%d} / followee_num : {%d} / follower_name : {%s} / followee_name {%s} / original_profile {%s} / saved_profile {%s} / friend_check {%b}"
+				,follower_num ,followee_num ,follower_name, followee_name, original_profile, saved_profile, friend_check);
 	}
 }

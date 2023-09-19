@@ -24,7 +24,7 @@ public interface ChatService
 
 	public int deleteMessage(ArrayList<ChatCommon> cc);
 
-	public ArrayList<ChatroomLink> getChatroomLinks(int userNum);
+	public ArrayList<ChatroomLink> getChatroomLinksByUserNum(int userNum);
 	
 	public ArrayList<ChatroomLink> getChatroomLinksByChatroomNum(int chatroom_num);
 
@@ -32,7 +32,7 @@ public interface ChatService
 
 	public Chatroom getChatroomById(int chatroom_num);
 
-	public ChatroomLink getChatroomLinkByUserNum(int userNum);
+	public ChatroomLink getChatroomLinkByUserNum(ChatroomLink chatroomLink);
 
 	public int insertChatCommon(ChatCommon chat);
 

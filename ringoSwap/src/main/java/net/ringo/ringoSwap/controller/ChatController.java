@@ -67,14 +67,9 @@ public class ChatController
 		return "chat/openChatMain";
 	}
 	
-	@GetMapping(PathHandler.CREATEROOMPAGE)
-	public String createRoomPage()
-	{
-		return "chat/createRoom";
-	}
-	
+	@ResponseBody
 	@PostMapping(PathHandler.CREATEOPENCHATROOM)
-	public String createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
+	public boolean createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
 	{
 	
 		log.debug("create open chat room . . .");
@@ -85,12 +80,37 @@ public class ChatController
 		boolean isSuccessCreateRoom = service.createOpenChatroom(chatRoom);
 
 		//chatEventHandlers...() 채팅방 서버 기능 관련 함수 추가하기
-		return "redirect:/";
+		
+		if (!isSuccessCreateRoom)
+			log.debug("방 생성 실패!");
+		
+		return isSuccessCreateRoom;
 	}
 	
 	@ResponseBody
 	@PostMapping(PathHandler.LOADCHATROOMS)
 	public ArrayList<Chatroom> loadChatRooms(@AuthenticationPrincipal UserDetails user)
+	{
+		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
+		ArrayList<ChatroomLink> chatroomLinks = service.getChatroomLinksByUserNum(userNum);
+		
+		if (chatroomLinks == null)
+			return null;
+		
+		ArrayList<Chatroom> chatrooms = service.loadChatRooms(chatroomLinks);
+		
+		if (chatrooms == null || chatrooms.size() <= 0)
+		{
+			return null;
+		}
+		
+		return chatrooms;
+	}
+	
+	/*
+	@MessageMapping(PathHandler.MM_OPENCHATROOMENTER)
+	@SendTo(PathHandler.ST_OPENCHATROOMMESSAGESTATE)
+	public ArrayList<Chatroom> loadChatRoomsRealTime(@AuthenticationPrincipal UserDetails user)
 	{
 		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
 		ArrayList<ChatroomLink> chatroomLinks = service.getChatroomLinks(userNum);
@@ -107,6 +127,7 @@ public class ChatController
 		
 		return chatrooms;
 	}
+	*/
 	
 	@GetMapping(PathHandler.OPENCHATROOMENTER)
 	public String openChatRoomEnter(int chatroom_num, @AuthenticationPrincipal UserDetails user, Model model)
@@ -132,7 +153,11 @@ public class ChatController
 			return "redirect:/";
 		}
 		
-		ChatroomLink myChatroomLink = service.getChatroomLinkByUserNum(myUserNum);
+		ChatroomLink chatroomLinkForSearch = new ChatroomLink();
+		chatroomLinkForSearch.setUser_num(myUserNum);
+		chatroomLinkForSearch.setChatroom_num(chatroom_num);
+		
+		ChatroomLink myChatroomLink = service.getChatroomLinkByUserNum(chatroomLinkForSearch);
 		
 		// 방에 처음 들어간다면 해당 방의 채팅방 링크를 DB에 저장한다.
 		if (myChatroomLink == null)
@@ -151,7 +176,7 @@ public class ChatController
 			
 			log.debug("새 유저 입장! 채팅방 링크 생성 성공.");
 			
-			myChatroomLink = service.getChatroomLinkByUserNum(myUserNum);
+			myChatroomLink = service.getChatroomLinkByUserNum(chatroomLinkForSearch);
 		}
 		
 		// 채팅방에 들어온 다른 사람들 정보도 확인하기 위해 링크들을 가져옴
@@ -190,34 +215,14 @@ public class ChatController
 		}
 		
 		// 유저 이름 가져오기
-		String nickName = mService.getUsernameByUserNum(chat.getUser_num());
+		String nickName = mService.getNicknameByUserNum(chat.getUser_num());
 		
 		if (nickName == null || nickName == "")
 		{
 			log.debug("유저이름 정보를 가져오는데 실패하였습니다");
 			return "유저이름 정보를 가져오는데 실패하였습니다";
 		}
-		
-		// 채팅방 링크가 존재하는지 확인하기 위해 가져옴
-		ChatroomLink isExistChatroomlink = service.getChatroomLinkByUserNum(chat.getUser_num());
-		
-		// 없으면 새로운 링크를 만듬
-		if (isExistChatroomlink == null)
-		{
-			ChatroomLink newChatroomLink = new ChatroomLink();
-			newChatroomLink.setChatroom_num(chat.getChatroom_num());
-			newChatroomLink.setUser_num(chat.getUser_num());
 			
-			// 채팅방 링크를 성공적으로 만들었는가?
-			int isSuccessCreateChatroomLink = service.createChatroomLink(newChatroomLink);
-			
-			if (isSuccessCreateChatroomLink <= 0)
-			{
-				log.debug("채팅룸 링크 생성 실패!");
-				return "채팅룸 링크 생성 실패!";
-			}
-		}
-		
 		return nickName + "님이 입장하셨습니다!";
 	}
 	

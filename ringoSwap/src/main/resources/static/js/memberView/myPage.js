@@ -5,8 +5,12 @@ const languageImages = {
    "영어": "../img/영어.jpg"
 };
 
+let myName;
+
+
  $(document).ready(function(){
    memberPrint();
+   $(document).on('click', '.goToMyFeed', goToMyFeed);
  });
 
 /* 멤버정보를 출력하는 함수 */
@@ -16,7 +20,8 @@ function memberPrint(){
        type: 'POST',
        dataType: 'json',
        success: function(member) {
-           $('.nickname').html(member.username);
+		   myName = member.nickname;
+           $('.nickname').html(member.nickname);
            $('.introduction').html(member.introduction);
            $('.follower-cnt').html(member.fr_count);
            $('.followee-cnt').html(member.fe_count);
@@ -28,14 +33,13 @@ function memberPrint(){
            $('.targetLanguage').attr('src', target);
            
            let str = '<h5 class="card-title">정보/취미</h5>';
-           if(tagArr && Array.isArray(tagArr)){
-               for(let i=0;i<tagArr.length;i++){
-                   str += `<button type="button" class="btn btn-outline-primary btn-sm">${tagArr[i]}</button>`;
-               }
-           }else if(tagArr){
-            str = `<button type="button" class="btn btn-outline-primary btn-sm">${tagArr}</button>`;
-           }
-           $(`.hobbyButton `).html(str);
+           tagArr.forEach(tag => {
+            str += `<button type="button" class="btn btn-outline-primary btn-sm">${tag}</button>`;
+           })
+            if(tagArr.length == 0){
+                str += `<p>설정되지 않았습니다.</p>`;
+            }
+           $(`.hobbyButton`).html(str);
            console.log('member출력완료');
        },
        error: function(jqXHR, textStatus, errorThrown) {
@@ -53,4 +57,9 @@ function printLanguage(lang){
        lang = languageImages["영어"];
    }
    return lang;
+}
+
+function goToMyFeed() {
+	const url = `../feed/feedMain?nickname=${myName}`;
+	window.location.href = url;
 }

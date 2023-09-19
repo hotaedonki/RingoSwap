@@ -42,6 +42,8 @@ public interface MemberDAO
 	public ArrayList<Integer> memberTagLinkSearchAllByUserNum(int user_num);
 	//특정 taglink 객체를 DB의 taglink_member 테이블에서 delete하는 메서드
 	public int memberTagLinkDelete(HashMap<String, Object> map);
+	//회원번호를 매개변수로 해당 회원의 회원태그 목록을 출력하는 메서드
+	public ArrayList<String> memberTagSelectByUserNum(int user_num);
 	//----------------[멤버태그 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[마이페이지 기능 시작]----------------------
@@ -67,11 +69,13 @@ public interface MemberDAO
 	public int followFriendUpdate(HashMap<String, Object> map);
 	//친구상태를 해제하는 메서드
 	public int followFriendRelease(HashMap<String, Object> map);
+	//회원번호를 매개변수로 해당 회원과 친구관계인 회원목록을 리턴하는 메서드
+	public ArrayList<MemberFollow> friendSelectByUserNum(int user_num);
 	//@멘션 기능을 위한 nickname으로 해당 유저의 num값을 가져오는 메서드 
 	public int getUserIdByNickname(String nickname);
 	public String nicknameByUserId(String userId);
 	// 유저 고유 번호로 닉네임을 가져온다.
-	public Member memberSearchByUsername(String username);
+	public Member memberSearchByUsername(String nickname);
 	public String getNicknameByUserNum(int user_num);
 
 }

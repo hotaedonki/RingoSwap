@@ -179,7 +179,7 @@ main {
     text-decoration: none;
 }
 
-.go-profile, .feed-header {
+.go-profile .showOffcanvasWithUserData{
 	cursor:pointer;
 }
 
