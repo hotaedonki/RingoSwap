@@ -16,7 +16,7 @@ function memberPrint(){
        type: 'POST',
        dataType: 'json',
        success: function(member) {
-           $('.nickname').html(member.username);
+           $('.nickname').html(member.nickname);
            $('.introduction').html(member.introduction);
            $('.follower-cnt').html(member.fr_count);
            $('.followee-cnt').html(member.fe_count);

@@ -414,10 +414,10 @@ public class MemberController
 	
 	@ResponseBody
 	@PostMapping("goToOtherProfile")
-	public Member goToOtherProfile(String username) {
+	public Member goToOtherProfile(String nickname) {
 	    // username을 기반으로 사용자 정보를 검색하는 서비스 메서드 호출
-	    Member member = service.memberSearchByUsername(username);
-	    log.debug("Username: {}", username);
+	    Member member = service.memberSearchByUsername(nickname);
+	    log.debug("Username: {}", nickname);
 	    log.debug("Member info: {}", member);
 	    return member;
 	}

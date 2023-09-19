@@ -71,7 +71,7 @@ public interface MemberDAO
 	public int getUserIdByNickname(String nickname);
 	public String nicknameByUserId(String userId);
 	// 유저 고유 번호로 닉네임을 가져온다.
-	public Member memberSearchByUsername(String username);
+	public Member memberSearchByUsername(String nickname);
 	public String getNicknameByUserNum(int user_num);
 
 }

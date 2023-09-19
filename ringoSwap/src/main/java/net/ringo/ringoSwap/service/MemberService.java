@@ -67,7 +67,7 @@ public interface MemberService
 	//홈에 닉네임 띄우기
 	public String nicknameByUserId(String userId);
 	//유저 이름으로 정보를 가져오는 코드
-	public Member memberSearchByUsername(String username);
+	public Member memberSearchByUsername(String nickname);
 	//유저의 고유번호로 닉네임을 가져옴
 	public String getNicknameByUserNum(int user_num);
 }

@@ -200,6 +200,6 @@
 	<select id="memberSearchByUsername" parameterType="String" resultType="Member">
 		select *
 		from ringo_member_with_mypage
-		where username = #{username}
+		where nickname = #{nickname}
 	</select>
 </mapper>
