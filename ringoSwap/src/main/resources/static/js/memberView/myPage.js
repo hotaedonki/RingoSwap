@@ -1,6 +1,3 @@
-/**
- * 
- */
 // 변수 및 설정
 const languageImages = {
    "한국어": "../img/한국어.jpg",
@@ -10,7 +7,6 @@ const languageImages = {
 
  $(document).ready(function(){
    memberPrint();
-	 
  });
 
 /* 멤버정보를 출력하는 함수 */
@@ -20,13 +16,12 @@ function memberPrint(){
        type: 'POST',
        dataType: 'json',
        success: function(member) {
-           console.log('member출력');
            $('.nickname').html(member.username);
            $('.introduction').html(member.introduction);
            $('.follower-cnt').html(member.fr_count);
            $('.followee-cnt').html(member.fe_count);
-            let native = printLanguage(member.native_lang);
-            let target = printLanguage(member.target_lang);
+           let native = printLanguage(member.native_lang);
+           let target = printLanguage(member.target_lang);
            let tagArr = member.tagList;
            $('#profilePicInput').attr('src', '../member/memberProfilePrint?user_id='+member.user_id);
            $('.nativeLanguage').attr('src', native);

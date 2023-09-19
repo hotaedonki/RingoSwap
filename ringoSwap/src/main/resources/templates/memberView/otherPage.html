@@ -123,15 +123,6 @@
 							<img th:src="@{../img/5.jpg}" alt="배경사진" class="card-img-top">
 							<img th:src="@{../img/123.png}" alt="프로필 사진" id="profilePicInput"
 								style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; width: 200px; height: 200px;">
-
-							<!-- 버튼들을 중앙에 배치하기 위한 div -->
-							<div
-								class="profile-buttons d-flex justify-content-center align-items-center">
-								<a th:href="@{/member/modifyProfile}"
-									class="btn btn-info btn-lg modify" style="margin-right: 20px;">프로필
-									수정</a> <a th:href="@{/member/updatePersonalInfo}"
-									class="btn btn-info btn-lg">개인정보 수정</a>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -185,9 +176,8 @@
 						<div class="card-body" style="position: relative;">
 							<h5 class="card-title">최근 게시물</h5>
 							<p>최근 게시물의 내용 미리보기입니다.</p>
-							<button class="btn btn-primary"
-								style="position: absolute; right: 10px; bottom: 10px;">내
-								피드 가기</button>
+							<button class="btn btn-primary goToOtherPeopleFeed"
+								style="position: absolute; right: 10px; bottom: 10px;"></button>
 						</div>
 					</div>
 				</div>
@@ -199,7 +189,7 @@
 
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
 	<script th:src="@{../js/memberView/sidebar.js}"></script>
-	<script th:src="@{../js/memberView/myPage.js}"></script>
+	<script th:src="@{../js/memberView/otherPage.js}"></script>
 
 </body>
 </html>

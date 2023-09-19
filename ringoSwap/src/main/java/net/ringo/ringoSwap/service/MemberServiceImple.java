@@ -148,9 +148,14 @@ public class MemberServiceImple implements MemberService
 	
 	//특정 유저의 닉네임을 기반으로 검색한 값에서 회원번호만 리턴하는 메서드
 	@Override
-	public ArrayList<Integer> memberByUsernameReturnUserNum(String username){
-		return dao.memberByUsernameReturnUserNum(username);
+	public ArrayList<Integer> memberByNicknameReturnUserNum(String nickname){
+		return dao.memberByNicknameReturnUserNum(nickname);
 	}
+
+	//----------------[마이페이지 기능 종료]----------->>>>>>>>>>>>
+	
+	
+	//<<<<<<<<<<<------[팔로우 기능 시작]----------------------
 	//특정 사용자의 특정 범위의 팔로워 목록을 리턴하는 메서드
 	@Override
 	public ArrayList<MemberFollow> followerArraySearch(HashMap<String, Object> map){
@@ -172,14 +177,17 @@ public class MemberServiceImple implements MemberService
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("followee_num", user_num);
 		map.put("follower_num", follower_num);
+		log.debug("map {}", map);
 		int methodResult = dao.followInsert(map);		//팔로우 메서드 실행
 
 		//상대가 자신을 팔로우 했는지 확인하기위한 맵 변수 구성
 		HashMap<String, Object> fmap = new HashMap<>();
 		fmap.put("followee_num", follower_num);
 		fmap.put("follower_num", user_num);
+		log.debug("fmap {}", fmap);
 		
 		int check = dao.followSearch(fmap);		//상대도 자신을 팔로우했는지 확인하는 메서드 실행
+		log.debug("체크 {}", check);
 		
 		if(check !=0) {	//상대도 자신을 팔로우했을 경우, 자신과 상대의 관계를 친구상태로 변경하는 메서드 실행
 			methodResult = dao.followFriendUpdate(map);
@@ -211,18 +219,28 @@ public class MemberServiceImple implements MemberService
 	}
 	
 	@Override
-	public int getUserIdByUsername(String username) {
-		return dao.getUserIdByUsername(username);
+	public int getUserIdByNickname(String nickname) {
+		return dao.getUserIdByNickname(nickname);
 	}
 	@Override
-	public String usernameByUserId(String userId) {
-		return dao.usernameByUserId(userId);
+	public String nicknameByUserId(String userId) {
+		return dao.nicknameByUserId(userId);
 	}
 	
 	// 유저 고유 번호로 닉네임을 가져온다.
 	@Override
-	public String getUsernameByUserNum(int user_num) 
+	public String getNicknameByUserNum(int user_num) 
 	{
-		return dao.getUsernameByUserNum(user_num);
+		return dao.getNicknameByUserNum(user_num);
+	}
+	@Override
+	public Member memberSearchByUsername(String username) {
+		Member member = dao.memberSearchByUsername(username);
+		log.debug("다른 사람의 페이지 태그숫자 : {}", member.getTag_list());
+		String [] list = member.getTag_list().split(" ");
+	    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));
+		log.debug("다른 사람의 페이지 태그숫자2 : {}",tagList);
+		member.setTagList(tagList);
+		return member;
 	}
 }

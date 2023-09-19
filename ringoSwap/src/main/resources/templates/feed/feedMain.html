@@ -351,11 +351,13 @@
 		<div class="offcanvas-body text-center">
 			<div id="userProfileContent">
 				<!-- 프로필 사진과 사용자 이름 -->
-				<div class="d-flex align-items-center mb-3 my-3 justify-content-center ">
-					<img id="original_profile" src="" alt="User Profile Picture"
-						class="posterImage rounded-circle me-3" style="width: 90px; height: 90px;">
-					<h5 id="username" class="mb-0 fs-3"></h5>
-				</div>
+				<a href="javascript:void(0);" id="goToOtherProfile">
+					<div class="d-flex align-items-center mb-3 my-3 justify-content-center">
+						<img id="original_profile" src="" alt="User Profile Picture"
+							class="posterImage rounded-circle me-3" style="width: 90px; height: 90px;" data-username="someUsername">
+						<h5 id="username" class="mb-0 fs-3"></h5>
+					</div>
+				</a>
 
 				<!-- 타겟 언어와 모국어 -->
 				<div class="d-flex align-items-center mb-3 my-4 justify-content-center" >
@@ -394,6 +396,7 @@
 	<script th:src="@{../js/feed/replyAjax.js}"></script>
 	<script th:src="@{../js/feed/offcanvas.js}"></script>
 	<script th:src="@{../js/memberView/myPage.js}"></script>
+
 
 </body>
 </html>

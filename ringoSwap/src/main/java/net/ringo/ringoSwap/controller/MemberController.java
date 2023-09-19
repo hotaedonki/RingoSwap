@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -311,6 +312,16 @@ public class MemberController
 		return "memberView/myPage";
 	}
 	
+	@GetMapping("/otherPage")
+	public String otherPage(@RequestParam(name = "username", required = false) String username, Model model) 
+	{
+	    if (username != null) {
+	        model.addAttribute("username", username);
+	    }
+	    return "memberView/otherPage";
+	}
+
+	
 	@ResponseBody
 	@PostMapping("myMemberPrint")
 	public Member myMemberPrint(@AuthenticationPrincipal UserDetails user) {
@@ -398,8 +409,17 @@ public class MemberController
 	@ResponseBody
 	@PostMapping("nicknamePrint") 
 	public String nicknamePrint(@AuthenticationPrincipal UserDetails user) {
-		return service.usernameByUserId(user.getUsername());
-		
+	return service.nicknameByUserId(user.getUsername());	
+	}
+	
+	@ResponseBody
+	@PostMapping("goToOtherProfile")
+	public Member goToOtherProfile(String username) {
+	    // username을 기반으로 사용자 정보를 검색하는 서비스 메서드 호출
+	    Member member = service.memberSearchByUsername(username);
+	    log.debug("Username: {}", username);
+	    log.debug("Member info: {}", member);
+	    return member;
 	}
 	
 	//<<<<<<<<<<<------[ 시작]----------------------
