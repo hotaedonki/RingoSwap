@@ -73,7 +73,7 @@ public interface FeedDAO
 	//태그 링크
 	int linkHashtagToFeed(Map<String, Object> hashtagLinkMap);
 	// 오프캔버스
-	Member memberInformationByusername(String username);
+	Member memberInformationByNickname(String nickname);
 	//----------------[태그 관련 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[삭제 관련 기능 시작]----------------------

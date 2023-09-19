@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
+import net.ringo.ringoSwap.enums.webService.MessageType;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.util.PathHandler;
@@ -53,15 +54,13 @@ public class ChatController
 		// user의 이름으로 user_num을 가져온다.
 		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
 		
-		// 가져온 user_num으로 chat room의 고유 번호들을 가져온다.
-		ArrayList<Integer> chatRoomNums = service.getChatroomNums(userNum);
+		ArrayList<Chatroom> chatrooms = service.getOpenChatrooms();
 		
-		log.debug("{}", chatRoomNums.size());
+		log.debug("{}", chatrooms.size());
 		
 		// chatRoomNums이 있는 경우(= 한개 이상 링크(ringo_chatroom_link)가 있는 경우) chat room의 정보를 가져온다.
-		if (chatRoomNums != null && chatRoomNums.size() > 0)
+		if (chatrooms != null && chatrooms.size() > 0)
 		{
-			ArrayList<Chatroom> chatrooms = service.getChatrooms(chatRoomNums);
 			model.addAttribute("chatrooms", chatrooms);
 		}
 		
@@ -138,6 +137,7 @@ public class ChatController
 		// 방에 처음 들어간다면 해당 방의 채팅방 링크를 DB에 저장한다.
 		if (myChatroomLink == null)
 		{
+			myChatroomLink = new ChatroomLink();
 			myChatroomLink.setChatroom_num(chatroom_num);
 			myChatroomLink.setUser_num(myUserNum);
 			
@@ -150,6 +150,8 @@ public class ChatController
 			}
 			
 			log.debug("새 유저 입장! 채팅방 링크 생성 성공.");
+			
+			myChatroomLink = service.getChatroomLinkByUserNum(myUserNum);
 		}
 		
 		// 채팅방에 들어온 다른 사람들 정보도 확인하기 위해 링크들을 가져옴
@@ -175,7 +177,7 @@ public class ChatController
 	
 	// 채팅방에 입장했을때
 	@MessageMapping(PathHandler.MM_OPENCHATROOMENTER)
-	@SendTo(PathHandler.ST_OPENCHATROOMMESSAGE)
+	@SendTo(PathHandler.ST_OPENCHATROOMMESSAGESTATE)
 	public String enterUser(@DestinationVariable int chatroomID, @Payload ChatCommon chat)
 	{
 		log.debug("enterUser . . . ");
@@ -221,20 +223,19 @@ public class ChatController
 	
 	@MessageMapping(PathHandler.MM_OPENCHATROOMMESSAGE)
 	@SendTo(PathHandler.ST_OPENCHATROOMMESSAGE)
-	public boolean sendMessage(@DestinationVariable int chatroomID, @Payload ChatCommon chat)
+	public ChatCommon sendMessage(@DestinationVariable int chatroomID, @Payload ChatCommon chat)
 	{
 		log.info("chat : {}", chat.toString());
 		
+		ChatCommon dbChat = service.insertChatCommonAndGetChatCommon(chat);
 		
-		int isSuccessedSaveChat = service.insertChatCommon(chat);
-				
-		if(isSuccessedSaveChat <= 0)
+		if (dbChat == null)
 		{
-			log.debug("chatroom ID - {} / 해당 메시지 저장을 실패했습니다.", chatroomID);
-			return false;
+			log.debug("dbChat이 존재하지 않습니다!");
+			return null;
 		}
 		
-		return true;
+		return dbChat;
 	}
 	
 	@ResponseBody

@@ -26,6 +26,8 @@ function init()
 	myChatroomLinkInfo = document.getElementById("myChatroomLink").value;
 	myUserNum = findValueByKey("user_num", myChatroomLinkInfo);
 	url = new URL(location.href).searchParams;
+	
+	scrollDown();
 }
 
 // 원하는 키 값을 getElementById('E_ID').value 형태로 받아오는 경우 value 안에 키를 찾아줌
@@ -68,7 +70,7 @@ function connect()
     {
 		const chatCommon = 
 		{
-			type: 'TALK', // MessageType.ENTER와 동일
+			type: 'TALK', // 메시지 타입
 			chat_num: "", // 채팅 번호
 			user_num: myUserNum, // 사용자 번호
 			chatroom_num: chatroomNum, // 채팅방 번호
@@ -105,7 +107,9 @@ function onConnected()
 
 	stompClient.send('/pub/chat/openChatRoomEnter/' + chatroomNum, {}, JSON.stringify(chatCommon));
 	
-	// sub 할 url => /sub/chat/openChatRoom/message/채팅방번호 로 구독한다
+	// 입장, 퇴장 관련 메시지를 받는 이벤트
+	stompClient.subscribe('/sub/chat/openChatRoom/message/state/' + chatroomNum, onMessageForState)
+	// 메시지를 받는 이벤트 => /sub/chat/openChatRoom/message/채팅방번호 로 구독한다
 	stompClient.subscribe('/sub/chat/openChatRoom/message/' + chatroomNum, onMessageReceived);
 }
 
@@ -116,11 +120,83 @@ function onError(error)
     connectingElement.style.color = 'red';
 }
 
-function onMessageReceived(message)
+// 입장, 퇴장 시에 실행하는 함수
+function onMessageForState(message)
 {
 	console.log(message);
 }
 
+// 채팅 메시지를 받을때 실행하는 함수
+function onMessageReceived(message) 
+{
+    //console.log(message);
+    
+    // message의 body 속성을 가져와서 파싱
+    const bodyString = message.body;
+    if (bodyString) 
+    {
+        try 
+        {
+            const bodyObj = JSON.parse(bodyString);
+            const messageValue = bodyObj.message;
+            const type = bodyObj.type;
+            const userNumData = bodyObj.user_num;
+            //console.log("메시지 :", messageValue);
+            //console.log("타입 :", type);  //
+            
+            if (type == null)
+            	return;
+            	
+            switch (type)
+            {
+				// case가 TALK인 경우에는 새 메시지를 추가해서 붙혀준다.
+				case 'TALK':
+					console.log("메시지:", messageValue);
+					createChatMsgBox(userNumData, JSON.stringify(messageValue));
+					scrollDown();
+					break;
+			}
+        } 
+        catch (error) 
+        {
+            console.error("JSON 파싱 에러:", error);
+        }
+    } 
+    else 
+    {
+        console.error("body가 존재하지 않습니다.");
+    }
+}
+
+function scrollDown()
+{
+	let chatBox = document.querySelector('.chatbox'); // 채팅 박스에 대한 참조
+    chatBox.scrollTop = chatBox.scrollHeight; // 스크롤을 맨 아래로 이동
+}
+
+// user_num이 자신의 아이디면 
+function createChatMsgBox(userNum, message)
+{
+	const liElement = document.createElement('li');
+	const pElement = document.createElement('p');
+
+	if (userNum == myUserNum)
+	{
+		liElement.classList.add('chat', 'outcoming');
+	}
+	else
+	{
+		liElement.classList.add('chat', 'incoming');
+	}
+	pElement.setAttribute('text', message);
+	pElement.textContent = message;  // 실제 텍스트 내용도 '안녕'으로 설정
+
+	// 3. div의 자식으로 p를 추가
+	liElement.appendChild(pElement);
+
+	// 4. 부모 태그에 div 추가 (예를 들어, body 태그가 부모일 경우)
+	document.getElementById('msg_chatBoxArea').appendChild(liElement);
+}
 /*
 	참고 - 메시지 보내는 예시
 	

@@ -20,7 +20,7 @@ public class Member implements UserDetails
 	int user_num;				//계정의 회원번호
 	String user_id;				//계정의 id값
 	String password;			//계정의 비밀번호
-	String username;			//계정의 닉네임
+	String nickname;			//계정의 닉네임
 	String first_name;			//계정 사용자의 이름
 	String last_name;			//계정 사용자의 성
 	String gender;				//계정 사용자의 성별
@@ -53,14 +53,14 @@ public class Member implements UserDetails
 	public String toString()
 	{
 		return String.format
-				("{%d} : user_num {%s} : user_id {%s} : password {%s} : username {%s} : first_name \n"
+				("{%d} : user_num {%s} : user_id {%s} : password {%s} : nickname {%s} : first_name \n"
 				+ "{%s} : last_name {%s} : gender {%s} : birth_date {%s} : email {%s} : native_lang {%s} : target_lang \n"
 				+ "{%s} : original_profile {%s} : saved_profile {%s} : introduction {%s} : mbti \n"
 				+ "{%d} : point {%d} : cash {%s} : rewrite_time {%s} : role_name \n"
 				+ "{%s} : ranking_open {%s} : email_open {%s} : follow_open {%s} : gps_open {%s} : trans_lang \n"
 				+ "{%b} : enabled \n"
 				+ "{%d} : fr_count {%d} : fe_count {%s} : tag_list, {%s} : tagList \n"
-						, user_num, user_id, password, username, first_name, last_name, gender, birth_date, email, native_lang, target_lang
+						, user_num, user_id, password, nickname, first_name, last_name, gender, birth_date, email, native_lang, target_lang
 						, original_profile, saved_profile, introduction, mbti, point, cash, rewrite_time, role_name
 						, ranking_open, email_open, follow_open, gps_open, trans_lang, enabled, fr_count, fe_count, tag_list, tagList);
 	}

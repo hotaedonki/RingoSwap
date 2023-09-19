@@ -13,7 +13,7 @@ public class Feed {
 	String contents;
 	String inputdate;
 	String user_id;
-	String username;
+	String nickname;
 	String original_profile;
 	String saved_profile;	
 	int like_count;								//각 피드당 좋아요 수를 기록하기위한 추가 변수
@@ -21,7 +21,7 @@ public class Feed {
 	String[] tagList;
 	public String toString()
 	{
-		return String.format("feed_num : {%d} / user_num : {%d} / user_id : {%s} / contents : {%s} / inputdate : {%s} / like_count : {%d} / tag_list : {%s}"
-				, feed_num, user_num, user_id, contents, inputdate, like_count, tag_list);
+		return String.format("feed_num : {%d} / user_num : {%d} / user_id : {%s} / nickname : {%s} / contents : {%s} / inputdate : {%s} / like_count : {%d} / tag_list : {%s}"
+				, feed_num, user_num, user_id, nickname, contents, inputdate, like_count, tag_list);
 	}
 }

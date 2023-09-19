@@ -230,25 +230,25 @@
 	<insert id="saveMention" parameterType="java.util.Map">
 		INSERT INTO ringo_reply_mentions (
 		mentioned_num,
-		mentioned_username,
+		mentioned_nickname,
 		reply_num,
 		mentioned_user_num
 		)
 		VALUES (
 		RINGO_REPLY_MENTIONS_SEQ.NEXTVAL,
-		#{mentioned_username},
+		#{mentioned_nickname},
 		#{reply_num},
 		#{mentioned_user_num}
 		)
 	</insert>
 
-	<select id="memberInformationByusername" parameterType="String"
+	<select id="memberInformationByNickname" parameterType="String"
 		resultType="Member">
-		select user_id, username, native_lang, target_lang,
+		select user_id, nickname, native_lang, target_lang,
 		original_profile, introduction
 		from ringo_member
-		where username =
-		#{username}
+		where nickname =
+		#{nickname}
 	</select>
 
 </mapper>

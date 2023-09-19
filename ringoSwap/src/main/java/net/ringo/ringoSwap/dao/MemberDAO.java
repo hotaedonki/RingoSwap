@@ -50,13 +50,15 @@ public interface MemberDAO
 	//사용자의 수정한 계정 정보 매개변수로 가져가 DB를 수정하는 메서드
 	public int memberUpdateAccount(Member m);
 	//회원의 닉네임을 기반으로 해당 문자열이 포함된 닉네임을 가진 모든 사용자의 회원번호를 리턴하는 메서드.
-	public ArrayList<Integer> memberByUsernameReturnUserNum(String username);
+	public ArrayList<Integer> memberByNicknameReturnUserNum(String nickname);
 	//특정 사용자의 특정 범위의 팔로워 회원 목록을 리턴하는 메서드
 	public ArrayList<MemberFollow> followerArraySearch(HashMap<String, Object> map);
 	//특정 사용자의 특정 범위의 팔로우 회원 목록을 리턴하는 메서드
 	public ArrayList<MemberFollow> followeeArraySearch(HashMap<String, Object> map);
 	//사용자가 특정 회원을 팔로우하는 메서드
 	public int followInsert(HashMap<String, Object> map);
+	//해당 팔로우를 삭제해 언팔로우하는 메서드
+	public int followDelete(HashMap<String, Object> map);
 	//특정 회원이 다른 회원을 팔로우 했는지 확인하는 메서드
 	public int followSearch(HashMap<String, Object> map);
 	//특정 회원이 다른 회원과 친구상태인지 확인하는 메서드
@@ -65,12 +67,11 @@ public interface MemberDAO
 	public int followFriendUpdate(HashMap<String, Object> map);
 	//친구상태를 해제하는 메서드
 	public int followFriendRelease(HashMap<String, Object> map);
-	//@멘션 기능을 위한 username으로 해당 유저의 num값을 가져오는 메서드 
-	public int getUserIdByUsername(String username);
-	public String usernameByUserId(String userId);
-	
+	//@멘션 기능을 위한 nickname으로 해당 유저의 num값을 가져오는 메서드 
+	public int getUserIdByNickname(String nickname);
+	public String nicknameByUserId(String userId);
 	// 유저 고유 번호로 닉네임을 가져온다.
-	public String getUsernameByUserNum(int user_num);
-	
 	public Member memberSearchByUsername(String username);
+	public String getNicknameByUserNum(int user_num);
+
 }

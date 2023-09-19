@@ -272,7 +272,7 @@ public class FeedController {
 		if (mentionedUsers != null && !mentionedUsers.isEmpty()) {
 	        List<Integer> mentionedUserIds = mentionedUsers.stream()
 	                .map(mentionedUser -> mentionedUser.substring(1)) // @ 제거
-	                .map(username -> memberService.getUserIdByUsername(username)) // NAME으로 유저NUM 조회
+	                .map(nickname -> memberService.getUserIdByNickname(nickname)) // NAME으로 유저NUM 조회
 	                .filter(Objects::nonNull) //유저 ID가 NULL이 아닌 경우만
 	                .collect(Collectors.toList()); // 결과를 LIST로
 	                
@@ -352,12 +352,12 @@ public class FeedController {
 	//닉네임을 매개변수로 하는 팔로워 검색 메서드
 	@ResponseBody
 	@PostMapping("followerSearch")
-	public ArrayList<MemberFollow> followerSearch(String username
+	public ArrayList<MemberFollow> followerSearch(String nickname
 			, @AuthenticationPrincipal UserDetails user){
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		HashMap<String, Object> map = new HashMap<>();		//followerArraySearch메서드용 해쉬맵 변수
 		log.debug("번호 {}", user_num);
-		ArrayList<Integer> followerList = memberService.memberByUsernameReturnUserNum(username); 
+		ArrayList<Integer> followerList = memberService.memberByNicknameReturnUserNum(nickname); 
 		log.debug("리스트 {}",followerList);
 		if(followerList.isEmpty()) {		//followerList변수가 비어있음 = 검색된 팔로워가 없는 것이므로 이후 검색 메서드 구동은 스킵한다.
 			ArrayList<MemberFollow> none = null;
@@ -376,11 +376,11 @@ public class FeedController {
 	//닉네임을 매개변수로 하는 팔로우 검색 메서드
 	@ResponseBody
 	@PostMapping("followeeSearch")
-	public ArrayList<MemberFollow> followeeSearch(String username
+	public ArrayList<MemberFollow> followeeSearch(String nickname
 					, @AuthenticationPrincipal UserDetails user){
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		HashMap<String, Object> map = new HashMap<>();		//followerArraySearch메서드용 해쉬맵 변수
-		ArrayList<Integer> followeeList = memberService.memberByUsernameReturnUserNum(username); 
+		ArrayList<Integer> followeeList = memberService.memberByNicknameReturnUserNum(nickname); 
 		if(followeeList.isEmpty()) {		//followeeList변수가 비어있음 = 검색된 팔로우 회원이 없는 것이므로 이후 검색 메서드 구동은 스킵한다.
 			ArrayList<MemberFollow> none = null;
 			return none;
@@ -396,9 +396,9 @@ public class FeedController {
 	@ResponseBody
 	@PostMapping("followCheck")
 	public int followCheck(@AuthenticationPrincipal UserDetails user
-					, String username){
+					, String nickname){
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		int followee_num = memberService.getUserIdByUsername(username);
+		int followee_num = memberService.getUserIdByNickname(nickname);
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("follower_num", user_num);
 		map.put("followee_num", followee_num);
@@ -409,9 +409,9 @@ public class FeedController {
 	//사용자가 특정 회원을 팔로우 하는 기능
 	@ResponseBody
 	@PostMapping("userFollowInsert")
-	public ResponseEntity<?> userFollowInsert(String username
+	public ResponseEntity<?> userFollowInsert(String nickname
 					, @AuthenticationPrincipal UserDetails user) {
-		int user_num = memberService.getUserIdByUsername(username);
+		int user_num = memberService.getUserIdByNickname(nickname);
 		int follower_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		if(user_num == follower_num) {
 			return ResponseEntity.ok("fail");
@@ -426,9 +426,9 @@ public class FeedController {
 	//사용자가 특정 회원을 언팔로우 하는 기능
 	@ResponseBody
 	@PostMapping("userFollowDelete")
-	public ResponseEntity<?> userFollowDelete(String username
+	public ResponseEntity<?> userFollowDelete(String nickname
 					, @AuthenticationPrincipal UserDetails user) {
-		int user_num = memberService.getUserIdByUsername(username);
+		int user_num = memberService.getUserIdByNickname(nickname);
 		int follower_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		if(user_num == follower_num) {
 			return ResponseEntity.ok("fail");
@@ -443,9 +443,9 @@ public class FeedController {
 	
 	@ResponseBody
 	@PostMapping("showOffcanvasWithUserData")
-	public Member showOffcanvasWithUserData(String username) {
+	public Member showOffcanvasWithUserData(String nickname) {
 		Member member = new Member();
-		member = service.showOffcanvasWithUserData(username);
+		member = service.showOffcanvasWithUserData(nickname);
 		log.debug("오프캔버스 멤버 정보 : {}", member);
 		return member;
 	}

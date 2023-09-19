@@ -6,12 +6,12 @@
 	<!-- 회원정보를 memberDB로 전송하여 회원정보를 insert하는 코드 -->
 	<insert id="insertMember" parameterType="Member">
 		insert into ringo_member
-			(user_num, user_id, password, username
+			(user_num, user_id, password, nickname
 			, first_name, last_name, gender, birth_date
 			, email, native_lang, target_lang, introduction)
 		values
 			(ringo_member_seq.nextval, #{user_id}, #{password}
-			, #{username}, #{first_name}, #{last_name}, #{gender}
+			, #{nickname}, #{first_name}, #{last_name}, #{gender}
 			, #{birth_date}, #{email}, #{native_lang}, #{target_lang}
 			,
 			<!-- 자기소개 값을 입력하지 않은 경우 빈칸으로 대체 --> 
@@ -104,7 +104,7 @@
 	<!-- 사용자의 수정한 계정 정보 매개변수로 가져가 DB를 수정하는 update문 -->
 	<update id="memberUpdateAccount" parameterType="Member">
 	update ringo_member
-	set user_id=#{user_id}, password=#{password}, username=#{username}
+	set user_id=#{user_id}, password=#{password}, nickname=#{nickname}
 		, first_name=#{first_name}, last_name=#{last_name}, gender=#{gender}
 		, birth_date=#{birth_date}, ranking_open=#{ranking_open}, email_open=#{email_open}
 		, follow_open=#{follow_open}, gps_open=#{gps_open}, trans_lang=#{trans_lang}
@@ -113,10 +113,10 @@
 	<!-- 마이페이지 종료 -->
 	<!-- 팔로우/팔로워 기능 시작 -->
 	<!-- 특정 문자열이 포함된 닉네임을 가진 모든 회원의 회원번호를 리턴하는 select문 -->
-	<select id="memberByUsernameReturnUserNum" parameterType="String">
+	<select id="memberByNicknameReturnUserNum" parameterType="String">
 	select user_num
 	from ringo_member
-	where username like '%'||#{username}||'%'
+	where nickname like '%'||#{nickname}||'%'
 	</select>
 	
 	<select id="followerArraySearch" parameterType="java.util.HashMap">
@@ -179,20 +179,20 @@
 	</update>
 	<!-- 팔로우/팔로워 기능 종료 -->
 	
-	<select id="getUserIdByUsername" parameterType="String" resultType="int">
+	<select id="getUserIdByNickname" parameterType="String" resultType="int">
 		select user_num
 		from ringo_member
-		where username like '%'|| #{username} ||'%'
+		where nickname like '%'|| #{nickname} ||'%'
 	</select>
 	
-	<select id="usernameByUserId" parameterType="String" resultType="String">
-		select username
+	<select id="nicknameByUserId" parameterType="String" resultType="String">
+		select nickname
 		from ringo_member
 		where user_id = #{user_id}
 	</select>
 	
-	<select id="getUsernameByUserNum" parameterType="int" resultType="String">
-		select username
+	<select id="getNicknameByUserNum" parameterType="int" resultType="String">
+		select nickname
 		from ringo_member
 		where user_num = #{user_num}
 	</select>

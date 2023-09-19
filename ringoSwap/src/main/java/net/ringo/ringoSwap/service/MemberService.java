@@ -23,7 +23,7 @@ public interface MemberService
 	public int idCheck(String user_id);
 
 	//자신의 id값을 매개변수로 DB에서 select문을 돌려 user_num값을 리턴받는 메서드
-	public int memberSearchByIdReturnUserNum(String username);
+	public int memberSearchByIdReturnUserNum(String nickname);
 	
 
 	// 이메일과 아이디가 같으면 멤버를 반환
@@ -50,7 +50,7 @@ public interface MemberService
 	public int memberUpdateAccount(Member m);
 
 	//특정 유저의 닉네임을 기반으로 검색한 값에서 회원번호만 리턴하는 메서드
-	public ArrayList<Integer> memberByUsernameReturnUserNum(String username);
+	public ArrayList<Integer> memberByNicknameReturnUserNum(String nickname);
 	//특정 사용자의 특정 범위의 팔로워 수를 리턴하는 메서드
 	public ArrayList<MemberFollow> followerArraySearch(HashMap<String, Object> map);
 	//특정 사용자의 특정 범위의 팔로우 수를 리턴하는 메서드
@@ -62,13 +62,12 @@ public interface MemberService
 	//사용자가 특정 회원을 언팔로우 하는 메서드
 	public int followDelete(int user_num, int follower_num);
 
-	//@멘션 기능을 위한 username으로 해당 유저의 num값을 가져오는 메서드 
-	public int getUserIdByUsername(String username);
+	//@멘션 기능을 위한 nickname으로 해당 유저의 num값을 가져오는 메서드 
+	public int getUserIdByNickname(String nickname);
 	//홈에 닉네임 띄우기
-	public String usernameByUserId(String userId);
-
-	//유저의 고유번호로 닉네임을 가져옴
-	public String getUsernameByUserNum(int user_num);
+	public String nicknameByUserId(String userId);
 	//유저 이름으로 정보를 가져오는 코드
 	public Member memberSearchByUsername(String username);
+	//유저의 고유번호로 닉네임을 가져옴
+	public String getNicknameByUserNum(int user_num);
 }
