@@ -67,14 +67,9 @@ public class ChatController
 		return "chat/openChatMain";
 	}
 	
-	@GetMapping(PathHandler.CREATEROOMPAGE)
-	public String createRoomPage()
-	{
-		return "chat/createRoom";
-	}
-	
+	@ResponseBody
 	@PostMapping(PathHandler.CREATEOPENCHATROOM)
-	public String createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
+	public boolean createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
 	{
 	
 		log.debug("create open chat room . . .");
@@ -85,7 +80,11 @@ public class ChatController
 		boolean isSuccessCreateRoom = service.createOpenChatroom(chatRoom);
 
 		//chatEventHandlers...() 채팅방 서버 기능 관련 함수 추가하기
-		return "redirect:/";
+		
+		if (!isSuccessCreateRoom)
+			log.debug("방 생성 실패!");
+		
+		return isSuccessCreateRoom;
 	}
 	
 	@ResponseBody
@@ -108,6 +107,28 @@ public class ChatController
 		return chatrooms;
 	}
 	
+	/*
+	@MessageMapping(PathHandler.MM_OPENCHATROOMENTER)
+	@SendTo(PathHandler.ST_OPENCHATROOMMESSAGESTATE)
+	public ArrayList<Chatroom> loadChatRoomsRealTime(@AuthenticationPrincipal UserDetails user)
+	{
+		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
+		ArrayList<ChatroomLink> chatroomLinks = service.getChatroomLinks(userNum);
+		
+		if (chatroomLinks == null)
+			return null;
+		
+		ArrayList<Chatroom> chatrooms = service.loadChatRooms(chatroomLinks);
+		
+		if (chatrooms == null || chatrooms.size() <= 0)
+		{
+			return null;
+		}
+		
+		return chatrooms;
+	}
+	*/
+	
 	@GetMapping(PathHandler.OPENCHATROOMENTER)
 	public String openChatRoomEnter(int chatroom_num, @AuthenticationPrincipal UserDetails user, Model model)
 	{
@@ -124,7 +145,7 @@ public class ChatController
 		log.debug(chatroom.toString());
 		
 		// 내 고유번호 가져오기
-		int myUserNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
+		int myUserNum = mService.memberSearchById(user.getUsername()).getUser_num();
 		
 		if (myUserNum <= 0)
 		{
