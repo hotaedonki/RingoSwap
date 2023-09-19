@@ -130,13 +130,13 @@ function replyPrint(feedNum) {
 				        let nestedReplyElement = $(`
 				            <div class="nested-reply-item" data-reply-id="${comment.reply_num}" data-user-id="${comment.user_id}" style="display: none; margin-left: 30px;">
 				            	<div class="row nested-reply-1 d-flex align-items-center">
-				            		<div class="col-1 nested-goToOtherProfile">
+				            		<div class="col-1 showOffcanvasWithUserData" data-user-name="${nestedReply.nickname}">
 				            			<img src="../member/memberProfilePrint?user_id=${comment.user_id}" alt="User Photo" class="user-photo-reply">
 					            	</div>
-					            	<div class="col-2 nested-goToOtherProfile">
+					            	<div class="col-2 showOffcanvasWithUserData" data-user-name="${nestedReply.nickname}">
 						                <span class="nested-reply-user">${nestedReply.nickname}</span>
 					            	</div>
-					            	<div class="col-6">
+					            	<div class="col-6" >
 					            		<span class="nested-reply-text">${nestedReply.contents}</span>
 					            	</div>
 					            	<div class="col-2">

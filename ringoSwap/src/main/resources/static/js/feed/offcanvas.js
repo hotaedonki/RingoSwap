@@ -56,7 +56,6 @@ function goToOtherProfile(){
 	window.location.href = url;
 }
 
-
 function followCheck(nickname){
 	//해당 회원을 팔로우 했는지 여부를 체크하여, 오프캔버스의 팔로우 관련 버튼 중 해당하는 기능의 버튼을 출력하는 함수
     $.ajax({

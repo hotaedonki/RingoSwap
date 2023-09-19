@@ -5,8 +5,12 @@ const languageImages = {
    "영어": "../img/영어.jpg"
 };
 
+let myName;
+
+
  $(document).ready(function(){
    memberPrint();
+   $(document).on('click', '.goToMyFeed', goToMyFeed);
  });
 
 /* 멤버정보를 출력하는 함수 */
@@ -16,7 +20,7 @@ function memberPrint(){
        type: 'POST',
        dataType: 'json',
        success: function(member) {
-           console.log('member출력');
+		   myName = member.nickname;
            $('.nickname').html(member.nickname);
            $('.introduction').html(member.introduction);
            $('.follower-cnt').html(member.fr_count);
@@ -53,4 +57,9 @@ function printLanguage(lang){
        lang = languageImages["영어"];
    }
    return lang;
+}
+
+function goToMyFeed() {
+	const url = `../feed/feedMain?nickname=${myName}`;
+	window.location.href = url;
 }
