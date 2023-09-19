@@ -4,8 +4,11 @@ const offcanvaslanguage = {
    "영어": "../img/영어.jpg"
 };
 
+let username
+
 function showOffcanvasWithUserData() {
-	const username = $(this).closest('[data-user-name]').data('user-name');
+	const name = $(this).closest('[data-user-name]').data('user-name');
+	username = name;
 	const offcanvsElement = document.getElementById('offcanvasWithBothOptions');
 	const offcanvas = new bootstrap.Offcanvas(offcanvsElement);
 	
@@ -46,3 +49,10 @@ function printLanguage(lang){
    }
    return lang;
 }
+
+function goToOtherProfile(){
+	const url = `../member/otherPage?username=${encodeURIComponent(username)}`;
+	alert(url);
+	window.location.href = url;
+}
+

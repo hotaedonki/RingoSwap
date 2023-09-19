@@ -41,7 +41,7 @@ function initializeDocumentClickHandlers() {
     $(document).on('input', '#searchInput', feedSearch);
     $(document).on('click', '.feedUser', followCheck);
     $(document).on('click', '.showOffcanvasWithUserData', showOffcanvasWithUserData);
-    //$(document).on('click', '.goToOtherProfile', goToOtherProfile);
+    $(document).on('click', '#goToOtherProfile', goToOtherProfile);
     }
 
 function initializeWindowEventHandlers() {

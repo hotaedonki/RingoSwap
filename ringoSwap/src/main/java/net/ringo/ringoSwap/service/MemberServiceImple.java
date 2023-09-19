@@ -224,4 +224,14 @@ public class MemberServiceImple implements MemberService
 	{
 		return dao.getUsernameByUserNum(user_num);
 	}
+	@Override
+	public Member memberSearchByUsername(String username) {
+		Member member = dao.memberSearchByUsername(username);
+		log.debug("다른 사람의 페이지 태그숫자 : {}", member.getTag_list());
+		String [] list = member.getTag_list().split(" ");
+	    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));
+		log.debug("다른 사람의 페이지 태그숫자2 : {}",tagList);
+		member.setTagList(tagList);
+		return member;
+	}
 }

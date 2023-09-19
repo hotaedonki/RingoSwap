@@ -69,4 +69,6 @@ public interface MemberService
 
 	//유저의 고유번호로 닉네임을 가져옴
 	public String getUsernameByUserNum(int user_num);
+	//유저 이름으로 정보를 가져오는 코드
+	public Member memberSearchByUsername(String username);
 }

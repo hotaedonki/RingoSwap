@@ -25,11 +25,11 @@ public class WebSecurityConfig {
         http.csrf().disable()
         .authorizeRequests()
         .antMatchers(
-        		"/",
+        		"/**",
         		"/bootstrap/**",
         		"/member/**",
         		"/chat/**",
-        		"/feed/feedMain",
+        		"/feed/**",
         		"/game/gameMain",
                 "/img/**",
                 "/css/**",
