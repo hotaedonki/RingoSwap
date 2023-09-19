@@ -1,32 +1,32 @@
-let username;  // Global variable to hold the username value
+let nickname;  // Global variable to hold the nickname value
 const myPagelanguage = {
    "한국어": "../img/한국어.jpg",
    "일본어": "../img/일본어.jpg",
    "영어": "../img/영어.jpg"
 };
 
-function getUsernameFromUrl() {
+function getnicknameFromUrl() {
   const urlParams = new URLSearchParams(window.location.search);
-  username = urlParams.get('username');  // Updating the global variable
-  console.log('Username:', username);
+  nickname = urlParams.get('nickname');  // Updating the global variable
+  console.log('nickname:', nickname);
 }
 
 function printOtherPeoplePage() {
-  if (!username) {
-    console.error('Username is not defined');
+  if (!nickname) {
+    console.error('nickname is not defined');
     return;
   }
 
   $.ajax({
     url: '../member/goToOtherProfile',
     type: 'post',
-    data: { username: username },
+    data: { nickname: nickname },
     success: function(member) {
-       $('.nickname').html(member.username);
+       $('.nickname').html(member.nickname);
        $('.introduction').html(member.introduction);
        $('.follower-cnt').html(member.fr_count);
        $('.followee-cnt').html(member.fe_count);
-       $('.goToOtherPeopleFeed').html(member.username + "님의 피드가기");
+       $('.goToOtherPeopleFeed').html(member.nickname + "님의 피드가기");
        let native = printOtherPeopleLanguage(member.native_lang);
        let target = printOtherPeopleLanguage(member.target_lang);
        let tagArr = member.tagList;
@@ -62,9 +62,15 @@ function printOtherPeopleLanguage(lang){
    return lang;
 }
 
+function goToOtherPeopleFeed() {
+	const url = `../feed/feedMain?nickname=${nickname}`;
+	window.location.href = url;
+}
+
 $(document).ready(function() {
-  getUsernameFromUrl();
+  getnicknameFromUrl();
   printOtherPeoplePage();
   printOtherPeopleLanguage();
+  $(document).on('click', '.goToOtherPeopleFeed', goToOtherPeopleFeed);
 });
 
