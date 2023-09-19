@@ -393,6 +393,7 @@ function followInsert(){
             if(result === -1){
                 alert('자기자신을 팔로우할 수 없습니다.');
             }
+            $('.btn-close').click();
             memberPrint();
         },
         error:function(e){
@@ -414,6 +415,7 @@ function followDelete(){
             if(result === -1){
                 alert('자기자신을 팔로우할 수 없습니다.');
             }
+            $('.btn-close').click();
             memberPrint();
         },
         error:function(e){
@@ -422,6 +424,7 @@ function followDelete(){
     })
 }
 
+//친구목록 출력 함수
 function friendPrint(){
     console.log('친구출력 시작');
     $.ajax({
