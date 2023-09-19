@@ -51,10 +51,12 @@ function renderFeeds(res, newLoad) {
 		 let styledContent = hashtagHighlightAndClick(feed.contents);
 	     console.log(feed);
 		$('.feed-display-area .col-12').append(`
-            <div class="card feed-card main-card" data-feed-num="${feed.feed_num}">
-                <div class="card-header feed-header showOffcanvasWithUserData" data-user-name="${feed.nickname}"> 
-                	<img src="../member/memberProfilePrint?user_id=${feed.user_id}" alt="Poster Image" class="posterImage"> 
-                    <span class="feedUser">${feed.nickname}</span>
+            <div class="card feed-card" data-feed-num="${feed.feed_num}">
+                <div class="card-header feed-header">
+                    <div class="showOffcanvasWithUserData" data-user-name="${feed.nickname}">
+                        <img src="../member/memberProfilePrint?user_id=${feed.user_id}" alt="Poster Image" class="posterImage"> 
+                        <span class="feedUser">${feed.nickname}</span>
+                    </div>
                     <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
                 </div>
                 <div class="card-body">
@@ -281,6 +283,7 @@ function clickLikeFeed() {
 function feedDelete(){
     let feed_num = $(this).data('feed-num');
     console.log(feed_num);
+	confirm("피드를 삭제하시겠습니까?");	
     $.ajax({
         url: "feedDeleteOne",
         type: "post",
@@ -290,7 +293,6 @@ function feedDelete(){
 			if(res === "0") {
 				alert("본인이 작성한 글만 삭제할 수 있습니다.")
 			} else { 
-				confirm("피드를 삭제하시겠습니까?");	
 			}
 			feedPrint();
         },
@@ -309,7 +311,7 @@ function followerSearch(){
         dataType:'json',
         success:function(followerList){
             if(followerList){
-                $('.followBox').html('');
+                $('.followerBox').html('');
                 console.log(followerList);
                 followerList.forEach(follower => {
                     $('.followerBox').append(`
@@ -383,9 +385,16 @@ function followInsert(){
         data: {nickname : name},
         dataType:'json',
         success:function(result){
-            console.log(result);
             console.log('팔');
+            console.log(result);
+            if(result === -1){
+                alert('자기자신을 팔로우할 수 없습니다.');
+            }
+            memberPrint();
         },
+        error:function(e){
+            console.log('eee');
+        }
     })
 }
 function followDelete(){
@@ -397,8 +406,15 @@ function followDelete(){
         data: {nickname : name},
         dataType:'json',
         success:function(result){
-            console.log(result);
             console.log('언팔');
+            console.log(result);
+            if(result === -1){
+                alert('자기자신을 팔로우할 수 없습니다.');
+            }
+            memberPrint();
         },
+        error:function(e){
+            console.log('eee');
+        }
     })
 }

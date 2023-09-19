@@ -369,7 +369,7 @@ public class FeedController {
 
 		log.debug("맵 {}",map);
 		ArrayList<MemberFollow> followerSearch = memberService.followerArraySearch(map);
-		
+		log.debug("검색값 {}", followerSearch.size());
 		return followerSearch;
 	}
 
@@ -389,7 +389,8 @@ public class FeedController {
 		map.put("followee_num", followeeList);
 		
 		ArrayList<MemberFollow> followeeSearch = memberService.followeeArraySearch(map);
-		
+
+		log.debug("검색값 {}", followeeSearch.size());
 		return followeeSearch;
 	}
 	//팔로우 했는지 여부를 확인하는 메서드
@@ -409,36 +410,32 @@ public class FeedController {
 	//사용자가 특정 회원을 팔로우 하는 기능
 	@ResponseBody
 	@PostMapping("userFollowInsert")
-	public ResponseEntity<?> userFollowInsert(String nickname
+	public int userFollowInsert(String nickname
 					, @AuthenticationPrincipal UserDetails user) {
 		int user_num = memberService.getUserIdByNickname(nickname);
 		int follower_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		if(user_num == follower_num) {
-			return ResponseEntity.ok("fail");
+			return -1;
 		}
 		int methodResult = memberService.followInsert(user_num, follower_num);		//팔로우 추가 메서드 실행
-		if(methodResult == 0) {
-			return ResponseEntity.ok("fail");
-		}
+		log.debug("삽입 성공 {}", methodResult);
 		
-		return ResponseEntity.ok("success");
+		return methodResult;
 	}
 	//사용자가 특정 회원을 언팔로우 하는 기능
 	@ResponseBody
 	@PostMapping("userFollowDelete")
-	public ResponseEntity<?> userFollowDelete(String nickname
+	public int userFollowDelete(String nickname
 					, @AuthenticationPrincipal UserDetails user) {
 		int user_num = memberService.getUserIdByNickname(nickname);
 		int follower_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		if(user_num == follower_num) {
-			return ResponseEntity.ok("fail");
+			return -1;
 		}
 		int methodResult = memberService.followDelete(user_num, follower_num);		//팔로우 해제 메서드 실행
-		if(methodResult == 0) {
-			return ResponseEntity.ok("fail");
-		}
 		
-		return ResponseEntity.ok("success");
+		log.debug("삭제성공 {}", methodResult);
+		return methodResult;
 	}
 	
 	@ResponseBody

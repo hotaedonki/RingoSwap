@@ -40,19 +40,21 @@ create SEQUENCE ringo_member_seq;
 CREATE VIEW ringo_member_with_mypage AS
 	select M.user_num, M.user_id, M.nickname
 		, M.native_lang, M.target_lang
-		, M.introduction
-		, M.original_profile, M.saved_profile
-		, count(FE.followee_num) as fr_count					--팔로워 수를 기록하는 속성
-		, count(FW.follower_num) as fe_count				--팔로우 수를 기록하는 속성
-		, listagg(T.tag, ' ') within group (order by TL.tag_num) as tag_list
+		, M.introduction, M.original_profile, M.saved_profile
+		, COALESCE(FW.fw_cnt, 0) as fe_count				--팔로워 수를 기록하는 속성
+		, COALESCE(FE.fe_cnt, 0) as fr_count				--팔로우 수를 기록하는 속성
 	from ringo_member M
-	left join ringo_member_follow FW ON M.user_num = FW.follower_num
-	left join ringo_member_follow FE ON M.user_num = FE.followee_num
-	left join ringo_taglink_member TL ON M.user_num = TL.user_num
-	left join ringo_tagstorage_member T ON TL.tag_num = T.tag_num
-	group by
-		M.user_num, M.user_id, M.nickname, M.native_lang, M.target_lang
-        , M.introduction, M.original_profile, M.saved_profile;
+    LEFT JOIN (
+        SELECT follower_num, COUNT(*) AS fw_cnt
+        FROM ringo_member_follow
+        GROUP BY follower_num
+    ) FW ON M.user_num = FW.follower_num
+    LEFT JOIN (
+        SELECT followee_num, COUNT(*) AS fe_cnt
+        FROM ringo_member_follow
+        GROUP BY followee_num
+    ) FE ON M.user_num = FE.followee_num
+    ;
 
 --각 회원과 해당 회원이 갖는 태그를 매칭하는 테이블
 CREATE TABLE ringo_taglink_member (
