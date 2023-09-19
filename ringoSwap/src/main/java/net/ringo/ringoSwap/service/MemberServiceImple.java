@@ -243,11 +243,9 @@ public class MemberServiceImple implements MemberService
 	@Override
 	public Member memberSearchByUsername(String nickname) {
 		Member member = dao.memberSearchByUsername(nickname);
-		log.debug("다른 사람의 페이지 태그숫자 : {}", member.getTag_list());
-		String [] list = member.getTag_list().split(" ");
-	    ArrayList<String> tagList = new ArrayList<>(Arrays.asList(list));
-		log.debug("다른 사람의 페이지 태그숫자2 : {}",tagList);
-		member.setTagList(tagList);
+		//태그정보를 추가로 입력
+		member.setTagList(dao.memberTagSelectByUserNum(member.getUser_num()));
+		log.debug("다른 사람의 페이지 태그숫자 : {}", member.getTagList());
 		return member;
 	}
 }

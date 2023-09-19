@@ -20,6 +20,7 @@ function showOffcanvasWithUserData() {
 		, data: { nickname: nickname }
 		, success: function(userInfo) {
 			document.getElementById('nickname').textContent = userInfo.nickname;
+			$('#nickname').attr('data-nickname', userInfo.nickname);
 		    document.getElementById('original_profile').src = "../member/memberProfilePrint?user_id=" + userInfo.user_id;
 		    document.getElementById('target_lang_img').src = userInfo.target_lang; 
 		    document.getElementById('native_lang_img').src = userInfo.native_lang; 
@@ -52,6 +53,7 @@ function printLanguage(lang){
 }
 
 function goToOtherProfile(){
+	let nickname = $(this).find('[data-nickname]').data('nickname');
 	const url = `../member/otherPage?nickname=${encodeURIComponent(nickname)}`;
 	window.location.href = url;
 }
