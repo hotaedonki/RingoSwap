@@ -211,7 +211,7 @@ public class ChatController
 		}
 		
 		// 유저 이름 가져오기
-		String nickName = mService.getUsernameByUserNum(chat.getUser_num());
+		String nickName = mService.getNicknameByUserNum(chat.getUser_num());
 		
 		if (nickName == null || nickName == "")
 		{
