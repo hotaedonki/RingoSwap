@@ -36,7 +36,7 @@ function memberPrint(){
         dataType: 'json',
         success: function(member) {
             console.log('member출력');
-            $('.nickname').html(member.username);
+            $('.nickname').html(member.nickname);
             $('.introduction').html(member.introduction);
             $('.follower-cnt').text(member.fr_count);
             $('.followee-cnt').text(member.fe_count);

@@ -107,9 +107,9 @@ public class ChatServiceImple implements ChatService
 	
 	// 채팅방 링크를 해당 유저 기준으로 가져온다.
 	@Override
-	public ArrayList<ChatroomLink> getChatroomLinks(int userNum) 
+	public ArrayList<ChatroomLink> getChatroomLinksByUserNum(int userNum) 
 	{
-		return dao.getChatroomLinks(userNum);
+		return dao.getChatroomLinksByUserNum(userNum);
 	}
 
 	// 채팅방들을 채팅방 링크들 기준을 가져온다.
@@ -135,9 +135,9 @@ public class ChatServiceImple implements ChatService
 	
 	// 해당 유저의 채팅방 링크를 가져온다.
 	@Override
-	public ChatroomLink getChatroomLinkByUserNum(int userNum) 
+	public ChatroomLink getChatroomLinkByUserNum(ChatroomLink chatroomLink) 
 	{
-		return dao.getChatroomLinkByUserNum(userNum);
+		return dao.getChatroomLinkByUserNum(chatroomLink);
 	}
 	
 	// 채팅 메시지(ChatCommon)를 저장한다.

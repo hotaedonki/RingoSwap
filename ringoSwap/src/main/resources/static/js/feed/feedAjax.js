@@ -322,6 +322,7 @@ function clickLikeFeed() {
 function feedDelete(){
     let feed_num = $(this).data('feed-num');
     console.log(feed_num);
+	confirm("피드를 삭제하시겠습니까?");	
     $.ajax({
         url: "feedDeleteOne",
         type: "post",
@@ -331,7 +332,6 @@ function feedDelete(){
 			if(res === "0") {
 				alert("본인이 작성한 글만 삭제할 수 있습니다.")
 			} else { 
-				confirm("피드를 삭제하시겠습니까?");	
 			}
 			feedPrint();
         },
@@ -350,7 +350,7 @@ function followerSearch(){
         dataType:'json',
         success:function(followerList){
             if(followerList){
-                $('.followBox').html('');
+                $('.followerBox').html('');
                 console.log(followerList);
                 followerList.forEach(follower => {
                     $('.followerBox').append(`
@@ -424,9 +424,16 @@ function followInsert(){
         data: {nickname : name},
         dataType:'json',
         success:function(result){
-            console.log(result);
             console.log('팔');
+            console.log(result);
+            if(result === -1){
+                alert('자기자신을 팔로우할 수 없습니다.');
+            }
+            memberPrint();
         },
+        error:function(e){
+            console.log('eee');
+        }
     })
 }
 function followDelete(){
@@ -438,8 +445,15 @@ function followDelete(){
         data: {nickname : name},
         dataType:'json',
         success:function(result){
-            console.log(result);
             console.log('언팔');
+            console.log(result);
+            if(result === -1){
+                alert('자기자신을 팔로우할 수 없습니다.');
+            }
+            memberPrint();
         },
+        error:function(e){
+            console.log('eee');
+        }
     })
 }

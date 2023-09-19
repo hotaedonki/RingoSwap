@@ -42,6 +42,8 @@ public interface MemberDAO
 	public ArrayList<Integer> memberTagLinkSearchAllByUserNum(int user_num);
 	//특정 taglink 객체를 DB의 taglink_member 테이블에서 delete하는 메서드
 	public int memberTagLinkDelete(HashMap<String, Object> map);
+	//회원번호를 매개변수로 해당 회원의 회원태그 목록을 출력하는 메서드
+	public ArrayList<String> memberTagSelectByUserNum(int user_num);
 	//----------------[멤버태그 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<------[마이페이지 기능 시작]----------------------

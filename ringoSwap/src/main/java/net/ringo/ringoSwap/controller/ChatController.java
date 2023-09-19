@@ -92,7 +92,7 @@ public class ChatController
 	public ArrayList<Chatroom> loadChatRooms(@AuthenticationPrincipal UserDetails user)
 	{
 		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
-		ArrayList<ChatroomLink> chatroomLinks = service.getChatroomLinks(userNum);
+		ArrayList<ChatroomLink> chatroomLinks = service.getChatroomLinksByUserNum(userNum);
 		
 		if (chatroomLinks == null)
 			return null;
@@ -145,7 +145,7 @@ public class ChatController
 		log.debug(chatroom.toString());
 		
 		// 내 고유번호 가져오기
-		int myUserNum = mService.memberSearchById(user.getUsername()).getUser_num();
+		int myUserNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
 		
 		if (myUserNum <= 0)
 		{
@@ -153,7 +153,11 @@ public class ChatController
 			return "redirect:/";
 		}
 		
-		ChatroomLink myChatroomLink = service.getChatroomLinkByUserNum(myUserNum);
+		ChatroomLink chatroomLinkForSearch = new ChatroomLink();
+		chatroomLinkForSearch.setUser_num(myUserNum);
+		chatroomLinkForSearch.setChatroom_num(chatroom_num);
+		
+		ChatroomLink myChatroomLink = service.getChatroomLinkByUserNum(chatroomLinkForSearch);
 		
 		// 방에 처음 들어간다면 해당 방의 채팅방 링크를 DB에 저장한다.
 		if (myChatroomLink == null)
@@ -172,7 +176,7 @@ public class ChatController
 			
 			log.debug("새 유저 입장! 채팅방 링크 생성 성공.");
 			
-			myChatroomLink = service.getChatroomLinkByUserNum(myUserNum);
+			myChatroomLink = service.getChatroomLinkByUserNum(chatroomLinkForSearch);
 		}
 		
 		// 채팅방에 들어온 다른 사람들 정보도 확인하기 위해 링크들을 가져옴
@@ -218,27 +222,7 @@ public class ChatController
 			log.debug("유저이름 정보를 가져오는데 실패하였습니다");
 			return "유저이름 정보를 가져오는데 실패하였습니다";
 		}
-		
-		// 채팅방 링크가 존재하는지 확인하기 위해 가져옴
-		ChatroomLink isExistChatroomlink = service.getChatroomLinkByUserNum(chat.getUser_num());
-		
-		// 없으면 새로운 링크를 만듬
-		if (isExistChatroomlink == null)
-		{
-			ChatroomLink newChatroomLink = new ChatroomLink();
-			newChatroomLink.setChatroom_num(chat.getChatroom_num());
-			newChatroomLink.setUser_num(chat.getUser_num());
 			
-			// 채팅방 링크를 성공적으로 만들었는가?
-			int isSuccessCreateChatroomLink = service.createChatroomLink(newChatroomLink);
-			
-			if (isSuccessCreateChatroomLink <= 0)
-			{
-				log.debug("채팅룸 링크 생성 실패!");
-				return "채팅룸 링크 생성 실패!";
-			}
-		}
-		
 		return nickName + "님이 입장하셨습니다!";
 	}
 	
