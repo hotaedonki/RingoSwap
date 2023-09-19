@@ -23,10 +23,8 @@ function feedSearch(){
 }
 
 function returnFeedMain() {
-    history.pushState({url: window.location.href}, '', 'feedMain');
-    $(".feed-display-area .col-12").show();
-    $(".left-area, .middle-area").show();
-    $("#feedDetail").hide();
+	//history를 쓰면 사진값을 못받아옴
+    window.location.href= '../feed/feedMain';
 }
 
 function timeDifference(current, previous) {

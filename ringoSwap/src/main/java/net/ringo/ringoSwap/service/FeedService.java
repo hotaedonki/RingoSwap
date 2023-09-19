@@ -16,7 +16,7 @@ public interface FeedService {
 
 	//<<<<<<<<<<<------[피드 출력 기능 시작]----------------------
 	//모든 게시물을 매개변수로 받은 배열방식에 따라 최신순, 혹은 인기순(좋아요 순)으로 리턴하는 메서드
-	public ArrayList<Feed> feedSelectAllWithFeedArrayType(String feedArrayType, String text, int offset, int limit);
+	public ArrayList<Feed> feedSelectAllWithFeedArrayType(String feedArrayType, String text, int offset, int limit, String user_id);
 	//feed_num을 매개변수로 특정 피드 게시글 정보를 리턴하는 메서드
 	public Feed feedSelectOneByFeedNum(int feed_num);
 	//feed_num을 매개변수로 특정 댓글 배열 정보를 리턴하는 메서드
@@ -65,8 +65,16 @@ public interface FeedService {
 	public int feedDeleteByUser(int feed_num, int user_num);
 	//해당 댓글 작성자인지를 확인 후 해당 댓글을 삭제하는 메서드
 	public int replyDeleteOne(int user_num, int reply_num);
-	//
-	public int saveMention(int replyId, List<Integer> mentionedUserIds);
+
+
 
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
+	
+	//----------------[기타 기능]----------------------------
+	//멤버 언급
+	public int saveMention(int replyId, List<Integer> mentionedUserIds);
+	//닉네임으로 아이디 가져오기
+	public String findUserIdByNickname(String nickname);
+	//피드 댓글개수
+	public int replyCountByFeedNum(int feed_num);
 }

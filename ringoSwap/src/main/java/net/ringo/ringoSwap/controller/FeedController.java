@@ -88,29 +88,39 @@ public class FeedController {
 			, @RequestParam(name = "feedArrayType", defaultValue = "default") String feedArrayType
 			, @RequestParam(name="text", defaultValue = "null") String text
 			, @RequestParam(defaultValue = "0") int offset
-	        , @RequestParam(defaultValue = "5") int limit) {
+	        , @RequestParam(defaultValue = "5") int limit
+	        , @RequestParam(required = false) String nickname) {
 		Map<String, Object> map = new HashMap<>();
 	    ArrayList<Feed> feedList = new ArrayList<>(); // 피드목록 출력용 배열 변수
 	    int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+	    
+	    log.debug("피드어레이 닉네임 확인: {}",nickname);
+	    // nickname이 주어진 경우 해당 nickname의 user_id를 찾습니다.
+	    String user_id = null;
+	    if (nickname != null && !nickname.trim().isEmpty()) {
+		    user_id = service.findUserIdByNickname(nickname);
+		    log.debug("닉네임을 아이디로 바꿨음?: {}", user_id);
+	    } 
+	    
+	    feedList = service.feedSelectAllWithFeedArrayType(feedArrayType, text, offset, limit, user_id);
 
-	    // 피드배열방식을 매개변수로 넘기고 배열방식에 따라 정렬된 게시글 목록을 리턴받는 메서드 실행
-	    log.debug("확인?{}");
-	    feedList = service.feedSelectAllWithFeedArrayType(feedArrayType, text, offset, limit);
-	    log.debug("확인완료 {}", feedList);
-
-	    // 각 피드에 대한 좋아요 클릭 여부를 저장할 Map
+	    // 각 피드에 대한 좋아요와 댓글에 대한 정보를 저장할 Map
 	    Map<Integer, Integer> likeCheckMap = new HashMap<>();
+	    Map<Integer, Integer> replyCountMap = new HashMap<>();
 	    for (Feed feed : feedList) {
 	        int feed_num = feed.getFeed_num();
 	        // 현재 피드에 대한 좋아요 클릭 여부를 확인
 	        int likeCheck = service.feedLikePrint(user_num, feed_num);
+	        int replyCount = service.replyCountByFeedNum(feed_num);
 	        // 결과를 Map에 저장
 	        likeCheckMap.put(feed_num, likeCheck);
+	        replyCountMap.put(feed_num, replyCount);
 	    }
 
 	    log.debug("피드 리스트 확인 : {}", feedList);
 	    map.put("feedList", feedList);
 	    map.put("likeCheckMap", likeCheckMap); // 좋아요 클릭 여부 Map을 결과 Map에 추가
+	    map.put("replyCountMap", replyCountMap);
 	    return map;
 	}
 
@@ -312,7 +322,7 @@ public class FeedController {
 	}
 
 	// ----------------[피드&댓글 좋아요 기능 종료]----------->>>>>>>>>>>>
-
+	
 	// <<<<<<<<<<<------[태그 관련 기능 시작]----------------------
 
 	// 피드, 댓글에 달린 태그 중 하나를 클릭할경우, 해당 태그가 달린 피드를 검색해서 출력하는 controller메서드

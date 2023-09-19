@@ -71,6 +71,7 @@ function handleCollapseFeedClick(event) {
         '.like-button', 
         '.hashtag', 
         '.posterImage', 
+        '.translate'
     ];
 
     // 클릭된 요소가 nonClickableSelectors 중 하나에 해당하는지 확인합니다.
@@ -79,9 +80,10 @@ function handleCollapseFeedClick(event) {
     );
 
     // 클릭된 요소가 nonClickableSelectors 중 하나에 해당하면 feedDetail 함수를 호출하지 않습니다.
-    if (!clickedOnNonClickableElement && !$(event.target).hasClass('bi')) {
-        feedDetail.call(this, event);
-    }
+    if (!clickedOnNonClickableElement && !($(event.target).hasClass('like-button') || $(event.target).hasClass('translate'))) {
+	    feedDetail.call(this, event);
+	}
+	
 }
 
 //브라우저에서 뒤로가기 클릭시, History API이 적용된 feedDetail이 아닌 기존 페이지로 이동하는 이벤트

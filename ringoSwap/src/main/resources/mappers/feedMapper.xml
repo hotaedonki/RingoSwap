@@ -12,28 +12,40 @@
 		select rownum rnum, a.* from (
 		select * from ringo_feed_with_likeandtag
 		<where>
+			<if test="user_id != null">
+				user_id = #{user_id}
+			</if>
 			<if test="text != 'null'">
-				user_id like '%'||#{text}||'%'
-				or contents like '%'||#{text}||'%'
-				or tag_list
-				like '%'||#{text}||'%'
+				<choose>
+					<when test="user_id != null">
+						and (contents like '%'||#{text}||'%' or tag_list like
+						'%'||#{text}||'%')
+					</when>
+					<otherwise>
+						user_id like '%'||#{text}||'%' or contents like '%'||#{text}||'%' or
+						tag_list like '%'||#{text}||'%'
+					</otherwise>
+				</choose>
 			</if>
 			<if test="feedArrayType == 'popular' and text != 'null'">
 				and
 			</if>
-			<if test="feedArrayType == 'popular' ">
-				where (sysdate - inputdate) &lt;= 14
+			<if test="feedArrayType == 'popular'">
+				(sysdate - inputdate) &lt;= 14
 			</if>
 		</where>
-		<if test="feedArrayType == 'default' ">
-			order by inputdate desc
-		</if>
-		<if test="feedArrayType == 'popular' ">
-			order by like_count DESC
-		</if>
+		<choose>
+			<when test="feedArrayType == 'default'">
+				order by inputdate desc
+			</when>
+			<otherwise>
+				order by like_count DESC
+			</otherwise>
+		</choose>
 		) a where rownum &lt;= #{limit}+#{offset}
-	) where rnum > #{offset}
+		) where rnum > #{offset}
 	</select>
+
 
 
 	<!-- feed_num을 매개변수로 특정 feed 게시글 정보를 리턴하는 select문 -->
@@ -47,10 +59,12 @@
 	<select id="replySelectByFeedNum" resultType="Reply">
 		select
 		R.*,
-		(select count(*) from ringo_reply where parent_reply_num = R.reply_num) as
+		(select
+		count(*) from ringo_reply where parent_reply_num = R.reply_num) as
 		reply_count
 		from ringo_reply_with_likeandtag R
-		where feed_num = #{feed_num}
+		where feed_num =
+		#{feed_num}
 		order by inputdate desc
 	</select>
 
@@ -74,14 +88,17 @@
 	</insert>
 	<!-- 작성한 feedPhoto 배열을 DB에 매개변수로 전달하는 메서드 -->
 	<insert id="feedPhotoInsert" parameterType="FeedPhoto">
-		INSERT INTO ringo_feed_photo(
+		INSERT INTO
+		ringo_feed_photo(
 		photo_num, feed_num, origin_file,
-		saved_file, description, photo_size,
+		saved_file,
+		description, photo_size,
 		photo_format
 		)
 		VALUES (
 		ringo_feed_photo_seq.nextval, #{feed_num},
-		#{origin_file}, #{saved_file}, NULL,
+		#{origin_file},
+		#{saved_file}, NULL,
 		#{photo_size}, #{photo_format}
 		)
 	</insert>
@@ -176,7 +193,8 @@
 		select distinct
 		feed_num
 		from ringo_reply_with_likeandtag R
-		where tag_list like '%' || #{tag_name} || '%'
+		where tag_list like '%' ||
+		#{tag_name} || '%'
 		)
 		<choose>
 			<when test="feedArrayType == 'default' ">
@@ -192,11 +210,14 @@
 
 	<!-- 해당 해시태그가 이미 존재하는 경우 아무런 작업을 하지 않음 -->
 	<insert id="insertHashtag" parameterType="String">
-		MERGE INTO ringo_tagstorage d
+		MERGE INTO
+		ringo_tagstorage d
 		USING (SELECT #{hashtag} AS tag_name FROM dual) s
-		ON (d.tag_name = s.tag_name)
+		ON
+		(d.tag_name = s.tag_name)
 		WHEN NOT MATCHED THEN
-		INSERT (tag_num, tag_name)
+		INSERT (tag_num,
+		tag_name)
 		VALUES (tag_num_seq.NEXTVAL, s.tag_name)
 	</insert>
 
@@ -207,8 +228,10 @@
 	</select>
 
 	<insert id="linkHashtagToFeed" parameterType="map">
-		INSERT INTO ringo_taglink_feed (feed_num, tag_num, link_num)
-		VALUES (#{newFeedNum}, #{tagNum}, link_num_seq.nextval)
+		INSERT INTO
+		ringo_taglink_feed (feed_num, tag_num, link_num)
+		VALUES (#{newFeedNum},
+		#{tagNum}, link_num_seq.nextval)
 	</insert>
 	<!-- 태그 관련 기능 끝 -->
 
@@ -228,7 +251,8 @@
 	<!-- 삭제 관련 기능 끝 -->
 	<!-- Mention 기능 시작 -->
 	<insert id="saveMention" parameterType="java.util.Map">
-		INSERT INTO ringo_reply_mentions (
+		INSERT INTO
+		ringo_reply_mentions (
 		mentioned_num,
 		mentioned_nickname,
 		reply_num,
@@ -242,6 +266,8 @@
 		)
 	</insert>
 
+	<!-- 기타 기능 -->
+
 	<select id="memberInformationByNickname" parameterType="String"
 		resultType="Member">
 		select user_id, nickname, native_lang, target_lang,
@@ -249,6 +275,12 @@
 		from ringo_member
 		where nickname =
 		#{nickname}
+	</select>
+	
+	<select id="replyCountByFeedNum" resultType="int" parameterType="int">
+   		select count(reply_num) as reply_count
+	    from ringo_reply
+	    where feed_num = #{feed_num}
 	</select>
 
 </mapper>
