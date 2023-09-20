@@ -347,6 +347,7 @@ CREATE TABLE ringo_chat_common (
 	constraint fk_chatroom_num	foreign key	(chatroom_num) references ringo_chatroom(chatroom_num) on delete cascade,
 	constraint fk_chatphoto_num	foreign key	(chatphoto_num) references ringo_chatphoto(chatphoto_num) on delete cascade
 );
+
 CREATE SEQUENCE ringo_chat_common_seq;
 
 --라이브 방에서 사용하는 채팅 메세지 테이블. 기본적으로 이미지 업로드 기능은 제외하고 메세지와 이모티콘만 보낼 수 있습니다.

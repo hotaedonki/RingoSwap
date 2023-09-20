@@ -238,8 +238,8 @@ function feedPhotoPrint(feed_num) {
                             originalImage.style.height = 'auto';  // 이미지 높이를 auto로 설정하여 비율 유지
                         }
                         $('.modal-content').css({
-                            width: originalImage.width + 'px',
-                            height: originalImage.height + 'px'
+                            width: originalImage.width * 1.1 + 'px',
+                            height: originalImage.height * 1.1 + 'px'
                         });
                     };
 
