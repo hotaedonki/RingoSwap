@@ -58,6 +58,10 @@ dependencies {
     implementation 'commons-io:commons-io:2.8.0'
 
    	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.2'
+   	
+   	//google Cloud translation API
+	implementation platform("com.google.cloud:libraries-bom:20.6.0")
+	implementation("com.google.cloud:google-cloud-translate")
 }
 
 tasks.named('test') {
