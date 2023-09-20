@@ -7,6 +7,7 @@ import org.springframework.web.socket.WebSocketSession;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
+import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
 
 public interface ChatService 
 {
@@ -43,4 +44,6 @@ public interface ChatService
 
 	// ChatCommon 저장 후, 성공적으로 저장하면 다시 채팅방에 전달하기 위해 ChatCommon을 반환
 	public ChatCommon insertChatCommonAndGetChatCommon(ChatCommon chat);
+
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnails(int userNum);
 }

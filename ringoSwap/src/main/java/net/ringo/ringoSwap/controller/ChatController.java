@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
+import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
 import net.ringo.ringoSwap.enums.webService.MessageType;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.MemberService;
@@ -74,8 +75,12 @@ public class ChatController
 	@SendTo(PathHandler.ST_LOADJOINEDCHATROOMLISTREALTIME)
 	public String loadJoinedChatroomListRealTime(@DestinationVariable int userNum) throws Exception
 	{
+		log.debug("load Joined Chatroom List RealTime . . .");
+		
+		ArrayList<ChatroomThumbnail> chatroomThumbnails = service.getChatroomThumbnails(userNum);
+		
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString("안녕 : " + userNum);
+        return mapper.writeValueAsString(chatroomThumbnails);
 	}
 	
 	@ResponseBody
