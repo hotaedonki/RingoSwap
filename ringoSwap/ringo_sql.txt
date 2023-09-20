@@ -31,7 +31,7 @@ CREATE TABLE ringo_member (
 	email_open			char(1)				default 'Y',				--이메일 공개여부
 	follow_open			char(1)				default 'Y',				--팔로워수 공개여부
 	gps_open				char(1)				default 'Y',				--장소(gps) 공개여부
-	trans_lang				varchar2(8)		default 'kor' check(trans_lang in ('kor', 'jap', 'eng'))			--기본 번역언어 설정
+	trans_lang				varchar2(8)		default 'ko' check(trans_lang in ('ko', 'ja', 'en'))			--기본 번역언어 설정
 );
 --member전용 시퀸스
 create SEQUENCE ringo_member_seq;
@@ -127,8 +127,8 @@ CREATE TABLE ringo_member_follow(
 --
 CREATE VIEW ringo_follower_view AS
 	select F.follower_num, F.followee_num
+        , F.friend_check
 		, M.nickname as follower_name
-		,
 		, M.original_profile, M.saved_profile
 	from ringo_member_follow F
 	left join
@@ -136,6 +136,7 @@ CREATE VIEW ringo_follower_view AS
 --
 CREATE VIEW ringo_followee_view AS
 	select F.follower_num, F.followee_num
+        , F.friend_check
 		, M.nickname as followee_name
 		, M.original_profile, M.saved_profile
 	from ringo_member_follow F

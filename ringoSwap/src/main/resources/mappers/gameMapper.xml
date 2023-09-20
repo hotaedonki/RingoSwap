@@ -7,7 +7,7 @@
 		ringo_member 테이블의 정보는 id대조용으로 사용하고 ringo_single_difficulty 테이블의 정보만 읽습니다.
 	 -->
 	<select id="difficultyCall" parameterType="String" resultType="SingleDifficulty">
-		select sd.user_num
+		select sd.user_num, m.user_id, m.nickname
             , file_num
             , difficulty
             , word_method
@@ -18,5 +18,15 @@
 		from ringo_single_difficulty sd, ringo_member m 
 		where sd.user_num = m.user_num and m.user_id = #{user_id}
 	</select>
-	
+	<!-- 
+		ringo_single_difficulty테이블의 정보를 수정하는 update문
+		아직 미완성 코드입니다.
+	 -->
+	<update id="difficultyUpdate" parameterType="SingleDifficulty">
+	update ringo_single_difficulty
+	set 
+	<if test="">
+	</if>
+	where user_num = #{user_num}
+	</update>
 </mapper>
