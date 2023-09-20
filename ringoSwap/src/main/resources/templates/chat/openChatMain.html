@@ -17,8 +17,12 @@
     <!-- ======== JS ======== -->
     <script th:src="@{/js/jquery-3.7.0.js}"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+    <script th:src="@{/js/chat/openChatMain.js}"></script>
 </head>
-	<body>
+<body>
+	<input th:type="hidden" th:id="userNum" th:value="${userNum}">
 		<nav class="sidebar close">
 			<header>
 				<div class="image-text">
@@ -228,7 +232,7 @@
                     -->
                     <tbody th:each="room : ${chatrooms}" class="chatroom_list_tbody">
                         <tr>
-                            <td><input type="hidden" th:id="${room.chatroom_num}" th:value="${room.chatroom_num}"><p th:text="${room.lang_category}"></p></td>
+                            <td><input th:type="hidden" th:id="${room.chatroom_num}" th:value="${room.chatroom_num}"><p th:text="${room.lang_category}"></p></td>
                             <td class="text_align_left"><a th:href="@{/chat/openChatRoomEnter(chatroom_num=${room.chatroom_num})}" th:text=${room.chatroom_num}></a> <!-- <p th:text="${room.title}"> </p> --></td>
                             <td>3/6</td>
                             <td class="text_align_left"><p th:text="${room.host_num}"></td><!--보이스룸 호스트 닉네임-->
@@ -264,7 +268,7 @@
             </div>
         </div>
     </div>
-    </div>
+
 
     <!-- New Room modal -->
     <div class="modal fade" id="modal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
@@ -284,9 +288,9 @@
                         <th>language</th>
                         <td>
                             <select autofocus id="lang_category">
-                                <option selected value="kor">Korean</option>
-                                <option value="eng">English</option>
-                                <option value="jap">Japanese</option>
+                                <option selected value="ko">Korean</option>
+                                <option value="en">English</option>
+                                <option value="ja">Japanese</option>
                             </select>
                         </td>
                     </tr>

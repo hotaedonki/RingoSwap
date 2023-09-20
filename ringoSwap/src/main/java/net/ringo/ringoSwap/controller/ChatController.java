@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.ChatCommon;
@@ -49,7 +51,7 @@ public class ChatController
 	@GetMapping(PathHandler.OPENCHATMAIN)
 	public String chatMain(Model model, @AuthenticationPrincipal UserDetails user)
 	{
-		log.debug("move to chat/chatMain . . .");
+		log.debug("move to chat/openChatMain . . .");
 		
 		// user의 이름으로 user_num을 가져온다.
 		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
@@ -62,72 +64,36 @@ public class ChatController
 		if (chatrooms != null && chatrooms.size() > 0)
 		{
 			model.addAttribute("chatrooms", chatrooms);
+			model.addAttribute("userNum", userNum);
 		}
 		
 		return "chat/openChatMain";
+	}
+	
+	@MessageMapping(PathHandler.MM_LOADJOINEDCHATROOMLISTREALTIME)
+	@SendTo(PathHandler.ST_LOADJOINEDCHATROOMLISTREALTIME)
+	public String loadJoinedChatroomListRealTime(@DestinationVariable int userNum) throws Exception
+	{
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString("안녕 : " + userNum);
 	}
 	
 	@ResponseBody
 	@PostMapping(PathHandler.CREATEOPENCHATROOM)
 	public boolean createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
 	{
-	
 		log.debug("create open chat room . . .");
 		chatRoom.setHost_num(mService.memberSearchByIdReturnUserNum(user.getUsername()));
 		
 		log.debug(chatRoom.toString());
 		
 		boolean isSuccessCreateRoom = service.createOpenChatroom(chatRoom);
-
-		//chatEventHandlers...() 채팅방 서버 기능 관련 함수 추가하기
 		
 		if (!isSuccessCreateRoom)
 			log.debug("방 생성 실패!");
 		
 		return isSuccessCreateRoom;
 	}
-	
-	@ResponseBody
-	@PostMapping(PathHandler.LOADCHATROOMS)
-	public ArrayList<Chatroom> loadChatRooms(@AuthenticationPrincipal UserDetails user)
-	{
-		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
-		ArrayList<ChatroomLink> chatroomLinks = service.getChatroomLinksByUserNum(userNum);
-		
-		if (chatroomLinks == null)
-			return null;
-		
-		ArrayList<Chatroom> chatrooms = service.loadChatRooms(chatroomLinks);
-		
-		if (chatrooms == null || chatrooms.size() <= 0)
-		{
-			return null;
-		}
-		
-		return chatrooms;
-	}
-	
-	/*
-	@MessageMapping(PathHandler.MM_OPENCHATROOMENTER)
-	@SendTo(PathHandler.ST_OPENCHATROOMMESSAGESTATE)
-	public ArrayList<Chatroom> loadChatRoomsRealTime(@AuthenticationPrincipal UserDetails user)
-	{
-		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
-		ArrayList<ChatroomLink> chatroomLinks = service.getChatroomLinks(userNum);
-		
-		if (chatroomLinks == null)
-			return null;
-		
-		ArrayList<Chatroom> chatrooms = service.loadChatRooms(chatroomLinks);
-		
-		if (chatrooms == null || chatrooms.size() <= 0)
-		{
-			return null;
-		}
-		
-		return chatrooms;
-	}
-	*/
 	
 	@GetMapping(PathHandler.OPENCHATROOMENTER)
 	public String openChatRoomEnter(int chatroom_num, @AuthenticationPrincipal UserDetails user, Model model)
@@ -232,6 +198,7 @@ public class ChatController
 	{
 		log.info("chat : {}", chat.toString());
 		
+		// 채팅을 보낼때 DB에 저장된 후에 다시 돌아옴.
 		ChatCommon dbChat = service.insertChatCommonAndGetChatCommon(chat);
 		
 		if (dbChat == null)

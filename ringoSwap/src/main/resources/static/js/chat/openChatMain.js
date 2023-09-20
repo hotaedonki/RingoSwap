@@ -2,8 +2,49 @@
 
 $(document).ready(function()
 {
-	
+	init();
+	connect();
 });
+
+let stompClient;
+let userNum;
+
+function init()
+{
+	stompClient = null;
+	userNum = document.getElementById('userNum').value;
+}
+
+// 소켓을 만들어주는 역할을 하는 함수
+function connect()
+{
+	// 연결하고자하는 Socket 의 endPoint
+    let socket = new SockJS('/ringo/ws-stomp');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, onConnected, onError);
+    
+    if (stompClient == null)
+    {	
+		console.log("연결 실패. client를 찾을 수 없습니다.");
+    	return false;
+    }
+    
+    return true;
+}
+
+function onConnected() 
+{
+	stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/', {}, userNum);
+	
+	// 입장, 퇴장 관련 메시지를 받는 이벤트
+	stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + userNum, loadJoinedChatroomListRealTime);
+}
+
+function onError() 
+{
+	connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
+	connectingElement.style.color = 'red';
+}
 
 function createChatRoom()
 {
@@ -41,4 +82,14 @@ function createChatRoom()
 			alert(JSON.stringify(e));
 		}
 	});
+}
+
+function loadJoinedChatroomListRealTime(jsonData)
+{
+	console.log(jsonData);
+}
+
+function loadChatroomList()
+{
+	
 }

@@ -1,6 +1,19 @@
 
 'use strict';
 
+document.addEventListener("DOMContentLoaded", function() {
+	const toggleButton = document.querySelector('.navbar-toggler');
+	const leftSideContainer = document.querySelector('.leftside');
+
+	toggleButton.addEventListener('click', function() {
+		if (leftSideContainer.style.display === 'none') {
+			leftSideContainer.style.display = 'flex';
+		} else {
+			leftSideContainer.style.display = 'none';
+		}
+	});
+});
+
 $(document).ready(function()
 {
 	init();
