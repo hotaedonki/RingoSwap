@@ -149,4 +149,8 @@ public class NoteServiceImple implements NoteService{
 	public int wordDeleteOne(HashMap<String, Integer> map) {
 		return dao.wordDeleteOne(map);
 	}
+	@Override
+	public int checkLastWord(HashMap<String, Object> checkMap) {
+		return dao.checkLastWord(checkMap);
+	}
 }

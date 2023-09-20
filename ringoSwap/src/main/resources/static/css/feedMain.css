@@ -257,3 +257,7 @@ main {
 .comment-2, .nested-reply-2 {
 	font-size: 16px;
 }
+
+.showOffcanvasWithUserData {
+	cursor: pointer;
+}

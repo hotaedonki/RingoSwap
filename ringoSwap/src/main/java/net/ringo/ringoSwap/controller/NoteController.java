@@ -2,6 +2,7 @@ package net.ringo.ringoSwap.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -327,15 +328,32 @@ public class NoteController
    //수정 이벤트 중 좌우 화살표를 클릭해서 해당 파일의 직전/직후 단어 수정으로 이동하는 메서드
    @ResponseBody
    @PostMapping("wordMoveWidth")
-   public DirWord wordMoveWidth(int word_num, int file_num, String arrow
-		   		, @AuthenticationPrincipal UserDetails user) {
-	   int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+   public DirWord wordMoveWidth(int word_num, int file_num, String arrow) {
+	   log.debug("옆 단어 이동 파라미터들: {} {} {}", word_num, file_num, arrow);
 	   HashMap<String, Object> map = new HashMap<>();
+	   HashMap<String, Object> checkMap = new HashMap<>();
+	   
+	   checkMap.put("arrow", arrow);
+	   checkMap.put("file_num", file_num);
+	   
+	   int lastWord = service.checkLastWord(checkMap);
+	   
+	   if(arrow.equals("right") && word_num >= lastWord) {
+		   DirWord endWord = new DirWord();
+		   endWord.setIsEndOfWords(1);
+		   return endWord;
+	   } 
+	   else if(arrow.equals("left") && word_num <= lastWord) { 
+		   DirWord firstWord = new DirWord();
+		   firstWord.setIsEndOfWords(0);
+		   return firstWord; 
+	   }
+
 	   map.put("word_num", word_num);
 	   map.put("file_num", file_num);
-	   map.put("user_num", user_num);
 	   map.put("arrow", arrow);
 	   DirWord word = service.wordSearchByArrow(map);
+	   log.debug("옆단어로 이동 : {} 맵값 {}", word, map);
 	   return word;
    }
    //수정한 단어 객체를 DB에 전달해 수정하는 메서드

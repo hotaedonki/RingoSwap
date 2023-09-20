@@ -203,7 +203,7 @@ function fileOpen(){
     let num = $(this).data("file-num");
     file_num_saver = num;
     let type = $(this).siblings('.fileType').data("file-type");
-    console.log(num, type);
+    console.log("모기모기 빔 ", file_num_saver, num, type);
 
     //실제 출력 함수 실행
     fileOpenUrl(num, type);

@@ -6,16 +6,17 @@
     font-family: 'Open Sans', sans-serif;
 }
 body {
-  display: flex;
   justify-content: center;
   align-items: center;
   background: linear-gradient(#f0f5f4 0%, #f0f5f4 130px);
 }
+
 .container {
-  position: relative;
   max-width: 100%;
   height: calc(100vh);
   display: flex;
+  margin-right: 0px;
+  margin-left: 50px;
 }
 /* 채팅 목록 */
 .container .leftside {

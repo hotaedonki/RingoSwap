@@ -184,7 +184,7 @@
 		resultType="Feed">
 		select feed_num, user_id, original_profile
 		, saved_profile, contents,
-		inputdate
+		inputdate, nickname
 		, like_count, tag_list
 		from ringo_feed_with_likeandtag F
 		where
