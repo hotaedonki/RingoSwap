@@ -198,19 +198,41 @@
 	</select>
 	<!-- 단어 수정 기능의 양 옆의 화살표를 클릭할 경우, 해당 단어를 기준으로 해당 단어장에서 바로 직전/직후의 단어를 호출하는 select문-->
 	<select id="wordSearchByArrow" parameterType="java.util.HashMap" resultType="DirWord">
-	<if test="arrow == 'right' ">
-		select min(word_num)
-		from ringo_word
-		where file_num = #{file_num} 
-			and word_num &gt; #{word_num}
-	</if>
-	<if test="arrow == 'left' ">
-		select max(word_num)
-		from ringo_word
-		where file_num = #{file_num} 
-			and word_num &lt; #{word_num}
-	</if>
+		<if test="arrow == 'right'">
+			select * 
+			from ringo_word
+			where file_num = #{file_num} 
+				and word_num = 
+					(select min(word_num) 
+					from ringo_word 
+					where file_num = #{file_num} 
+					and word_num &gt; #{word_num})
+		</if>
+		<if test="arrow == 'left'">
+			select * 
+			from ringo_word
+			where file_num = #{file_num} 
+				and word_num = 
+				(select max(word_num) 
+				from ringo_word 
+				where file_num = #{file_num} 
+				and word_num &lt; #{word_num})
+		</if>
 	</select>
+
+	<select id="checkLastWord" resultType="int">
+	    <if test="arrow == 'right'">
+	        select max(word_num)
+	        from ringo_word
+	        where file_num = #{file_num}
+	    </if>
+	    <if test="arrow == 'left'">
+	        select min(word_num)
+	        from ringo_word
+	        where file_num = #{file_num}
+	    </if>
+	</select>
+
 	<!-- 수정한 단어 객체를 DB에 전달해 수정하는 메서드 -->
 	<update id="wordUpdateOne" parameterType="DirWord">
 	update ringo_word

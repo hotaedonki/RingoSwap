@@ -341,16 +341,19 @@ public class FeedController {
 		
 		Map<String, Object> feedListMap = new HashMap<>();
 		Map<Integer, Integer> likeCheckMap = new HashMap<>();
+		Map<Integer, Integer> replyCountMap = new HashMap<>();
 	    for (Feed feed : feedList) {
 	        int feed_num = feed.getFeed_num();
 	        // 현재 피드에 대한 좋아요 클릭 여부를 확인
 	        int likeCheck = service.feedLikePrint(user_num, feed_num);
+	        int replyCount = service.replyCountByFeedNum(feed_num);
 	        // 결과를 Map에 저장
 	        likeCheckMap.put(feed_num, likeCheck);
+	        replyCountMap.put(feed_num, replyCount);
 	    }
 		feedListMap.put("feedList", feedList);
 		feedListMap.put("likeCheckMap", likeCheckMap);
-		
+		feedListMap.put("replyCountMap", replyCountMap);
 		return feedListMap;
 	}
 

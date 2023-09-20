@@ -63,4 +63,6 @@ public interface NoteService {
 	DirWord wordSearchByArrow(HashMap<String, Object> map);
 	// word_num을 받아와서 해당 단어 삭제
 	int wordDeleteOne(HashMap<String, Integer> map);
+	// 마지막 단어인지 체크
+	int checkLastWord(HashMap<String, Object> checkMap);
 }

@@ -75,6 +75,8 @@ function renderFeeds(res, newLoad) {
 	
 	feeds.forEach(feed => {
 		feedPhotoPrint(feed.feed_num);
+		console.log('replyCount map:', replyCount);
+console.log('Current feed number:', feed.feed_num);
 	     let likeButtonClass = likeCheck[feed.feed_num] === 1 ? "bi-heart-fill" : "bi-heart";
 	     let replyCountForThisFeed = replyCount[feed.feed_num] || 0;
 		 //해시태그에 css적용

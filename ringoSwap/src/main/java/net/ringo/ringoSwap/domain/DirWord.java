@@ -17,6 +17,7 @@ public class DirWord {
 	String mean;
 	String description;
 	String inputdate;
+	int isEndOfWords = 2;
 	
 	public String toString()
 	{

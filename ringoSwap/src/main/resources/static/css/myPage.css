@@ -50,3 +50,7 @@ a {
 .modal-backdrop {
 	display: none;
 }
+
+.infoBox {
+	width: 95%;
+}

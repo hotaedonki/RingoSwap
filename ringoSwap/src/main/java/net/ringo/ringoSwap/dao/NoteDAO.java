@@ -67,4 +67,7 @@ public interface NoteDAO
 	DirWord wordSearchByArrow(HashMap<String, Object> map);
 	//수정한 단어 객체를 DB에 전달해 수정하는 메서드
 	int wordUpdateOne(DirWord word);
+	// 마지막 단어인지 체크
+	int checkLastWord(HashMap<String, Object> checkMap);
+	
 }

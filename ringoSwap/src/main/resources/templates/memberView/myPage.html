@@ -139,30 +139,34 @@
 				<div class="col-lg-5 mt-4">
 					<div class="card mb-4" style="height: 150px;">
 						<div class="card-body">
-							<h5 class="card-title nickname">닉네임</h5>
-							<p class="card-text introduction">자기소개 내용입니다. 여기에 사용자의 소개를 입력하세요.</p>
+							<h5 class="card-title nickname"></h5>
+							<p class="card-text introduction"></p>
 						</div>
 					</div>
 					<!-- 팔로워, 팔로우, 언어 정보 -->
 					<div class="card-body profile-info">
-						<div style="min-width: 400px">
-							<a th:href="@{/member/follower}" style="font-size: 1.4em;" class="text-primary">팔로워
-								<span class="follower-cnt">100</span></a>
-							<a th:href="@{/member/follow}" style="margin-left: 10px; font-size: 1.4em;" class="text-primary">팔로우
-								<span class="followee-cnt">150</span></a>
+						<div style="min-width: 400px" class="d-flex">
+							<a th:href="@{/member/follower}" style="font-size: 1.4em;"
+								class="text-primary">팔로워 <span class="follower-cnt">100</span></a>
+							<a th:href="@{/member/follow}"
+								style="margin-left: 10px; font-size: 1.4em;"
+								class="text-primary">팔로우 <span class="followee-cnt">150</span></a>
+							<button class="btn btn-primary ms-auto goToMyFeed">내 피드
+								가기</button>
 						</div>
 						<div
 							style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; min-width: 430px;">
 							<!-- 모국어와 국기 -->
 							<div
 								style="display: flex; align-items: center; font-size: 1.1em;">
-								<span class="nativeLanguage">모국어</span> <img th:src="@{../img/일본어.jpg}" class="nativeLanguage"
+								<span class="nativeLanguage">모국어</span> <img
+									th:src="@{../img/일본어.jpg}" class="nativeLanguage"
 									alt="Korean Flag"
 									style="border-radius: 50%; width: 20px; height: 20px; margin-left: 10px;">
 								<!-- 배우고 싶은 언어와 국기 -->
-								<span style="margin-left: 10px;" class="targetLanguage">배우고 싶은 언어</span> <img class="targetLanguage" 
-									th:src="@{../img/한국어.jpg}" alt="Desired Language"
-									id="desiredLanguageFlag"
+								<span style="margin-left: 10px;" class="targetLanguage">배우고
+									싶은 언어</span> <img class="targetLanguage" th:src="@{../img/한국어.jpg}"
+									alt="Desired Language" id="desiredLanguageFlag"
 									style="border-radius: 50%; width: 20px; height: 20px; margin-left: 10px;">
 							</div>
 						</div>
@@ -173,22 +177,9 @@
 			<!-- 두 번째 컨테이너 -->
 			<div class="row mb-4">
 				<!-- 정보/취미 탭 -->
-				<div class="col-lg-6">
+				<div class="col-lg-12 infoBox">
 					<div class="card">
-						<div class="card-body hobbyButton">
-						</div>
-					</div>
-				</div>
-				<!-- 최근 게시물 및 내 피드 가기 버튼 -->
-				<div class="col-lg-5">
-					<div class="card">
-						<div class="card-body" style="position: relative;">
-							<h5 class="card-title">최근 게시물</h5>
-							<p>최근 게시물의 내용 미리보기입니다.</p>
-							<button class="btn btn-primary goToMyFeed"
-								style="position: absolute; right: 10px; bottom: 10px;">내
-								피드 가기</button>
-						</div>
+						<div class="card-body hobbyButton"></div>
 					</div>
 				</div>
 			</div>

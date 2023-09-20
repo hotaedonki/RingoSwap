@@ -1,8 +1,25 @@
-let originalWordList = ""; // 임시 변수로 원래 wordList의 내용을 저장
-
 $(document).ready(function() {
+    let originalWordList = ""; 
+    let currentWordNum;
+
     // "추가" 버튼 클릭 이벤트 핸들러
-    $("button:contains('추가')").click(function() {
+    $("button:contains('추가')").click(handleAddButtonClick);
+    // "저장" 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.save-btn', handleSaveButtonClick);
+    // "돌아가기" 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.back-btn', handleBackButtonClick);
+    // 단어 수정
+    $(document).on('click', '.modifyWord', handleModifyWordClick);
+    // "수정" 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.word-modify-btn', handleWordModifyButtonClick);
+    // "삭제" 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.word-delete-btn', handleWordDeleteButtonClick);
+    // 앞뒤 단어로 이동
+    $(document).on('click', '.carousel-control-next, .carousel-control-prev', handleWordNavigation);
+    
+});
+
+function handleAddButtonClick() {
       originalWordList = $(".wordList").html();
         const wordCard = `
           <div class = "card-body wordCard">
@@ -45,53 +62,53 @@ $(document).ready(function() {
         
         $("button:contains('추가'), .card-footer").hide();
         
-    });
+    };
 
-    // "저장" 버튼 클릭 이벤트 핸들러
-    $(document).on('click', '.save-btn', function() {
-        // 데이터 수집
-        let num = $('.add-btn').data('file-num');
-        const word = $("#word-input").val();
-        const meaning = $("#meaning-input").val();
-        const pronunciation = $("#pronunciation-input").val();
-        const description = $("#description-input").val();
+	// "저장" 버튼 클릭 이벤트 핸들러
+	function handleSaveButtonClick() {
+	    // 데이터 수집
+	    let num = $('.add-btn').data('file-num');
+	    const word = $("#word-input").val();
+	    const meaning = $("#meaning-input").val();
+	    const pronunciation = $("#pronunciation-input").val();
+	    const description = $("#description-input").val();
 		console.log(num, word, meaning, pronunciation, description + "저장 값 받아오기")
-        // 데이터를 서버로 전송
-        $.post("wordCreate", {
-            file_num : num,
-            word: word,
-            mean: meaning,
-            pron: pronunciation,
-            description: description
-        }).done(function(response) {
-            // Toast 메시지 표시
-            const toast = `
-            <div class="toast toast-center show" role="alert" aria-live="assertive" aria-atomic="true">
-              <div class="toast-header">
-                <strong class="me-auto">Bootstrap</strong>
-                <small>Just now</small>
-                <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
-                  <span aria-hidden="true"></span>
-                </button>
-              </div>
-              <div class="toast-body">
-                저장되었습니다!
-              </div>
-            </div>`;
-
-            $("body").append(toast);
-            $(".toast").toast({ delay: 2000 });
-
-            setTimeout(function() {
-                $(".toast").remove();
-            }, 2000);
-        }).fail(function() {
+	    // 데이터를 서버로 전송
+	    $.post("wordCreate", {
+	        file_num : num,
+	        word: word,
+	        mean: meaning,
+	        pron: pronunciation,
+	        description: description
+	    }).done(function(response) {
+	        // Toast 메시지 표시
+	        const toast = `
+	        <div class="toast toast-center show" role="alert" aria-live="assertive" aria-atomic="true">
+	          <div class="toast-header">
+	            <strong class="me-auto">Bootstrap</strong>
+	            <small>Just now</small>
+	            <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
+	              <span aria-hidden="true"></span>
+	            </button>
+	          </div>
+	          <div class="toast-body">
+	            저장되었습니다!
+	          </div>
+	        </div>`;
+	
+	        $("body").append(toast);
+	        $(".toast").toast({ delay: 2000 });
+	
+	        setTimeout(function() {
+	            $(".toast").remove();
+	        }, 2000);
+	    }).fail(function() {
 			console.log("단어 생성 실패")
 		})
-    });
+	}
 
     // "돌아가기" 버튼 클릭 이벤트 핸들러
-     $(document).on('click', '.back-btn', function() {
+    function handleBackButtonClick() {
        // wordCard + navigationButtons에서 originalWordList로 다시 출력
        $(".wordCard").replaceWith('<div class="card-body wordList">' + originalWordList + '</div>');
    
@@ -103,13 +120,28 @@ $(document).ready(function() {
    
        // "추가" 버튼 다시 표시
        $("button:contains('추가'), .card-footer").show();
+       
+       $(".wordCard").replaceWith('<div class="card-body wordList">' + originalWordList + '</div>');
    
-   });
+       // "수정" 버튼 제거
+       $(".word-modify-btn").remove();
    
-   let currentWordNum;
+       // "돌아가기" 버튼 제거
+       $(".back-btn").remove();
+
+       // "삭제" 버튼 제거
+       $(".word-delete-btn").remove();
+   
+       // "추가" 버튼 다시 표시
+       $("button:contains('추가'), .card-footer").show();
+       
+       // navigationButtons 제거
+       $(".carousel-control-prev").remove();
+       $(".carousel-control-next").remove();
+   }
    
    //단어 수정
-   $(document).on('click', '.modifyWord', function() {
+   function handleModifyWordClick() {
 	  const word = $(this).find('.word').text();
 	  const pronunciation = $(this).data('pron');  // 원본 발음 데이터 참조
       const meaning = $(this).data('mean');  // 원본 의미 데이터 참조
@@ -175,10 +207,10 @@ $(document).ready(function() {
         $(".wordButton").prepend(backButton);
                 
         $("button:contains('추가'), .card-footer").hide();
-    });
+    }
 
     // "수정" 버튼 클릭 이벤트 핸들러
-    $(document).on('click', '.word-modify-btn', function() {
+    function handleWordModifyButtonClick() {
         // 데이터 수집
         const word = $("#word-input").val();
         const meaning = $("#meaning-input").val();
@@ -194,6 +226,7 @@ $(document).ready(function() {
             description: description
         }).done(function(response) {
             // Toast 메시지 표시
+            alert(response);
             const toast = `
             <div class="toast toast-center show" role="alert" aria-live="assertive" aria-atomic="true">
               <div class="toast-header">
@@ -215,9 +248,9 @@ $(document).ready(function() {
                 $(".toast").remove();
             }, 2000);
         });
-    });
+    };
     
-    $(document).on('click', '.word-delete-btn', function() {
+   function handleWordDeleteButtonClick() {
 		console.log(currentWordNum + "삭제 카드 번호");
 		$.post("wordDeleteOne", {
 			word_num: currentWordNum
@@ -248,29 +281,52 @@ $(document).ready(function() {
 			}).fail(function(response) {
    				console.log("단어 삭제 실패: ", response);
 			})
-		});
+		};
 
-    // "돌아가기" 버튼 클릭 이벤트 핸들러
-     $(document).on('click', '.back-btn', function() {
-       // wordCard + navigationButtons에서 originalWordList로 다시 출력
-       $(".wordCard").replaceWith('<div class="card-body wordList">' + originalWordList + '</div>');
-   
-       // "수정" 버튼 제거
-       $(".word-modify-btn").remove();
-   
-       // "돌아가기" 버튼 제거
-       $(".back-btn").remove();
 
-       // "삭제" 버튼 제거
-       $(".word-delete-btn").remove();
-   
-       // "추가" 버튼 다시 표시
-       $("button:contains('추가'), .card-footer").show();
-       
-       // navigationButtons 제거
-       $(".carousel-control-prev").remove();
-       $(".carousel-control-next").remove();
-   
-   });
-});
+	function handleWordNavigation(event) {
+		let arrow;
+	    if ($(event.target).closest('.carousel-control-next').length > 0) {
+	        arrow = 'right';
+	    } else if ($(event.target).closest('.carousel-control-prev').length > 0) {
+	        arrow = 'left';
+	    }
+		
+		const word_num = currentWordNum;
+		const file_num = file_num_saver;
+		
+		$.ajax({
+			url:'wordMoveWidth'
+			, type: 'post'
+			, data: {
+				word_num: word_num,
+				file_num: file_num,
+				arrow: arrow
+			}
+			, success: function(response) {
+			    console.log("워드 네비게이션 : " + response);
+			    if(response.isEndOfWords === 1) {
+			        alert("마지막 단어입니다.")
+			    } 
+			    else if (response.isEndOfWords === 0) {
+			        alert("첫 단어입니다.")
+			    }
+			    else {
+			        updateWordCard(response);
+			    }
+			},
+			error: function(error) {
+				console.error(error)
+			}
+		})
+	};
+	
+	function updateWordCard(wordInfo) {
+	    $("#word-input").val(wordInfo.word);
+	    $("#meaning-input").val(wordInfo.meaning);
+	    $("#pronunciation-input").val(wordInfo.pronunciation);
+	    $("#description-input").val(wordInfo.description);
+	    currentWordNum = wordInfo.word_num;  // 현재 단어 번호 업데이트
+	}
+
    
