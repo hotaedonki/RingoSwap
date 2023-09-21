@@ -203,31 +203,31 @@
 			from ringo_word
 			where file_num = #{file_num} 
 				and word_num = 
-					(select min(word_num) 
+					(select max(word_num) 
 					from ringo_word 
 					where file_num = #{file_num} 
-					and word_num &gt; #{word_num})
+					and word_num &lt; #{word_num})
 		</if>
 		<if test="arrow == 'left'">
 			select * 
 			from ringo_word
 			where file_num = #{file_num} 
 				and word_num = 
-				(select max(word_num) 
+				(select min(word_num) 
 				from ringo_word 
 				where file_num = #{file_num} 
-				and word_num &lt; #{word_num})
+				and word_num &gt; #{word_num})
 		</if>
 	</select>
 
 	<select id="checkLastWord" resultType="int">
 	    <if test="arrow == 'right'">
-	        select max(word_num)
+	        select min(word_num)
 	        from ringo_word
 	        where file_num = #{file_num}
 	    </if>
 	    <if test="arrow == 'left'">
-	        select min(word_num)
+	        select max(word_num)
 	        from ringo_word
 	        where file_num = #{file_num}
 	    </if>
