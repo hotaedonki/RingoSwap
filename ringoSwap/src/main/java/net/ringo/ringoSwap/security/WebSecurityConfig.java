@@ -34,6 +34,7 @@ public class WebSecurityConfig {
                 "/img/**",
                 "/css/**",
                 "/js/**").permitAll()
+        .antMatchers("/translate/**").authenticated() // "/translate/**" 경로는 로그인한 사용자만 접근 가능
         .anyRequest().authenticated()
         .and()
         .formLogin()					
