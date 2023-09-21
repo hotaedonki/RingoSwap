@@ -62,6 +62,7 @@ dependencies {
    	//google Cloud translation API
 	implementation platform("com.google.cloud:libraries-bom:20.6.0")
 	implementation("com.google.cloud:google-cloud-translate")
+	implementation 'com.google.cloud:google-cloud-translate:2.23.0'
 }
 
 tasks.named('test') {
