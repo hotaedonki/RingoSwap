@@ -85,6 +85,9 @@ function createChatRoom()
 
 function loadJoinedChatroomListRealTime(data)
 {
+	// 기존에 있는 채팅방 리스트를 삭제
+	clearChatlist();
+	
 	let jsonData = JSON.parse(data.body);
 	
 	jsonData.forEach(item => {
@@ -140,4 +143,14 @@ function createChatroomThumbnail(chatroom_num, title, inputdate, message)
     
     // 생성한 blockDiv 요소를 chatlist에 append
     chatlist.appendChild(blockDiv);
+}
+
+function clearChatlist() 
+{
+    let chatlist = document.querySelector('.chatlist');
+    
+    // 모든 자식 요소를 삭제
+    while (chatlist.firstChild) {
+        chatlist.removeChild(chatlist.firstChild);
+    }
 }

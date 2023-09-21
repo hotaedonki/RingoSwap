@@ -124,9 +124,10 @@ function onConnected()
 	stompClient.subscribe('/sub/chat/openChatRoom/message/state/' + chatroomNum, onMessageForState)
 	// 메시지를 받는 이벤트 => /sub/chat/openChatRoom/message/채팅방번호 로 구독한다
 	stompClient.subscribe('/sub/chat/openChatRoom/message/' + chatroomNum, onMessageReceived);
-	// 채팅방 ㅈ
-	stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + myUserNum, {}, myUserNum);
 	
+	// 채팅방 정보를 가져오기 위한 호출
+	stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + myUserNum, {}, myUserNum);
+	// 채팅방 정보를 받기 위한 이벤트 연결
 	stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + myUserNum, loadJoinedChatroomListRealTime);
 }
 
@@ -158,8 +159,6 @@ function onMessageReceived(message)
             const messageValue = bodyObj.message;
             const type = bodyObj.type;
             const userNumData = bodyObj.user_num;
-            //console.log("메시지 :", messageValue);
-            //console.log("타입 :", type);  //
             
             if (type == null)
             	return;
@@ -170,6 +169,9 @@ function onMessageReceived(message)
 				case 'TALK':
 					console.log("메시지:", messageValue);
 					createChatMsgBox(userNumData, JSON.stringify(messageValue));
+					
+					// 채팅방 정보를 가져오기 위한 호출
+					stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + myUserNum, {}, myUserNum);
 					scrollDown();
 					break;
 			}
@@ -217,6 +219,9 @@ function createChatMsgBox(userNum, message)
 
 function loadJoinedChatroomListRealTime(data)
 {
+	// 기존에 있는 채팅방 리스트를 삭제
+	clearChatlist();
+	
 	let jsonData = JSON.parse(data.body);
 	
 	jsonData.forEach(item => {
@@ -272,6 +277,16 @@ function createChatroomThumbnail(chatroom_num, title, inputdate, message)
     
     // 생성한 blockDiv 요소를 chatlist에 append
     chatlist.appendChild(blockDiv);
+}
+
+function clearChatlist() 
+{
+    let chatlist = document.querySelector('.chatlist');
+    
+    // 모든 자식 요소를 삭제
+    while (chatlist.firstChild) {
+        chatlist.removeChild(chatlist.firstChild);
+    }
 }
 
 /*
