@@ -214,4 +214,39 @@
 			)
 		WHERE ROWNUM = 1
 	</select>
+	
+	<!-- 채팅방 링크들을 이용해 채팅방들을 가져온다. -->
+	<select id="getChatroomsByChatroomLinks" parameterType="ChatroomLink" resultType="Chatroom">
+	select * from
+		ringo_chatroom
+	where
+		chatroom_num in
+		<foreach collection="list" item="chatroom_num" open="(" separator="," close=")">
+			#{chatroom_num}
+		</foreach>
+	</select>
+	
+	<!-- 채팅방 목록에 표시할 필요한 데이터들만 가져오기 위한 sql문 -->
+	<select id="getChatroomThumbnails" parameterType="int" resultType="net.ringo.ringoSwap.domain.custom.ChatroomThumbnail">
+		SELECT 
+			rc.chatroom_num,
+			rc.title,
+			rcc.message,
+			TO_CHAR(rcc.inputdate, 'YYYY-MM-DD HH24:MI:SS') as inputdate
+		FROM
+			ringo_chatroom rc
+		JOIN 
+			ringo_chat_common rcc 
+		ON 
+			rc.chatroom_num = rcc.chatroom_num
+		WHERE
+			rc.chatroom_num IN (
+				SELECT chatroom_num FROM ringo_chatroom_link WHERE user_num = #{userNum}
+			)
+		AND rcc.inputdate = (
+				SELECT MAX(inputdate) FROM ringo_chat_common WHERE chatroom_num = rc.chatroom_num
+			)
+		ORDER BY
+			rcc.inputdate DESC
+	</select>
 </mapper>

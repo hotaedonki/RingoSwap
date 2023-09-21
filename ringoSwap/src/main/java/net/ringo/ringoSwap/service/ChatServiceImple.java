@@ -2,6 +2,7 @@ package net.ringo.ringoSwap.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -14,9 +15,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.ChatDAO;
+import net.ringo.ringoSwap.dao.MemberDAO;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
+import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
 import net.ringo.ringoSwap.enums.webService.MessageType;
 
 /*
@@ -36,7 +39,10 @@ public class ChatServiceImple implements ChatService
 	@Autowired
 	private ChatDAO dao;
 	
-
+	@Autowired
+	private MemberDAO mDao;
+	
+	
 	@Override
 	public ArrayList<Integer> getChatroomNums(int userNum) 
 	{
@@ -189,5 +195,16 @@ public class ChatServiceImple implements ChatService
 	public int getMaxChatNum() 
 	{
 		return dao.getMaxChatNum();
+	}
+
+	// 채팅방 메인에서 채팅방 목록들에 대한 정보들을 가져오기 위한 기능
+	@Override
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnails(int userNum) 
+	{
+		/* 필요한 정보 : 채팅방 고유 번호, 채팅방 제목, 가장 마지막으로 입력된 메시지 입력 날짜, 가장 마지막으로 입력된 메시지 
+		 * int chatroom_num; String title; String inputdate; String message;
+		 */
+		
+		return dao.getChatroomThumbnails(userNum);
 	}
 }

@@ -40,7 +40,7 @@ public class PathHandler
 	public final static String LOADMESSAGE = "loadMessage";
 	public final static String MM_OPENCHATROOMENTER = "/chat/openChatRoomEnter/{chatroomID}";
 	public final static String MM_OPENCHATROOMMESSAGE = "/chat/openChatRoom/message/{chatroomID}";
-	public final static String MM_LOADJOINEDCHATROOMLISTREALTIME ="/chat/openChatMain/loadJoinedChatroomListRealTime/{userNum}";
+	public final static String MM_LOADJOINEDCHATROOMLISTREALTIME = "/chat/openChatMain/loadJoinedChatroomListRealTime/{userNum}";
 	public final static String ST_OPENCHATROOMMESSAGE = "/sub/chat/openChatRoom/message/{chatroomID}";
 	public final static String ST_OPENCHATROOMMESSAGESTATE = "/sub/chat/openChatRoom/message/state/{chatroomID}";
 	public final static String ST_LOADJOINEDCHATROOMLISTREALTIME = "/sub/chat/openChatMain/loadJoinedChatroomListRealTime/{userNum}";

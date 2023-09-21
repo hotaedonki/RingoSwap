@@ -34,9 +34,8 @@ function connect()
 
 function onConnected() 
 {
-	stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/', {}, userNum);
+	stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + userNum, {}, userNum);
 	
-	// 입장, 퇴장 관련 메시지를 받는 이벤트
 	stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + userNum, loadJoinedChatroomListRealTime);
 }
 
