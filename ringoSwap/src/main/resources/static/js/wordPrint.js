@@ -306,10 +306,10 @@ function handleAddButtonClick() {
 			, success: function(response) {
 			    console.log("워드 네비게이션 : " + response);
 			    if(response.isEndOfWords === 1) {
-			        alert("마지막 단어입니다.")
+			        alert("가장 최근 단어입니다.")
 			    } 
 			    else if (response.isEndOfWords === 0) {
-			        alert("첫 단어입니다.")
+			        alert("마지막 단어입니다.")
 			    }
 			    else {
 			        updateWordCard(response);

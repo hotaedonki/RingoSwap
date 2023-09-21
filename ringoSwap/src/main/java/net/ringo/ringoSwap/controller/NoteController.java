@@ -338,14 +338,14 @@ public class NoteController
 	   
 	   int lastWord = service.checkLastWord(checkMap);
 	   
-	   if(arrow.equals("right") && word_num >= lastWord) {
+	   if(arrow.equals("right") && word_num <= lastWord) {
 		   DirWord endWord = new DirWord();
-		   endWord.setIsEndOfWords(1);
+		   endWord.setIsEndOfWords(0);
 		   return endWord;
 	   } 
-	   else if(arrow.equals("left") && word_num <= lastWord) { 
+	   else if(arrow.equals("left") && word_num >= lastWord) { 
 		   DirWord firstWord = new DirWord();
-		   firstWord.setIsEndOfWords(0);
+		   firstWord.setIsEndOfWords(1);
 		   return firstWord; 
 	   }
 
