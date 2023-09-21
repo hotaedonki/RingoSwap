@@ -27,6 +27,7 @@ let chatroomNum;
 let myChatroomLinkInfo;
 let myUserNum;
 let url;
+let subscriptionForUpdateChatroom;
 
 // 초기화를 해주기 위한 코드, 실행 시점 차이로 인해 값을 받지 못하는 것을 방지.
 function init()
@@ -39,6 +40,10 @@ function init()
 	myChatroomLinkInfo = document.getElementById("myChatroomLink").value;
 	myUserNum = findValueByKey("user_num", myChatroomLinkInfo);
 	url = new URL(location.href).searchParams;
+	subscriptionForUpdateChatroom = {};
+	
+	console.log("init chatroomNum - " + chatroomNum);
+	console.log("init usernum - " + myUserNum);
 	
 	scrollDown();
 }
@@ -126,9 +131,14 @@ function onConnected()
 	stompClient.subscribe('/sub/chat/openChatRoom/message/' + chatroomNum, onMessageReceived);
 	
 	// 채팅방 정보를 가져오기 위한 호출
-	stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + myUserNum, {}, myUserNum);
+	//stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + myUserNum, {}, myUserNum);
 	// 채팅방 정보를 받기 위한 이벤트 연결
-	stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + myUserNum, loadJoinedChatroomListRealTime);
+	//stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + myUserNum, loadJoinedChatroomListRealTime);
+	
+	// 자신이 잠가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 요청
+	stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);
+	// 자신이 잠가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 받기 위한 이벤트 연결
+	stompClient.subscribe('/sub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, loadChatRoomNumsByUserNum);
 }
 
 // 접속 실패 후, 에러 발생시 실행하는 함수
@@ -171,7 +181,7 @@ function onMessageReceived(message)
 					createChatMsgBox(userNumData, JSON.stringify(messageValue));
 					
 					// 채팅방 정보를 가져오기 위한 호출
-					stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + myUserNum, {}, myUserNum);
+					stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroomNum, {}, chatroomNum, myUserNum);
 					scrollDown();
 					break;
 			}
@@ -289,6 +299,30 @@ function clearChatlist()
     }
 }
 
+function loadChatRoomNumsByUserNum(data)
+{
+	let jsonData = JSON.parse(data.body);
+	
+	// 불러온 채팅방 데이터를 기반으로 
+	jsonData.forEach(item => 
+	{
+		subscribe(item);
+		stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroomNum, {}, myUserNum);
+	});
+	
+}
+
+// 새로운 이벤트를 구독하기 위한 기능
+function subscribe(endpoint)
+{
+	// 이미 구독 중이라면 구독을 해지
+	if (subscriptionForUpdateChatroom[endpoint])
+		subscriptionForUpdateChatroom[endpoint].unsubscribe();
+	
+	// 채팅방 정보를 받기 위한 이벤트 연결
+	subscriptionForUpdateChatroom[endpoint] = stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + endpoint, loadJoinedChatroomListRealTime);
+}
+
 /*
 	참고 - 메시지 보내는 예시
 	
@@ -308,4 +342,7 @@ function clearChatlist()
 
 	// stompClient.send()를 사용하여 메시지 전송
 	stompClient.send('/pub/chat/openChatRoomEnter/' + chatroomNum, {}, JSON.stringify(chatCommon));
+	
+	! 전달할 값이 없는 경우에는
+	stompClient.send('/pub/chat/openChatRoomEnter/' + chatroomNum, {}, "");
 */

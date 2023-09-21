@@ -207,4 +207,11 @@ public class ChatServiceImple implements ChatService
 		
 		return dao.getChatroomThumbnails(userNum);
 	}
+
+	// 유저가 속해있는 채팅방의 고유 번호들을 유저 고유 번호로 가져온다.
+	@Override
+	public ArrayList<Integer> loadChatRoomNumsByUserNum(int userNum) 
+	{
+		return dao.loadChatRoomNumsByUserNum(userNum);
+	}
 }

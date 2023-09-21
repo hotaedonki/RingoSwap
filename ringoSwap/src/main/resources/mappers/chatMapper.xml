@@ -249,4 +249,14 @@
 		ORDER BY
 			rcc.inputdate DESC
 	</select>
+	
+	<!-- 내가 속한 채팅방의 고유 번호들을 내 고유번호로 가져옴 -->
+	<select id="loadChatRoomNumsByUserNum" parameterType="int" resultType="int">
+		select 
+			chatroom_num
+		from
+			ringo_chatroom_link
+		where
+			user_num = #{user_num}
+	</select>
 </mapper>

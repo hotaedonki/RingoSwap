@@ -73,10 +73,11 @@ public class ChatController
 	
 	@MessageMapping(PathHandler.MM_LOADJOINEDCHATROOMLISTREALTIME)
 	@SendTo(PathHandler.ST_LOADJOINEDCHATROOMLISTREALTIME)
-	public String loadJoinedChatroomListRealTime(@DestinationVariable int userNum) throws Exception
+	public String loadJoinedChatroomListRealTime(@DestinationVariable int chatroom_num, int userNum) throws Exception
 	{
 		log.debug("load Joined Chatroom List RealTime . . .");
-		
+		log.debug("chatroom : {}", chatroom_num);
+		log.debug("userNum : {}", userNum);
 		ArrayList<ChatroomThumbnail> chatroomThumbnails = service.getChatroomThumbnails(userNum);
 		
         ObjectMapper mapper = new ObjectMapper();
@@ -213,6 +214,18 @@ public class ChatController
 		}
 		
 		return dbChat;
+	}
+	
+	@MessageMapping(PathHandler.MM_LOADCHATROOMNUMSBYUSERNUM)
+	@SendTo(PathHandler.ST_LOADCHATROOMNUMSBYUSERNUM)
+	public String loadChatRoomNumsByUserNum(@DestinationVariable int userNum) throws Exception
+	{
+		log.debug("load Chat Room Nums By UserNum . . .");
+
+		ArrayList<Integer> chatroomNums =  service.loadChatRoomNumsByUserNum(userNum);
+
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(chatroomNums);
 	}
 	
 	@ResponseBody

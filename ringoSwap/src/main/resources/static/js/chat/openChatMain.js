@@ -8,11 +8,13 @@ $(document).ready(function()
 
 let stompClient;
 let userNum;
+let subscriptionForUpdateChatroom;	// 방 정보 업데이트 이벤트를 구독할 때 구독 정보를 저장하는 객체 
 
 function init()
 {
 	stompClient = null;
 	userNum = document.getElementById('userNum').value;
+	subscriptionForUpdateChatroom = {};
 }
 
 // 소켓을 만들어주는 역할을 하는 함수
@@ -35,9 +37,14 @@ function connect()
 function onConnected() 
 {
 	// 채팅방 정보를 가져오기 위한 호출
-	stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + userNum, {}, userNum);
+	//stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroom_num, {}, userNum);
 	// 채팅방 정보를 받기 위한 이벤트 연결
-	stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + userNum, loadJoinedChatroomListRealTime);
+	//stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroom_num, loadJoinedChatroomListRealTime);
+	
+	// 자신이 잠가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 요청
+	stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, {}, userNum);
+	// 자신이 잠가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 받기 위한 이벤트 연결
+	stompClient.subscribe('/sub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, loadChatRoomNumsByUserNum);
 }
 
 function onError() 
@@ -153,4 +160,26 @@ function clearChatlist()
     while (chatlist.firstChild) {
         chatlist.removeChild(chatlist.firstChild);
     }
+}
+
+function loadChatRoomNumsByUserNum(data)
+{
+	let jsonData = JSON.parse(data.body);
+	
+	// 불러온 채팅방 데이터를 기반으로 
+	jsonData.forEach(item => 
+	{
+		subscribe(item);
+	});
+}
+
+// 새로운 이벤트를 구독하기 위한 기능
+function subscribe(endpoint)
+{
+	// 이미 구독 중이라면 구독을 해지
+	if (subscriptionForUpdateChatroom[endpoint])
+		subscriptionForUpdateChatroom[endpoint].unsubscribe();
+	
+	// 채팅방 정보를 받기 위한 이벤트 연결
+	subscriptionForUpdateChatroom[endpoint] = stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + endpoint, loadJoinedChatroomListRealTime);
 }

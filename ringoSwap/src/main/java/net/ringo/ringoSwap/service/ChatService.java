@@ -46,4 +46,6 @@ public interface ChatService
 	public ChatCommon insertChatCommonAndGetChatCommon(ChatCommon chat);
 
 	public ArrayList<ChatroomThumbnail> getChatroomThumbnails(int userNum);
+
+	public ArrayList<Integer> loadChatRoomNumsByUserNum(int userNum);
 }

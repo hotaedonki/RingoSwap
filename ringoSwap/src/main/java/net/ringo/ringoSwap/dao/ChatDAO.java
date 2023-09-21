@@ -53,4 +53,6 @@ public interface ChatDAO
 	public ArrayList<Chatroom> getChatroomsByChatroomLinks(ArrayList<ChatroomLink> chatroomLinks);
 
 	public ArrayList<ChatroomThumbnail> getChatroomThumbnails(int userNum);
+
+	public ArrayList<Integer> loadChatRoomNumsByUserNum(int userNum);
 }
