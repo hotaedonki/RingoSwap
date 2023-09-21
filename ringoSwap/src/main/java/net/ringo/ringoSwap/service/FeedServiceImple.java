@@ -17,7 +17,7 @@ import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.Reply;
 import net.ringo.ringoSwap.domain.Tagstorage;
-import net.ringo.ringoSwap.util.FeedSort;
+import net.ringo.ringoSwap.util.JsonRead;
 @Slf4j
 @Service
 public class FeedServiceImple implements FeedService{

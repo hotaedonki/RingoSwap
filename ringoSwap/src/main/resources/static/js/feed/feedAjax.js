@@ -90,7 +90,7 @@ console.log('Current feed number:', feed.feed_num);
                     <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
                 </div>
                 <div class="card-body">
-                    <p class="card-text collapseFeed" data-feed-num="${feed.feed_num}">${styledContent}</p>
+                    <p class="card-text collapseFeed content-translate" data-feed-num="${feed.feed_num}">${styledContent}</p>
                     <div class="feed-image-list" data-feed-num="${feed.feed_num}"></div>
                     <div class="feed-button">
                         <span class="like-count" data-feed-num="${feed.feed_num}">${feed.like_count}</span> 
@@ -173,7 +173,7 @@ function feedDetail() {
                         <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-3 me-3" data-feed-num="${detail.feed.feed_num}">삭제</button>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">${styledContent}</p>
+                        <p class="card-text content-translate">${styledContent}</p>
                         <div class="feed-image-list" data-feed-num="${detail.feed.feed_num}"></div>
                         <div class="feed-button">
                             <span class="like-count" data-feed-num="${detail.feed.feed_num}">${detail.feed.like_count}</span> 
@@ -493,6 +493,36 @@ function friendPrint(){
         },
         error:function(e){
             console.log('eee');
+        }
+    })
+}
+/*
+    content-translate : 번역기능을 적용할 텍스트는 무조건 이러한 명칭의 클래스를 붙여야 합니다.
+*/
+function feedTranslate(){
+    console.log('번역번역');
+    let trans = $(this).closest('.card-body').find('.content-translate');
+    let text = trans.text();
+    let target = $('#translateLang').val();
+    console.log(text);
+    
+    $.ajax({
+        url:'/ringo/translate/feed',
+        type: "post",
+        data:{text : text, targetLang : target},
+        dataType:'text',
+        success:function(translateText){
+            console.log('번역성공');
+            if(text == translateText){
+                alert('동일한 언어로 번역할 수 없습니다.');
+            }else{
+                trans.html(translateText);
+            }
+            console.log('적용완료');
+        },
+        error:function(e){
+            console.log(e);
+            console.log('error');
         }
     })
 }
