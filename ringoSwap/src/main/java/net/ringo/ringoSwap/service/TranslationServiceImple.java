@@ -1,25 +1,38 @@
 package net.ringo.ringoSwap.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.stereotype.Service;
 
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.translate.Detection;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
 
+import lombok.extern.slf4j.Slf4j;
+import net.ringo.ringoSwap.util.JsonRead;
+
 @Service
+@Slf4j
 public class TranslationServiceImple implements TranslationService{
-	static String key = "17ea03595a210241d6b26b2bbbb711fd5e693513";
-	static String location = "global";
-	static String projectId = "key-range-399607";
+	private static final String PROJECT_ID = "key-range-399607";		//해당 API의 프로젝트ID를 담은 상수
+	private static final String KEY = JsonRead.readJsonFile("key-range-399607-17ea03595a21.json");	//해당 API의 서비스 계정의 키값을 담은 상수
 	
 	@Override
 	public String translateDetection(String text) {
+		log.debug("키값{}", KEY.getBytes(StandardCharsets.UTF_8));
+		log.debug("변환값{}", StandardCharsets.UTF_8);
 		try {
 			//인증 및 설정
+			GoogleCredentials credentials = GoogleCredentials.fromStream(new ByteArrayInputStream(KEY.getBytes(StandardCharsets.UTF_8))); 
+			log.debug("키값{}", KEY.getBytes(StandardCharsets.UTF_8));
+			log.debug("변환값{}", StandardCharsets.UTF_8);
+			
 			TranslateOptions options = TranslateOptions.newBuilder()
-					.setProjectId(projectId)
+					.setProjectId(PROJECT_ID)
+	                .setCredentials(credentials)
 					.build();
 			//Translate API 클라이언트 생성
 			Translate translate = options.getService();
@@ -40,16 +53,19 @@ public class TranslationServiceImple implements TranslationService{
 	public String translateFeed(String text, String sourceLang, String targetLang) {
 		try {
 			//인증설정
+			GoogleCredentials credentials = GoogleCredentials.fromStream(new ByteArrayInputStream(KEY.getBytes(StandardCharsets.UTF_8)));
+			
 			TranslateOptions options = TranslateOptions.newBuilder()
-					.setProjectId(projectId)
+					.setProjectId(PROJECT_ID)
+	                .setCredentials(credentials)
 					.build();
 			//Translate API 클라이언트 생성
 			Translate translate = options.getService();
 			
 			//번역설정
 			Translation translation = translate.translate(text
-					, Translate.TranslateOption.sourceLanguage(text)
-					, Translate.TranslateOption.targetLanguage(text));
+					, Translate.TranslateOption.sourceLanguage(sourceLang)
+					, Translate.TranslateOption.targetLanguage(targetLang));
 			
 			//번역 텍스트 반환 
 			return translation.getTranslatedText();

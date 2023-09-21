@@ -44,6 +44,7 @@ function initializeDocumentClickHandlers() {
     $(document).on('click', '#unfollow_button', followDelete);
     $(document).on('click', '.goToOtherProfile', goToOtherProfile);
     //$(document).on('click', '#goToOtherProfile', goToOtherProfile);
+    $(document).on('click', '.translate', feedTranslate);
 }
 
 function initializeWindowEventHandlers() {
