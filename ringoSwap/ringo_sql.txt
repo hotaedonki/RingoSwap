@@ -39,7 +39,7 @@ create SEQUENCE ringo_member_seq;
 --마이탭에 표시하기 위해 기존 회원정보에 더해 프로필사진정보+팔로워/팔로잉 갯수+태그 정보를 같이 출력하는 view create문
 CREATE VIEW ringo_member_with_mypage AS
 	select M.user_num, M.user_id, M.nickname
-		, M.native_lang, M.target_lang
+		, M.native_lang, M.target_lang, M.trans_lang
 		, M.introduction, M.original_profile, M.saved_profile
 		, COALESCE(FW.fw_cnt, 0) as fe_count				--팔로워 수를 기록하는 속성
 		, COALESCE(FE.fe_cnt, 0) as fr_count				--팔로우 수를 기록하는 속성
@@ -53,8 +53,7 @@ CREATE VIEW ringo_member_with_mypage AS
         SELECT followee_num, COUNT(*) AS fe_cnt
         FROM ringo_member_follow
         GROUP BY followee_num
-    ) FE ON M.user_num = FE.followee_num
-    ;
+    ) FE ON M.user_num = FE.followee_num;
 
 --각 회원과 해당 회원이 갖는 태그를 매칭하는 테이블
 CREATE TABLE ringo_taglink_member (

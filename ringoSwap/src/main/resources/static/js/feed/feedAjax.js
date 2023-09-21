@@ -503,12 +503,13 @@ function feedTranslate(){
     console.log('번역번역');
     let trans = $(this).closest('.card-body').find('.content-translate');
     let text = trans.text();
+    let target = $('#translateLang').val();
     console.log(text);
     
     $.ajax({
         url:'/ringo/translate/feed',
         type: "post",
-        data:{text : text, targetLang : 'en'},
+        data:{text : text, targetLang : target},
         dataType:'text',
         success:function(translateText){
             console.log('번역성공');
