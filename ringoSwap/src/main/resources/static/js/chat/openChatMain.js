@@ -34,8 +34,9 @@ function connect()
 
 function onConnected() 
 {
+	// 채팅방 정보를 가져오기 위한 호출
 	stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + userNum, {}, userNum);
-	
+	// 채팅방 정보를 받기 위한 이벤트 연결
 	stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + userNum, loadJoinedChatroomListRealTime);
 }
 
@@ -93,50 +94,50 @@ function loadJoinedChatroomListRealTime(data)
 
 function createChatroomThumbnail(chatroom_num, title, inputdate, message)
 {
-	 // chatlist의 div 요소를 찾습니다.
+	 // chatlist의 div 요소 접근
     let chatlist = document.querySelector('.chatlist');
     
-    // 새로운 block div 요소를 생성합니다.
+    // 새로운 block div 요소를 생성
     let blockDiv = document.createElement('div');
     blockDiv.className = 'block';
     
-    // details div 요소를 생성합니다.
+    // details div 요소를 생성
     let detailsDiv = document.createElement('div');
     detailsDiv.className = 'details';
     blockDiv.appendChild(detailsDiv);
     
-    // listHead div 요소를 생성하고, details에 append 합니다.
+    // listHead div 요소를 생성, details에 append
     let listHeadDiv = document.createElement('div');
     listHeadDiv.className = 'listHead';
     detailsDiv.appendChild(listHeadDiv);
     
-    // hidden input 요소를 생성하고, chatroom_num 값을 설정합니다.
+    // hidden input 요소를 생성, chatroom_num 값을 설정
     let hiddenInput = document.createElement('input');
     hiddenInput.type = 'hidden';
     hiddenInput.value = chatroom_num;
     listHeadDiv.appendChild(hiddenInput);
     
-    // h5 요소를 생성하고, title 값을 설정합니다.
+    // h5 요소를 생성, title 값을 설정
     let h5 = document.createElement('h5');
     h5.textContent = title;
     listHeadDiv.appendChild(h5);
     
-    // p 요소를 생성하고, time 클래스를 추가하며 inputdate 값을 설정합니다.
+    // p 요소를 생성, time 클래스를 추가하며 inputdate 값을 설정
     let timeP = document.createElement('p');
     timeP.className = 'time';
     timeP.textContent = inputdate;
     listHeadDiv.appendChild(timeP);
     
-    // message_p div 요소를 생성하고, details에 append 합니다.
+    // message_p div 요소를 생성, details에 append
     let messageDiv = document.createElement('div');
     messageDiv.className = 'message_p';
     detailsDiv.appendChild(messageDiv);
     
-    // p 요소를 생성하고, message 값을 설정합니다.
+    // p 요소를 생성, message 값을 설정
     let messageP = document.createElement('p');
     messageP.textContent = message;
     messageDiv.appendChild(messageP);
     
-    // 생성한 blockDiv 요소를 chatlist에 append 합니다.
+    // 생성한 blockDiv 요소를 chatlist에 append
     chatlist.appendChild(blockDiv);
 }
