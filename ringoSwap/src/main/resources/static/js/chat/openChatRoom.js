@@ -181,7 +181,7 @@ function onMessageReceived(message)
 					createChatMsgBox(userNumData, JSON.stringify(messageValue));
 					
 					// 채팅방 정보를 가져오기 위한 호출
-					stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroomNum, {}, chatroomNum, myUserNum);
+					stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroomNum, {}, myUserNum);
 					scrollDown();
 					break;
 			}
@@ -307,9 +307,9 @@ function loadChatRoomNumsByUserNum(data)
 	jsonData.forEach(item => 
 	{
 		subscribe(item);
-		stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroomNum, {}, myUserNum);
 	});
 	
+	stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroomNum, {}, myUserNum);
 }
 
 // 새로운 이벤트를 구독하기 위한 기능
