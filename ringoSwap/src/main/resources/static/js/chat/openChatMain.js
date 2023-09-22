@@ -165,11 +165,19 @@ function clearChatlist()
 function loadChatRoomNumsByUserNum(data)
 {
 	let jsonData = JSON.parse(data.body);
+	// 한번만 불러와도 되기 때문에 사용한 함수
+	let isLoaded = false;
 	
 	// 불러온 채팅방 데이터를 기반으로 
 	jsonData.forEach(item => 
 	{
 		subscribe(item);
+		
+		if (!isLoaded)
+		{
+			stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + item, {}, userNum);
+			isLoaded = true;
+		}
 	});
 }
 
