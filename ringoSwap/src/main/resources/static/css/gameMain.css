@@ -53,3 +53,15 @@
 .set-rule, .carousel-caption h5, p {
 	font-size: x-large;
 }
+
+h3:not(.notMargin) {
+    margin-top: 20px;
+}
+
+.row .justify-content-center {
+	margin-top: 10px;
+}
+
+i {
+	cursor : pointer;
+}
