@@ -41,20 +41,29 @@ public class GameController
 	@GetMapping("MCQ")
 	public String MCQ()
 	{
-		//난이도 정보 가져오기
-		
 		return "game/MCQ";
 	}
 
-	   // 해당 사용자가 생성한 단어장분류 파일 목록을 user_num을 매개변수로 검색하여 리턴하는 메서드
-	   @ResponseBody
-	   @PostMapping("fileOpenWordNote")
-	   public ArrayList<DirFile> fileOpenWordNote(@AuthenticationPrincipal UserDetails user) {
-		  int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		  //회원번호를 매개변수로 file_type이 word인 파일목록을 리턴하는 메서드 실행
-		  ArrayList<DirFile> note = service.wordFileSelectByUserNum(user_num);
-	      
-	      log.debug("파일 열어~~~: {} ", note);
-	      return note;
+	@GetMapping("flashCards")
+	public String flashCards()
+	{
+		return "game/flashCards";
+	}
+	@GetMapping("dictation")
+	public String dictation()
+	{
+		return "game/dictation";
+	}
+	
+	// 해당 사용자가 생성한 단어장분류 파일 목록을 user_num을 매개변수로 검색하여 리턴하는 메서드
+	@ResponseBody
+	@PostMapping("fileOpenWordNote")
+	public ArrayList<DirFile> fileOpenWordNote(@AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		//회원번호를 매개변수로 file_type이 word인 파일목록을 리턴하는 메서드 실행
+		ArrayList<DirFile> note = service.wordFileSelectByUserNum(user_num);
+
+		log.debug("파일 열어~~~: {} ", note);
+		return note;
 	   }
 }

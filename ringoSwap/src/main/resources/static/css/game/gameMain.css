@@ -2,15 +2,15 @@
     margin-left: 60px;
 }
 
-.row {
-	width: 70%;
-	margin: auto;
-	margin-top: 20px;
-}
-
 .carousel-item {
     height: 60vh;
     background-position: center;
+}
+
+.carouselRow, .game-option-area {
+	width: 70%;
+	margin: auto;
+	margin-top: 20px;
 }
 
 
@@ -58,7 +58,7 @@ h3:not(.notMargin) {
     margin-top: 20px;
 }
 
-.row .justify-content-center {
+.set-rule {
 	margin-top: 10px;
 }
 

@@ -1,0 +1,39 @@
+.flashCards-option-line {
+	font-size: 1.7rem;
+}
+
+.flashCards-option-line, .flashCards-question-box {
+	margin: auto;
+	margin-top:30px;
+	width:70%;
+}
+
+.flashCards-question-box {
+	height: 70vh;
+	perspective: 1500px;
+}
+
+.flashCards-inner {
+  position: relative;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+}
+
+.flashCards-inner h1:first-child {
+    font-size: 4em; 
+}
+
+.flashCards-inner h1:nth-child(2) {
+    display: flex;
+    justify-content: center;
+}
+
+.flashCards-front, .flashCards-back {
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.flashCards-back {
+  transform: rotateY(180deg);
+}
