@@ -29,4 +29,16 @@
 	</if>
 	where user_num = #{user_num}
 	</update>
+	
+	
+	<!-- 
+		user_num을 매개변수로 file_type이 word인 파일목록을 리턴하는 select문
+		note기능과 연동되는 기능입니다.
+	 -->
+	 <select id="wordFileSelectByUserNum" resultType="DIrFile">
+	 select * 
+	 from ringo_file
+	 where user_num = #{user_num}
+	 	and file_type = 'word'
+	 </select>
 </mapper>

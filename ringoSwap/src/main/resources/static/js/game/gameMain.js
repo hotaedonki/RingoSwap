@@ -53,6 +53,7 @@ function showWordListModal() {
         $('#wordlistModal').on('hidden.bs.modal', function () {
             $(this).remove();
         });
+        wordFilePrint();
 }
 
 function showFormModal() {
@@ -242,4 +243,27 @@ function showCountOfItemsModal() {
 	    $('#countOfItemsModal').on('hidden.bs.modal', function () {
 	        $(this).remove();
 	    });
+}
+
+//wordlistModal 모달에 해당 사용자가 작성한 단어장 목록을 출력하는 메서드
+function wordFilePrint(){
+    $.ajax({
+        url:'fileOpenWordNote',
+        type:'post',
+        dataType:'json',
+        success:function(wordList){
+            console.log(wordList);
+                wordList.forEach(file => {
+                $('#wordlistModal .word-list-group').append(`
+                    <li>
+                        <input type="checkbox" data-file-num="${file.file_num}">
+                        <span>${file.title}</span>
+                        </li>
+                `);
+            });
+        },
+        error:function(e){
+            console.log(e);
+        }
+    })
 }
