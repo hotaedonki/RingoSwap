@@ -33,9 +33,17 @@ public class GameController
 	@GetMapping("MCQ")
 	public String MCQ()
 	{
-		//난이도 정보 가져오기
-		
 		return "game/MCQ";
+	}
+	@GetMapping("flashCards")
+	public String flashCards()
+	{
+		return "game/flashCards";
+	}
+	@GetMapping("dictation")
+	public String dictation()
+	{
+		return "game/dictation";
 	}
 	
 }

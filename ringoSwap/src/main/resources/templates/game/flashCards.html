@@ -12,6 +12,7 @@
 	th:href="@{/bootstrap-5.3.1-dist/css/bootstrap.min.css}" />
 <link rel="stylesheet" th:href="@{../css/sidebar.css}">
 <link rel="stylesheet" th:href="@{../css/game/gameMain.css}">
+<link rel="stylesheet" th:href="@{../css/game/flashCards.css}">
 <link
 	href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
 	rel="stylesheet">
@@ -113,86 +114,39 @@
 	</nav>
 
 	<section class="home container">
-		<div class="row carouselRow">
-			<div id="carouselExampleCaptions" class="carousel slide">
-				<div class="carousel-indicators">
-					<button type="button" data-bs-target="#carouselExampleCaptions"
-						data-bs-slide-to="0" class="active" aria-current="true"
-						aria-label="Slide 1"></button>
-					<button type="button" data-bs-target="#carouselExampleCaptions"
-						data-bs-slide-to="1" aria-label="Slide 2"></button>
-					<button type="button" data-bs-target="#carouselExampleCaptions"
-						data-bs-slide-to="2" aria-label="Slide 3"></button>
-				</div>
-				<div class="carousel-inner">
-					<div class="carousel-item active">
-						<i class="bi bi-pencil-square MCQ"></i>
-						<div class="d-block w-100">
-							<div class="carousel-caption d-none d-md-block">
-								<h5>Multiple Choice Quiz</h5>
-								<p>객관식 테스트</p>
-							</div>
-						</div>
-					</div>
-					<div class="carousel-item">
-						<div class="d-block w-100">
-							<i class="bi bi-magic flash-cards"></i>
-							<div class="carousel-caption d-none d-md-block">
-								<h5>FlashCards</h5>
-								<p>클릭하면 정답이 나와요!</p>
-							</div>
-						</div>
-					</div>
-					<div class="carousel-item">
-						<div class="d-block w-100">
-							<i class="bi bi-pencil-square dictation"></i>
-							<div class="carousel-caption d-none d-md-block">
-								<h5>Dictation</h5>
-								<p>받아쓰기로 암기 완성!</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<button class="carousel-control-prev" type="button"
-					data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-					<span class="visually-hidden">Previous</span>
-				</button>
-				<button class="carousel-control-next" type="button"
-					data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-					<span class="carousel-control-next-icon" aria-hidden="true"></span>
-					<span class="visually-hidden">Next</span>
-				</button>
+		<div class="row flashCards-option-line">
+			<div class="col-3 returnToGameMain d-flex flex-row">
+				<i class="bi bi-arrow-return-left"></i>
+			</div>
+			<div class="col-6 currentProblemNumber d-flex justify-content-center">
+				1/50</div>
+			<div class="col-3 update-cards d-flex flex-row-reverse">
+				<button type="button" class="btn btn-primary btn-sm">Update</button>
 			</div>
 		</div>
-		<div class="game-option-area">
-			<div class="row set-rule justify-content-center">
-				<div class="col-8 text-center">Set Rules</div>
-			</div>
-			<div class="row justify-content-center mt-3">
-				<div class="col-4 text-start">Select WordList</div>
-				<div class="col-4 text-end">
-					<button type="button" class="btn btn-primary btn-sm"
-						data-bs-toggle="modal" data-bs-target="#wordlistModal">All</button>
+		<div class="row d-flex justify-content-center">
+			<div class="card border-dark flashCards-question-box mb-3 mt-5">
+				<div class="flashCards-inner d-flex justify-content-center align-items-center">
+					<div class="flashCards-front">
+						<!-- 문제 내용 -->
+						<h1>Front</h1>
+						<h1>[발음]</h1>
+					</div>
+					<div class="flashCards-back">
+						<!-- 답안 내용 -->
+						<h1>Back</h1>
+						<h1>[발음]</h1>
+					</div>
 				</div>
 			</div>
-			<div class="row justify-content-center mt-3">
-				<div class="col-4 text-start">Presentation Form</div>
-				<div class="col-4 text-end">
-					<button type="button" class="btn btn-primary btn-sm"
-						data-bs-toggle="modal" data-bs-target="#formModal">Detailed</button>
-				</div>
-			</div>
-			<div class="row justify-content-center mt-3">
-				<div class="col-4 text-start">Number of Questions</div>
-				<div class="col-4 text-end">
-					<button type="button" class="btn btn-primary btn-sm"
-						data-bs-toggle="modal" data-bs-target="#countOfItemsModal">Total</button>
-				</div>
-			</div>
-			<div class="row justify-content-center more-option mt-3"></div>
 		</div>
 	</section>
+
+	<p>
+		<a th:href="@{/game/gameMain}">back</a>
+	</p>
+
+
 
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
 	<script th:src="@{../js/memberView/sidebar.js}"></script>
@@ -201,7 +155,6 @@
 	<script th:src="@{../js/game/MCQ.js}"></script>
 	<script th:src="@{../js/game/flashCards.js}"></script>
 	<script th:src="@{../js/game/dictation.js}"></script>
-
 
 </body>
 </html>
