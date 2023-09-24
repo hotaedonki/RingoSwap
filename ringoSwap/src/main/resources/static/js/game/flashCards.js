@@ -2,7 +2,37 @@ let currentCardIndex = 0; // 현재 카드 인덱스
 const cards = [...$(".flashCards-question-box")]; // 모든 카드들
 
 function playFlashCards() {
-    window.location.href = '../game/flashCards';
+    flashCardsHTML = `
+	    <section class="home container flashCards-container">
+			<div class="row flashCards-option-line">
+				<div class="col-3 d-flex flex-row">
+					<i class="bi bi-arrow-return-left return-to-game-main" data-bs-toggle="modal" data-bs-target="#confirmModal"></i>
+				</div>
+				<div class="col-6 currentProblemNumber d-flex justify-content-center">
+					1/50</div>
+				<div class="col-3 update-cards d-flex flex-row-reverse">
+					<button type="button" class="btn btn-primary btn-sm">Update</button>
+				</div>
+			</div>
+			<div class="row d-flex justify-content-center">
+				<div class="card border-dark flashCards-question-box mb-3 mt-5">
+					<div class="flashCards-inner d-flex justify-content-center align-items-center">
+						<div class="flashCards-front">
+							<!-- 문제 내용 -->
+							<h1>Front</h1>
+							<h1>[발음]</h1>
+						</div>
+						<div class="flashCards-back">
+							<!-- 답안 내용 -->
+							<h1>Back</h1>
+							<h1>[발음]</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>`;
+		$('.main-container').hide();
+		$("body").append(flashCardsHTML);
 }
 
 function clickCard() {
@@ -19,7 +49,3 @@ function clickCard() {
 function nextCard() {
 	alert("끝!");
 }
-
-$(document).ready(function() {
-	$('.flashCards-question-box').on('click', clickCard);
-});

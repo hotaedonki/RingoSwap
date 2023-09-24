@@ -12,6 +12,9 @@
 	th:href="@{/bootstrap-5.3.1-dist/css/bootstrap.min.css}" />
 <link rel="stylesheet" th:href="@{../css/sidebar.css}">
 <link rel="stylesheet" th:href="@{../css/game/gameMain.css}">
+<link rel="stylesheet" th:href="@{../css/game/MCQ.css}">
+<link rel="stylesheet" th:href="@{../css/game/flashCards.css}">
+<link rel="stylesheet" th:href="@{../css/game/dictation.css}">
 <link
 	href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
 	rel="stylesheet">
@@ -112,7 +115,7 @@
 		</div>
 	</nav>
 
-	<section class="home container">
+	<section class="home container main-container">
 		<div class="row carouselRow">
 			<div id="carouselExampleCaptions" class="carousel slide">
 				<div class="carousel-indicators">
@@ -193,11 +196,32 @@
 			<div class="row justify-content-center more-option mt-3"></div>
 		</div>
 	</section>
+	
+	
+	<!-- 모달 -->
+	<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h1 class="modal-title fs-5" id="confirmModalLabel">Modal title</h1>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        게임을 중단하고 돌아가시겠습니까?
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+		        <button type="button" class="btn btn-primary confirm-exit">Yes</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
 	<script th:src="@{../js/memberView/sidebar.js}"></script>
 	<script th:src="@{../js/game/gameVariables.js}"></script>
 	<script th:src="@{../js/game/gameMain.js}"></script>
+	<script th:src="@{../js/game/gameUtilities.js}"></script>
 	<script th:src="@{../js/game/MCQ.js}"></script>
 	<script th:src="@{../js/game/flashCards.js}"></script>
 	<script th:src="@{../js/game/dictation.js}"></script>

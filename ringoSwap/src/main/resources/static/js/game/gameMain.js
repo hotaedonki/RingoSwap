@@ -29,7 +29,7 @@ function showWordListModal() {
 		            <div class="modal-header">
 		                <h1 class="modal-title fs-5" id="wordlistModalLabel">Select a Wordlist</h1>
 		                <span class="d-flex align-items-frt">
-		                    <button type="button" class="btn btn-primary btn-sm me-3">Select All</button>
+		                    <button type="button" class="btn btn-primary btn-sm me-3 select-all">Select All</button>
 		                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		                </span>
 		            </div>

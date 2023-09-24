@@ -11,4 +11,13 @@ $(document).ready(function () {
 	$('.MCQ').on('click', playMCQ);
 	$('.flash-cards').on('click', playFlashCards);
 	$('.dictation').on('click', playDictation);
+	
+	//
+	$('.flashCards-question-box').on('click', clickCard);
+	
+	//게임을 중단하고 결과보기
+	$('.confirm-exit').on('click', confirmExit);
+	
+	//전체선택
+	$(document).on('click', '.select-all', selectAll);
 });
