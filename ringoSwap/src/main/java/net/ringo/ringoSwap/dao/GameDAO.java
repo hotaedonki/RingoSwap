@@ -2,6 +2,7 @@ package net.ringo.ringoSwap.dao;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -25,5 +26,7 @@ public interface GameDAO
 	GameSetting gameSettingSelectByUserNum(int user_num);
 	//사용자가 수정한 게임세팅 정보를 매개변수로  DB의 정보를 수정하는 메서드
 	int gameSettingUpdate(GameSetting setting);
+	//사용자가 수정한 정보를 매개변수로 DB의 문제갯수 속성을 수정하는 메서드
+	int gameSettingUpdateQuestionNum(HashMap<String, Object> map);
 	
 }

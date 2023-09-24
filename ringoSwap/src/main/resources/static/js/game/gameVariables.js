@@ -25,6 +25,9 @@ $(document).ready(function () {
 
 	//윈도우이벤트핸들러(대부분 history api 기능)
 	initializeWindowEventHandlers();
+
+	//게임세팅정보 출력 기능
+	questionNumPrint();
 });
 
 
@@ -40,7 +43,6 @@ function popStateWindow(event) {
     if(previousUrl === newUrl){
         return; //현재 url과 이전 url이 동일할경우, 아무 작업도 수행하지 않도록 리턴
     }
-    
     if (event.state && event.state.category) {
         // 이전 URL이 존재하고 현재 URL과 다른 경우, 앞으로 가기 작업을 실행
         console.log('앞으로 가기');
@@ -49,8 +51,7 @@ function popStateWindow(event) {
         // 이전 URL이 없으면서 현재 URL과 다른 경우, 뒤로가기 작업
         console.log('뒤로 가기');
         gameMainShow();
-    }
-    
+    }    
     previousUrl = newUrl; // 현재 URL을 이전 URL로 저장합니다.
 }
 

@@ -1,6 +1,7 @@
 package net.ringo.ringoSwap.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -84,6 +85,29 @@ public class GameController
 		setting.setUser_num(user_num);
 		int methodResult = service.gameSettingUpdate(setting);
 		
+		return methodResult;
+	}
+	
+	//사용자가 설정한 문제갯수 설정을 출력하는 메서드
+	@ResponseBody
+	@PostMapping("questNumPrint")
+	public int questNumPrint(@AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		int methodResult = service.gameSettingSelectByUserNumReturnQuestNum(user_num);
+		
+		return methodResult;
+	}
+	//사용자가 설정한 문제갯수 설정을 업데이트하는 메서드
+	@ResponseBody
+	@PostMapping("gameSettingUpdateQuestionNum")
+	public int gameSettingUpdateQuestionNum(@AuthenticationPrincipal UserDetails user
+					, int question_num) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("user_num", user_num);
+		map.put("question_num", question_num);
+		
+		int methodResult = service.gameSettingUpdateQuestionNum(map);
 		return methodResult;
 	}
 }
