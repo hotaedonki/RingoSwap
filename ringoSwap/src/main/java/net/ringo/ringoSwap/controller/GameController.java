@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.GameSetting;
 import net.ringo.ringoSwap.domain.SingleDifficulty;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.GameService;
@@ -65,11 +66,25 @@ public class GameController
 
 		log.debug("파일 열어~~~: {} ", note);
 		return note;
-	 }
-	
-	@GetMapping("dictationResult")
-	public String dictationResult()
-	{
-		return "game/dictationResult";
+	   }
+	//해당 사용자의 게임 설정을 불러오는 메서드
+	@ResponseBody
+	@PostMapping("gameSettingOpen")
+	public GameSetting gameSettingOpen(@AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		GameSetting setting = service.gameSettingSelectByUserNum(user_num);
+		return setting;
+	}
+	//해당 사용자의 게임설정을 업데이트하는 메서드
+	@ResponseBody
+	@PostMapping("gameSettingUpdate")
+	public int gameSettingOpen(GameSetting setting
+					, @AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		setting.setUser_num(user_num);
+		int methodResult = service.gameSettingUpdate(setting);
+		
+		return methodResult;
+
 	}
 }

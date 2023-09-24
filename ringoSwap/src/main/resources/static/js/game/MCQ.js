@@ -1,4 +1,7 @@
 function playMCQ() {
+    //history API기능을 위한 url변수
+    const currentUrl = window.location.href;
+    const newUrl = 'http://localhost:8888/ringo/game/gameMain?category=MCQ';
 	const MCQAreaHTML = `
 		<section class="home container MCQ-container">
 			<div class="row MCQ-option-line">
@@ -39,6 +42,9 @@ function playMCQ() {
 		</section>`;
 	$('.main-container').hide();
 	$("body").append(MCQAreaHTML);
+	if(currentUrl !== newUrl){
+		history.pushState({ url: newUrl }, '', `?category=MCQ`);
+	}
 }
 
 function MCQResultScreen() {
