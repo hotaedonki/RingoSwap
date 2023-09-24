@@ -2,6 +2,10 @@ let currentCardIndex = 0; // 현재 카드 인덱스
 const cards = [...$(".flashCards-question-box")]; // 모든 카드들
 
 function playFlashCards() {
+    //history API기능을 위한 url변수
+    const currentUrl = window.location.href;
+    const newUrl = 'http://localhost:8888/ringo/game/gameMain?category=flashcard';
+
     flashCardsHTML = `
 	    <section class="home container flashCards-container">
 			<div class="row flashCards-option-line">
@@ -33,6 +37,9 @@ function playFlashCards() {
 		</section>`;
 		$('.main-container').hide();
 		$("body").append(flashCardsHTML);
+        if(currentUrl !== newUrl){
+            history.pushState({ url: newUrl }, '', `?category=flashcard`);
+        }
 }
 
 function clickCard() {

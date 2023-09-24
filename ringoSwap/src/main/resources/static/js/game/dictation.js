@@ -1,4 +1,8 @@
 function playDictation() {
+    //history API기능을 위한 url변수
+    const currentUrl = window.location.href;
+    const newUrl = 'http://localhost:8888/ringo/game/gameMain?category=dictation';
+
 	const dictationHTML = `
 		<section class="home container dictation-container">
 			<div class="row dictation-option-line">
@@ -30,6 +34,9 @@ function playDictation() {
 		
 		$('.main-container').hide();
 		$("body").append(dictationHTML);
+        if(currentUrl !== newUrl){
+            history.pushState({ url: newUrl }, '', `?category=dictation`);
+        }
 }
 
 function dictationResultScreen() {
