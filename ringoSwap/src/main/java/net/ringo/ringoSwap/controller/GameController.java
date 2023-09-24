@@ -86,6 +86,7 @@ public class GameController
 		int methodResult = service.gameSettingUpdate(setting);
 		
 		return methodResult;
+
 	}
 	
 	//사용자가 설정한 문제갯수 설정을 출력하는 메서드

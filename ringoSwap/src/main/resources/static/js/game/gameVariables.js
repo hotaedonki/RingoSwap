@@ -14,7 +14,7 @@ $(document).ready(function () {
 	$('.flash-cards').on('click', playFlashCards);
 	$('.dictation').on('click', playDictation);
 	
-	//
+	//플래시카드에서 정답 출력
 	$('.flashCards-question-box').on('click', clickCard);
 	
 	//게임을 중단하고 결과보기
@@ -22,7 +22,8 @@ $(document).ready(function () {
 	
 	//전체선택
 	$(document).on('click', '.select-all', selectAll);
-
+	//메인화면으로 돌아가기
+	$(document).on('click', '.return-to-game-main', returnToGameMain);
 	//윈도우이벤트핸들러(대부분 history api 기능)
 	initializeWindowEventHandlers();
 

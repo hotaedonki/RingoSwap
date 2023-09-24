@@ -10,7 +10,7 @@ function playFlashCards() {
 	    <section class="home container flashCards-container">
 			<div class="row flashCards-option-line">
 				<div class="col-3 d-flex flex-row">
-					<i class="bi bi-arrow-return-left return-to-game-main" data-bs-toggle="modal" data-bs-target="#confirmModal"></i>
+					<i class="bi bi-arrow-return-left" data-bs-toggle="modal" data-bs-target="#confirmModal"></i>
 				</div>
 				<div class="col-6 currentProblemNumber d-flex justify-content-center">
 					1/50</div>

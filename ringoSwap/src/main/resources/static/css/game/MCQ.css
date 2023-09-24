@@ -1,8 +1,8 @@
-.MCQ-option-line {
+.MCQ-option-line, .MCQ-result-option-line {
 	font-size: 1.7rem;
 }
 
-.MCQ-option-line, .MCQ-question-box {
+.MCQ-option-line, .MCQ-question-box, .MCQ-result-option-line, .MCQ-result-box{
 	margin: auto;
 	margin-top:30px;
 	width:70%;
@@ -27,4 +27,16 @@
 	height: 20px;
 	margin: auto;
 }
+
+.MCQ-accuracy-rate {
+	font-size: 19px;
+}
+
+.MCQ-answer-and-wrongAnswer {
+	margin-top: 30px;
+	margin-bottom: 0px;
+}
+
+
+
 
