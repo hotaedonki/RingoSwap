@@ -16,6 +16,8 @@ function getCurrentGame() {
     if ($('.MCQ-container').length > 0) return 'MCQ';
     if ($('.dictation-container').length > 0) return 'dictation';
     if ($('.flashCards-container').length > 0) return 'flashCards';
+    if ($('.MCQ-result-container').length > 0) return 'MCQ-result';
+    if ($('.flashCards-result-container').length > 0) return 'flashCardsResult';
     return null;
 }
 
@@ -34,4 +36,13 @@ function selectAll() {
         // 체크된 체크박스가 절반 초과라면 전체 해제
         allCheckboxes.prop('checked', false);
     }
+}
+
+function returnToGameMain() {
+	const resultGame = getCurrentGame();
+	console.log(resultGame + "-container");
+	$(`.${resultGame}-container`).remove();
+	
+	$('#returnToMainModal').modal('hide');
+	$('.main-container').show();
 }

@@ -198,24 +198,67 @@
 	</section>
 	
 	
-	<!-- 모달 -->
-	<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h1 class="modal-title fs-5" id="confirmModalLabel">Modal title</h1>
-		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-		      </div>
-		      <div class="modal-body">
-		        게임을 중단하고 돌아가시겠습니까?
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-		        <button type="button" class="btn btn-primary confirm-exit">Yes</button>
-		      </div>
-		    </div>
-		  </div>
+	<!-- 게임 종료 모달 -->
+	<div class="modal fade" id="confirmModal" tabindex="-1"
+		aria-labelledby="confirmModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="confirmModalLabel">Modal
+						title</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">게임을 중단하고 돌아가시겠습니까?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary confirm-exit">Yes</button>
+				</div>
+			</div>
 		</div>
+	</div>
+	
+	<!-- 다시하기 모달 -->
+	<div class="modal fade" id="retryModal" tabindex="-1"
+		aria-labelledby="retryModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="retryModalLabel">Retry?</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">틀린 것만 다시 하시겠습니까?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary do-retry">Retry</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 종료 후 메인으로 돌아가기 모달 -->
+	<div class="modal fade" id="returnToMainModal" tabindex="-1"
+		aria-labelledby="returnToMainModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="returnToMainModalLabel">Modal
+						title</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">게임 메인으로 돌아가시겠습니까?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary return-to-game-main">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
 	<script th:src="@{../js/memberView/sidebar.js}"></script>

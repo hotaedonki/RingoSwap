@@ -1,8 +1,9 @@
-.dictation-option-line {
+.dictation-option-line, .dictation-result-option-line {
 	font-size: 1.7rem;
 }
 
-.dictation-option-line, .dictation-question-box {
+.dictation-option-line, .dictation-question-box
+, .dictation-result-option-line, .dictation-result-box {
 	margin: auto;
 	margin-top:30px;
 	width:70%;
@@ -37,4 +38,13 @@
 	width: 25%;
 	height: 20px;
 	margin: auto;
+}
+
+.dictation-accuracy-rate {
+	font-size: 19px;
+}
+
+.dictation-answer-and-wrongAnswer {
+	margin-top: 30px;
+	margin-bottom: 0px;
 }

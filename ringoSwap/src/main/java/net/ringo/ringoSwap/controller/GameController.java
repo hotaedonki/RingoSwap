@@ -65,5 +65,11 @@ public class GameController
 
 		log.debug("파일 열어~~~: {} ", note);
 		return note;
-	   }
+	 }
+	
+	@GetMapping("dictationResult")
+	public String dictationResult()
+	{
+		return "game/dictationResult";
+	}
 }
