@@ -54,15 +54,16 @@
 		<if test="category != 'all'">
 			and lang_type = #{category}
 		</if>
+		order by 
 		<choose>
 			<when test="sort eq 'input'">
-				order by file_num
+				 file_num
 			</when>
 			<when test="sort eq 'title'">
-				order by title
+				 title
 			</when>
 			<otherwise>
-				order by modifie_date
+				modifie_date
 			</otherwise>
 		</choose>
 	</select>

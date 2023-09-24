@@ -1,17 +1,24 @@
 package net.ringo.ringoSwap.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
+import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.GameSetting;
 import net.ringo.ringoSwap.domain.SingleDifficulty;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.GameService;
+import net.ringo.ringoSwap.service.MemberService;
 
 @Slf4j
 @Controller
@@ -20,6 +27,8 @@ public class GameController
 {
 	@Autowired
 	GameService service;
+	@Autowired
+	MemberService memberService;
 	//게임서비스의 메인페이지로 이동하는 컨트롤러 메서드
 	@GetMapping("gameMain")
 	public String gameMain()
@@ -27,103 +36,55 @@ public class GameController
 		return "game/gameMain";
 	}
 	
-	//난이도 설정 페이지로 이동하는 메서드
-	@GetMapping("singleDifficultySelect")
-	public String singleDifficultySelect(@AuthenticationPrincipal UserDetails user
-						, Model model)
-	{
-		SingleDifficulty diffi = service.difficultyCall(user.getUsername());
-		
-		return "game/gameMain";
-	}
-	
 	
 	//이하 싱글게임 진입 메서드 목록
-	/*
-	 * 싱글 사천성 게임 페이지 진입 메서드
-	 * difficultyCall메서드를 사용하여 난이도 정보를 불러오고, 해당 정보에 따라 지정된 난이도의 사천성 게임을 해당 페이지에서 실행한다.
-	 */
-	@GetMapping("singleSichuan")
-	public String singleSichuan(@AuthenticationPrincipal UserDetails user
-			, Model model)
+
+	@GetMapping("MCQ")
+	public String MCQ()
 	{
-		//난이도 정보 가져오기
-		SingleDifficulty diffi = service.difficultyCall(user.getUsername());
-		
-		model.addAttribute("diffi", diffi);
-		
-		return "game/singleSichuan";
+		return "game/MCQ";
 	}
-	/*
-	 * 싱글 단어조합 게임 페이지 진입 메서드
-	 * 동일하게 difficultyCall메서드를 사용하여 지정된 난이도의 게임을 해당 페이지에서 실행한다.
-	 */
-	@GetMapping("singleWordCombine")
-	public String singleCatch(@AuthenticationPrincipal UserDetails user
-			, Model model)
+
+	@GetMapping("flashCards")
+	public String flashCards()
 	{
-		//난이도 정보 가져오기
-		SingleDifficulty diffi = service.difficultyCall(user.getUsername());
-		return "game/singleWordCombine";
+		return "game/flashCards";
 	}
-	/*
-	 * 싱글 객관식 게임 페이지 진입 메서드
-	 * 동일하게 difficultyCall메서드를 사용하여 지정된 난이도의 게임을 해당 페이지에서 실행한다.
-	 */
-	@GetMapping("singleChoice")
-	public String singleSiritory(@AuthenticationPrincipal UserDetails user
-			, Model model)
+	@GetMapping("dictation")
+	public String dictation()
 	{
-		//난이도 정보 가져오기
-		SingleDifficulty diffi = service.difficultyCall(user.getUsername());
-		return "game/singleChoice";
-	}
-	/*
-	 * 싱글 받아쓰기 게임 페이지 진입 메서드
-	 * 동일하게 difficultyCall메서드를 사용하여 지정된 난이도의 게임을 해당 페이지에서 실행한다.
-	 */
-	@GetMapping("singleDictation")
-	public String singleDictation(@AuthenticationPrincipal UserDetails user
-			, Model model)
-	{
-		//난이도 정보 가져오기
-		SingleDifficulty diffi = service.difficultyCall(user.getUsername());
-		
-		return "game/singleDictation";
+		return "game/dictation";
 	}
 	
-	//이하 멀티게임 진입 메서드 목록
-	/*
-	 * 멀티 사천성 게임 페이지 진입 시퀸스
-	 * 1.게임 플레이 버튼 클릭시 '다른 참가자들을 모으는 중입니다...'라는 메세지를 띄우는 로딩창을 출력한다.
-	 * 2.1의 이벤트를 처리하면서 사용자가 클릭한 멀티게임의 참가자를 모은다.
-	 * 3.참가자가 일정이상 모이면 해당 게임을 시작할 수 있는 게임방으로 이동한다.
-	 */
-	@GetMapping("multiSichuan")
-	public String multiSichuan(@AuthenticationPrincipal UserDetails user) {
+	// 해당 사용자가 생성한 단어장분류 파일 목록을 user_num을 매개변수로 검색하여 리턴하는 메서드
+	@ResponseBody
+	@PostMapping("fileOpenWordNote")
+	public ArrayList<DirFile> fileOpenWordNote(@AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		//회원번호를 매개변수로 file_type이 word인 파일목록을 리턴하는 메서드 실행
+		ArrayList<DirFile> note = service.wordFileSelectByUserNum(user_num);
 
-		return "game/gameMain";
-		//return "game/multiSichuan";
+		log.debug("파일 열어~~~: {} ", note);
+		return note;
+	   }
+	//해당 사용자의 게임 설정을 불러오는 메서드
+	@ResponseBody
+	@PostMapping("gameSettingOpen")
+	public GameSetting gameSettingOpen(@AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		GameSetting setting = service.gameSettingSelectByUserNum(user_num);
+		return setting;
 	}
-	//멀티 끝말잇기 게임 페이지
-	@GetMapping("multiSiritory")
-	public String multiSiritory(@AuthenticationPrincipal UserDetails user) {
+	//해당 사용자의 게임설정을 업데이트하는 메서드
+	@ResponseBody
+	@PostMapping("gameSettingUpdate")
+	public int gameSettingOpen(GameSetting setting
+					, @AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		setting.setUser_num(user_num);
+		int methodResult = service.gameSettingUpdate(setting);
+		
+		return methodResult;
 
-		return "game/gameMain";
-		//return "game/multiSiritory";
-	}
-	//멀티 스무고개 게임 페이지
-	@GetMapping("multiTwenty")
-	public String multiTwenty(@AuthenticationPrincipal UserDetails user) {
-
-		return "game/gameMain";
-		//return "game/multiTwenty";
-	}
-	//멀티 캐치마인드 게임 페이지
-	@GetMapping("multiCatch")
-	public String multiCatch(@AuthenticationPrincipal UserDetails user) {
-
-		return "game/gameMain";
-		//return "game/multiCatch";
 	}
 }

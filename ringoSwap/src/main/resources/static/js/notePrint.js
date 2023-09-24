@@ -1,5 +1,5 @@
 // 함수처리용 변수값 설정 (검색 및 정렬을 위한 변수)
-let ca = 'kor';
+let ca = 'ko';
 let st = 'input';
 
 // 문서 준비가 완료되면 실행
@@ -176,7 +176,7 @@ function dirOpen() {
             console.log(list.title);
             $(list).each(function(n, item) {
 				let iconClass = (item.file_type === "note") ? "bi-journal" : "bi-file-word"
-				let langClass = (item.lang_type === "kor") ? "(한국어)" : (item.lang_type === "jap") ? "(일본어)" : "(영어)"
+				let langClass = (item.lang_type === "ko") ? "(한국어)" : (item.lang_type === "ja") ? "(일본어)" : "(영어)"
                 str += `<li style="position: relative; cursor:pointer;"><i class="bi ${iconClass} fileType" data-file-type="${item.file_type}"></i>
                             <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
                             <span>${langClass}</span>
