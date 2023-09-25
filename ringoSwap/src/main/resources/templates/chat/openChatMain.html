@@ -175,7 +175,7 @@
                         <tr>
                             <td><input th:type="hidden" th:id="${room.chatroom_num}" th:value="${room.chatroom_num}"><p th:text="${room.lang_category}"></p></td>
                             <td><a th:href="@{/chat/openChatRoomEnter(chatroom_num=${room.chatroom_num})}" th:text=${room.title}></a> <!-- <p th:text="${room.title}"> </p> --></td>
-                            <td><p th:text=${room.capacity}></p></td>
+                            <td><p th:text="${room.currentHeadCount + ' / ' + room.capacity}"></p></td>
                             <td><p th:text="${room.nickname}"></td><!--보이스룸 호스트 닉네임-->
                         </tr>
                     </tbody> 

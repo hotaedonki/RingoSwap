@@ -13,6 +13,7 @@ public class OpenChatroomInfo
 	String lang_category;
 	String title;
 	int capacity;
+	int currentHeadCount;
 	String modifie_date;
 	int host_num;
 	String nickname;
