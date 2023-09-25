@@ -22,6 +22,8 @@ public interface GameDAO
 
 	//user_num을 매개변수로 file_type이 word인 파일목록을 리턴하는 메서드
 	ArrayList<DirFile> wordFileSelectByUserNum(int user_num);
+	//user_num과 file_num을 매개변수로 DB에서 특정 사용자의 file_num값을 수정하는 메서드
+	int fileWordUpdate(HashMap<String, Integer> map);
 	//user_num을 매개변수로 DB의 게임세팅 정보를 리턴하는 메서드
 	GameSetting gameSettingSelectByUserNum(int user_num);
 	//사용자가 수정한 게임세팅 정보를 매개변수로  DB의 정보를 수정하는 메서드
