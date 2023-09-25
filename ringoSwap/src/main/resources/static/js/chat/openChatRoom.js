@@ -148,9 +148,9 @@ function onConnected()
 	// 채팅방 정보를 받기 위한 이벤트 연결
 	//stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + myUserNum, loadJoinedChatroomListRealTime);
 	
-	// 자신이 잠가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 요청
+	// 자신이 참가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 요청
 	stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);
-	// 자신이 잠가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 받기 위한 이벤트 연결
+	// 자신이 참가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 받기 위한 이벤트 연결
 	stompClient.subscribe('/sub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, loadChatRoomNumsByUserNum);
 }
 
@@ -171,9 +171,9 @@ function onMessageForState(message)
 function onMessageReceived(message) 
 {
     //console.log(message);
-    
     // message의 body 속성을 가져와서 파싱
     const bodyString = message.body;
+    
     if (bodyString) 
     {
         try 
@@ -198,15 +198,19 @@ function onMessageReceived(message)
 					scrollDown();
 					break;
 			}
+			
+			return;
         } 
         catch (error) 
         {
             console.error("JSON 파싱 에러:", error);
+            return;
         }
     } 
     else 
     {
         console.error("body가 존재하지 않습니다.");
+        return;
     }
 }
 
@@ -347,7 +351,6 @@ function subscribe(endpoint)
 	// 채팅방 정보를 받기 위한 이벤트 연결
 	subscriptionForUpdateChatroom[endpoint] = stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + endpoint, loadJoinedChatroomListRealTime);
 }
-
 /*
 	참고 - 메시지 보내는 예시
 	

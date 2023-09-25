@@ -4,7 +4,8 @@ let st = 'input';
 
 // 문서 준비가 완료되면 실행
 $(document).ready(function(){
-    dirPrint();    
+    dirPrint();
+    latestFilePrint();      //가장 최근 수정한 메모장or단어장 출력 함수
     // 정렬 방식 설정
     $('.sortBtn').click(sortEvent);
     $('#createFolder').click(dirCreate);
@@ -207,6 +208,24 @@ function fileOpen(){
 
     //실제 출력 함수 실행
     fileOpenUrl(num, type);
+}
+
+function latestFilePrint(){
+    $.ajax({
+        url: 'fileOpenLatestOne',
+            type: 'post',
+            dataType: 'json',
+            success: function(file){
+                console.log(file);
+                if(file.fileIsNone === '1'){
+                }
+
+                fileOpenUrl(file.file_num, file.file_type, 1);
+            },
+            error: function(e){
+                console.log("error");
+            }
+    })
 }
 
 function fileOpenUrl(fileNum, fileType, pageNumber = 1){

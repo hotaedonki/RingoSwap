@@ -30,7 +30,13 @@
 	 where user_num = #{user_num}
 	 	and file_type = 'word'
 	 </select>
-	 
+	 <!-- user_num과 file_num을 매개변수로 DB에서 특정 사용자의 file_num값을 수정하는 update문 -->
+	 <update id="fileWordUpdate" parameterType="java.util.HashMap">
+	 update ringo_game_setting
+	 set file_num = #{file_num]
+	 where user_num = #{user_num}
+	 </update>
+	 <!-- user_num을 매개변수로 특정 사용자의 게임세팅 정보를 리턴하는 select문 -->
 	 <select id="gameSettingSelectByUserNum" resultType="GameSetting">
 	 select *
 	 from ringo_game_setting

@@ -60,4 +60,6 @@ public interface ChatDAO
 	public ArrayList<OpenChatroomInfo> searchChatroomByLang(String lang_category);
 
 	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms();
+
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(String title);
 }

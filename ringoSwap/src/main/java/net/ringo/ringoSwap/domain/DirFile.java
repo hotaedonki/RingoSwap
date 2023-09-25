@@ -18,6 +18,7 @@ public class DirFile {
 	String modifie_date;
 	String lang_type;
 	String file_type;
+	int fileIsNone;
 	
 	public String toStirng()
 	{

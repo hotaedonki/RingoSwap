@@ -43,10 +43,12 @@ public class PathHandler
 	public final static String MM_OPENCHATROOMMESSAGE = "/chat/openChatRoom/message/{chatroomID}";
 	public final static String MM_LOADJOINEDCHATROOMLISTREALTIME = "/chat/openChatMain/loadJoinedChatroomListRealTime/{chatroom_num}";
 	public final static String MM_LOADCHATROOMNUMSBYUSERNUM = "/chat/openChatMain/loadChatRoomNumsByUserNum/{userNum}";
+	public final static String MM_SEARCHBYTITLE = "/chat/openChatMain/searchByTitle/{userNum}";
 	public final static String ST_OPENCHATROOMMESSAGE = "/sub/chat/openChatRoom/message/{chatroomID}";
 	public final static String ST_OPENCHATROOMMESSAGESTATE = "/sub/chat/openChatRoom/message/state/{chatroomID}";
 	public final static String ST_LOADJOINEDCHATROOMLISTREALTIME = "/sub/chat/openChatMain/loadJoinedChatroomListRealTime/{chatroom_num}";
 	public final static String ST_LOADCHATROOMNUMSBYUSERNUM = "/sub/chat/openChatMain/loadChatRoomNumsByUserNum/{userNum}";
+	public final static String ST_SEARCHBYTITLE = "/sub/chat/openChatMain/searchByTitle/{userNum}";
 	
 	// Setting for Web socket, stomp, sockjs . . .
 	public final static String WS_STOMP = "/ws-stomp";

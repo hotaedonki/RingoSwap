@@ -229,4 +229,10 @@ public class ChatServiceImple implements ChatService
 		// TODO Auto-generated method stub
 		return dao.getAllOpenchatrooms();
 	}
+
+	@Override
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(String title) 
+	{
+		return dao.getChatroomThumbnailsByTitle(title);
+	}
 }
