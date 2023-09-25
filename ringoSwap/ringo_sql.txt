@@ -15,7 +15,7 @@ CREATE TABLE ringo_member (
 	--취미 및 기타 선택입력 정보
 	original_profile		varchar2(100)	default '5.jpg',		--프로필 사진 실제 파일 이름
 	saved_profile			varchar2(100)	default '1000.jpg',		--프로필 사진 저장경로에서의 이름
-	introduction			varchar2(1500),								--자기소개
+	introduction			varchar2(1500)	default '자기소개를 적어주세요',								--자기소개
 	mbti						varchar2(5)		check(mbti in('NONE', 'ISFJ', 'ISFP', 'ISTJ', 'ISTP', 'INFJ', 'INFP', 'INTJ', 'INTP', 'ESFJ', 'ESFP', 'ESTJ', 'ESTP', 'ENFJ', 'ENFP', 'ENTJ', 'ENTP')),
 	--mbti 성격 지정, 16개+지정안했을때 전용인 NONE의 17가지로 선택지를 한정함
 	--해당 계정의 유료, 무료재화 보유량에 관한 정보
@@ -584,6 +584,7 @@ create table ringo_game_setting (
 	description_show	number(1)		default 1 check(description_show in (0,1)),		--설명 표시 여부, 1=표시, 0=표시안함
 	pron_show		number(1)			default 0 check(pron_show in(0, 1)),	 --발음도 사용할 것인지 여부(받아쓰기(DIctation)에만 사용)/0=비사용, 1=사용
 	question_num	number				default 0,							--문제 갯수/0=모든 문제 출력, 그외=숫자만큼 문제출력
+    match_use		number(1)        default 0 check(match_use in (0, 1)),	--받아쓰기 문제에서 발음을 사용할 것인지 여부/0=사용안함, 1=사용함
 	primary key(user_num),
 	constraint fk_user_num_sg	foreign key (user_num)	references ringo_member(user_num) on delete cascade
 );

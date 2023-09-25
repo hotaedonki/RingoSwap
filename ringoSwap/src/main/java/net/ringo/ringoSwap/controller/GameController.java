@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.GameSetting;
 import net.ringo.ringoSwap.domain.SingleDifficulty;
 import net.ringo.ringoSwap.service.ChatService;
@@ -102,14 +103,14 @@ public class GameController
 
 	}
 	
-	//사용자가 설정한 문제갯수 설정을 출력하는 메서드
+	//사용자가 설정한 문제갯수 설정, 받아쓰기에 발음을 사용하는지 여부등의 세팅값을 출력하는 메서드
 	@ResponseBody
-	@PostMapping("questNumPrint")
-	public int questNumPrint(@AuthenticationPrincipal UserDetails user) {
+	@PostMapping("gameSettingPrint")
+	public GameSetting gameSettingPrint(@AuthenticationPrincipal UserDetails user) {
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		int methodResult = service.gameSettingSelectByUserNumReturnQuestNum(user_num);
-		
-		return methodResult;
+		GameSetting setting = service.gameSettingSelectByUserNum(user_num);
+		log.debug("세팅 {}", setting);
+		return setting;
 	}
 	//사용자가 설정한 문제갯수 설정을 업데이트하는 메서드
 	@ResponseBody
@@ -127,7 +128,7 @@ public class GameController
 
 	@ResponseBody
 	@PostMapping("gameNotePrint")
-	public DirFile gameNotePrint(@AuthenticationPrincipal UserDetails user){
+	public ArrayList<DirWord> gameNotePrint(@AuthenticationPrincipal UserDetails user){
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		//회원번호를 매개변수로 사용자의 게임세팅 정보를 리턴
 		GameSetting setting = service.gameSettingSelectByUserNum(user_num);
@@ -136,10 +137,21 @@ public class GameController
 			return null;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
 		}
 		//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
-		DirFile note = noteService.fileSelectByFileNum(setting.getFile_num());
+		ArrayList<DirWord> wordList = noteService.selectWordArrayByFileNum(null, user_num);
 		
-		return note;
+		return wordList;
 	}
-	
+
+	@ResponseBody
+	@PostMapping("matchUseUpdate")
+	public int matchUseUpdate(boolean match_use
+					, @AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("match_use", match_use);
+		map.put("user_num", user_num);
+		int methodResult = service.matchUseUpdate(map);
+		return methodResult;
+	}
 	
 }

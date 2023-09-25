@@ -348,6 +348,7 @@ function feedDelete(){
 
 function followerSearch(){
     let nickname = $('.justify-content-center .searchFollower').val();
+    console.log("팔로우 닉네임 : ", nickname)
     $.ajax({
         url: "followerSearch",
         type: "post",
@@ -360,8 +361,7 @@ function followerSearch(){
                 followerList.forEach(follower => {
                     $('.followerBox').append(`
                     <div>
-                    <span class="goToOtherProfile">
-                        <img src="" alt="Poster Image" class="posterImage feedUser" data-nickname="${follower.follower_name}"> 
+                    <span class="showOffcanvasWithUserData" data-user-name="${follower.follower_name}">
                         <img src="../member/memberProfilePrint?user_id=${follower.follower_id}" style="width:25px; height:25px; border-radius:12px;" alt="Profile Picture" />
                         <span >${follower.follower_name}</span>
                         <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" />
@@ -395,15 +395,14 @@ function followeeSearch(){
                 followeeList.forEach(followee => {
                     console.log(followee);
                     $('.followBox').append(`
-                    <div>
-                    <span class="goToOtherProfile">
-                        <img src="" alt="Poster Image" class="posterImage feedUser" data-nickname="${followee.followee_name}"> 
-                        <img src="../member/memberProfilePrint?user_id=${followee.followee_id}" alt="Profile Picture" style="width:25px; height:25px; border-radius:12px;" />
-                        <span >${followee.followee_name}</span>
-                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" />
-                        <img src="../img/일본어.jpg" alt="Learning Language" style="width:25px; height:25px; border-radius:12px;" />
-                    </span>
-                        <button type="button" class="btn btn-primary">팔로우</button>
+                    <div class="d-flex justify-content-between align-items-center">
+	                    <span class="showOffcanvasWithUserData " data-user-name="${followee.followee_name}">
+	                        <img src="../member/memberProfilePrint?user_id=${followee.followee_id}" alt="Profile Picture" style="width:25px; height:25px; border-radius:12px;" />
+	                        <span >${followee.followee_name}</span>
+	                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" /> <-->
+	                        <img src="../img/일본어.jpg" alt="Learning Language" style="width:25px; height:25px; border-radius:12px;" />
+	                    </span>
+	                        <button type="button" class="btn btn-primary unfollow_button" data-nickname="${followee.followee_name}">Unfollow</button>
                     </div>
                     `);
                 })
@@ -450,6 +449,11 @@ function followInsert(){
 }
 function followDelete(){
     let name = document.getElementById('nickname').textContent;
+    
+    if(name === '') {
+		name = $(this).data('nickname');
+	}
+	
     console.log(name);
     $.ajax({
         url:'userFollowDelete',
@@ -483,7 +487,7 @@ function friendPrint(){
             console.log('출력되냐?');
             friendList.forEach(friend =>{
                 $('.friend-list').append(`
-                <li class="list-group-item open-chatbox goToOtherProfile" data-chat-target="#chatBox">
+                <li class="list-group-item open-chatbox showOffcanvasWithUserData" data-user-name="${friend.followee_name}">
                     <img src="../member/memberProfilePrint?user_id=${friend.followee_id}" alt="Profile Picture" style="width:25px; height:25px; border-radius:12px;" />
                     <span data-nickname="${friend.followee_name}">${friend.followee_name}</span>
                 </li>
