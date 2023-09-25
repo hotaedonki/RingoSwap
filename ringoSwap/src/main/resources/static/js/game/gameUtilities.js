@@ -72,21 +72,26 @@ function printGame(resultGame){
 	}
 }
 
-function questionNumPrint(){
+function gameSettingPrint(){
     $.ajax({
-        url:'questNumPrint',
+        url:'gameSettingPrint',
         type:'post',
         dataType:'json',
-        success:function(number){
+        success:function(setting){
+            let number = setting.question_num;
             console.log('문제갯수 : '+number);
-            $('.btn[data-bs-target="#countOfItemsModal"]').attr('data-question-num', number);
-            if(number === 0){
+            if(setting.question_num === 0){
                 number = 'total';
             }
+            console.log('매치속성 : '+setting.match_use);
             $('.btn[data-bs-target="#countOfItemsModal"]').text(number);
+            $('.btn[data-bs-target="#countOfItemsModal"]').attr('data-question-num', setting.question_num);
+            if(setting.match_use){
+                $('#flexSwitchCheckDefault').attr('checked', true);
+            }
         },
         error:function(e){
-            console.error(e);
+            console.log(e);
         }
     })
 }

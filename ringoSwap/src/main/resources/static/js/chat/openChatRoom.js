@@ -54,6 +54,7 @@ function init()
 	myUserNum = findValueByKey("user_num", myChatroomLinkInfo);
 	url = new URL(location.href).searchParams;
 	subscriptionForUpdateChatroom = {};
+	document.getElementById('searchInput').value = ''; // 검색창은 최초 실행시에 비워준다.
 	
 	console.log("init chatroomNum - " + chatroomNum);
 	console.log("init usernum - " + myUserNum);
@@ -90,7 +91,7 @@ function connect()
     stompClient = Stomp.over(socket);
     stompClient.connect({}, onConnected, onError);
     
-    if (stompClient == null)
+    if (stompClient === null)
     {	
 		console.log("연결 실패. client를 찾을 수 없습니다.");
     	return false;
@@ -115,6 +116,12 @@ function connect()
         stompClient.send('/pub/chat/openChatRoom/message/' + chatroomNum, {}, JSON.stringify(chatCommon));
         document.getElementById("msg_input").value = '';
     });
+    
+     // 검색 관련 이벤트 추가
+    document.getElementById('searchInput').addEventListener('keyup', function()
+    {
+		searchByTitle(document.getElementById('searchInput').value);
+	});
     
     return true;
 }
@@ -152,6 +159,9 @@ function onConnected()
 	stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);
 	// 자신이 참가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 받기 위한 이벤트 연결
 	stompClient.subscribe('/sub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, loadChatRoomNumsByUserNum);
+	
+	// 검색창에 방 제목을 입력할 시 결과를 받기 위해 이벤트 연결
+	stompClient.subscribe('/sub/chat/openChatMain/searchByTitle/' + myUserNum, searchResultByTitle);
 }
 
 // 접속 실패 후, 에러 발생시 실행하는 함수
@@ -246,6 +256,15 @@ function createChatMsgBox(userNum, message)
 
 function loadJoinedChatroomListRealTime(data)
 {
+	// 검색중에는 새로운 이벤트가 들어와 내가 참여한 채팅방 리스트를 새로고침하는 것을 막는다.
+	if (document.getElementById('searchInput').value.length > 0)
+	{
+		return;
+	}
+	
+	if (data == null)
+		return;
+	
 	// 기존에 있는 채팅방 리스트를 삭제
 	clearChatlist();
 	
@@ -330,6 +349,12 @@ function clearChatlist()
 
 function loadChatRoomNumsByUserNum(data)
 {
+	// 검색중에는 새로운 이벤트를 막는다.
+	if (document.getElementById('searchInput').value.length > 0)
+	{
+		return;
+	}
+	
 	let jsonData = JSON.parse(data.body);
 	
 	// 불러온 채팅방 데이터를 기반으로 
@@ -350,6 +375,37 @@ function subscribe(endpoint)
 	
 	// 채팅방 정보를 받기 위한 이벤트 연결
 	subscriptionForUpdateChatroom[endpoint] = stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + endpoint, loadJoinedChatroomListRealTime);
+}
+
+function searchByTitle(title)
+{
+	if (stompClient && stompClient.connected)
+	{
+		if (title.trim() === '')
+		{
+			// 검색어가 비어 있으면 요청을 보내지 않는다.
+			// 대신 기존에 가져온 내가 참여한 채팅방 전체 목록이 사라지기 때문에 다시 호출
+			stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);
+       		return;
+		}
+		
+		stompClient.send('/pub/chat/openChatMain/searchByTitle/' + myUserNum, {}, title);
+	}
+}
+
+function searchResultByTitle(data)
+{
+	if (data == null)
+		return;
+	
+	// 기존에 있는 채팅방 리스트를 삭제
+	clearChatlist();
+	
+	let jsonData = JSON.parse(data.body);
+	
+	jsonData.forEach(item => {
+		createChatroomThumbnail(item.chatroom_num, item.title, item.inputdate, item.message);
+	});
 }
 /*
 	참고 - 메시지 보내는 예시

@@ -59,5 +59,10 @@ public class GameServiceImple implements GameService{
 	public int gameSettingUpdateQuestionNum(HashMap<String, Object> map) {
 		return dao.gameSettingUpdateQuestionNum(map);
 	}
-	
+
+	//해당 사용자의 user_num을 매개변수로 DB 내부 게임설정의 match_use값을 변경하는 메서드
+	@Override
+	public int matchUseUpdate(HashMap<String, Object> map) {
+		return dao.matchUseUpdate(map);
+	}
 }

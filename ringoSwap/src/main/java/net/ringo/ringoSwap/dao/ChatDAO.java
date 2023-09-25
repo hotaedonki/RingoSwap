@@ -2,6 +2,7 @@ package net.ringo.ringoSwap.dao;
 
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -61,5 +62,5 @@ public interface ChatDAO
 
 	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms();
 
-	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(String title);
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(Map<String, Object> params);
 }

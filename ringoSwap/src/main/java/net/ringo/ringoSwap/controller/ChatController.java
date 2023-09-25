@@ -301,10 +301,13 @@ public class ChatController
 	        return mapper.writeValueAsString("empty title");
 	    }
 		
-		Map<Integer, String> params = new HashMap();
+		Map<String, Object> params = new HashMap();
 	
-		
-		ArrayList<ChatroomThumbnail> chatroomThumbnails = service.getChatroomThumbnailsByTitle(title);
+		params.put("userNum", userNum);
+		// 와일드 카드 검사를 위해 '%' 추가
+		params.put("title", "%" + title + "%");
+
+		ArrayList<ChatroomThumbnail> chatroomThumbnails = service.getChatroomThumbnailsByTitle(params);
 		
 		return mapper.writeValueAsString(chatroomThumbnails);
 	}

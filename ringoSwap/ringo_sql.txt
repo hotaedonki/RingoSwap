@@ -313,7 +313,7 @@ CREATE TABLE ringo_chatroom (
 	host_num				number				references ringo_member(user_num) on delete cascade,	--해당 채팅룸의 호스트(방장) 계정 번호
 	title						varchar2(60)	NOT NULL,		--채팅방 제목
 	lang_category		varchar2(10)		NOT NULL	check(lang_category in('ko', 'ja', 'en')),	--채팅방 언어 설정
-	gen_category		varchar2(10)		NOT NULL	check(gen_category in('enjoy', 'study', 'dm', 'voice')),	--채팅반 기능 분류 설정
+	gen_category		varchar2(10)		NOT NULL	check(gen_category in('dm', 'openChat')),	--채팅반 기능 분류 설정
 	modifie_date		timestamp			default sysdate,
 	--가장 최근에 달린 메세지의 입력시간으로 갱신되는 날짜 속성. 수정날짜에 관한 이벤트 처리시 통일성을 위해 modifie_date로 이름을 지정해 놓았습니다.
 	totalsize				number				default 10000000,
@@ -584,6 +584,7 @@ create table ringo_game_setting (
 	description_show	number(1)		default 1 check(description_show in (0,1)),		--설명 표시 여부, 1=표시, 0=표시안함
 	pron_show		number(1)			default 0 check(pron_show in(0, 1)),	 --발음도 사용할 것인지 여부(받아쓰기(DIctation)에만 사용)/0=비사용, 1=사용
 	question_num	number				default 0,							--문제 갯수/0=모든 문제 출력, 그외=숫자만큼 문제출력
+    match_use		number(1)        default 0 check(match_use in (0, 1)),	--받아쓰기 문제에서 발음을 사용할 것인지 여부/0=사용안함, 1=사용함
 	primary key(user_num),
 	constraint fk_user_num_sg	foreign key (user_num)	references ringo_member(user_num) on delete cascade
 );

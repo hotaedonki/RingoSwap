@@ -231,8 +231,8 @@ public class ChatServiceImple implements ChatService
 	}
 
 	@Override
-	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(String title) 
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(Map<String, Object> params) 
 	{
-		return dao.getChatroomThumbnailsByTitle(title);
+		return dao.getChatroomThumbnailsByTitle(params);
 	}
 }

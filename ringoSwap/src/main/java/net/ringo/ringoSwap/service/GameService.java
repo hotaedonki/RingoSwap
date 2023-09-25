@@ -23,5 +23,7 @@ public interface GameService {
 	public int gameSettingSelectByUserNumReturnQuestNum(int user_num);
 	//사용자가 수정한 정보를 매개변수로 DB의 문제갯수 속성을 수정하는 메서드
 	public int gameSettingUpdateQuestionNum(HashMap<String, Object> map);
+	//해당 사용자의 user_num을 매개변수로 DB 내부 게임설정의 match_use값을 변경하는 메서드
+	public int matchUseUpdate(HashMap<String, Object> map);
 
 }
