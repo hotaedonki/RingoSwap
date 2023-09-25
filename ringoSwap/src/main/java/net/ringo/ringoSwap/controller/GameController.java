@@ -68,6 +68,16 @@ public class GameController
 		log.debug("파일 열어~~~: {} ", note);
 		return note;
 	   }
+	//해당 사용자가 지정한 단어장 분류 파일의 파일번호를 매개변수로 DB를 수정하는 메서드
+	@ResponseBody
+	@PostMapping("fileWordUpdate")
+	public int fileWordUpdate(int file_num, @AuthenticationPrincipal UserDetails user) {
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		int methodResult = service.fileWordUpdate(file_num, user_num);
+		
+		return methodResult;
+	}
 	//해당 사용자의 게임 설정을 불러오는 메서드
 	@ResponseBody
 	@PostMapping("gameSettingOpen")

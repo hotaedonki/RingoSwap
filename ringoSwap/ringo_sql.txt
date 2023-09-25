@@ -578,16 +578,14 @@ CREATE TABLE ringo_ranking (
 --싱글게임 난이도 정보를 기록하는 테이블
 create table ringo_game_setting (
 	user_num			number				NOT NULL,				--싱글게임을 실행하는 유저의 계정 번호, 왜래키이면서 기본키입니다
-	file_num			number				default -1,						--싱글게임 문제제출에 사용하는 단어장 파일 번호, 왜래키, -1=단어장이 설정되지 않은 상태
-	form_type			varchar2(15)		default 'title' check(difficulty in ('title_tomean', 'mean_totitle', 'title_only', 'mean_only')),	--문제 형태 설정, title_tomean=제목-의미순, mean_totitle=의미-제목순, title_only=제목만, mean_only=의미만
-	word_type			varchar2(10)		default 'random' check(word_method in ('first_in','random', 'atoz', 'ztoa')),		--문제 배열 방법, first_in=등록순, random=랜덤 출력, atoz=A-Z, ztoa=Z-A
+	file_num			number				default -1,						--싱글게임 문제제출에 사용하는 단어장 파일 번호, 왜래키X, -1=단어장이 설정되지 않은 상태
+	form_type			varchar2(15)		default 'title_tomean' check(form_type in ('title_tomean', 'mean_totitle', 'title_only', 'mean_only')),	--문제 형태 설정, title_tomean=제목-의미순, mean_totitle=의미-제목순, title_only=제목만, mean_only=의미만
+	order_type			varchar2(10)		default 'random' check(word_type in ('random', 'first_in', 'latest', 'atoz', 'ztoa')),		--문제 배열 방법, first_in=등록순, random=랜덤 출력, latest=최신순, atoz=A-Z, ztoa=Z-A
 	description_show	number(1)		default 1 check(description_show in (0,1)),		--설명 표시 여부, 1=표시, 0=표시안함
-	pron_show		number(1)			default 0 check(word_check in(0, 1)),	 --발음도 사용할 것인지 여부(받아쓰기(DIctation)에만 사용)/0=비사용, 1=사용
+	pron_show		number(1)			default 0 check(pron_show in(0, 1)),	 --발음도 사용할 것인지 여부(받아쓰기(DIctation)에만 사용)/0=비사용, 1=사용
 	question_num	number				default 0,							--문제 갯수/0=모든 문제 출력, 그외=숫자만큼 문제출력
-	answer_category	varchar2(10) check(answer_category in('mcq', 'flashcard', 'dictation')),
 	primary key(user_num),
-	constraint fk_user_num_sg	foreign key (user_num)	references ringo_member(user_num) on delete cascade,
-	constraint fk_file_num_sg		foreign key (file_num) references ringo_file(file_num) on delete set null
+	constraint fk_user_num_sg	foreign key (user_num)	references ringo_member(user_num) on delete cascade
 );
 --싱글게임 로그를 기록하는 테이블
 create table ringo_game_log (

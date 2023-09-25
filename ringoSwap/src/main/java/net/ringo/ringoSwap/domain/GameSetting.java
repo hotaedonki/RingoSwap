@@ -15,7 +15,7 @@ public class GameSetting {
 	@Column(name="file_num", nullable = false)
 	private int file_num;
 	String form_type;
-	String word_type;
+	String order_type;
 	boolean description_show;
 	boolean pron_show;
 	@Column(name="question_num", nullable = false)
@@ -25,6 +25,6 @@ public class GameSetting {
 	public String toString()
 	{
 		return String.format("user_num : {%d} / file_num : {%d} / question_num : {%d} / form_type : {%s} / word_type : {%s} / description_show : {%b} / pron_show : {%b} / answer_category : {%s}"
-				, user_num, file_num, question_num, form_type, word_type, description_show, pron_show, answer_category);
+				, user_num, file_num, question_num, form_type, order_type, description_show, pron_show, answer_category);
 	}
 }
