@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.GameSetting;
 import net.ringo.ringoSwap.domain.SingleDifficulty;
 import net.ringo.ringoSwap.service.ChatService;
@@ -127,7 +128,7 @@ public class GameController
 
 	@ResponseBody
 	@PostMapping("gameNotePrint")
-	public DirFile gameNotePrint(@AuthenticationPrincipal UserDetails user){
+	public ArrayList<DirWord> gameNotePrint(@AuthenticationPrincipal UserDetails user){
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		//회원번호를 매개변수로 사용자의 게임세팅 정보를 리턴
 		GameSetting setting = service.gameSettingSelectByUserNum(user_num);
@@ -136,9 +137,9 @@ public class GameController
 			return null;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
 		}
 		//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
-		DirFile note = noteService.fileSelectByFileNum(setting.getFile_num());
+		ArrayList<DirWord> wordList = noteService.selectWordArrayByFileNum(null, user_num);
 		
-		return note;
+		return wordList;
 	}
 	
 	

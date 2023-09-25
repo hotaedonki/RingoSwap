@@ -96,6 +96,17 @@
 		where file_num = #{file_num}
 		order by word_num desc
 	</select>
+	
+	<!-- 사용자의 가장 최근 수정한 파일을 출력하는 select문 -->
+	<select id="fileSelectByModifieDate" parameterType="java.util.HashMap">
+		select *
+		from (
+			select *
+			from ringo_file
+			where user_num = #{user_num}
+			order by modifie_date desc
+		) where rownum &lt;= 1
+	</select>
 	<!-- 출력부 끝 -->
 
 	<!-- 생성부 시작 -->
