@@ -1,6 +1,8 @@
 package net.ringo.ringoSwap.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -266,7 +268,7 @@ public class ChatController
 		return true;
 	}
 	
-	
+	// 언어 기준으로 검색시 선택한 언어만 표시될 수 있도록 오픈채팅방 목록을 가져옴.
 	@GetMapping(PathHandler.SEARCHCHATROOMBYLANG)
 	public String searchChatroomByLang(String lang_category, Model model)
 	{
@@ -284,6 +286,27 @@ public class ChatController
 		log.debug("openChatrooms size - {}", openChatrooms.size());
 		
 		return "/chat/openChatMain";
+	}
+	
+	// 내가 참가한 채팅방 목록들 중에 제목과 일치한 목록을 보여줌
+	@MessageMapping(PathHandler.MM_SEARCHBYTITLE)
+	@SendTo(PathHandler.ST_SEARCHBYTITLE)
+	public String searchByTitle(@DestinationVariable int userNum, String title) throws Exception
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		
+		if (title == null || title.trim().isEmpty()) 
+		{
+	        // 검색어가 비어 있을 경우의 처리
+	        return mapper.writeValueAsString("empty title");
+	    }
+		
+		Map<Integer, String> params = new HashMap();
+	
+		
+		ArrayList<ChatroomThumbnail> chatroomThumbnails = service.getChatroomThumbnailsByTitle(title);
+		
+		return mapper.writeValueAsString(chatroomThumbnails);
 	}
 	
 	@EventListener

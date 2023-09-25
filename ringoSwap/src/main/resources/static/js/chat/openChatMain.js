@@ -43,6 +43,12 @@ function connect()
     	return false;
     }
     
+    // 검색 관련 이벤트 추가
+    document.getElementById('searchInput').addEventListener('keyup', function()
+    {
+		searchByTitle(document.getElementById('searchInput').value);
+	});
+    
     return true;
 }
 
@@ -57,6 +63,9 @@ function onConnected()
 	stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, {}, userNum);
 	// 자신이 잠가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 받기 위한 이벤트 연결
 	stompClient.subscribe('/sub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, loadChatRoomNumsByUserNum);
+	
+	// 검색창에 방 제목을 입력할 시 결과를 받기 위해 이벤트 연결
+	stompClient.subscribe('/sub/chat/openChatMain/searchByTitle/' + userNum, searchResultByTitle);
 }
 
 function onError() 
@@ -214,4 +223,26 @@ function subscribe(endpoint)
 	
 	// 채팅방 정보를 받기 위한 이벤트 연결
 	subscriptionForUpdateChatroom[endpoint] = stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + endpoint, loadJoinedChatroomListRealTime);
+}
+
+function searchByTitle(title)
+{
+	if (stompClient && stompClient.connected)
+	{
+		if (title.trim() === '')
+		{
+			// 검색어가 비어 있으면 요청을 보내지 않는다.
+       		return;
+		}
+		
+		stompClient.send('/pub/chat/openChatMain/searchByTitle/' + userNum, {}, title);
+	}
+}
+
+function searchResultByTitle(data)
+{
+	if (data == null)
+		return;
+		
+	console.log(data.body);
 }
