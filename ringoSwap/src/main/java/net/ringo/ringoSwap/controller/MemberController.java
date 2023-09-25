@@ -102,39 +102,19 @@ public class MemberController
 	 * 중복 존재 : model을 통해 사용가능하지 않음을 표시하는 문자열을 idCheck.html에 보내고 해당 html문서를
 	 * 		새장으로 엽니다.
 	 */
-	@GetMapping(PathHandler.IDCHECK)
-	public String idCheck(String user_id, Model model, HttpSession session)
-	{
-		//service부의 id체크 메서드 실행
-		int n = service.idCheck(user_id);
-		
-		if(n==0) {
-			model.addAttribute("result", user_id+"는 사용 가능한 ID입니다.");
-			model.addAttribute("searchid", user_id);
-			model.addAttribute("accept", true);
-			resetSession(session, SessionNameHandler.isVerifiedID, false);
-		}else {
-			model.addAttribute("result", user_id+"는 이미 존재하는 ID입니다.");
-			model.addAttribute("accept", false);
-			resetSession(session, SessionNameHandler.isVerifiedID, true);
-		}
-		return "memberView/idCheck";
-	}
-	
+
 	@ResponseBody
 	@PostMapping(PathHandler.IDCHECK)
 	public boolean idCheck(String user_id, HttpSession session)
 	{
 		//service부의 id체크 메서드 실행
 		int result = service.idCheck(user_id);
-		
+		log.debug("이 유저 아이디가 있는경우 : {}", result);
 		// 존재하는 아이디가 있을때
-		if (result < 0)
-		{
+		if (result <= 0) {
 			resetSession(session, SessionNameHandler.isVerifiedID, false);
 			return false;
 		}
-		
 		resetSession(session, SessionNameHandler.isVerifiedID, true);
 		return true;
 	}
