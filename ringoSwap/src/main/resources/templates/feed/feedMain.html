@@ -117,7 +117,7 @@
 		</div>
 		<main>
 			<div class="row main-row">
-				<div class="col-lg-3 left-area">
+				<div class="col-md-3 left-area">
 					<div class="row profile-area">
 						<div class="col-12">
 							<div class="card profile-card">
@@ -160,9 +160,9 @@
 					</div>
 				</div>
 
-				<div class="col-lg-8" id="feedDetail" style="display: none;">
+				<div class="col-md-8" id="feedDetail" style="display: none;">
 				</div>
-				<div class="col-lg-5 middle-area">
+				<div class="col-md-5 middle-area">
 					<div class="row feed-area">
 						<div class="col-12">
 							<form id="feedForm" th:action="@{/feed/feedWrite}" method="post"
@@ -194,18 +194,14 @@
 					</div>
 				</div>
 
-				<div class="col-lg-3">
+				<div class="col-md-3">
 					<!-- 팔로우 목록 영역 시작 -->
 					<div class="row friend-list-row">
 						<div class="col-12">
 							<div class="card friend-list-card">
 								<div class="card-header">Friends</div>
 								<ul class="list-group list-group-flush friend-list">
-									<li class="list-group-item open-chatbox"
-										data-chat-target="#chatBox">Friend A</li>
-									<li class="list-group-item open-chatbox"
-										data-chat-target="#chatBox">Friend B</li>
-									<!-- 여기에 더 많은 친구를 추가하실 수 있습니다. -->
+									
 								</ul>
 							</div>
 						</div>
@@ -244,6 +240,7 @@
 			</div>
 		</div>
 	</div>
+	
 	<!-- 팔로워 -->
 	<div class="modal fade" id="followerModal" tabindex="-1"
 		aria-labelledby="followerModalLabel" aria-hidden="true">
@@ -263,17 +260,12 @@
 					</button>
 				</div>
 				<div class="modal-body followerBox">
-					<div th:each="follower : ${followers}">
-						<img th:src="@{/img/고양.jpg}" alt="Profile Picture" /> <span
-							th:text="${follower.username}"></span> <img
-							th:src="@{/img/영어.jpg}" alt="Native Language" /> <img
-							th:src="@{/img/일본어.jpg}" alt="Learning Language" />
-						<button type="button" class="btn btn-primary">팔로우</button>
-					</div>
+					
 				</div>
 			</div>
 		</div>
 	</div>
+	
 	<!-- 팔로우 -->
 	<div class="modal fade" id="followModal" tabindex="-1"
 		aria-labelledby="followModalLabel" aria-hidden="true">
@@ -287,25 +279,19 @@
 				<div class="modal-search d-flex justify-content-center">
 					<input type="text" placeholder="검색"
 						class="form-control searchFollow">
-					<button class="btn btn-light follow-btn" style="margin-left: 5px;">
+					<button class="btn btn-light" style="margin-left: 5px;">
 						<i class="bi bi-search"></i>
 					</button>
 				</div>
 				<div class="modal-body">
 					<div class="modal-body followBox">
-						123
-						<div th:each="follow : ${followe}">
-							<img th:src="@{/img/고양.jpg}" alt="Profile Picture" /> <span
-								th:text="${follow.username}"></span> <img
-								th:src="@{/img/영어.jpg}" alt="Native Language" /> <img
-								th:src="@{/img/일본어.jpg}" alt="Learning Language" />
-							<button type="button" class="btn btn-primary">해제</button>
-						</div>
+						
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	
 	<!-- 사진 클릭시 확대-->
 	<div class="modal fade" id="imageModal" tabindex="-1"
 		aria-hidden="true">
@@ -317,6 +303,7 @@
 			</div>
 		</div>
 	</div>
+	
 	<!-- 다른 회원의 정보를 표시하는 오프캔버스 -->
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true"
 		tabindex="-1" id="offcanvasWithBothOptions"
@@ -347,10 +334,8 @@
 
 				<!-- 팔로우 및 메시지 버튼 -->
 				<div class="d-flex mb-3 my-4 justify-content-center">
-					<button type="button" id="follow_button"
-						class="btn btn-primary me-3" style="width: 96.63px;">Follow</button>
-					<button type="button" id="unfollow_button"
-						class="btn btn-primary me-3" style="width: 96.63px;">Unfollow</button>
+					<button type="button" class="btn btn-primary me-3 follow_button" style="width: 96.63px;">Follow</button>
+					<button type="button" class="btn btn-primary me-3 unfollow_button" style="width: 96.63px;">Unfollow</button>
 					<button type="button" id="message_button" class="btn btn-primary ms-3">Message</button>
 				</div>
 
@@ -359,9 +344,6 @@
 			</div>
 		</div>
 	</div>
-
-
-
 
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
 	<script

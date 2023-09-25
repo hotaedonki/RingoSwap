@@ -54,8 +54,10 @@ function printLanguage(lang){
 
 function goToOtherProfile(){
 	let nickname = $(this).find('[data-nickname]').data('nickname');
+	
 	const url = `../member/otherPage?nickname=${encodeURIComponent(nickname)}`;
 	window.location.href = url;
+
 }
 
 function followCheck(nickname){
@@ -68,12 +70,12 @@ function followCheck(nickname){
         success:function(result){
             if(result == 0){
                 console.log('팔로우');
-				$('#follow_button').show();			//버튼을 출력함
-				$('#unfollow_button').hide();		//버튼을 숨김
+				$('.follow_button').show();			//버튼을 출력함
+				$('.unfollow_button').hide();		//버튼을 숨김
             }else{
                 console.log('언팔로우');
-				$('#follow_button').hide();			//버튼을 숨김
-				$('#unfollow_button').show();		//버튼을 출력함
+				$('.follow_button').hide();			//버튼을 숨김
+				$('.unfollow_button').show();		//버튼을 출력함
             }
         },
         error: function(error) {

@@ -51,3 +51,18 @@ function timeDifference(current, previous) {
         return Math.floor(elapsed/msPerYear) + ' 년 전';   
     }
 }
+
+$(document).ready(function() {
+    const offcanvasElement = document.getElementById('offcanvasWithBothOptions');
+    
+    offcanvasElement.addEventListener('show.bs.offcanvas', function() {
+        // Offcanvas가 보여질 때, 팔로우와 팔로워 모달의 z-index를 1035로 설정
+        $('#followerModal, #followModal').css('z-index', '1035');
+        $('.modal-backdrop').css('z-index', '1040');
+    });
+
+    offcanvasElement.addEventListener('hidden.bs.offcanvas', function() {
+        // Offcanvas가 숨겨질 때, 팔로우와 팔로워 모달의 z-index를 1055로 설정
+        $('#followerModal, #followModal').css('z-index', '1055');
+    });
+});

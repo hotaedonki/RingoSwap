@@ -177,6 +177,7 @@ main {
 
 .profile-card {
 	text-align: center;
+	cursor: pointer;
 }
 
 .searchFollow, .searchFollower {
@@ -254,3 +255,8 @@ main {
 , .text-primary.f {
 	cursor: pointer;
 }
+
+.offcanvas {
+	z-index:9999;
+}
+
