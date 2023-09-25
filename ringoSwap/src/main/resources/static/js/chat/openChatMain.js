@@ -113,6 +113,9 @@ function createChatRoom()
 
 function loadJoinedChatroomListRealTime(data)
 {
+	if (data == null)
+		return;
+	
 	// 기존에 있는 채팅방 리스트를 삭제
 	clearChatlist();
 	
@@ -232,6 +235,8 @@ function searchByTitle(title)
 		if (title.trim() === '')
 		{
 			// 검색어가 비어 있으면 요청을 보내지 않는다.
+			// 대신 기존에 가져온 내가 참여한 채팅방 전체 목록이 사라지기 때문에 다시 호출
+			stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, {}, userNum);
        		return;
 		}
 		
@@ -244,5 +249,12 @@ function searchResultByTitle(data)
 	if (data == null)
 		return;
 		
-	console.log(data.body);
+	// 기존에 있는 채팅방 리스트를 삭제
+	clearChatlist();
+	
+	let jsonData = JSON.parse(data.body);
+	
+	jsonData.forEach(item => {
+		createChatroomThumbnail(item.chatroom_num, item.title, item.inputdate, item.message);
+	});
 }
