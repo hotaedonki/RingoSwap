@@ -20,6 +20,7 @@ import net.ringo.ringoSwap.domain.SingleDifficulty;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.GameService;
 import net.ringo.ringoSwap.service.MemberService;
+import net.ringo.ringoSwap.service.NoteService;
 
 @Slf4j
 @Controller
@@ -30,6 +31,8 @@ public class GameController
 	GameService service;
 	@Autowired
 	MemberService memberService;
+	@Autowired
+	NoteService noteService;
 	//게임서비스의 메인페이지로 이동하는 컨트롤러 메서드
 	@GetMapping("gameMain")
 	public String gameMain()
@@ -121,4 +124,22 @@ public class GameController
 		int methodResult = service.gameSettingUpdateQuestionNum(map);
 		return methodResult;
 	}
+
+	@ResponseBody
+	@PostMapping("gameNotePrint")
+	public DirFile gameNotePrint(@AuthenticationPrincipal UserDetails user){
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		//회원번호를 매개변수로 사용자의 게임세팅 정보를 리턴
+		GameSetting setting = service.gameSettingSelectByUserNum(user_num);
+		
+		if(setting.getFile_num() == -1) {
+			return null;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
+		}
+		//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
+		DirFile note = noteService.fileSelectByFileNum(setting.getFile_num());
+		
+		return note;
+	}
+	
+	
 }
