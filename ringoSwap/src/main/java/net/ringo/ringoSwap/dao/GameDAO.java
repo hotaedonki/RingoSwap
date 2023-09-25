@@ -30,5 +30,7 @@ public interface GameDAO
 	int gameSettingUpdate(GameSetting setting);
 	//사용자가 수정한 정보를 매개변수로 DB의 문제갯수 속성을 수정하는 메서드
 	int gameSettingUpdateQuestionNum(HashMap<String, Object> map);
+	//DB 내부 게임설정의 match_use값을 변경하는 메서드
+	int matchUseUpdate(HashMap<String, Object> map);
 	
 }

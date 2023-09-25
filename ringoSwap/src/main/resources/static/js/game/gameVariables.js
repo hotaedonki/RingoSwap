@@ -28,7 +28,8 @@ $(document).ready(function () {
 	initializeWindowEventHandlers();
 
 	//게임세팅정보 출력 기능
-	questionNumPrint();
+	gameSettingPrint();
+
 	//클릭이벤트 처리
 	clickEventFunction();
 });
@@ -75,4 +76,5 @@ function clickEventFunction(){
 	$(document).on('click', '.wordList-update', wordListUpdate);
 	$(document).on('click', '.form-update', gameSettingUpdate);
 	$(document).on('click', '.questionNum-update', questionNumUpdate);
+	$(document).on('click', '#flexSwitchCheckDefault', matchUseUpdate);
 }

@@ -55,4 +55,10 @@
 	 set question_num = #{question_num}
 	 where user_num = #{user_num}
 	 </update>
+	 <!-- DB 내부 게임설정의 match_use값을 변경하는 update문 -->
+	 <update id="matchUseUpdate" parameterType="java.util.HashMap">
+	 update ringo_game_setting
+	 set match_use = #{match_use}
+	 where user_num = #{user_num}
+	 </update>
 </mapper>
