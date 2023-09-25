@@ -1,6 +1,4 @@
-
-'use strict';
-
+/*
 document.addEventListener("DOMContentLoaded", function() {
 	const toggleButton = document.querySelector('.navbar-toggler');
 	const leftSideContainer = document.querySelector('.leftside');
@@ -13,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	});
 });
+*/
 
 $(document).ready(function()
 {
@@ -29,9 +28,23 @@ let myUserNum;
 let url;
 let subscriptionForUpdateChatroom;
 
+window.addEventListener('beforeunload', function(event) 
+{
+    if (stompClient !== null) 
+    {
+        stompClient.disconnect();
+    }
+    
+    // 원하는 경우, 사용자에게 경고 메시지를 표시할 수도 있습니다.
+    //event.returnValue = '';
+});
+
 // 초기화를 해주기 위한 코드, 실행 시점 차이로 인해 값을 받지 못하는 것을 방지.
 function init()
 {
+	if (stompClient)
+		stompClient.disconnect();
+	
 	stompClient = null;
 	username = null;
 	
@@ -178,7 +191,7 @@ function onMessageReceived(message)
 				// case가 TALK인 경우에는 새 메시지를 추가해서 붙혀준다.
 				case 'TALK':
 					console.log("메시지:", messageValue);
-					createChatMsgBox(userNumData, JSON.stringify(messageValue));
+					createChatMsgBox(userNumData, messageValue);
 					
 					// 채팅방 정보를 가져오기 위한 호출
 					stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroomNum, {}, myUserNum);
@@ -287,6 +300,18 @@ function createChatroomThumbnail(chatroom_num, title, inputdate, message)
     
     // 생성한 blockDiv 요소를 chatlist에 append
     chatlist.appendChild(blockDiv);
+    
+    // blockDiv 클릭 이벤트 리스너 추가
+    blockDiv.addEventListener('click', function() 
+    {
+        moveToChatroom(chatroom_num);
+    });
+}
+
+function moveToChatroom(chatroom_num) 
+{
+    // chatroom 페이지로 이동하면서 chatroom_num을 파라미터로 전달
+    window.location.href = "/ringo/chat/openChatRoomEnter?chatroom_num=" + chatroom_num;
 }
 
 function clearChatlist() 

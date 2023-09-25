@@ -7,28 +7,17 @@
 		ringo_member 테이블의 정보는 id대조용으로 사용하고 ringo_single_difficulty 테이블의 정보만 읽습니다.
 	 -->
 	<select id="difficultyCall" parameterType="String" resultType="SingleDifficulty">
-		select sd.user_num, m.user_id, m.nickname
+		select gs.user_num, m.user_id, m.nickname
             , file_num
-            , difficulty
-            , word_method
-            , quest_num
-            , sichuan_num
-            , word_check
+            , form_type
+            , word_type
+            , description_show
+            , pron_show
+            , question_num
             , answer_category
-		from ringo_single_difficulty sd, ringo_member m 
-		where sd.user_num = m.user_num and m.user_id = #{user_id}
+		from ringo_game_setting gs, ringo_member m 
+		where gs.user_num = m.user_num and m.user_id = #{user_id}
 	</select>
-	<!-- 
-		ringo_single_difficulty테이블의 정보를 수정하는 update문
-		아직 미완성 코드입니다.
-	 -->
-	<update id="difficultyUpdate" parameterType="SingleDifficulty">
-	update ringo_single_difficulty
-	set 
-	<if test="">
-	</if>
-	where user_num = #{user_num}
-	</update>
 	
 	
 	<!-- 
@@ -41,4 +30,23 @@
 	 where user_num = #{user_num}
 	 	and file_type = 'word'
 	 </select>
+	 
+	 <select id="gameSettingSelectByUserNum" resultType="GameSetting">
+	 select *
+	 from ringo_game_setting
+	 where user_num = #{user_num}
+	 </select>
+	 <!-- 사용자가 수정한 게임세팅 정보를 매개변수로  DB의 정보를 수정하는 update문 -->
+	 <update id="gameSettingUpdate" parameterType="GameSetting">
+	 update ringo_game_setting
+	 set form_type=#{form_type}, pron_show=#{pron_show}
+	 	, word_type=#{word_type}, description_show=#{description_show}
+	 where user_num = #{user_num}
+	 </update>
+	 <!-- 사용자가 수정한 정보를 매개변수로 DB의 문제 갯수 속성을 수정하는 update문 -->
+	 <update id="gameSettingUpdateQuestionNum" parameterType="java.util.HashMap">
+	 update ringo_game_setting
+	 set question_num = #{question_num}
+	 where user_num = #{user_num}
+	 </update>
 </mapper>

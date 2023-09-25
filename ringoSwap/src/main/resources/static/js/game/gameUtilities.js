@@ -8,11 +8,14 @@ function confirmExit() {
 		} else if (currentGame === 'flashCards') {
 			$('.flashCards-container').remove();
 			$('.main-container').show();
+            history.pushState({ url: 'http://localhost:8888/ringo/game/gameMain' }, '', `?category=dictation`);
+            console.log(history);
 		}
     $('#confirmModal').modal('hide');
 }
 
 function getCurrentGame() {
+    const category = getUrlParam('category');
     if ($('.MCQ-container').length > 0) return 'MCQ';
     if ($('.dictation-container').length > 0) return 'dictation';
     if ($('.flashCards-container').length > 0) return 'flashCards';
@@ -39,10 +42,30 @@ function selectAll() {
 }
 
 function returnToGameMain() {
+    const newUrl = 'http://localhost:8888/ringo/game/gameMain';
 	const resultGame = getCurrentGame();
 	console.log(resultGame + "-container");
 	$(`.${resultGame}-container`).remove();
 	
 	$('#returnToMainModal').modal('hide');
 	$('.main-container').show();
+    history.pushState({ url: newUrl }, '', '');
+}
+
+function questionNumPrint(){
+    $.ajax({
+        url:'questNumPrint',
+        type:'post',
+        dataType:'json',
+        success:function(number){
+            console.log('문제갯수 : '+number);
+            if(number === 0){
+                number = 'total';
+            }
+            $('.btn[data-bs-target="#countOfItemsModal"]').text(number);
+        },
+        error:function(e){
+            console.error(e);
+        }
+    })
 }

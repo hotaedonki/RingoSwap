@@ -8,6 +8,7 @@ import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
 import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
+import net.ringo.ringoSwap.domain.custom.OpenChatroomInfo;
 
 public interface ChatService 
 {
@@ -48,4 +49,9 @@ public interface ChatService
 	public ArrayList<ChatroomThumbnail> getChatroomThumbnails(int userNum);
 
 	public ArrayList<Integer> loadChatRoomNumsByUserNum(int userNum);
+
+	// 오픈 채팅방 정보들을 언어 필터 기준으로 가져온다.
+	public ArrayList<OpenChatroomInfo> searchChatroomByLang(String lang_category);
+	// 모든 오픈 채팅방 정보를 가져온다.
+	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms();
 }

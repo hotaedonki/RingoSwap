@@ -1,5 +1,7 @@
 package net.ringo.ringoSwap.domain;
 
+import javax.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,13 +10,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GameSetting {
-	int user_num;
-	int file_num;
+	@Column(name="user_num", nullable = false)
+	private int user_num;
+	@Column(name="file_num", nullable = false)
+	private int file_num;
 	String form_type;
 	String word_type;
 	boolean description_show;
 	boolean pron_show;
-	int question_num;
+	@Column(name="question_num", nullable = false)
+	private int question_num;
 	String answer_category;
 	
 	public String toString()

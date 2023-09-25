@@ -38,7 +38,7 @@ function playFlashCards() {
 		$('.main-container').hide();
 		$("body").append(flashCardsHTML);
         if(currentUrl !== newUrl){
-            history.pushState({ url: newUrl }, '', `?category=flashcard`);
+            history.pushState({ category:'flashcard', url: newUrl }, '', `?category=flashcard`);
         }
 }
 

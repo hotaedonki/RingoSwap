@@ -35,7 +35,7 @@ function playDictation() {
 		$('.main-container').hide();
 		$("body").append(dictationHTML);
         if(currentUrl !== newUrl){
-            history.pushState({ url: newUrl }, '', `?category=dictation`);
+            history.pushState({ category:'dictation', url: newUrl }, '', `?category=dictation`);
         }
 }
 

@@ -28,6 +28,7 @@ import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
 import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
+import net.ringo.ringoSwap.domain.custom.OpenChatroomInfo;
 import net.ringo.ringoSwap.enums.webService.MessageType;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.MemberService;
@@ -50,25 +51,31 @@ public class ChatController
 	
 	//채팅서비스의 메인페이지로 이동하는 컨트롤러 메서드
 	@GetMapping(PathHandler.OPENCHATMAIN)
-	public String chatMain(Model model, @AuthenticationPrincipal UserDetails user)
+	public String chatMain(String lang_category, Model model, @AuthenticationPrincipal UserDetails user)
 	{
 		log.debug("move to chat/openChatMain . . .");
 		
 		// user의 이름으로 user_num을 가져온다.
 		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
 		
-		ArrayList<Chatroom> chatrooms = service.getOpenChatrooms();
+		ArrayList<OpenChatroomInfo> openChatrooms = new ArrayList<>();
 		
-		log.debug("{}", chatrooms.size());
+		// 언어 필터 관련해서 값이 있으면
+		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja")))
+			openChatrooms = service.searchChatroomByLang(lang_category);
+		else
+			openChatrooms = service.getAllOpenchatrooms();
 		
 		// chatRoomNums이 있는 경우(= 한개 이상 링크(ringo_chatroom_link)가 있는 경우) chat room의 정보를 가져온다.
-		if (chatrooms != null && chatrooms.size() > 0)
+		if (openChatrooms != null && openChatrooms.size() > 0)
 		{
-			model.addAttribute("chatrooms", chatrooms);
-			model.addAttribute("userNum", userNum);
+			model.addAttribute("openChatrooms", openChatrooms);
+			log.debug("{}", openChatrooms.size());
 		}
 		
-		return "chat/openChatMain";
+		model.addAttribute("userNum", userNum);
+		
+		return "/chat/openChatMain";
 	}
 	
 	@MessageMapping(PathHandler.MM_LOADJOINEDCHATROOMLISTREALTIME)
@@ -259,6 +266,26 @@ public class ChatController
 		return true;
 	}
 	
+	
+	@GetMapping(PathHandler.SEARCHCHATROOMBYLANG)
+	public String searchChatroomByLang(String lang_category, Model model)
+	{
+		log.debug("search Chatroom By Lang . . .");
+		
+		ArrayList<OpenChatroomInfo> openChatrooms = service.searchChatroomByLang(lang_category);
+		
+		if (openChatrooms == null || openChatrooms.size() <= 0)
+		{
+			return "redirect:/chat/openChatMain";
+		}
+		
+		model.addAttribute("openChatrooms", openChatrooms);
+		
+		log.debug("openChatrooms size - {}", openChatrooms.size());
+		
+		return "/chat/openChatMain";
+	}
+	
 	@EventListener
 	public void webSocketDisconnectListener(SessionDisconnectEvent event)
 	{
@@ -268,6 +295,6 @@ public class ChatController
         String userUUID = (String) headerAccessor.getSessionAttributes().get("userUUID");
         String roomId = (String) headerAccessor.getSessionAttributes().get("roomId");
 
-        log.info("headAccessor : {}",headerAccessor);
+        log.info("headAccessor : {}", headerAccessor);
 	}
 }

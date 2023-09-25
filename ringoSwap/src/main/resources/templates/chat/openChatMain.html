@@ -52,7 +52,7 @@
 								class='bx bx-edit icon'></i> <span class="text nav-text">Note</span>
 						</a></li>
 
-						<li><a th:href="@{/message/messageMain}"> <i
+						<li><a th:href="@{/chat/openChatMain}"> <i
 								class='bx bx-message-square-dots icon'></i> <span
 								class="text nav-text">Message</span>
 						</a></li>
@@ -110,7 +110,7 @@
 	            <!-- chat list-->
 	            <!-- 현재 동적 생성중 -->
 	            <div class="chatlist">
-	          
+	            	
 	            </div>
 	        </div>
         </div>
@@ -126,7 +126,7 @@
                       <div class="collapse navbar-collapse" id="navbarNavDropdown">
                         <ul class="navbar-nav">
                           <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active" aria-current="page" th:href="@{/member/home}">Home</a>
                           </li>
                           <li class="nav-item">
                             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modal1">New Room</a>
@@ -136,9 +136,9 @@
                               Language
                             </a>
                             <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="#" name="korean">Korean</a></li>
-                              <li><a class="dropdown-item" href="#" name="english">English</a></li>
-                              <li><a class="dropdown-item" href="#" name="japanese">Japanese</a></li>
+                              <li><a class="dropdown-item" th:href="@{/chat/openChatMain(lang_category='ko')}" name="ko">Korean</a></li>
+                              <li><a class="dropdown-item" th:href="@{/chat/openChatMain(lang_category='en')}" name="en">English</a></li>
+                              <li><a class="dropdown-item" th:href="@{/chat/openChatMain(lang_category='ja')}" name="ja">Japanese</a></li>
                             </ul>
                           </li>
                         </ul>
@@ -171,12 +171,12 @@
                         </tr>
                     </tbody>
                     -->
-                    <tbody th:each="room : ${chatrooms}" class="chatroom_list_tbody">
+                    <tbody th:each="room : ${openChatrooms}" class="chatroom_list_tbody">
                         <tr>
                             <td><input th:type="hidden" th:id="${room.chatroom_num}" th:value="${room.chatroom_num}"><p th:text="${room.lang_category}"></p></td>
-                            <td class="text_align_left"><a th:href="@{/chat/openChatRoomEnter(chatroom_num=${room.chatroom_num})}" th:text=${room.chatroom_num}></a> <!-- <p th:text="${room.title}"> </p> --></td>
-                            <td>3/6</td>
-                            <td class="text_align_left"><p th:text="${room.host_num}"></td><!--보이스룸 호스트 닉네임-->
+                            <td><a th:href="@{/chat/openChatRoomEnter(chatroom_num=${room.chatroom_num})}" th:text=${room.title}></a> <!-- <p th:text="${room.title}"> </p> --></td>
+                            <td><p th:text=${room.capacity}></p></td>
+                            <td><p th:text="${room.nickname}"></td><!--보이스룸 호스트 닉네임-->
                         </tr>
                     </tbody> 
                 </table>

@@ -1,5 +1,3 @@
-'use strict';
-
 $(document).ready(function()
 {
 	init();
@@ -10,8 +8,22 @@ let stompClient;
 let userNum;
 let subscriptionForUpdateChatroom;	// 방 정보 업데이트 이벤트를 구독할 때 구독 정보를 저장하는 객체 
 
+window.addEventListener('beforeunload', function(event) 
+{
+    if (stompClient !== null) 
+    {
+        stompClient.disconnect();
+    }
+    
+    // 원하는 경우, 사용자에게 경고 메시지를 표시할 수도 있습니다.
+    //event.returnValue = '';
+});
+
 function init()
 {
+	if (stompClient)
+		stompClient.disconnect();
+	
 	stompClient = null;
 	userNum = document.getElementById('userNum').value;
 	subscriptionForUpdateChatroom = {};
@@ -150,9 +162,21 @@ function createChatroomThumbnail(chatroom_num, title, inputdate, message)
     
     // 생성한 blockDiv 요소를 chatlist에 append
     chatlist.appendChild(blockDiv);
+    
+    // blockDiv 클릭 이벤트 리스너 추가
+    blockDiv.addEventListener('click', function() 
+    {
+        moveToChatroom(chatroom_num);
+    });
 }
 
-function clearChatlist() 
+function moveToChatroom(chatroom_num) 
+{
+    // chatroom 페이지로 이동하면서 chatroom_num을 파라미터로 전달
+    window.location.href = "/ringo/chat/openChatRoomEnter?chatroom_num=" + chatroom_num;
+}
+
+function clearChatlist()
 {
     let chatlist = document.querySelector('.chatlist');
     
@@ -165,11 +189,19 @@ function clearChatlist()
 function loadChatRoomNumsByUserNum(data)
 {
 	let jsonData = JSON.parse(data.body);
+	// 한번만 불러와도 되기 때문에 사용한 함수
+	let isLoaded = false;
 	
 	// 불러온 채팅방 데이터를 기반으로 
 	jsonData.forEach(item => 
 	{
 		subscribe(item);
+		
+		if (!isLoaded)
+		{
+			stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + item, {}, userNum);
+			isLoaded = true;
+		}
 	});
 }
 

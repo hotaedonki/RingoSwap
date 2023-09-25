@@ -43,7 +43,7 @@ function playMCQ() {
 	$('.main-container').hide();
 	$("body").append(MCQAreaHTML);
 	if(currentUrl !== newUrl){
-		history.pushState({ url: newUrl }, '', `?category=MCQ`);
+		history.pushState({ category:'MCQ', url: newUrl }, '', `?category=MCQ`);
 	}
 }
 

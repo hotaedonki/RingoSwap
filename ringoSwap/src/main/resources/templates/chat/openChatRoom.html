@@ -125,8 +125,8 @@
       </div>
 	  <!-- chatbox -->
       <ul class="chatbox">
-        <li class="msg_content">
-		  <div th:each="msg, i : ${messages}" id="msg_chatBoxArea">
+        <li class="msg_content" id="msg_chatBoxArea">
+		  <div th:each="msg, i : ${messages}">
 		  
 		  	<div th:switch="${msg.user_num}">
 		  		<div th:case="${myChatroomLink.user_num}" class="chat outcoming"><p th:text="${msg.message}"></p></div>
