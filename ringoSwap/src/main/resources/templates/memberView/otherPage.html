@@ -100,17 +100,13 @@
 			<!-- 첫 번째 컨테이너 -->
 			<div class="row mb-4">
 				<!-- 프로필 사진 및 수정 버튼 -->
-				<div class="col-lg-6">
-					<div class="card">
-						<div class="position-relative">
-							<img th:src="@{../img/5.jpg}" alt="배경사진" class="card-img-top">
-							<img th:src="@{../img/123.png}" alt="프로필 사진" id="profilePicInput"
-								style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; width: 200px; height: 200px;">
-						</div>
-					</div>
+				<div class="col-md-6 card profile-card">
+						<img th:src="@{../img/5.jpg}" alt="배경사진" class="card-img-top">
+						<img th:src="@{../img/123.png}" alt="프로필 사진" id="profilePicInput"
+							style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; width: 200px; height: 200px;">
 				</div>
 				<!-- 닉네임 및 자기소개 -->
-				<div class="col-lg-5 mt-4">
+				<div class="col-md-5 mt-4 ms-5">
 					<div class="card mb-4" style="height: 150px;">
 						<div class="card-body">
 							<h5 class="card-title nickname">닉네임</h5>
@@ -148,7 +144,7 @@
 			<!-- 두 번째 컨테이너 -->
 			<div class="row mb-4">
 				<!-- 정보/취미 탭 -->
-				<div class="col-lg-12 infoBox">
+				<div class="col-md-12 infoBox">
 					<div class="card">
 						<div class="card-body hobbyButton">
 						</div>

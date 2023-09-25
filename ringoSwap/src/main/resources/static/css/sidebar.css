@@ -22,10 +22,10 @@
     --tran-05: all 0.3s ease;
 }
 
-body{
+body {
     background-color: #FEFBF5;
     transition: var(--tran-05);
-    display:: flex;
+    display:: show;
 }
 
 ::selection{
@@ -297,4 +297,19 @@ body.dark .sidebar li a:hover .text{
 
 .logo-area {
 	cursor: pointer;
+}
+
+/* Chrome, Safari, Edge */
+.home::-webkit-scrollbar {
+    display: none;
+}
+
+/* Firefox */
+.home {
+    scrollbar-width: none;
+}
+
+/* IE */
+.home {
+    -ms-overflow-style: none;
 }

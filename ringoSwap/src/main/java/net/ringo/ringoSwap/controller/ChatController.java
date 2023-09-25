@@ -320,4 +320,5 @@ public class ChatController
 
         log.info("headAccessor : {}", headerAccessor);
 	}
+
 }

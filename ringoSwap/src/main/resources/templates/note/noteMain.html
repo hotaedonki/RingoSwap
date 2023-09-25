@@ -33,137 +33,92 @@
 <title>Dashboard Sidebar Menu</title>
 </head>
 <body>
-	<div class="sidebar-container" style="position: relative;">
-		<nav class="sidebar close">
-			<header>
-				<div class="image-text logo-area">
-					<span class="image"> <img th:src="@{../img/sidebar.png}"
-						alt="">
-					</span>
 
-					<div class="text logo-text">
-						<span class="name">LingoSwap</span>
-					</div>
-				</div>
-				<i class='bx bx-chevron-right toggle'></i>
-			</header>
+	<nav class="sidebar close">
+		<header>
+			<div class="image-text logo-area">
+				<span class="image"> <img th:src="@{../img/sidebar.png}"
+					alt="">
+				</span>
 
-			<div class="menu-bar">
-				<div class="menu">
-					<ul class="menu-ul">
-						<li><a th:href="@{/member/home}"> <i
-								class='bx bx-home-alt icon'></i> <span class="text nav-text">Hoooome</span>
-						</a></li>
-
-						<li><a th:href="@{/feed/feedMain}"> <i
-								class='bx bx-detail icon'></i> <span class="text nav-text">Feed</span>
-						</a></li>
-
-						<li><a th:href="@{/note/noteMain}"> <i
-								class='bx bx-edit icon'></i> <span class="text nav-text">Note</span>
-						</a></li>
-
-						<li><a th:href="@{/chat/openChatMain}"> <i
-								class='bx bx-message-square-dots icon'></i> <span
-								class="text nav-text">Message</span>
-						</a></li>
-
-						<li><a th:href="@{/game/gameMain}"> <i
-								class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
-						</a></li>
-					</ul>
-				</div>
-				<!-- ========================사이드바 하단=========================== -->
-				<div class="bottom-content">
-					<ul class="menu-ul">
-						<li class="">
-							<div sec:authorize="isAuthenticated()">
-								<a th:href="@{/member/logout}"> <i
-									class='bx bx-log-out icon'></i> <span class="text nav-text">Logout</span>
-								</a>
-							</div>
-						</li>
-
-						<li class=""><a th:href="@{/notification/notificationMain}">
-								<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
-						</a></li>
-						<li class="">
-							<div sec:authorize="isAuthenticated()">
-								<a th:href="@{/member/myPage}"> <span class="profile-pic-li"
-									data-tooltip="프로필 사진으로 이동합니다."> <span
-										class="profile-pic"> <img th:src="@{../img/2.jpg}"
-											alt="Your Profile Picture">
-									</span>
-								</span> <span class="text nav-text">Profile</span>
-								</a>
-							</div>
-						</li>
-					</ul>
+				<div class="text logo-text">
+					<span class="name">LingoSwap</span>
 				</div>
 			</div>
-		</nav>
+			<i class='bx bx-chevron-right toggle'></i>
+		</header>
 
-		<main class="home custom-container">
-			<div class="container">
-				<div class="row noteHome">
-					<div class="col-1">
-					<div class="noteItem" style="position: fixed; top: 15px; right: 30px; z-index: 9999; ">
-						<h5 class="noteTitle" style="position: relative; display: inline-block; margin-right: 30px; top: 5px; font-size: x-large;"></h5>
+		<div class="menu-bar">
+			<div class="menu">
+				<ul class="menu-ul">
+					<li><a th:href="@{/member/home}"> <i
+							class='bx bx-home-alt icon'></i> <span class="text nav-text">Hoooome</span>
+					</a></li>
+
+					<li><a th:href="@{/feed/feedMain}"> <i
+							class='bx bx-detail icon'></i> <span class="text nav-text">Feed</span>
+					</a></li>
+
+					<li><a th:href="@{/note/noteMain}"> <i
+							class='bx bx-edit icon'></i> <span class="text nav-text">Note</span>
+					</a></li>
+
+					<li><a th:href="@{/chat/openChatMain}"> <i
+							class='bx bx-message-square-dots icon'></i> <span
+							class="text nav-text">Message</span>
+					</a></li>
+
+					<li><a th:href="@{/game/gameMain}"> <i
+							class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
+					</a></li>
+				</ul>
+			</div>
+			<!-- ========================사이드바 하단=========================== -->
+			<div class="bottom-content">
+				<ul class="menu-ul">
+					<li class="">
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/logout}"> <i class='bx bx-log-out icon'></i>
+								<span class="text nav-text">Logout</span>
+							</a>
+						</div>
+					</li>
+
+					<li class=""><a th:href="@{/notification/notificationMain}">
+							<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
+					</a></li>
+					<li class="">
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/myPage}"> <span class="profile-pic-li"
+								data-tooltip="프로필 사진으로 이동합니다."> <span class="profile-pic">
+										<img th:src="@{../img/2.jpg}" alt="Your Profile Picture">
+								</span>
+							</span> <span class="text nav-text">Profile</span>
+							</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<main class="home custom-container">
+		<div class="container">
+			<div class="row noteHome">
+				<div class="col-1">
+					<div class="noteItem"
+						style="position: fixed; top: 5px; right: 30px; z-index:5555">
+						<h5 class="noteTitle"></h5>
 						<button class="btn btn-primary noteOffcanvas " type="button"
 							data-bs-toggle="offcanvas"
 							data-bs-target="#offcanvasWithBothOptions"
 							aria-controls="offcanvasWithBothOptions">
 							<i class="bi bi-arrows-angle-expand"></i>
-						</button></div>
-						<!-- ========================폴더 출력 오프캔버스=================== -->
-						<div class="offcanvas offcanvas-start" data-bs-scroll="true"
-							tabindex="-1" id="offcanvasWithBothOptions"
-							aria-labelledby="offcanvasWithBothOptionsLabel">
-							<div class="offcanvas-header">
-								<h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">노트</h5>
-								<button type="button" class="btn-close"
-									data-bs-dismiss="offcanvas" aria-label="Close"></button>
-							</div>
-							<div class="offcanvas-body">
-								<!-- 버튼 그룹 위치 변경 -->
-								<div class="row">
-									<div class="btn-group mb-2" role="group"
-										aria-label="Button group with nested dropdown">
-										<div class="col-6 sortCategory">
-											<button type="button"
-												class="btn btn-outline-success sortBtnMain"
-												style="border: none;">생성순</button>
-											<div class="btn-group" role="group">
-												<button id="btnGroupDrop2" type="button"
-													class="btn btn-outline-success dropdown-toggle"
-													data-bs-toggle="dropdown" aria-haspopup="true"
-													aria-expanded="false" style="border: none;"></button>
-												<div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-													<a class="dropdown-item sortBtn" href="#">제목순</a> <a
-														class="dropdown-item sortBtn" href="#">수정순</a>
-												</div>
-											</div>
-										</div>
-										<div class="col-6 createArea" style="position: relative;">
-											<div style="position: absolute; right: 5px; top: 5px;">
-												<i class="bi bi-folder-plus createFolder"
-													data-bs-toggle="modal" data-bs-target="#folderModal"></i> <i
-													class="bi bi-file-earmark-plus createFile"
-													data-bs-toggle="modal" data-bs-target="#fileModal"></i>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-12">
-										<ul class="dirPrint"></ul>
-									</div>
-								</div>
-							</div>
-						</div>
+						</button>
 					</div>
 				</div>
-				<div class="noteOrWord">
+			</div>
+			<div class="noteOrWord">
 				<div class="row wordMain-content">
 					<div class="col-12">
 						<div class="card mb-3" style="height: 97vh; top: 9px;">
@@ -180,7 +135,6 @@
 										<i class="bi bi-arrows-angle-expand"></i>
 									</button>
 								</div>
-
 							</div>
 
 							<!-- Body for the words -->
@@ -214,70 +168,86 @@
 				</textarea>
 					<script>
 						tinymce
-								.init({
-									language : "ko_KR",
-									selector : '#noteTextarea',
-									selector : 'textarea',
-									height : '97vh',
-									menubar : false,
-									plugins : [ "advlist", "autolink", "lists",
-											"link", "image", "charmap",
-											"preview", "anchor",
-											"searchreplace", "visualblocks",
-											"code", "fullscreen",
-											"insertdatetime", "media", "table",
-											"code", "help", "wordcount", "save" ],
-									toolbar : 'formatselect fontselect fontsizeselect |'
-											+ ' forecolor backcolor |'
-											+ ' bold italic underline strikethrough |'
-											+ ' alignjustify alignleft aligncenter alignright |'
-											+ ' bullist numlist |'
-											+ ' table tabledelete |'
-											+ ' link image | ' + ' save ',
-									image_title : true,
-									automatic_uploads : true,
-									file_picker_types : 'image',
-									file_picker_callback : function(cb, value,
-											meta) {
-										let input = document
-												.createElement('input');
-										input.setAttribute('type', 'file');
-										input.setAttribute('accept', 'image/*');
-										input.onchange = function() {
-											let file = this.files[0];
-											let reader = new FileReader();
-											reader.onload = function() {
-												let id = 'blobid'
-														+ (new Date())
-																.getTime();
-												let blobCache = tinymce.activeEditor.editorUpload.blobCache;
-												let base64 = reader.result
-														.split(',')[1];
-												let blobInfo = blobCache
-														.create(id, file,
-																base64);
-												blobCache.add(blobInfo);
-												cb(blobInfo.blobUri(), {
-													title : file.name
-												});
-											};
-											reader.readAsDataURL(file);
-										};
-										input.click();
-									},
-									content_style : 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }',					
-									save_onsavecallback : function() {
-										// 내용을 저장하는 함수를 호출
-										fileSave();
-									},
-									autosave_interval : 600000, //자동저장 설정 간격(10분 = 10*60*1000밀리초)
-									autosave_callback : function() {
-										//자동 저장될 때마다 아래 함수 fileSave를 호출합니다.
-										console.log('자동저장 작동');
-										fileSave();
-									},
-									setup : function(editor) {
-										editor.on('init', function() {
+							.init({
+								language : "ko_KR",
+								selector : '#noteTextarea',
+								selector : 'textarea',
+								height : '97vh',
+								menubar : false,
+								plugins : [ "advlist", "autolink", "lists",
+										"link", "image", "charmap",
+										"preview", "anchor",
+										"searchreplace", "visualblocks",
+										"code", "fullscreen",
+										"insertdatetime", "media", "table",
+										"code", "help", "wordcount", "save" ],
+								toolbar : 'formatselect fontselect fontsizeselect |'
+										+ ' forecolor backcolor |'
+										+ ' bold italic underline strikethrough |'
+										+ ' alignjustify alignleft aligncenter alignright |'
+										+ ' bullist numlist |'
+										+ ' table tabledelete |'
+										+ ' link image | ' + ' save ',
+								image_title : true,
+								automatic_uploads : true,
+								file_picker_types : 'image',
+								file_picker_callback: function(cb, value, meta) {
+								    let input = document.createElement('input');
+								    input.setAttribute('type', 'file');
+								    input.setAttribute('accept', 'image/*');
+								    input.onchange = function() {
+								        let file = this.files[0];
+								        let reader = new FileReader();
+								        reader.onload = function(e) {
+								            let img = new Image();
+								            img.onload = function() {
+								                let width = img.width;
+								                let height = img.height;
+								                
+								                if (width > 800 || height > 600) {
+								                    let scale = Math.min(800 / width, 600 / height);
+								                    width *= scale;
+								                    height *= scale;
+
+								                    let canvas = document.createElement('canvas');
+								                    let ctx = canvas.getContext('2d');
+								                    canvas.width = width;
+								                    canvas.height = height;
+								                    ctx.drawImage(img, 0, 0, width, height);
+								                    
+								                    img.src = canvas.toDataURL();
+								                }
+
+								                // 나머지 로직은 동일
+								                let id = 'blobid' + (new Date()).getTime();
+								                let blobCache = tinymce.activeEditor.editorUpload.blobCache;
+								                let base64 = img.src.split(',')[1];
+								                let blobInfo = blobCache.create(id, file, base64);
+								                blobCache.add(blobInfo);
+								                cb(blobInfo.blobUri(), {
+								                    title: file.name
+								                });
+								            };
+								            img.src = e.target.result;
+								        };
+								        reader.readAsDataURL(file);
+								    };
+								    input.click();
+								},
+								content_style : 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }',
+								save_onsavecallback : function() {
+									// 내용을 저장하는 함수를 호출
+									fileSave();
+								},
+								autosave_interval : 600000, //자동저장 설정 간격(10분 = 10*60*1000밀리초)
+								autosave_callback : function() {
+									//자동 저장될 때마다 아래 함수 fileSave를 호출합니다.
+									console.log('자동저장 작동');
+									fileSave();
+								},
+								setup : function(editor) {
+									editor.on('init',
+										function() {
 											// 에디터 초기화 이벤트 처리
 											// 여기에 추가적인 초기화 작업을 수행할 수 있습니다.
 											console.log('변환');
@@ -288,62 +258,61 @@
 															fileNum,
 															fileType));
 										});
-										// 다른 이벤트 핸들러를 여기에 추가할 수 있습니다.
-									}
-								});
+									// 다른 이벤트 핸들러를 여기에 추가할 수 있습니다.
+								}
+							});
 					</script>
-					</div>
-				</div>
-			</div>
-		</main>
-
-
-		<!-- Modal -->
-		<!-- 폴더 생성 -->
-		<div class="modal fade createFolder" id="folderModal" tabindex="-1"
-			aria-labelledby="folderModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="folderModalLabel">Create Folder</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<input type="text" class="form-control" placeholder="Folder name"
-							id="folderNameInput">
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary yes"
-							id="createFolder" data-bs-dismiss="modal">Create</button>
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">Cancel</button>
-					</div>
 				</div>
 			</div>
 		</div>
+	</main>
 
-		<!-- 파일 생성 -->
-		<div class="modal fade createFile" id="fileModal" tabindex="-1"
-			aria-labelledby="fileModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="fileModalLabel">Create File or
-							Note</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<input type="text" class="form-control" placeholder="Name"
-							id="fileNameInput">
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary yes" id="createNote">Note</button>
-						<button type="button" class="btn btn-primary yes" id="createWord">Word</button>
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">Cancel</button>
-					</div>
+
+	<!-- Modal -->
+	<!-- 폴더 생성 -->
+	<div class="modal fade createFolder" id="folderModal" tabindex="-1"
+		aria-labelledby="folderModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="folderModalLabel">Create Folder</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<input type="text" class="form-control" placeholder="Folder name"
+						id="folderNameInput">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary yes" id="createFolder"
+						data-bs-dismiss="modal">Create</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 파일 생성 -->
+	<div class="modal fade createFile" id="fileModal" tabindex="-1"
+		aria-labelledby="fileModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="fileModalLabel">Create File or
+						Note</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<input type="text" class="form-control" placeholder="Name"
+						id="fileNameInput">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary yes" id="createNote">Note</button>
+					<button type="button" class="btn btn-primary yes" id="createWord">Word</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -391,6 +360,52 @@
 						Delete</button>
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- ========================폴더 출력 오프캔버스=================== -->
+	<div class="offcanvas offcanvas-start" data-bs-scroll="true"
+		tabindex="-1" id="offcanvasWithBothOptions"
+		aria-labelledby="offcanvasWithBothOptionsLabel">
+		<div class="offcanvas-header">
+			<h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">노트</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+				aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+			<!-- 버튼 그룹 위치 변경 -->
+			<div class="row">
+				<div class="btn-group mb-2" role="group"
+					aria-label="Button group with nested dropdown">
+					<div class="col-6 sortCategory">
+						<button type="button" class="btn btn-outline-success sortBtnMain"
+							style="border: none;">생성순</button>
+						<div class="btn-group" role="group">
+							<button id="btnGroupDrop2" type="button"
+								class="btn btn-outline-success dropdown-toggle"
+								data-bs-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false" style="border: none;"></button>
+							<div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+								<a class="dropdown-item sortBtn" href="#">제목순</a> <a
+									class="dropdown-item sortBtn" href="#">수정순</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 createArea" style="position: relative;">
+						<div style="position: absolute; right: 5px; top: 5px;">
+							<i class="bi bi-folder-plus createFolder" data-bs-toggle="modal"
+								data-bs-target="#folderModal"></i> <i
+								class="bi bi-file-earmark-plus createFile"
+								data-bs-toggle="modal" data-bs-target="#fileModal"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<ul class="dirPrint"></ul>
 				</div>
 			</div>
 		</div>
