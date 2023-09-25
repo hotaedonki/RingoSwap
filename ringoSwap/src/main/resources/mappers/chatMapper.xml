@@ -20,7 +20,7 @@
 				, #{host_num}
 				, #{title}
 				, #{lang_category}
-				, 'voice'
+				, 'openchat'
 				, #{capacity}
 			)
 	</insert>
@@ -188,7 +188,7 @@
 		from
 			ringo_chatroom
 		where
-			gen_category = 'voice'
+			gen_category = 'openchat'
 		order by
 			modifie_date desc
 	</select>
