@@ -304,6 +304,7 @@ public class ChatController
 		Map<String, Object> params = new HashMap();
 	
 		params.put("userNum", userNum);
+		// 와일드 카드 검사를 위해 '%' 추가
 		params.put("title", "%" + title + "%");
 
 		ArrayList<ChatroomThumbnail> chatroomThumbnails = service.getChatroomThumbnailsByTitle(params);

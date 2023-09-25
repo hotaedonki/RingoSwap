@@ -27,6 +27,7 @@ function init()
 	stompClient = null;
 	userNum = document.getElementById('userNum').value;
 	subscriptionForUpdateChatroom = {};
+	document.getElementById('searchInput').value = ''; // 검색창은 최초 실행시에 비워준다.
 }
 
 // 소켓을 만들어주는 역할을 하는 함수
@@ -37,7 +38,7 @@ function connect()
     stompClient = Stomp.over(socket);
     stompClient.connect({}, onConnected, onError);
     
-    if (stompClient == null)
+    if (stompClient === null)
     {	
 		console.log("연결 실패. client를 찾을 수 없습니다.");
     	return false;
@@ -113,6 +114,12 @@ function createChatRoom()
 
 function loadJoinedChatroomListRealTime(data)
 {
+	// 검색중에는 새로운 이벤트가 들어와 내가 참여한 채팅방 리스트를 새로고침하는 것을 막는다.
+	if (document.getElementById('searchInput').value.length > 0)
+	{
+		return;
+	}
+	
 	if (data == null)
 		return;
 	
