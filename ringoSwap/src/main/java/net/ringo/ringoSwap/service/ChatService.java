@@ -1,6 +1,7 @@
 package net.ringo.ringoSwap.service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.springframework.web.socket.WebSocketSession;
 
@@ -55,5 +56,5 @@ public interface ChatService
 	// 모든 오픈 채팅방 정보를 가져온다.
 	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms();
 	// 자신이 참가한 채팅방 목록을 제목으로 검색하여 가져온다.
-	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(String title);
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(Map<String, Object> params);
 }

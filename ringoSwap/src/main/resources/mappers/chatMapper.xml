@@ -251,7 +251,7 @@
 	</select>
 	
 	<!-- 내가 참여한 채팅방을 제목 기준으로 검색하여 결과를 가져옴 -->
-	<select id="getChatroomThumbnailsByTitle" parameterType="string" resultType="net.ringo.ringoSwap.domain.custom.ChatroomThumbnail">
+	<select id="getChatroomThumbnailsByTitle" parameterType="java.util.Map" resultType="net.ringo.ringoSwap.domain.custom.ChatroomThumbnail">
 		SELECT 
 			rc.chatroom_num,
 			rc.title,
@@ -267,6 +267,8 @@
 			rc.chatroom_num IN (
 				SELECT chatroom_num FROM ringo_chatroom_link WHERE user_num = #{userNum}
 			)
+		AND
+			rc.title LIKE #{title}
 		AND rcc.inputdate = (
 				SELECT MAX(inputdate) FROM ringo_chat_common WHERE chatroom_num = rc.chatroom_num
 			)
