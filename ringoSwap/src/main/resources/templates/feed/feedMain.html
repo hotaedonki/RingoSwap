@@ -31,12 +31,12 @@
 <!-- JS -->
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
 
-<title>Dashboard Sidebar Menu</title>
+<title>Feed</title>
 </head>
 <body>
 	<nav class="sidebar close">
 		<header>
-			<div class="image-text">
+			<div class="image-text logo-area">
 				<span class="image"> <img th:src="@{../img/sidebar.png}"
 					alt="">
 				</span>
@@ -71,11 +71,6 @@
 					<li><a th:href="@{/game/gameMain}"> <i
 							class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
 					</a></li>
-
-					<li><a th:href="@{/live/liveMain}"> <i
-							class='bx bx-tv icon'></i> <span class="text nav-text">Live</span>
-					</a></li>
-
 				</ul>
 			</div>
 			<!-- ========================사이드바 하단=========================== -->
@@ -89,10 +84,7 @@
 						</div>
 					</li>
 					<li class=""><a th:href="@{/notification/notificationMain}">
-							<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
-					</a></li>
-					<li class=""><a th:href="@{/store/storeMain}"> <i
-							class='bx bx-shopping-bag icon'></i> <span class="text nav-text">Store</span>
+							<i class='bx bx-bell icon'></i><span class="text nav-text">Notifications</span>
 					</a></li>
 					<li class="">
 						<div sec:authorize="isAuthenticated()">
@@ -102,15 +94,6 @@
 								</span>
 							</span> <span class="text nav-text">Profile</span>
 							</a>
-						</div>
-					</li>
-					<li class="mode">
-						<div class="sun-moon">
-							<i class='bx bx-moon icon moon'></i> <i
-								class='bx bx-sun icon sun'></i>
-						</div> <span class="mode-text text">Dark mode</span>
-						<div class="toggle-switch">
-							<span class="switch"></span>
 						</div>
 					</li>
 				</ul>
@@ -142,24 +125,20 @@
 									<img th:src="@{../img/5.jpg}" alt="Background Image"
 										class="card-img-top"> <img th:src="@{../img/123.png}"
 										alt="Profile Image" id="profilePicInput" class="profileImage">
-									<div class="card-body"
-										style="padding-top: 55px; margin-bottom: -20px;">
-										<div class="center">
-											<h5 class="card-title nickname">Hotaedonki</h5>
+									<div class="card-body">
+										<h5 class="card-title nickname mt-5"></h5>
+										<div onclick="event.stopPropagation();">
+											<a class="text-primary f" data-bs-toggle="modal"
+												data-bs-target="#followerModal">팔로워<span
+												class="follower-cnt"></span>
+											</a> <a style="margin-left: 10px;" class="text-primary f"
+												data-bs-toggle="modal" data-bs-target="#followModal">팔로우<span
+												class="followee-cnt"></span>
+											</a>
 										</div>
 									</div>
-									<a class="text-primary" data-bs-toggle="modal"
-										data-bs-target="#followerModal"
-										onclick="event.stopPropagation();">팔로워 <span
-										class="follower-cnt">100</span>
-									</a> <a style="margin-left: 10px;" class="text-primary"
-										data-bs-toggle="modal" data-bs-target="#followModal"
-										onclick="event.stopPropagation();">팔로우 <span
-										class="followee-cnt">150</span>
-									</a>
 								</div>
-								<p class="card-text introduction" style="margin: 20px 0;">This
-									is a short description about yourself.</p>
+								<p class="card-text introduction" style="margin: 20px 0;"></p>
 								<input type="hidden" id="translateLang">
 							</div>
 						</div>

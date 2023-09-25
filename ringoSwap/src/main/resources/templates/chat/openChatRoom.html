@@ -60,11 +60,6 @@
 						<li><a th:href="@{/game/gameMain}"> <i
 								class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
 						</a></li>
-
-						<li><a th:href="@{/live/liveMain}"> <i
-								class='bx bx-tv icon'></i> <span class="text nav-text">Live</span>
-						</a></li>
-
 					</ul>
 				</div>
 				<!-- ========================사이드바 하단=========================== -->
@@ -81,9 +76,6 @@
 						<li class=""><a th:href="@{/notification/notificationMain}">
 								<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
 						</a></li>
-						<li class=""><a th:href="@{/store/storeMain}"> <i
-								class='bx bx-shopping-bag icon'></i> <span class="text nav-text">Store</span>
-						</a></li>
 						<li class="">
 							<div sec:authorize="isAuthenticated()">
 								<a th:href="@{/member/myPage}"> <span class="profile-pic-li"
@@ -93,15 +85,6 @@
 									</span>
 								</span> <span class="text nav-text">Profile</span>
 								</a>
-							</div>
-						</li>
-						<li class="mode">
-							<div class="sun-moon">
-								<i class='bx bx-moon icon moon'></i> <i
-									class='bx bx-sun icon sun'></i>
-							</div> <span class="mode-text text">Dark mode</span>
-							<div class="toggle-switch">
-								<span class="switch"></span>
 							</div>
 						</li>
 					</ul>

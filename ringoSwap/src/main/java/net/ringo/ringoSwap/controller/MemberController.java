@@ -57,7 +57,7 @@ public class MemberController
 	public String join(HttpSession session)
 	{
 		removeAllSessions(session);
-		return "memberView/join";
+		return "/memberView/join";
 	}
 	
 	@PostMapping(PathHandler.JOIN)
@@ -68,7 +68,7 @@ public class MemberController
 		
 		service.insertMember(m);
 		
-		return "main";
+		return "/memberView/home";
 	}
 	
 	/*
@@ -78,7 +78,7 @@ public class MemberController
 	@GetMapping(PathHandler.HOME)
 	public String home()
 	{
-		return "memberView/home";
+		return "/memberView/home";
 	}
 	
 	/*

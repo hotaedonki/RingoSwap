@@ -67,11 +67,11 @@ function memberPrint(){
 }
 /*  */
 function printLanguage(lang){
-    if(lang === 'kor'){
+    if(lang === 'ko'){
         lang = languageImages["한국어"];
-    }else if(lang === 'jap'){
+    }else if(lang === 'ja'){
         lang = languageImages["일본어"];
-    }else if(lang === 'eng'){
+    }else if(lang === 'en'){
         lang = languageImages["영어"];
     }
     return lang;
@@ -213,13 +213,13 @@ function printLanguage(lang){
     function setTargetLanguage(){
         let lang = $(".targetLanguage").attr('src');
         if(lang === languageImages["한국어"]){
-            lang = 'kor';
+            lang = 'ko';
         }else if(lang === languageImages["일본어"]){
-            lang = 'jap';
+            lang = 'ja';
         }else if(lang === languageImages["영어"]){
-            lang = 'eng';
+            lang = 'en';
         }else{
-            lang = 'kor';
+            lang = 'ko';
         }
         return lang;
     }

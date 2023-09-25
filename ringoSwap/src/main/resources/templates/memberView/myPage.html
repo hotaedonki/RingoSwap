@@ -22,13 +22,13 @@
 <!-- JS -->
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
 
-<title>Dashboard Sidebar Menu</title>
+<title>My page</title>
 </head>
 <body>
 	<!-- =============================사이드바 상단=============================== -->
 	<nav class="sidebar close">
 		<header>
-			<div class="image-text">
+			<div class="image-text logo-area">
 				<span class="image"> <img th:src="@{../img/sidebar.png}"
 					alt="">
 				</span>
@@ -63,11 +63,6 @@
 					<li><a th:href="@{/game/gameMain}"> <i
 							class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
 					</a></li>
-
-					<li><a th:href="@{/live/liveMain}"> <i
-							class='bx bx-tv icon'></i> <span class="text nav-text">Live</span>
-					</a></li>
-
 				</ul>
 			</div>
 			<!-- ========================사이드바 하단=========================== -->
@@ -84,9 +79,6 @@
 					<li class=""><a th:href="@{/notification/notificationMain}">
 							<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
 					</a></li>
-					<li class=""><a th:href="@{/store/storeMain}"> <i
-							class='bx bx-shopping-bag icon'></i> <span class="text nav-text">Store</span>
-					</a></li>
 					<li class="">
 						<div sec:authorize="isAuthenticated()">
 							<a th:href="@{/member/myPage}"> <span class="profile-pic-li"
@@ -97,46 +89,31 @@
 							</a>
 						</div>
 					</li>
-					<li class="mode">
-						<div class="sun-moon">
-							<i class='bx bx-moon icon moon'></i> <i
-								class='bx bx-sun icon sun'></i>
-						</div> <span class="mode-text text">Dark mode</span>
-						<div class="toggle-switch">
-							<span class="switch"></span>
-						</div>
-					</li>
 				</ul>
 			</div>
 		</div>
 	</nav>
 
-
 	<section class="home custom-container">
-		<div class="container mt-5" style="margin-left: 80px;">
+		<div class="container mt-5 ms-auto">
 			<!-- 첫 번째 컨테이너 -->
 			<div class="row mb-4">
 				<!-- 프로필 사진 및 수정 버튼 -->
-				<div class="col-lg-6">
-					<div class="card">
-						<div class="position-relative">
-							<img th:src="@{../img/5.jpg}" alt="배경사진" class="card-img-top">
-							<img th:src="@{../img/123.png}" alt="프로필 사진" id="profilePicInput"
-								style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; width: 200px; height: 200px;">
-
-							<!-- 버튼들을 중앙에 배치하기 위한 div -->
-							<div
-								class="profile-buttons d-flex justify-content-center align-items-center">
-								<a th:href="@{/member/modifyProfile}"
-									class="btn btn-info btn-lg modify" style="margin-right: 20px;">프로필
-									수정</a> <a th:href="@{/member/updatePersonalInfo}"
-									class="btn btn-info btn-lg">개인정보 수정</a>
-							</div>
-						</div>
+				<div class="col-lg-6 card profile-card ">
+					<img th:src="@{../img/5.jpg}" alt="배경사진" class="card-img-top">
+					<img th:src="@{../img/123.png}" alt="프로필 사진" id="profilePicInput"
+						style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; width: 200px; height: 200px;">
+					<!-- 버튼들을 중앙에 배치하기 위한 div -->
+					<div
+						class="profile-buttons d-flex justify-content-center align-items-center">
+						<a th:href="@{/member/modifyProfile}"
+							class="btn btn-info btn-lg modify" style="margin-right: 20px;">프로필
+							수정</a> <a th:href="@{/member/updatePersonalInfo}"
+							class="btn btn-info btn-lg">개인정보 수정</a>
 					</div>
 				</div>
 				<!-- 닉네임 및 자기소개 -->
-				<div class="col-lg-5 mt-4">
+				<div class="col-lg-5 mt-3 ms-5">
 					<div class="card mb-4" style="height: 150px;">
 						<div class="card-body">
 							<h5 class="card-title nickname"></h5>
@@ -145,14 +122,15 @@
 					</div>
 					<!-- 팔로워, 팔로우, 언어 정보 -->
 					<div class="card-body profile-info">
-						<div style="min-width: 400px" class="d-flex">
-							<a th:href="@{/member/follower}" style="font-size: 1.4em;"
-								class="text-primary">팔로워 <span class="follower-cnt">100</span></a>
-							<a th:href="@{/member/follow}"
-								style="margin-left: 10px; font-size: 1.4em;"
-								class="text-primary">팔로우 <span class="followee-cnt">150</span></a>
-							<button class="btn btn-primary ms-auto goToMyFeed">내 피드
-								가기</button>
+						<div style="min-width: 400px">
+							<a class="text-primary f" data-bs-toggle="modal"
+								data-bs-target="#followerModal">팔로워<span
+								class="follower-cnt"></span>
+							</a> <a style="margin-left: 10px;" class="text-primary f"
+								data-bs-toggle="modal" data-bs-target="#followModal">팔로우<span
+								class="followee-cnt"></span>
+							</a>
+							<button class="btn btn-primary ms-5 goToMyFeed">내 피드 가기</button>
 						</div>
 						<div
 							style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; min-width: 430px;">

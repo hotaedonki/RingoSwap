@@ -17,7 +17,7 @@ function getCurrentGame() {
     if ($('.dictation-container').length > 0) return 'dictation';
     if ($('.flashCards-container').length > 0) return 'flashCards';
     if ($('.MCQ-result-container').length > 0) return 'MCQ-result';
-    if ($('.flashCards-result-container').length > 0) return 'flashCardsResult';
+    if ($('.dictation-result-container').length > 0) return 'dictation-result';
     return null;
 }
 

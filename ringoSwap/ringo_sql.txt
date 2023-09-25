@@ -312,7 +312,7 @@ CREATE TABLE ringo_chatroom (
 	chatroom_num		number				primary key,				--공통 채팅룸 번호
 	host_num				number				references ringo_member(user_num) on delete cascade,	--해당 채팅룸의 호스트(방장) 계정 번호
 	title						varchar2(60)	NOT NULL,		--채팅방 제목
-	lang_category		varchar2(10)		NOT NULL	check(lang_category in('kor', 'jap', 'eng')),	--채팅방 언어 설정
+	lang_category		varchar2(10)		NOT NULL	check(lang_category in('ko', 'ja', 'en')),	--채팅방 언어 설정
 	gen_category		varchar2(10)		NOT NULL	check(gen_category in('enjoy', 'study', 'dm', 'voice')),	--채팅반 기능 분류 설정
 	modifie_date		timestamp			default sysdate,
 	--가장 최근에 달린 메세지의 입력시간으로 갱신되는 날짜 속성. 수정날짜에 관한 이벤트 처리시 통일성을 위해 modifie_date로 이름을 지정해 놓았습니다.
