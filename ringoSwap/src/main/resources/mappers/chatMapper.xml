@@ -259,4 +259,42 @@
 		where
 			user_num = #{user_num}
 	</select>
+	
+	<!-- 모든 오픈 채팅방 정보를 가져온다 -->
+	<select id="getAllOpenchatrooms" resultType="net.ringo.ringoSwap.domain.custom.OpenChatroomInfo">
+		SELECT
+            c.chatroom_num,
+            c.lang_category,
+            c.title,
+            c.capacity,
+            c.modifie_date,
+            c.host_num,
+            m.nickname
+        FROM 
+            ringo_chatroom c
+        INNER JOIN 
+            ringo_member m ON c.host_num = m.user_num
+        ORDER BY 
+            c.modifie_date DESC
+	</select>
+	
+	<!-- 언어 필터 기준으로 채팅방들을 가져온다. -->
+	<select id="searchChatroomByLang" parameterType="string" resultType="net.ringo.ringoSwap.domain.custom.OpenChatroomInfo">
+		SELECT
+            c.chatroom_num,
+            c.lang_category,
+            c.title,
+            c.capacity,
+            c.modifie_date,
+            c.host_num,
+            m.nickname
+        FROM 
+            ringo_chatroom c
+        INNER JOIN 
+            ringo_member m ON c.host_num = m.user_num
+        WHERE
+            c.lang_category = #{lang_category}
+        ORDER BY 
+            c.modifie_date DESC
+	</select>
 </mapper>

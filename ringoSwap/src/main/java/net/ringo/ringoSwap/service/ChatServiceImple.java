@@ -20,6 +20,7 @@ import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
 import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
+import net.ringo.ringoSwap.domain.custom.OpenChatroomInfo;
 import net.ringo.ringoSwap.enums.webService.MessageType;
 
 /*
@@ -213,5 +214,19 @@ public class ChatServiceImple implements ChatService
 	public ArrayList<Integer> loadChatRoomNumsByUserNum(int userNum) 
 	{
 		return dao.loadChatRoomNumsByUserNum(userNum);
+	}
+
+	// 오픈 채팅방 정보를 언어 필터 기준으로 가져온다.
+	@Override
+	public ArrayList<OpenChatroomInfo> searchChatroomByLang(String lang_category) 
+	{
+		return dao.searchChatroomByLang(lang_category);
+	}
+
+	@Override
+	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms() 
+	{
+		// TODO Auto-generated method stub
+		return dao.getAllOpenchatrooms();
 	}
 }

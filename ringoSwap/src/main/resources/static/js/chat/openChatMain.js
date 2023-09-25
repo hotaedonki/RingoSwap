@@ -1,5 +1,3 @@
-'use strict';
-
 $(document).ready(function()
 {
 	init();
@@ -10,8 +8,22 @@ let stompClient;
 let userNum;
 let subscriptionForUpdateChatroom;	// 방 정보 업데이트 이벤트를 구독할 때 구독 정보를 저장하는 객체 
 
+window.addEventListener('beforeunload', function(event) 
+{
+    if (stompClient !== null) 
+    {
+        stompClient.disconnect();
+    }
+    
+    // 원하는 경우, 사용자에게 경고 메시지를 표시할 수도 있습니다.
+    //event.returnValue = '';
+});
+
 function init()
 {
+	if (stompClient)
+		stompClient.disconnect();
+	
 	stompClient = null;
 	userNum = document.getElementById('userNum').value;
 	subscriptionForUpdateChatroom = {};

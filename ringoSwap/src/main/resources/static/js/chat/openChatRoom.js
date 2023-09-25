@@ -1,6 +1,4 @@
-
-'use strict';
-
+/*
 document.addEventListener("DOMContentLoaded", function() {
 	const toggleButton = document.querySelector('.navbar-toggler');
 	const leftSideContainer = document.querySelector('.leftside');
@@ -13,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	});
 });
+*/
 
 $(document).ready(function()
 {
@@ -29,9 +28,23 @@ let myUserNum;
 let url;
 let subscriptionForUpdateChatroom;
 
+window.addEventListener('beforeunload', function(event) 
+{
+    if (stompClient !== null) 
+    {
+        stompClient.disconnect();
+    }
+    
+    // 원하는 경우, 사용자에게 경고 메시지를 표시할 수도 있습니다.
+    //event.returnValue = '';
+});
+
 // 초기화를 해주기 위한 코드, 실행 시점 차이로 인해 값을 받지 못하는 것을 방지.
 function init()
 {
+	if (stompClient)
+		stompClient.disconnect();
+	
 	stompClient = null;
 	username = null;
 	
