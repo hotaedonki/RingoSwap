@@ -116,6 +116,12 @@ function connect()
         document.getElementById("msg_input").value = '';
     });
     
+     // 검색 관련 이벤트 추가
+    document.getElementById('searchInput').addEventListener('keyup', function()
+    {
+		searchByTitle(document.getElementById('searchInput').value);
+	});
+    
     return true;
 }
 
@@ -152,6 +158,9 @@ function onConnected()
 	stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);
 	// 자신이 참가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 받기 위한 이벤트 연결
 	stompClient.subscribe('/sub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, loadChatRoomNumsByUserNum);
+	
+	// 검색창에 방 제목을 입력할 시 결과를 받기 위해 이벤트 연결
+	stompClient.subscribe('/sub/chat/openChatMain/searchByTitle/' + myUserNum, searchResultByTitle);
 }
 
 // 접속 실패 후, 에러 발생시 실행하는 함수
@@ -350,6 +359,37 @@ function subscribe(endpoint)
 	
 	// 채팅방 정보를 받기 위한 이벤트 연결
 	subscriptionForUpdateChatroom[endpoint] = stompClient.subscribe('/sub/chat/openChatMain/loadJoinedChatroomListRealTime/' + endpoint, loadJoinedChatroomListRealTime);
+}
+
+function searchByTitle(title)
+{
+	if (stompClient && stompClient.connected)
+	{
+		if (title.trim() === '')
+		{
+			// 검색어가 비어 있으면 요청을 보내지 않는다.
+			// 대신 기존에 가져온 내가 참여한 채팅방 전체 목록이 사라지기 때문에 다시 호출
+			stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);
+       		return;
+		}
+		
+		stompClient.send('/pub/chat/openChatMain/searchByTitle/' + myUserNum, {}, title);
+	}
+}
+
+function searchResultByTitle(data)
+{
+	if (data == null)
+		return;
+	
+	// 기존에 있는 채팅방 리스트를 삭제
+	clearChatlist();
+	
+	let jsonData = JSON.parse(data.body);
+	
+	jsonData.forEach(item => {
+		createChatroomThumbnail(item.chatroom_num, item.title, item.inputdate, item.message);
+	});
 }
 /*
 	참고 - 메시지 보내는 예시
