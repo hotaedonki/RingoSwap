@@ -191,7 +191,7 @@ function onMessageReceived(message)
 				// case가 TALK인 경우에는 새 메시지를 추가해서 붙혀준다.
 				case 'TALK':
 					console.log("메시지:", messageValue);
-					createChatMsgBox(userNumData, JSON.stringify(messageValue));
+					createChatMsgBox(userNumData, messageValue);
 					
 					// 채팅방 정보를 가져오기 위한 호출
 					stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroomNum, {}, myUserNum);
