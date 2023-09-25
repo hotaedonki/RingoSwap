@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.GameDAO;
 import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.GameSetting;
 import net.ringo.ringoSwap.domain.SingleDifficulty;
 
@@ -64,5 +65,11 @@ public class GameServiceImple implements GameService{
 	@Override
 	public int matchUseUpdate(HashMap<String, Object> map) {
 		return dao.matchUseUpdate(map);
+	}
+	
+	
+	//사용자의 게임세팅 정보에 따라 정렬된 단어 목록을 리턴하는 메서드
+	public ArrayList<DirWord> wordArraySearchByGameSetting(GameSetting setting){
+		return dao.wordArraySearchByGameSetting(setting);
 	}
 }

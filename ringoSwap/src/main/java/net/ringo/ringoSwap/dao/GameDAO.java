@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.apache.ibatis.annotations.Mapper;
 
 import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.GameSetting;
 import net.ringo.ringoSwap.domain.SingleDifficulty;
 
@@ -32,5 +33,7 @@ public interface GameDAO
 	int gameSettingUpdateQuestionNum(HashMap<String, Object> map);
 	//DB 내부 게임설정의 match_use값을 변경하는 메서드
 	int matchUseUpdate(HashMap<String, Object> map);
+	//게임세팅 정보값을 매개변수로 해당 세팅에 따라 정렬된 단어목록을 리턴하는 메서드
+	ArrayList<DirWord> wordArraySearchByGameSetting(GameSetting setting);
 	
 }

@@ -1,3 +1,7 @@
+let wordList = [];      //게임용 단어목록 저장을 위한 전역변수 배열
+let count = 0;          //게임용 단어목록 순서를 저장하는 전역변수
+let answerList =[];     //게임용 각 질문당 정답여부를 기록하는 전역변수 배열
+
 function playDictation() {
     //history API기능을 위한 url변수
     const currentUrl = window.location.href;
@@ -18,8 +22,8 @@ function playDictation() {
 			<div class="row d-flex justify-content-center">
 				<div class="card border-dark dictation-question-box mb-3 mt-5">
 					<div class="dictation-mean-area">
-						<h1>虎</h1>
-						<h1>[とら]</h1>
+						<h1 id="word-print">虎</h1>
+						<h1 id="pron-print">[とら]</h1>
 					</div><br>
 					<div class="dictation-answer-area">
 						<div class="input-group mb-3">
@@ -37,6 +41,9 @@ function playDictation() {
         if(currentUrl !== newUrl){
             history.pushState({ category:'dictation', url: newUrl }, '', `?category=dictation`);
         }
+
+        dictationQuestionSave();
+        $(document).on('click', '#button-addon2', nextQuestionPrint);
 }
 
 function dictationResultScreen() {
@@ -78,4 +85,56 @@ function dictationResultScreen() {
 		`;
 	
 	$("body").append(dictationResultHTML);
+}
+//단어목록을 전역변수에 저장
+function dictationQuestionSave(){
+    $.ajax({
+        url: 'gameNotePrint',
+        type:'post',
+        dataType:'json',
+        success:function(res){
+            console.log(res);
+            let setting = res.setting;
+            wordList = res.wordList;
+            console.log(wordList);
+            count = 0;
+        
+        	dictationQuestionPrint();
+        },
+        error:function(e){
+            console.log(e);
+        }
+    })
+}
+//저장한 전역변수를 순서대로 출력
+function dictationQuestionPrint(){
+    let word = wordList[count];
+    console.log(word.word);
+    console.log(word.pron);
+    console.log(wordList[count].mean);
+    $('#word-print').text(word.word);
+    $('#pron-print').text(word.pron);
+    
+    console.log('출력끝');
+}
+
+function nextQuestionPrint(){
+    let answer = $('.form-control').val();
+    console.log(answer);
+    let correct = wordList[count].mean;
+
+    if(answer != correct){
+        answerList[count] = false;
+    }else{
+        answerList[count] = true;
+    }
+    console.log(answerList[count]);
+
+    count++;
+
+    if(count >= wordList.length){
+        alert('마지막 문제입니다');
+    }else {
+        dictationQuestionPrint();
+    }
 }

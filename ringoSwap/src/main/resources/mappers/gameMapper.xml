@@ -61,4 +61,32 @@
 	 set match_use = #{match_use}
 	 where user_num = #{user_num}
 	 </update>
+	 
+	<!-- 게임세팅 정보값을 매개변수로 해당 세팅에 따라 정렬된 단어목록을 리턴하는 select문 -->
+	<select id="wordArraySearchByGameSetting">
+	select *
+	from ringo_word
+	where user_num = #{user_num}
+	<if test="match_use == true">
+		and pron is not null
+	</if>
+	order by 
+	<choose>
+		<when test="order_type == 'first_one' ">
+			inputdate asc
+		</when>
+		<when test="order_type == 'latest' ">
+			inputdate desc
+		</when>
+		<when test="order_type == 'atoz' ">
+			word asc
+		</when>
+		<when test="order_type == 'ztoa' ">
+			word desc
+		</when>
+		<otherwise>
+			DBMS_RANDOM.VALUE
+		</otherwise>
+	</choose>
+	</select>
 </mapper>

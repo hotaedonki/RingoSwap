@@ -127,22 +127,6 @@ public class GameController
 	}
 
 	@ResponseBody
-	@PostMapping("gameNotePrint")
-	public ArrayList<DirWord> gameNotePrint(@AuthenticationPrincipal UserDetails user){
-		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
-		//회원번호를 매개변수로 사용자의 게임세팅 정보를 리턴
-		GameSetting setting = service.gameSettingSelectByUserNum(user_num);
-		
-		if(setting.getFile_num() == -1) {
-			return null;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
-		}
-		//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
-		ArrayList<DirWord> wordList = noteService.selectWordArrayByFileNum(null, user_num);
-		
-		return wordList;
-	}
-
-	@ResponseBody
 	@PostMapping("matchUseUpdate")
 	public int matchUseUpdate(boolean match_use
 					, @AuthenticationPrincipal UserDetails user) {
@@ -153,5 +137,26 @@ public class GameController
 		int methodResult = service.matchUseUpdate(map);
 		return methodResult;
 	}
+	//-------------------------------------------------->>>>
+
 	
+	//<<<<-------------------------------------------------
+	@ResponseBody
+	@PostMapping("gameNotePrint")
+	public HashMap<String, Object> gameNotePrint(@AuthenticationPrincipal UserDetails user){
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		HashMap<String, Object> map = new HashMap<>();		//리턴용 변수
+		//회원번호를 매개변수로 사용자의 게임세팅 정보를 리턴
+		GameSetting setting = service.gameSettingSelectByUserNum(user_num);
+		
+		if(setting.getFile_num() == -1) {
+			return null;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
+		}
+		//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
+		ArrayList<DirWord> wordList = service.wordArraySearchByGameSetting(setting);
+		map.put("setting", setting);
+		map.put("wordList", wordList);
+		
+		return map;
+	}
 }

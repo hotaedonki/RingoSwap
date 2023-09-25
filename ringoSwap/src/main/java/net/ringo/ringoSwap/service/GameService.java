@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.ringo.ringoSwap.domain.DirFile;
+import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.GameSetting;
 import net.ringo.ringoSwap.domain.SingleDifficulty;
 
@@ -25,5 +26,8 @@ public interface GameService {
 	public int gameSettingUpdateQuestionNum(HashMap<String, Object> map);
 	//해당 사용자의 user_num을 매개변수로 DB 내부 게임설정의 match_use값을 변경하는 메서드
 	public int matchUseUpdate(HashMap<String, Object> map);
+
+	//사용자의 게임세팅 정보에 따라 정렬된 단어 목록을 리턴하는 메서드
+	public ArrayList<DirWord> wordArraySearchByGameSetting(GameSetting setting);
 
 }
