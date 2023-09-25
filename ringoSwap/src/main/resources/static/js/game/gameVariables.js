@@ -40,7 +40,8 @@ function initializeWindowEventHandlers() {
 //브라우저에서 뒤로가기 클릭시, History API이 적용된 feedDetail이 아닌 기존 페이지로 이동하는 이벤트
 function popStateWindow(event) {
     let newUrl = window.location.href;
-
+	console.log(event);
+	console.log(event.category);
     if(previousUrl === newUrl){
         return; //현재 url과 이전 url이 동일할경우, 아무 작업도 수행하지 않도록 리턴
     }
@@ -51,7 +52,7 @@ function popStateWindow(event) {
     } else {
         // 이전 URL이 없으면서 현재 URL과 다른 경우, 뒤로가기 작업
         console.log('뒤로 가기');
-        gameMainShow();
+        returnToGameMain();
     }    
     previousUrl = newUrl; // 현재 URL을 이전 URL로 저장합니다.
 }
@@ -74,7 +75,7 @@ function loadWindow() {
 	}else{
 		console.log('메인화면인가?');
 		if(!category){
-			gameMainShow();
+			returnToGameMain();
 		}
 	}
 }
@@ -82,14 +83,4 @@ function loadWindow() {
 function getUrlParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
-}
-
-//게임기능 메인페이지를 보이는 기능
-function gameMainShow(){
-	//3개의 게임관련 html요소를 없앤다.
-	$('.dictation-container').remove();
-	$('.flashCards-container').remove();
-	$('.MCQ-container').remove();
-	//게임기능 메인페이지를 show로 보이게 만든다
-	$('.main-container').show();
 }

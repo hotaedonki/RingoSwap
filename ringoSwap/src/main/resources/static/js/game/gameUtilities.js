@@ -42,12 +42,14 @@ function selectAll() {
 }
 
 function returnToGameMain() {
+    const newUrl = 'http://localhost:8888/ringo/game/gameMain';
 	const resultGame = getCurrentGame();
 	console.log(resultGame + "-container");
 	$(`.${resultGame}-container`).remove();
 	
 	$('#returnToMainModal').modal('hide');
 	$('.main-container').show();
+    history.pushState({ url: newUrl }, '', '');
 }
 
 function questionNumPrint(){
