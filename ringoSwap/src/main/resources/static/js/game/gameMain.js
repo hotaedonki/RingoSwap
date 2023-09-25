@@ -7,17 +7,9 @@ function chooseDictation(event) {
 	const dictationSlideIndex = 2;
 	
 	if(event.to === dictationSlideIndex) {
-		$('.more-option').html(`
-			<div class="col-4 text-start">
-				Match Pronuntation				
-			</div>
-			<div class="col-4 text-end">
-			    <div class="form-check form-switch d-inline-block">
-			        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-			    </div>
-			</div>`);
+		$('.more-option').show();
 	} else {
-		$('.more-option').empty();
+		$('.more-option').hide();
 	}
 }
 
