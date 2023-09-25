@@ -30,6 +30,8 @@ public interface NoteService {
 	PageNavigator wordSelectPageNavigator(int pagePerGroup, int countPerPage, int page, int file_num);
 	//file_num을 매개변수로 해당 파일에 속하는 word객체 목록을 리턴하는 메서드 
 	ArrayList<DirWord> selectWordArrayByFileNum(PageNavigator navi, int file_num);
+	//사용자의 가장 최근 수정한 파일을 출력하는 메서드
+	DirFile fileSelectByModifieDate(int user_num);
 	//-----------[ 노트 출력기능 종료 ]-------------->>>>>>>>>>>>>>
 
 	//<<<<<<<<<<<<-----[ 노트 생성기능 시작 ]-----------------------

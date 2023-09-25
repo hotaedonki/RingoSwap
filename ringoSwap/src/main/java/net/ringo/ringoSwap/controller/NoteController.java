@@ -141,6 +141,19 @@ public class NoteController
 		
 		return map;
 	}
+   
+   //가장 최근에 작성한 메모장/단어장을 출력하는 메서드
+   @ResponseBody
+	@PostMapping("fileOpenLatestOne")
+   public DirFile fileOpenLatestOne(@AuthenticationPrincipal UserDetails user) {
+	   int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+	   DirFile file = service.fileSelectByModifieDate(user_num);
+	   if(file.equals(null)) {
+		   file.setFileIsNone(1);
+	   }
+	   
+	   return file;
+   }
    //-----------[ 노트 출력기능 종료 ]-------------->>>>>>>>>>>>>>
 
    //<<<<<<<<<<<<-----[ 노트 생성기능 시작 ]-----------------------
