@@ -300,6 +300,18 @@ function createChatroomThumbnail(chatroom_num, title, inputdate, message)
     
     // 생성한 blockDiv 요소를 chatlist에 append
     chatlist.appendChild(blockDiv);
+    
+        // blockDiv 클릭 이벤트 리스너 추가
+    blockDiv.addEventListener('click', function() 
+    {
+        moveToChatroom(chatroom_num);
+    });
+}
+
+function moveToChatroom(chatroom_num) 
+{
+    // chatroom 페이지로 이동하면서 chatroom_num을 파라미터로 전달
+    window.location.href = "/ringo/chat/openChatRoomEnter?chatroom_num=" + chatroom_num;
 }
 
 function clearChatlist() 
