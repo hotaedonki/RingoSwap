@@ -301,7 +301,7 @@ function createChatroomThumbnail(chatroom_num, title, inputdate, message)
     // 생성한 blockDiv 요소를 chatlist에 append
     chatlist.appendChild(blockDiv);
     
-        // blockDiv 클릭 이벤트 리스너 추가
+    // blockDiv 클릭 이벤트 리스너 추가
     blockDiv.addEventListener('click', function() 
     {
         moveToChatroom(chatroom_num);

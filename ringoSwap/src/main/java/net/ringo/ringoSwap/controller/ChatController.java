@@ -60,6 +60,7 @@ public class ChatController
 		
 		ArrayList<OpenChatroomInfo> openChatrooms = new ArrayList<>();
 		
+		// 언어 필터 관련해서 값이 있으면
 		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja")))
 			openChatrooms = service.searchChatroomByLang(lang_category);
 		else
@@ -282,7 +283,7 @@ public class ChatController
 		
 		log.debug("openChatrooms size - {}", openChatrooms.size());
 		
-		return "redirect:/chat/openChatMain";
+		return "/chat/openChatMain";
 	}
 	
 	@EventListener
