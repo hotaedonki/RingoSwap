@@ -29,6 +29,8 @@ $(document).ready(function () {
 
 	//게임세팅정보 출력 기능
 	questionNumPrint();
+	//클릭이벤트 처리
+	clickEventFunction();
 });
 
 
@@ -48,7 +50,7 @@ function popStateWindow(event) {
     if (event.state && event.state.category) {
         // 이전 URL이 존재하고 현재 URL과 다른 경우, 앞으로 가기 작업을 실행
         console.log('앞으로 가기');
-        loadWindow();
+		printGame(event.state.category);
     } else {
         // 이전 URL이 없으면서 현재 URL과 다른 경우, 뒤로가기 작업
         console.log('뒤로 가기');
@@ -61,26 +63,16 @@ function popStateWindow(event) {
 function loadWindow() {
 	console.log("히스토리api")
     const category = getUrlParam('category');
-    if (category === "flashcard") {
-      // category가 flashcard일 경우 플래시카드 게임 실행
-        console.log('flashcard 열기');
-        playFlashCards();
-        
-    }else if(category === "dictation"){
-        console.log('dictation 열기');
-		playDictation();
-	}else if(category === "MCQ"){
-        console.log('MCQ 열기');
-		playMCQ();
-	}else{
-		console.log('메인화면인가?');
-		if(!category){
-			returnToGameMain();
-		}
-	}
+    printGame(category);
 }
 
 function getUrlParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
+}
+
+function clickEventFunction(){
+	$(document).on('click', '.wordList-update', wordListUpdate);
+	$(document).on('click', '.form-update', gameSettingUpdate);
+	$(document).on('click', '.questionNum-update', questionNumUpdate);
 }

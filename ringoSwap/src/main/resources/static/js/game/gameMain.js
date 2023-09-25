@@ -38,7 +38,7 @@ function showWordListModal() {
 		            </div>
 		            <div class="modal-footer">
 		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-		                <button type="button" class="btn btn-primary">Select</button>
+		                <button type="button" class="btn btn-primary wordList-update">Select</button>
 		            </div>
 		        </div>
 		    </div>
@@ -160,7 +160,7 @@ function showFormModal() {
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary">Select</button>
+						<button type="button" class="btn btn-primary form-update">Select</button>
 					</div>
 				</div>
 			</div>
@@ -168,6 +168,7 @@ function showFormModal() {
 	
 		$('body').append(modalHTML);
 			
+		gameSettingPrint();
 		const modalElement = new bootstrap.Modal($("#formModal")[0], modalOptions);
 		modalElement.show();
 	
@@ -191,7 +192,7 @@ function showCountOfItemsModal() {
 						<div class="form-check">
 							<input class="form-check-input" type="radio"
 								name="selectNumberOfQuestions" id="selectNumberOfQuestions1">
-							<label class="form-check-label" for="selectNumberOfQuestions1">
+							<label class=1"form-check-label" for="selectNumberOfQuestions1">
 								10 </label>
 						</div>
 						<div class="form-check">
@@ -228,7 +229,7 @@ function showCountOfItemsModal() {
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary">Select</button>
+						<button type="button" class="btn btn-primary questionNum-update">Select</button>
 					</div>
 				</div>
 			</div>
@@ -236,6 +237,8 @@ function showCountOfItemsModal() {
 		`;
 		
 		$('body').append(modalHTML);
+
+		countOfItemPrint();
 			
 		const modalElement = new bootstrap.Modal($("#countOfItemsModal")[0], modalOptions);
 		modalElement.show();
@@ -266,4 +269,53 @@ function wordFilePrint(){
             console.log(e);
         }
     })
+}
+
+function gameSettingPrint(){
+	
+    $.ajax({
+        url:'gameSettingOpen',
+        type:'post',
+        dataType:'json',
+        success:function(setting){'', 
+            console.log(setting);
+			const form = setting.form_type
+			const order = setting.order_type;
+			let formNum = (form == 'title_tomean') ? 1 : (form == 'mean_totitle') ? 2: ( form == 'title_only') ? 3: 4;
+			$('#form-radio'+formNum).click();
+			if(!setting.pron_show){
+				console.log("pron");
+				$('pronunciation-radio2').click();
+			}
+			let orderNum = (order == 'random')? 1 : (order == 'first_in')? 2 : (order == 'latest') ? 3: (order == 'atoz')? 4 : 5;
+			$('#order-radio'+orderNum).click();
+			if(!setting.description_show){
+				console.log("설명");
+				$('explanation-radio2').click();
+			}
+		},
+        error:function(e){
+            console.log(e);
+        }
+    })
+}
+
+function countOfItemPrint(){
+	let num = $('.btn[data-bs-target="#countOfItemsModal"]').data('question-num');
+	if(num === '0'){
+		$('#selectNumberOfQuestions6').click();
+	}else{
+		$('#selectNumberOfQuestions'+(num / 10)).click();
+	}
+}
+
+//
+function wordListUpdate(){
+	
+}
+function gameSettingUpdate(){
+	
+}
+function questionNumUpdate(){
+
 }

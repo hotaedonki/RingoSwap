@@ -20,7 +20,7 @@ function getCurrentGame() {
     if ($('.dictation-container').length > 0) return 'dictation';
     if ($('.flashCards-container').length > 0) return 'flashCards';
     if ($('.MCQ-result-container').length > 0) return 'MCQ-result';
-    if ($('.flashCards-result-container').length > 0) return 'flashCardsResult';
+    if ($('.dictation-result-container').length > 0) return 'dictation-result';
     return null;
 }
 
@@ -51,6 +51,26 @@ function returnToGameMain() {
 	$('.main-container').show();
     history.pushState({ url: newUrl }, '', '');
 }
+function printGame(resultGame){
+	console.log(resultGame);
+    if (resultGame === "flashcard") {
+      // category가 flashcard일 경우 플래시카드 게임 실행
+        console.log('flashcard 열기');
+        playFlashCards();
+        
+    }else if(resultGame === "dictation"){
+        console.log('dictation 열기');
+		playDictation();
+	}else if(resultGame === "MCQ"){
+        console.log('MCQ 열기');
+		playMCQ();
+	}else{
+		console.log('메인화면인가?');
+		if(!resultGame){
+			returnToGameMain();
+		}
+	}
+}
 
 function questionNumPrint(){
     $.ajax({
@@ -59,6 +79,7 @@ function questionNumPrint(){
         dataType:'json',
         success:function(number){
             console.log('문제갯수 : '+number);
+            $('.btn[data-bs-target="#countOfItemsModal"]').attr('data-question-num', number);
             if(number === 0){
                 number = 'total';
             }

@@ -1,21 +1,15 @@
 const body = document.querySelector('body'),
       sidebar = body.querySelector('nav'),
-      toggle = body.querySelector(".toggle"),
-      modeSwitch = body.querySelector(".toggle-switch"),
-      modeText = body.querySelector(".mode-text");
-
+      toggle = body.querySelector(".toggle")
 
 toggle.addEventListener("click" , () =>{
     sidebar.classList.toggle("close");
 })
 
-modeSwitch.addEventListener("click" , () =>{
-    body.classList.toggle("dark");
-    
-    if(body.classList.contains("dark")){
-        modeText.innerText = "Light mode";
-    }else{
-        modeText.innerText = "Dark mode";
-        
-    }
+function goHome() {
+	window.location.href = "../member/home";
+}
+
+$(document).ready(function() {
+	$(document).on('click', '.logo-area', goHome);
 });

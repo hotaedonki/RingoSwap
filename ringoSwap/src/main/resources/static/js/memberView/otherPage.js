@@ -52,11 +52,11 @@ function printOtherPeoplePage() {
 }
 
 function printOtherPeopleLanguage(lang){
-   if(lang === 'kor'){
+   if(lang === 'ko'){
        lang = myPagelanguage["한국어"];
-   }else if(lang === 'jap'){
+   }else if(lang === 'ja'){
        lang = myPagelanguage["일본어"];
-   }else if(lang === 'eng'){
+   }else if(lang === 'en'){
        lang = myPagelanguage["영어"];
    }
    return lang;

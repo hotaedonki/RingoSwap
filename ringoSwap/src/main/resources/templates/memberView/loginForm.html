@@ -29,15 +29,13 @@
 <!-- JS -->
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
 
-<title>Dashboard Sidebar Menu</title>
+<title>Login</title>
 </head>
 <body>
-
-	<!-- =============================사이드바 상단=============================== -->
 	<!-- =============================사이드바 상단=============================== -->
 	<nav class="sidebar close">
 		<header>
-			<div class="image-text">
+			<div class="image-text logo-area">
 				<span class="image"> <img th:src="@{../img/sidebar.png}"
 					alt="">
 				</span>
@@ -72,11 +70,6 @@
 					<li><a th:href="@{/game/gameMain}"> <i
 							class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
 					</a></li>
-
-					<li><a th:href="@{/live/liveMain}"> <i
-							class='bx bx-tv icon'></i> <span class="text nav-text">Live</span>
-					</a></li>
-
 				</ul>
 			</div>
 			<!-- ========================사이드바 하단=========================== -->
@@ -93,9 +86,6 @@
 					<li class=""><a th:href="@{/notification/notificationMain}">
 							<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
 					</a></li>
-					<li class=""><a th:href="@{/store/storeMain}"> <i
-							class='bx bx-shopping-bag icon'></i> <span class="text nav-text">Store</span>
-					</a></li>
 					<div sec:authorize="isAuthenticated()">
 						<li class=""><a th:href="@{/member/myPage}"> <span
 								class="profile-pic-li" data-tooltip="프로필 사진으로 이동합니다."> <span
@@ -105,15 +95,6 @@
 							</span> <span class="text nav-text">Profile</span>
 						</a></li>
 					</div>
-					<li class="mode">
-						<div class="sun-moon">
-							<i class='bx bx-moon icon moon'></i> <i
-								class='bx bx-sun icon sun'></i>
-						</div> <span class="mode-text text">Dark mode</span>
-						<div class="toggle-switch">
-							<span class="switch"></span>
-						</div>
-					</li>
 				</ul>
 			</div>
 		</div>
@@ -188,14 +169,14 @@
 						<!-- Language Preferences -->
 						<label>모국어를 선택해주세요.</label> <select class="select"
 							name="native_lang" id="native_lang">
-							<option value="kor">한국어</option>
-							<option value="jap">일본어</option>
-							<option value="eng">영어</option>
+							<option value="ko">한국어</option>
+							<option value="ja">일본어</option>
+							<option value="en">영어</option>
 						</select> <label>배우고 싶은 언어를 선택해주세요.</label> <select class="select"
 							name="target_lang" id="target_lang">
-							<option value="kor">한국어</option>
-							<option value="jap">일본어</option>
-							<option value="eng">영어</option>
+							<option value="ko">한국어</option>
+							<option value="ja">일본어</option>
+							<option value="en">영어</option>
 						</select>
 
 
