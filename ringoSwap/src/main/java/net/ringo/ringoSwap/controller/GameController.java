@@ -159,34 +159,33 @@ public class GameController
 			return null;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
 		}
 
-		log.debug("게임 프린트 세팅1 : {}", setting);
+		log.debug("게임 프린트 세팅1 : {}", category);
 		//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
 		ArrayList<DirWord> wordList = service.wordArraySearchByGameSetting(setting);
 		log.debug("게임 프린트 세팅2 : {}", setting);
 		log.debug("게임 프린트 워드리스트 : {}", wordList);
 
 		// 2.1. 랜덤 단어 선택
-		Random random = new Random();
-	    int index = random.nextInt(wordList.size());
-	    DirWord selectedWord = wordList.get(index);
-
-	    // 2.2. 정답 설정
-	    String correctAnswer = selectedWord.getMean();
-	    
-	    // 2.3. 오답 설정
-	    Set<String> wrongAnswers = new HashSet<>();
-	    while (wrongAnswers.size() < 3) {
-	        int wrongIndex = random.nextInt(wordList.size());
-	        if (wrongIndex != index) {
-	            wrongAnswers.add(wordList.get(wrongIndex).getMean());
-	        }
-	    }
-	    
-	    // 2.4. 4개의 의미를 무작위 순서로 배치
-	    List<String> options = new ArrayList<>(wrongAnswers);
-	    options.add(correctAnswer);
-	    Collections.shuffle(options);
-	    
+			Random random = new Random();
+		    int index = random.nextInt(wordList.size());
+		    DirWord selectedWord = wordList.get(index);
+	
+		    // 2.2. 정답 설정
+		    String correctAnswer = selectedWord.getMean();
+		    
+		    // 2.3. 오답 설정
+		    Set<String> wrongAnswers = new HashSet<>();
+		    while (wrongAnswers.size() < 3) {
+		        int wrongIndex = random.nextInt(wordList.size());
+		        if (wrongIndex != index) {
+		            wrongAnswers.add(wordList.get(wrongIndex).getMean());
+		        }
+		    }
+		    
+		    // 2.4. 4개의 의미를 무작위 순서로 배치
+		    List<String> options = new ArrayList<>(wrongAnswers);
+		    options.add(correctAnswer);
+		    Collections.shuffle(options);
 
 		map.put("setting", setting);
 		map.put("wordList", wordList);

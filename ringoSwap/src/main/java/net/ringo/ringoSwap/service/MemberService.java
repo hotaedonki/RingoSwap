@@ -76,4 +76,8 @@ public interface MemberService
 	public Member memberSearchByUsername(String nickname);
 	//유저의 고유번호로 닉네임을 가져옴
 	public String getNicknameByUserNum(int user_num);
+	//비밀번호 확인
+	public boolean isPasswordMatching(Member member);
+	//유저넘값으로 멤버 정보 가져오기
+	public Member memberSearchByNum(int user_num);
 }

@@ -8,13 +8,22 @@
 	align-items: center;
 }
 
-.border-primary {
+.check-password-card {
 	width: 500px;
 	height: 300px;
 }
 
-.submit-password{
+.submit-password, .submit-info{
 	position: absolute;
 	right: 20px;
 	bottom: 20px;
+}
+
+.personal-information-box {
+	width: 500px;
+	height: 600px;
+}
+
+.personal-card {
+	overflow: auto;
 }

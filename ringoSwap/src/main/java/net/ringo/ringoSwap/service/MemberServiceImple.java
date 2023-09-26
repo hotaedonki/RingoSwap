@@ -58,6 +58,12 @@ public class MemberServiceImple implements MemberService
 		log.debug("임플에서 패스워드 확인 - 암호화 후 {}",member.getPassword());
 		return dao.resetPassword(member);
 	}
+	
+	@Override
+	public boolean isPasswordMatching(Member member) {;
+		String storedEncodedPassword = dao.getEncodedPasswordByUserNum(member.getUser_num());
+		return passwordEncoder.matches(member.getPassword(), storedEncodedPassword);
+	}
 	//----------------[회원가입&로그인 기능 종료]----------->>>>>>>>>>>>
 
 	//<<<<<<<<<<<------[멤버태그 기능 시작]----------------------
@@ -248,4 +254,9 @@ public class MemberServiceImple implements MemberService
 		log.debug("다른 사람의 페이지 태그숫자 : {}", member.getTagList());
 		return member;
 	}
+	@Override
+	public Member memberSearchByNum(int user_num) {
+		return dao.memberSearchByNum(user_num);
+	}
+
 }
