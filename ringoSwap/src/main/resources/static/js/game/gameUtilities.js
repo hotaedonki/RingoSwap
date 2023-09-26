@@ -49,7 +49,7 @@ function returnToGameMain() {
 	
 	$('#returnToMainModal').modal('hide');
 	$('.main-container').show();
-    history.pushState({ url: newUrl }, '', '');
+    history.pushState({ url: newUrl }, '', newUrl);
 }
 
 function printGame(currentGame){

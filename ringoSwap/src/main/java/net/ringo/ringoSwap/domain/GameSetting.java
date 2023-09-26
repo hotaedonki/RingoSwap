@@ -25,7 +25,7 @@ public class GameSetting {
 	
 	public String toString()
 	{
-		return String.format("user_num : {%d} / file_num : {%d} / question_num : {%d} / form_type : {%s} / word_type : {%s} / description_show : {%b} / pron_show : {%b} / match_use : {%b} / answer_category : {%s}"
+		return String.format("user_num : {%d} / file_num : {%d} / question_num : {%d} / form_type : {%s} / order_type : {%s} / description_show : {%b} / pron_show : {%b} / match_use : {%b} / answer_category : {%s}"
 				, user_num, file_num, question_num, form_type, order_type, description_show, pron_show, match_use, answer_category);
 	}
 }

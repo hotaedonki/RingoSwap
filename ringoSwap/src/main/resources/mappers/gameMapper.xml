@@ -33,7 +33,7 @@
 	 <!-- user_num과 file_num을 매개변수로 DB에서 특정 사용자의 file_num값을 수정하는 update문 -->
 	 <update id="fileWordUpdate" parameterType="java.util.HashMap">
 	 update ringo_game_setting
-	 set file_num = #{file_num]
+	 set file_num = #{file_num}
 	 where user_num = #{user_num}
 	 </update>
 	 <!-- user_num을 매개변수로 특정 사용자의 게임세팅 정보를 리턴하는 select문 -->
@@ -46,7 +46,7 @@
 	 <update id="gameSettingUpdate" parameterType="GameSetting">
 	 update ringo_game_setting
 	 set form_type=#{form_type}, pron_show=#{pron_show}
-	 	, word_type=#{word_type}, description_show=#{description_show}
+	 	, order_type=#{order_type}, description_show=#{description_show}
 	 where user_num = #{user_num}
 	 </update>
 	 <!-- 사용자가 수정한 정보를 매개변수로 DB의 문제 갯수 속성을 수정하는 update문 -->
@@ -63,30 +63,36 @@
 	 </update>
 	 
 	<!-- 게임세팅 정보값을 매개변수로 해당 세팅에 따라 정렬된 단어목록을 리턴하는 select문 -->
-	<select id="wordArraySearchByGameSetting">
-	select *
-	from ringo_word
-	where file_num = #{file_num}
-	<if test="match_use == true">
-		and pron is not null
+	<select id="wordArraySearchByGameSetting" parameterType="java.util.HashMap">
+	<if test="question_num != 0">
+		select * from(
 	</if>
-	order by 
-	<choose>
-		<when test="order_type == 'first_one' ">
-			inputdate asc
-		</when>
-		<when test="order_type == 'latest' ">
-			inputdate desc
-		</when>
-		<when test="order_type == 'atoz' ">
-			word asc
-		</when>
-		<when test="order_type == 'ztoa' ">
-			word desc
-		</when>
-		<otherwise>
-			DBMS_RANDOM.VALUE
-		</otherwise>
-	</choose>
+		select *
+		from ringo_word
+		where file_num = #{file_num}
+		<if test="match_use == true">
+			and pron is not null
+		</if>
+		order by 
+		<choose>
+			<when test="order_type == 'first_one' ">
+				inputdate asc
+			</when>
+			<when test="order_type == 'latest' ">
+				inputdate desc
+			</when>
+			<when test="order_type == 'atoz' ">
+				word asc
+			</when>
+			<when test="order_type == 'ztoa' ">
+				word desc
+			</when>
+			<otherwise>
+				DBMS_RANDOM.VALUE
+			</otherwise>
+		</choose>
+	<if test="question_num != 0">
+		) where rownum &lt;= #{question_num}
+	</if>
 	</select>
 </mapper>
