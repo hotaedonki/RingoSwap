@@ -35,6 +35,7 @@ public class GameServiceImple implements GameService{
 		HashMap<String, Integer> map = new HashMap<>();
 		map.put("file_num", file_num);
 		map.put("user_num", user_num);
+		log.debug("맵 {}", map);
 		return dao.fileWordUpdate(map);
 	}
 	//user_num을 매개변수로 사용자의 게임세팅 정보를 리턴하는 메서드

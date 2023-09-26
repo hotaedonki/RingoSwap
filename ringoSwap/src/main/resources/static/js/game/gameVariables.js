@@ -15,8 +15,10 @@ $(document).ready(function () {
 	$('.dictation').on('click', playDictation);
 	
 	//MCQ에서 객관식 정답 클릭
-	$('.MCQ-answer-box button').on('click', chosenAnswer);
+	$(document).on('click', '.MCQ-answer-box button', chosenAnswer);
 
+	//플래시카드에서 정답 출력
+	$(document).on('click', '.flashCards-question-box', clickCard);
 	//게임을 중단하고 결과보기
 	$('.confirm-exit').on('click', confirmExit);
 	

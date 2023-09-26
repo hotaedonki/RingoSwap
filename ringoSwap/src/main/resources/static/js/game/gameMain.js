@@ -60,13 +60,13 @@ function showFormModal() {
 						<div class="btn-group-vertical" role="group"
 							aria-label="Basic radio toggle button group">
 							<div>
-								<input type="radio" class="btn-check" name="form-radio"
+								<input type="radio" class="btn-check" name="form-radio" data-form-type="title"
 									id="form-radio1" autocomplete="off" checked=""> <label
 									class="btn btn-outline-primary" for="form-radio1">제목-의미
 									순서로</label>
 							</div>
 							<div>
-								<input type="radio" class="btn-check" name="form-radio"
+								<input type="radio" class="btn-check" name="form-radio" data-form-type="mean"
 									id="form-radio2" autocomplete="off"> <label
 									class="btn btn-outline-primary" for="form-radio2">의미-제목
 									순서로</label>
@@ -86,13 +86,13 @@ function showFormModal() {
 						<div class="btn-group-vertical" role="group"
 							aria-label="Basic radio toggle button group">
 							<div>
-								<input type="radio" class="btn-check" name="pronunciation-radio"
+								<input type="radio" class="btn-check" name="pronunciation-radio" data-pron-show="true"
 									id="pronunciation-radio1" autocomplete="off" checked="">
 								<label class="btn btn-outline-primary" for="pronunciation-radio1">발음
 									표시</label>
 							</div>
 							<div>
-								<input type="radio" class="btn-check" name="pronunciation-radio"
+								<input type="radio" class="btn-check" name="pronunciation-radio" data-pron-show="false"
 									id="pronunciation-radio2" autocomplete="off"> <label
 									class="btn btn-outline-primary" for="pronunciation-radio2">발음
 									표시 안함</label>
@@ -102,27 +102,27 @@ function showFormModal() {
 						<div class="btn-group-vertical" role="group"
 							aria-label="Basic radio toggle button group">
 							<div>
-								<input type="radio" class="btn-check" name="order-radio"
+								<input type="radio" class="btn-check" name="order-radio" data-order-type="random"
 									id="order-radio1" autocomplete="off" checked=""> <label
 									class="btn btn-outline-primary" for="order-radio1">랜덤</label>
 							</div>
 							<div>
-								<input type="radio" class="btn-check" name="order-radio"
+								<input type="radio" class="btn-check" name="order-radio" data-order-type="first_in"
 									id="order-radio2" autocomplete="off"> <label
 									class="btn btn-outline-primary" for="order-radio2">등록순</label>
 							</div>
 							<div>
-								<input type="radio" class="btn-check" name="order-radio"
+								<input type="radio" class="btn-check" name="order-radio" data-order-type="latest"
 									id="order-radio3" autocomplete="off"> <label
 									class="btn btn-outline-primary" for="order-radio3">최신순</label>
 							</div>
 							<div>
-								<input type="radio" class="btn-check" name="order-radio"
+								<input type="radio" class="btn-check" name="order-radio" data-order-type="atoz"
 									id="order-radio4" autocomplete="off"> <label
 									class="btn btn-outline-primary" for="order-radio4">A-Z</label>
 							</div>
 							<div>
-								<input type="radio" class="btn-check" name="order-radio"
+								<input type="radio" class="btn-check" name="order-radio" data-order-type="ztoa"
 									id="order-radio5" autocomplete="off"> <label
 									class="btn btn-outline-primary" for="order-radio5">Z-A</label>
 							</div>
@@ -131,13 +131,13 @@ function showFormModal() {
 						<div class="btn-group-vertical" role="group"
 							aria-label="Basic radio toggle button group">
 							<div>
-								<input type="radio" class="btn-check" name="explanation-radio"
+								<input type="radio" class="btn-check" name="explanation-radio" data-desc-show="true"
 									id="explanation-radio1" autocomplete="off" checked=""> <label
 									class="btn btn-outline-primary" for="explanation-radio1">
 									설명 표시</label>
 							</div>
 							<div>
-								<input type="radio" class="btn-check" name="explanation-radio"
+								<input type="radio" class="btn-check" name="explanation-radio" data-desc-show="false"
 									id="explanation-radio2" autocomplete="off"> <label
 									class="btn btn-outline-primary" for="explanation-radio2">
 									설명 표시 안함</label>
@@ -177,37 +177,37 @@ function showCountOfItemsModal() {
 					</div>
 					<div class="modal-body">
 						<div class="form-check">
-							<input class="form-check-input" type="radio"
+							<input class="form-check-input" type="radio" data-question-num="10"
 								name="selectNumberOfQuestions" id="selectNumberOfQuestions1">
 							<label class=1"form-check-label" for="selectNumberOfQuestions1">
 								10 </label>
 						</div>
 						<div class="form-check">
-							<input class="form-check-input" type="radio"
-								name="selectNumberOfQuestions" id="selectNumberOfQuestions2"
-								checked> <label class="form-check-label"
+							<input class="form-check-input" type="radio" data-question-num="20"
+								name="selectNumberOfQuestions" id="selectNumberOfQuestions2">
+							<label class="form-check-label"
 								for="selectNumberOfQuestions2"> 20 </label>
 						</div>
 						<div class="form-check">
-							<input class="form-check-input" type="radio"
-								name="selectNumberOfQuestions" id="selectNumberOfQuestions3"
-								checked> <label class="form-check-label"
+							<input class="form-check-input" type="radio" data-question-num="30"
+								name="selectNumberOfQuestions" id="selectNumberOfQuestions3">
+							<label class="form-check-label"
 								for="selectNumberOfQuestions3"> 30 </label>
 						</div>
 						<div class="form-check">
-							<input class="form-check-input" type="radio"
-								name="selectNumberOfQuestions" id="selectNumberOfQuestions4"
-								checked> <label class="form-check-label"
+							<input class="form-check-input" type="radio" data-question-num="40"
+								name="selectNumberOfQuestions" id="selectNumberOfQuestions4">
+							<label class="form-check-label"
 								for="selectNumberOfQuestions4"> 40 </label>
 						</div>
 						<div class="form-check">
-							<input class="form-check-input" type="radio"
-								name="selectNumberOfQuestions" id="selectNumberOfQuestions5"
-								checked> <label class="form-check-label"
+							<input class="form-check-input" type="radio" data-question-num="50"
+								name="selectNumberOfQuestions" id="selectNumberOfQuestions5">
+							<label class="form-check-label"
 								for="selectNumberOfQuestions5"> 50 </label>
 						</div>
 						<div class="form-check">
-							<input class="form-check-input" type="radio"
+							<input class="form-check-input" type="radio" data-question-num="0"
 								name="selectNumberOfQuestions" id="selectNumberOfQuestions6"
 								checked> <label class="form-check-label"
 								for="selectNumberOfQuestions6"> All </label>
@@ -271,13 +271,13 @@ function gameSettingOpen(){
 			$('#form-radio'+formNum).click();
 			if(!setting.pron_show){
 				console.log("pron");
-				$('pronunciation-radio2').click();
+				$('#pronunciation-radio2').click();
 			}
 			let orderNum = (order == 'random')? 1 : (order == 'first_in')? 2 : (order == 'latest') ? 3: (order == 'atoz')? 4 : 5;
 			$('#order-radio'+orderNum).click();
 			if(!setting.description_show){
 				console.log("설명");
-				$('explanation-radio2').click();
+				$('#explanation-radio2').click();
 			}
 		},
         error:function(e){
@@ -291,19 +291,64 @@ function countOfItemPrint(){
 	if(num === '0'){
 		$('#selectNumberOfQuestions6').click();
 	}else{
-		$('#selectNumberOfQuestions'+(num / 10)).click();
+		$('#selectNumberOfQuestions'+Math.floor(num / 10)).click();
 	}
 }
 
-//
+//게임에 사용할 단어장 정보를 수정하는 함수
 function wordListUpdate(){
-	
+	let num = $('#wordlistModal .word-list-group').find('input[type="checkbox"]:checked').data('file-num');
+	console.log(num);
+	$.ajax({
+		url:'fileWordUpdate',
+		type:'post',
+		data:{file_num : num},
+		success:function(res){
+			console.log('성공');
+		},
+		error:function(e){
+			console.error(e);
+		}
+	});
 }
 function gameSettingUpdate(){
-	
+	let form = $('[id^=form-radio]:checked').data('form-type');
+	let pron = $('[id^=pronunciation-radio]:checked').data('pron-show');
+	let order = $('[id^=order-radio]:checked').data('order-type');
+	let description = $('[id^=explanation-radio]:checked').data('desc-show');
+	$.ajax({
+		url:'gameSettingUpdate',
+		type:'post',
+		data:{form_type : form, pron_show : pron, order_type : order, description_show: description},
+		success:function(res){
+			console.log('성공');
+		},
+		error:function(e){
+			console.error(e);
+		}
+	});
 }
 function questionNumUpdate(){
-
+	let num = $('input[name="selectNumberOfQuestions"]:checked').data('question-num');
+	let checkedRadio = $('input[name="selectNumberOfQuestions"]:checked');
+	console.log(num);
+	console.log(checkedRadio); // 0이면 선택된 것이 없는 것입니다.
+	
+	// 선택된 radio 버튼의 data-Qnum 값 확인
+	if (checkedRadio.length > 0) {
+	  console.log(checkedRadio.data('question-num')); // 이 값이 undefined면 data-Qnum 속성이 없는 것입니다.
+	}
+	$.ajax({
+		url:'gameSettingUpdateQuestionNum',
+		type:'post',
+		data:{question_num : num},
+		success:function(res){
+			console.log('성공');
+		},
+		error:function(e){
+			console.error(e);
+		}
+	});
 }
 function matchUseUpdate(){
 	let check = $('#flexSwitchCheckDefault');

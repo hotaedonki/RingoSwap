@@ -102,6 +102,7 @@ public class GameController
 					, @AuthenticationPrincipal UserDetails user) {
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		setting.setUser_num(user_num);
+		log.debug("세팅값 : {}", setting);
 		int methodResult = service.gameSettingUpdate(setting);
 		
 		return methodResult;
@@ -121,9 +122,14 @@ public class GameController
 	@ResponseBody
 	@PostMapping("gameSettingUpdateQuestionNum")
 	public int gameSettingUpdateQuestionNum(@AuthenticationPrincipal UserDetails user
-					, int question_num) {
+					, Integer question_num) {
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		HashMap<String, Object> map = new HashMap<>();
+		
+		if(question_num == null) {
+			question_num = 0;
+		}
+		
 		map.put("user_num", user_num);
 		map.put("question_num", question_num);
 		
@@ -156,23 +162,24 @@ public class GameController
 		GameSetting setting = service.gameSettingSelectByUserNum(user_num);		
 		
 		if(setting.getFile_num() == -1) {
-			return null;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
+			map.put("setting", setting);
+			return map;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
 		}
 
 		log.debug("게임 프린트 세팅1 : {}", category);
 		//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
 		ArrayList<DirWord> wordList = service.wordArraySearchByGameSetting(setting);
+		
 		log.debug("게임 프린트 세팅2 : {}", setting);
 		log.debug("게임 프린트 워드리스트 : {}", wordList);
 
-		// 2.1. 랜덤 단어 선택
+		if(category.equals("MCQ")) {
+			// 2.1. 랜덤 단어 선택
 			Random random = new Random();
 		    int index = random.nextInt(wordList.size());
 		    DirWord selectedWord = wordList.get(index);
-	
 		    // 2.2. 정답 설정
 		    String correctAnswer = selectedWord.getMean();
-		    
 		    // 2.3. 오답 설정
 		    Set<String> wrongAnswers = new HashSet<>();
 		    while (wrongAnswers.size() < 3) {
@@ -181,12 +188,12 @@ public class GameController
 		            wrongAnswers.add(wordList.get(wrongIndex).getMean());
 		        }
 		    }
-		    
+
 		    // 2.4. 4개의 의미를 무작위 순서로 배치
 		    List<String> options = new ArrayList<>(wrongAnswers);
 		    options.add(correctAnswer);
 		    Collections.shuffle(options);
-
+		}
 		map.put("setting", setting);
 		map.put("wordList", wordList);
 		

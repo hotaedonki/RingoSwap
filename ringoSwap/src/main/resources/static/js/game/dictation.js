@@ -90,12 +90,21 @@ function dictationResultScreen() {
 }
 //단어목록을 전역변수에 저장
 function dictationQuestionSave(){
+    console.log('왜 안됨?');
     $.ajax({
         url: 'gameNotePrint',
         type:'post',
+        data:{category : 'dictation'},
         dataType:'json',
         success:function(res){
-            console.log(res);
+            console.log('왜 안됨?');
+            console.log(res.setting.file_num);
+            if(res.setting.file_num === -1){
+                //file_num이 -1 == 설정되지 않았을경우 null값을 리턴하므로, 알림창 출력 후  gameMain페이지로 리턴한다.
+                alert('게임을 실행하기 전 먼저 메인창에서 게임에 사용할 단어장을 설정해주세요.');
+                returnToGameMain();
+                return;
+            }
             let setting = res.setting;
             if(setting.pron_show){
                 pronShow = true;
