@@ -1,24 +1,3 @@
-/*
-document.addEventListener("DOMContentLoaded", function() {
-	const toggleButton = document.querySelector('.navbar-toggler');
-	const leftSideContainer = document.querySelector('.leftside');
-
-	toggleButton.addEventListener('click', function() {
-		if (leftSideContainer.style.display === 'none') {
-			leftSideContainer.style.display = 'flex';
-		} else {
-			leftSideContainer.style.display = 'none';
-		}
-	});
-});
-*/
-
-$(document).ready(function()
-{
-	init();
-	connect();
-});
-
 let stompClient;
 let username;
 let chatroomInfo;
@@ -28,12 +7,16 @@ let myUserNum;
 let url;
 let subscriptionForUpdateChatroom;
 
+$(document).ready(function()
+{
+	init();
+	connect();
+});
+
 window.addEventListener('beforeunload', function(event) 
 {
     if (stompClient !== null) 
-    {
         stompClient.disconnect();
-    }
     
     // 원하는 경우, 사용자에게 경고 메시지를 표시할 수도 있습니다.
     //event.returnValue = '';
@@ -123,6 +106,23 @@ function connect()
 		searchByTitle(document.getElementById('searchInput').value);
 	});
     
+    // DM, OpenChat 버튼 이벤트 연결
+	let dm_btn = document.getElementById('DM_btn');
+    let openchat_btm = document.getElementById('OpenChat_btn');
+	
+	dm_btn.addEventListener('click', function()
+	{
+		dm_btn.style.backgroundColor = '#f4faf9';
+		openchat_btm.style.backgroundColor = '#a8e9dc';
+	});
+    
+    openchat_btm.addEventListener('click', function()
+	{
+		stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, {}, userNum);
+		openchat_btm.style.backgroundColor = '#f4faf9';
+        dm_btn.style.backgroundColor = '#a8e9dc';
+	});
+	
     return true;
 }
 
