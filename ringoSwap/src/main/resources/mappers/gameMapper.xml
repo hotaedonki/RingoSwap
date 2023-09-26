@@ -66,7 +66,7 @@
 	<select id="wordArraySearchByGameSetting">
 	select *
 	from ringo_word
-	where user_num = #{user_num}
+	where file_num = #{file_num}
 	<if test="match_use == true">
 		and pron is not null
 	</if>

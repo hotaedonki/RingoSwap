@@ -47,7 +47,7 @@ function initializeWindowEventHandlers() {
 function popStateWindow(event) {
     let newUrl = window.location.href;
 	console.log(event);
-	console.log(event.category);
+	console.log(event.state.category);
     if(previousUrl === newUrl){
         return; //현재 url과 이전 url이 동일할경우, 아무 작업도 수행하지 않도록 리턴
     }

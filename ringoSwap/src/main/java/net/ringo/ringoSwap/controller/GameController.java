@@ -148,7 +148,8 @@ public class GameController
 	//<<<<-------------------------------------------------
 	@ResponseBody
 	@PostMapping("gameNotePrint")
-	public HashMap<String, Object> gameNotePrint(@AuthenticationPrincipal UserDetails user){
+	public HashMap<String, Object> gameNotePrint(@AuthenticationPrincipal UserDetails user
+			, String category){
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		HashMap<String, Object> map = new HashMap<>();		//리턴용 변수
 		//회원번호를 매개변수로 사용자의 게임세팅 정보를 리턴
@@ -157,11 +158,13 @@ public class GameController
 		if(setting.getFile_num() == -1) {
 			return null;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
 		}
+
 		log.debug("게임 프린트 세팅1 : {}", setting);
 		//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
 		ArrayList<DirWord> wordList = service.wordArraySearchByGameSetting(setting);
 		log.debug("게임 프린트 세팅2 : {}", setting);
 		log.debug("게임 프린트 워드리스트 : {}", wordList);
+
 		// 2.1. 랜덤 단어 선택
 		Random random = new Random();
 	    int index = random.nextInt(wordList.size());

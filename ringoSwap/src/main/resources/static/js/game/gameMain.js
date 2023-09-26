@@ -267,7 +267,7 @@ function gameSettingOpen(){
             console.log(setting);
 			const form = setting.form_type
 			const order = setting.order_type;
-			let formNum = (form == 'title_tomean') ? 1 : (form == 'mean_totitle') ? 2: ( form == 'title_only') ? 3: 4;
+			let formNum = (form == 'title') ? 1 : 2;
 			$('#form-radio'+formNum).click();
 			if(!setting.pron_show){
 				console.log("pron");
