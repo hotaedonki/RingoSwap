@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!-- Coding by CodingLab | www.codinglabweb.com -->
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!----======== CSS ======== -->
+<link rel="stylesheet"
+	th:href="@{/bootstrap-5.3.1-dist/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{../css/sidebar.css}">
+<link rel="stylesheet"
+	th:href="@{../css/memberView/updatePersonalInfo.css}">
+<link
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+	rel="stylesheet">
+<!----===== Boxicons CSS ===== -->
+<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'
+	rel='stylesheet'>
+
+<!-- JS -->
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
+
+<title>My page</title>
+</head>
+<body>
+	<!-- =============================사이드바 상단=============================== -->
+	<nav class="sidebar close">
+		<header>
+			<div class="image-text logo-area">
+				<span class="image"> <img th:src="@{../img/sidebar.png}"
+					alt="">
+				</span>
+
+				<div class="text logo-text">
+					<span class="name">LingoSwap</span>
+				</div>
+			</div>
+			<i class='bx bx-chevron-right toggle'></i>
+		</header>
+
+		<div class="menu-bar">
+			<div class="menu">
+				<ul class="menu-ul">
+					<li><a th:href="@{/member/home}"> <i
+							class='bx bx-home-alt icon'></i> <span class="text nav-text">Hoooome</span>
+					</a></li>
+
+					<li><a th:href="@{/feed/feedMain}"> <i
+							class='bx bx-detail icon'></i> <span class="text nav-text">Feed</span>
+					</a></li>
+
+					<li><a th:href="@{/note/noteMain}"> <i
+							class='bx bx-edit icon'></i> <span class="text nav-text">Note</span>
+					</a></li>
+
+					<li><a th:href="@{/message/messageMain}"> <i
+							class='bx bx-message-square-dots icon'></i> <span
+							class="text nav-text">Message</span>
+					</a></li>
+
+					<li><a th:href="@{/game/gameMain}"> <i
+							class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
+					</a></li>
+				</ul>
+			</div>
+			<!-- ========================사이드바 하단=========================== -->
+			<div class="bottom-content">
+				<ul class="menu-ul">
+					<li class="">
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/logout}"> <i class='bx bx-log-out icon'></i>
+								<span class="text nav-text">Logout</span>
+							</a>
+						</div>
+					</li>
+
+					<li class=""><a th:href="@{/notification/notificationMain}">
+							<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
+					</a></li>
+					<li class="">
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/myPage}"> <span class="profile-pic-li"
+								data-tooltip="프로필 사진으로 이동합니다."> <span class="profile-pic">
+										<img th:src="@{../img/2.jpg}" alt="Your Profile Picture">
+								</span>
+							</span> <span class="text nav-text">Profile</span>
+							</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="home container d-center">
+		<div class="card border-primary shadow">
+			<div class="card-header">Edit personal information</div>
+			<div class="card-body">
+				<h4 class="card-title">Please enter your password.</h4>
+				<div class="form-group">
+					<label for="InputPassword1" class="form-label mt-5"></label>
+					<input type="password" class="form-control"
+						id="InputPassword1" placeholder="Password"
+						autocomplete="off">
+				</div>
+				<button type="button" class="btn btn-primary submit-password">Primary</button>
+			</div>
+		</div>
+	</div>
+
+	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{../js/memberView/sidebar.js}"></script>
+	<script th:src="@{../js/memberView/updatePersonalInfo.js}"></script>
+
+</body>
+</html>

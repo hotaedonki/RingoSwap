@@ -301,6 +301,15 @@ public class MemberController
 	    }
 	    return "memberView/otherPage";
 	}
+	
+	@GetMapping("/updatePersonalInfo")
+	public String updatePersonalInfo(@RequestParam(name = "username", required = false) String username, Model model) 
+	{
+	    if (username != null) {
+	        model.addAttribute("username", username);
+	    }
+	    return "memberView/updatePersonalInfo";
+	}
 
 	
 	@ResponseBody
