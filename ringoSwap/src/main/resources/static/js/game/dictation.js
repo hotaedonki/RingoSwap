@@ -1,8 +1,4 @@
-let wordList = [];      //게임용 단어목록 저장을 위한 전역변수 배열
 let count = 0;          //게임용 단어목록 순서를 저장하는 전역변수
-let answerList =[];     //게임용 각 질문당 정답여부를 기록하는 전역변수 배열
-let printSet = 'title';   //게임용 질문의 형식을 지정하는 전역변수
-let pronShow = false;    //게임용 발음부를 보일지 여부를 지정하는 전역변수
 
 function playDictation() {
     //history API기능을 위한 url변수
@@ -16,7 +12,8 @@ function playDictation() {
 					<i class="bi bi-arrow-return-left" data-bs-toggle="modal" data-bs-target="#confirmModal"></i>
 				</div>
 				<div class="col-6 currentProblemNumber d-flex justify-content-center">
-					1/50</div>
+					<span id="currentNum">1</span>/<span id="totalNum">50</span> 
+                </div>
 				<div class="col-3 progress timeCount">
 					<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 25%;"></div>
 				</div>
@@ -114,7 +111,8 @@ function dictationQuestionSave(){
             }
             wordList = res.wordList;
             console.log(wordList);
-            count = 0;
+            count = 0;      //count변수 초기화
+            $('#totalNum').text(res.wordList.length);      //문제 갯수 총합 출력
         
         	dictationQuestionPrint();
         },
@@ -126,9 +124,8 @@ function dictationQuestionSave(){
 //저장한 전역변수를 순서대로 출력
 function dictationQuestionPrint(){
     let word = wordList[count];
-    console.log(word.word);
-    console.log(word.pron);
-    console.log(wordList[count].mean);
+    $('#currentNum').text(count + 1);		//현재 문제순번 출력
+
     if(printSet ==='title'){
         $('#word-print').text(word.word);
     }else{
