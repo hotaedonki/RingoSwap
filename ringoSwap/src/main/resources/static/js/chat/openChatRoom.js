@@ -1,24 +1,3 @@
-/*
-document.addEventListener("DOMContentLoaded", function() {
-	const toggleButton = document.querySelector('.navbar-toggler');
-	const leftSideContainer = document.querySelector('.leftside');
-
-	toggleButton.addEventListener('click', function() {
-		if (leftSideContainer.style.display === 'none') {
-			leftSideContainer.style.display = 'flex';
-		} else {
-			leftSideContainer.style.display = 'none';
-		}
-	});
-});
-*/
-
-$(document).ready(function()
-{
-	init();
-	connect();
-});
-
 let stompClient;
 let username;
 let chatroomInfo;
@@ -28,12 +7,16 @@ let myUserNum;
 let url;
 let subscriptionForUpdateChatroom;
 
+$(document).ready(function()
+{
+	init();
+	connect();
+});
+
 window.addEventListener('beforeunload', function(event) 
 {
     if (stompClient !== null) 
-    {
         stompClient.disconnect();
-    }
     
     // 원하는 경우, 사용자에게 경고 메시지를 표시할 수도 있습니다.
     //event.returnValue = '';
