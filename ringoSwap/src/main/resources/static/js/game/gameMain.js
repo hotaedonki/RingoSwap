@@ -1,8 +1,3 @@
-const modalOptions = {
-	backdrop: true
-};
-
-
 function chooseDictation(event) {
 	const dictationSlideIndex = 2;
 	
@@ -39,7 +34,7 @@ function showWordListModal() {
 		
 		$('body').append(modalHTML);
 		
-		const modalElement = new bootstrap.Modal($("#wordlistModal")[0], modalOptions);
+		const modalElement = new bootstrap.Modal($("#wordlistModal")[0]);
 		modalElement.show();
 
         $('#wordlistModal').on('hidden.bs.modal', function () {
@@ -161,7 +156,7 @@ function showFormModal() {
 		$('body').append(modalHTML);
 			
 		gameSettingOpen();
-		const modalElement = new bootstrap.Modal($("#formModal")[0], modalOptions);
+		const modalElement = new bootstrap.Modal($("#formModal")[0]);
 		modalElement.show();
 	
 	    $('#formModal').on('hidden.bs.modal', function () {
@@ -232,7 +227,7 @@ function showCountOfItemsModal() {
 
 		countOfItemPrint();
 			
-		const modalElement = new bootstrap.Modal($("#countOfItemsModal")[0], modalOptions);
+		const modalElement = new bootstrap.Modal($("#countOfItemsModal")[0]);
 		modalElement.show();
 	
 	    $('#countOfItemsModal').on('hidden.bs.modal', function () {
@@ -264,7 +259,6 @@ function wordFilePrint(){
 }
 
 function gameSettingOpen(){
-	
     $.ajax({
         url:'gameSettingOpen',
         type:'post',
