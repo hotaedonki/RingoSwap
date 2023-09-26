@@ -23,7 +23,7 @@ function printPersonalInfoPage(res) {
 	console.log(res)
 	const PersonalInfoPage = `
 		<div class="card border-primary mb-3 personal-information-box">
-			<div class="card-header">Personal Information</div>
+			<div class="card-header fs-2">Personal Information</div>
 			<div class="card-body personal-card pt-1">
 				<div class="form-group">
 					<fieldset>
@@ -40,7 +40,7 @@ function printPersonalInfoPage(res) {
 					</fieldset>
 				</div>
 				<div class="form-group">
-				  <label class="col-form-label mt-4" for="inputDefault">New Password</label>
+				  <label class="form-label mt-4" for="inputDefault">New Password</label>
 				  <p class="col-form-label" for="inputDefault">(If you don't enter anything, it won't be edited.)</p>
 				  <input type="password" class="form-control" placeholder="Password" id="inputNewPassword">
 				</div>
@@ -63,45 +63,73 @@ function printPersonalInfoPage(res) {
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="exampleSelect1" class="form-label mt-4">성별 변경
+					<label for="exampleSelect1" class="form-label mt-4">Gender change
 						</label> <select class="form-select" id="exampleSelect1">
-						<option>여자</option>
-						<option>남자</option>
-						<option>기타</option>
+						<option value="F">여자</option>
+						<option value="M">남자</option>
+						<option value="N">기타</option>
 					</select>
 				</div>
 				<fieldset class="form-group">
-					<legend class="mt-4">배우고 싶은 언어 고르기</legend>
+					<label for="exampleSelect1" class="form-label mt-4">Language I want to learn</label>
 					<div class="form-check disabled">
 						<input class="form-check-input" type="radio" name="optionsRadios"
 							id="optionsRadios1" value="option3" disabled=""> <label
-							class="form-check-label ko" for="optionsRadios3"> 한국어 </label>
+							class="form-check-label ko" for="optionsRadios3"> Korean </label>
 					</div>
 					<div class="form-check">
 						<input class="form-check-input" type="radio" name="optionsRadios"
 							id="optionsRadios2" value="option1" checked=""> <label
-							class="form-check-label ja" for="optionsRadios1"> 일본어 </label>
+							class="form-check-label ja" for="optionsRadios1"> Japenese </label>
 					</div>
 					<div class="form-check">
 						<input class="form-check-input" type="radio" name="optionsRadios"
 							id="optionsRadios3" value="option2"> <label
-							class="form-check-label en" for="optionsRadios2"> 영어 </label>
+							class="form-check-label en" for="optionsRadios2"> English </label>
+					</div>
+				</fieldset>
+				<fieldset class="form-group">
+					<label for="exampleSelect1" class="form-label mt-4">Translate to the selected language</label>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="optionsRadios"
+							id="optionsRadios4" value="option3" disabled=""> <label
+							class="form-check-translang ko" for="optionsRadios3"> Korean </label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="optionsRadios"
+							id="optionsRadios5" value="option1" checked=""> <label
+							class="form-check-translang ja" for="optionsRadios1"> Japanese </label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="optionsRadios"
+							id="optionsRadios6" value="option2"> <label
+							class="form-check-translang en" for="optionsRadios2"> English </label>
 					</div>
 				</fieldset>
 				<fieldset class="form-group mb-5">
-					<legend class="mt-4">팔로워, 팔로잉 공개</legend>
+					<label for="exampleSelect1" class="form-label mt-4">Reveal followers and followings</label>
 					<div class="form-check form-switch">
 						<input class="form-check-input" type="checkbox"
 							id="flexSwitchCheckDefault"> <label
-							class="form-check-label" for="flexSwitchCheckDefault">공개비공개 </label>
+							class="form-check-label" for="flexSwitchCheckDefault"></label>
 					</div>
 				</fieldset>
 				<br>
-				<button type="button" class="btn btn-primary submit-info">Primary</button>
+				<button type="button" class="btn btn-primary submit-info">Update</button>
 			</div>
 		</div>`;
 		
+		//성별 기존 것으로 출력
+	    $(`#exampleSelect1 option[value=${res.data.gender}]`).prop('selected', true);
+	    
+	    //번역언어 기존 것으로 출력
+	    $(`.form-check-translang.${res.data.trans_lang}`).prev('input').prop('checked', true);
+		//배우고 싶은 언어 기존 것으로 출력
+		$(`.form-check-label.${res.data.target_lang}`).prev('input').prop('checked', true);
+		
 		$('.container').append(PersonalInfoPage);
+		//팔로우 공개여부 출력	    
+	    revealFollow();
 		//본인의 모국어는 고르지 못하도록 함
 		checkNativeLang(res);
 }

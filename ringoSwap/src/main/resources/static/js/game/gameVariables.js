@@ -26,9 +26,7 @@ $(document).ready(function () {
 	$(document).on('click', '.select-all', selectAll);
 	//메인화면으로 돌아가기
 	$(document).on('click', '.return-to-game-main', returnToGameMain);
-	//플래시카드에서 정답 출력
-	$(document).on('click', '.flashCards-question-box', clickCard);
-	
+
 	//윈도우이벤트핸들러(대부분 history api 기능)
 	initializeWindowEventHandlers();
 

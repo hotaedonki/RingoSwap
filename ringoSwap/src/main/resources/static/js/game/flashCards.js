@@ -119,6 +119,7 @@ function nextCard() {
         //마지막 순번에서 이 함수 호출시, 알림을 출력하고 gameMain페이지로 돌아간다.
 	    alert("끝!");
         returnToGameMain();
+        return;
     }
     // 카드를 다시 앞면으로 변경
     $('.flashCards-inner').removeClass('flipped');

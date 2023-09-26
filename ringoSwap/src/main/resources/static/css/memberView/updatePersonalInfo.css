@@ -28,7 +28,6 @@
 	overflow: auto;
 }
 
-label {
-	font-weight: bold;
+.form-label {
+	font-size: x-large;
 }
-
