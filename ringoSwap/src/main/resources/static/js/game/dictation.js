@@ -21,8 +21,8 @@ function playDictation() {
 			<div class="row d-flex justify-content-center">
 				<div class="card border-dark dictation-question-box mb-3 mt-5">
 					<div class="dictation-mean-area">
-						<h1 id="word-print">虎</h1>
-						<h1 id="pron-print">[とら]</h1>
+						<h1 id="word-print"></h1>
+						<h1 id="pron-print"></h1>
 					</div><br>
 					<div class="dictation-answer-area">
 						<div class="input-group mb-3">

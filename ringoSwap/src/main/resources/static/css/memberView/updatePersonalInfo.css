@@ -1,0 +1,29 @@
+.container {
+	margin-left: 90px;
+}
+
+.d-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.check-password-card {
+	width: 500px;
+	height: 300px;
+}
+
+.submit-password, .submit-info{
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+}
+
+.personal-information-box {
+	width: 500px;
+	height: 600px;
+}
+
+.personal-card {
+	overflow: auto;
+}

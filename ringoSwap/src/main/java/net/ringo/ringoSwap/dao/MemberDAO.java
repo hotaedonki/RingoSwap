@@ -77,5 +77,9 @@ public interface MemberDAO
 	// 유저 고유 번호로 닉네임을 가져온다.
 	public Member memberSearchByUsername(String nickname);
 	public String getNicknameByUserNum(int user_num);
+	// 비밀번호 확인
+	public String getEncodedPasswordByUserNum(int user_num);
+	// 유저넘으로 멤버값 가져오기
+	public Member memberSearchByNum(int user_num);
 
 }

@@ -165,9 +165,14 @@ public class GameController
 			map.put("setting", setting);
 			return map;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
 		}
+
+		log.debug("게임 프린트 세팅1 : {}", category);
 		//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
 		ArrayList<DirWord> wordList = service.wordArraySearchByGameSetting(setting);
 		
+		log.debug("게임 프린트 세팅2 : {}", setting);
+		log.debug("게임 프린트 워드리스트 : {}", wordList);
+
 		if(category.equals("MCQ")) {
 			// 2.1. 랜덤 단어 선택
 			Random random = new Random();
@@ -183,6 +188,7 @@ public class GameController
 		            wrongAnswers.add(wordList.get(wrongIndex).getMean());
 		        }
 		    }
+
 		    // 2.4. 4개의 의미를 무작위 순서로 배치
 		    List<String> options = new ArrayList<>(wrongAnswers);
 		    options.add(correctAnswer);
@@ -190,7 +196,7 @@ public class GameController
 		}
 		map.put("setting", setting);
 		map.put("wordList", wordList);
-		log.debug(null);
+		
 		
 		return map;
 	}

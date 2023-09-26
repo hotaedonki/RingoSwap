@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -301,6 +302,42 @@ public class MemberController
 	    }
 	    return "memberView/otherPage";
 	}
+	
+	@GetMapping("/updatePersonalInfo")
+	public String updatePersonalInfo(@RequestParam(name = "username", required = false) String username, Model model) 
+	{
+	    if (username != null) {
+	        model.addAttribute("username", username);
+	    }
+	    return "memberView/updatePersonalInfo";
+	}
+	
+	@ResponseBody
+	@PostMapping("checkPassword")
+	public Map<String, Object> checkPassword(@AuthenticationPrincipal UserDetails user, String password) {
+	    Map<String, Object> response = new HashMap<>();
+	    
+	    Member member = new Member();
+	    int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
+	    member.setUser_num(user_num);
+	    member.setPassword(password);
+	    
+	    boolean isMatching = service.isPasswordMatching(member);
+	    log.debug("패스워드 맞는지 확인 : {}", isMatching);
+	    
+	    if(isMatching) {
+	        member = service.memberSearchByNum(user_num);
+	        response.put("success", true);
+	        response.put("data", member);
+	        response.put("message", "Password is correct.");
+	    } else {
+	        response.put("success", false);
+	        response.put("message", "패스워드가 맞지 않습니다.");
+	    }
+	    
+	    return response;
+	}
+
 
 	
 	@ResponseBody

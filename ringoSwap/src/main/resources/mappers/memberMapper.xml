@@ -44,6 +44,12 @@
 	where 
 		user_id = #{user_id}
 	</update>
+	
+	<select id="getEncodedPasswordByUserNum" parameterType="int" resultType="String">
+		select password
+		from ringo_member 
+		where user_num = #{user_num}
+	</select>
 	<!-- [ 회원가입&로그인 기능 종료 ] -->
 
 	<!-- [ 멤버태그 관련 기능 시작 ] -->
@@ -118,6 +124,12 @@
 		, follow_open=#{follow_open}, gps_open=#{gps_open}, trans_lang=#{trans_lang}
 	where user_num = #{user_num}
 	</update>
+	
+	<select id="memberSearchByNum" parameterType="int" resultType="Member">
+		select *
+		from ringo_member
+		where user_num = #{user_num}
+	</select>
 	<!-- 마이페이지 종료 -->
 	<!-- 팔로우/팔로워 기능 시작 -->
 	<!-- 특정 문자열이 포함된 닉네임을 가진 모든 회원의 회원번호를 리턴하는 select문 -->

@@ -7,12 +7,6 @@ const languageImages = {
 
 let myName;
 
-
- $(document).ready(function(){
-   memberPrint();
-   $(document).on('click', '.goToMyFeed', goToMyFeed);
- });
-
 /* 멤버정보를 출력하는 함수 */
 function memberPrint(){
    $.ajax({
@@ -63,3 +57,9 @@ function goToMyFeed() {
 	const url = `../feed/feedMain?nickname=${myName}`;
 	window.location.href = url;
 }
+
+ $(document).ready(function(){
+   memberPrint();
+   $(document).on('click', '.goToMyFeed', goToMyFeed);
+ });
+
