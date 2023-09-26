@@ -118,7 +118,7 @@ function connect()
     
     openchat_btm.addEventListener('click', function()
 	{
-		stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, {}, userNum);
+		stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);
 		openchat_btm.style.backgroundColor = '#f4faf9';
         dm_btn.style.backgroundColor = '#a8e9dc';
 	});
