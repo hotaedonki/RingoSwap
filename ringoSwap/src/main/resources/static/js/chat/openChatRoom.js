@@ -106,6 +106,23 @@ function connect()
 		searchByTitle(document.getElementById('searchInput').value);
 	});
     
+    // DM, OpenChat 버튼 이벤트 연결
+	let dm_btn = document.getElementById('DM_btn');
+    let openchat_btm = document.getElementById('OpenChat_btn');
+	
+	dm_btn.addEventListener('click', function()
+	{
+		dm_btn.style.backgroundColor = '#f4faf9';
+		openchat_btm.style.backgroundColor = '#a8e9dc';
+	});
+    
+    openchat_btm.addEventListener('click', function()
+	{
+		stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, {}, userNum);
+		openchat_btm.style.backgroundColor = '#f4faf9';
+        dm_btn.style.backgroundColor = '#a8e9dc';
+	});
+	
     return true;
 }
 
