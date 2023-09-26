@@ -439,6 +439,16 @@ CREATE TABLE ringo_word (
 	inputdate		timestamp			default sysdate
 );
 CREATE SEQUENCE ringo_word_seq;
+--오답노트용 단어 테이블
+CREATE TABLE ringo_word_wrong (
+	word_num		number			primary key,
+	user_num		number			references ringo_member(user_num) on delete cascade,
+	word				varchar2(100)	not null,		--단어부, 적어야 합니다.
+	pron				    varchar2(100),					--발음부, 적지 않아도 됩니다.
+	mean		    	varchar2(100)	not null,		--의미부, 적어야 합니다.
+	description     varchar2(500), 				--단어카드 설명
+	inputdate		timestamp		default sysdate
+);
 
 --라이브 관련
 --라이브 방 테이블
