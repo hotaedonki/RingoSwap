@@ -7,7 +7,7 @@ function feedPrint(optionalRes, newLoad = true) {
     
     const urlParams = new URLSearchParams(window.location.search);
     const nickname = urlParams.get('nickname');
-    
+
     if (optionalRes) {
 		console.log("해시태그 클릭 후 feedPrint 반환 값 ", optionalRes)
         renderFeeds(optionalRes, newLoad);
@@ -86,7 +86,7 @@ console.log('Current feed number:', feed.feed_num);
             <div class="card feed-card main-card" data-feed-num="${feed.feed_num}">
                 <div class="card-header feed-header"> 
                 	<img src="../member/memberProfilePrint?user_id=${feed.user_id}" data-user-name="${feed.nickname}" alt="Poster Image" class="posterImage showOffcanvasWithUserData"> 
-                    <span class="feedUser showOffcanvasWithUserData"  data-user-name="${feed.nickname}">${feed.nickname}</span>
+                    <span class="feedUser showOffcanvasWithUserData" data-user-name="${feed.nickname}">${feed.nickname}</span>
                     <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
                 </div>
                 <div class="card-body">

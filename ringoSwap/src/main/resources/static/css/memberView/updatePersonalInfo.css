@@ -27,3 +27,8 @@
 .personal-card {
 	overflow: auto;
 }
+
+label {
+	font-weight: bold;
+}
+
