@@ -51,22 +51,23 @@ function returnToGameMain() {
 	$('.main-container').show();
     history.pushState({ url: newUrl }, '', '');
 }
-function printGame(resultGame){
-	console.log(resultGame);
-    if (resultGame === "flashcard") {
+
+function printGame(currentGame){
+	console.log(currentGame);
+    if (currentGame === "flashcard") {
       // category가 flashcard일 경우 플래시카드 게임 실행
         console.log('flashcard 열기');
         playFlashCards();
         
-    }else if(resultGame === "dictation"){
+    }else if(currentGame === "dictation"){
         console.log('dictation 열기');
 		playDictation();
-	}else if(resultGame === "MCQ"){
+	}else if(currentGame === "MCQ"){
         console.log('MCQ 열기');
 		playMCQ();
 	}else{
 		console.log('메인화면인가?');
-		if(!resultGame){
+		if(!currentGame){
 			returnToGameMain();
 		}
 	}

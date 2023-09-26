@@ -24,16 +24,16 @@ function playMCQ() {
 						</div>
 						<div class="col-5 MCQ-answer-box d-flex flex-column justify-content-center align-items-end">
 							<div>
-								<button type="button" class="btn btn-outline-primary">1번답</button>
+								<button type="button" class="btn btn-outline-primary answer-1">1번답</button>
 							</div>
 							<div>
-								<button type="button" class="btn btn-outline-primary">1번답</button>
+								<button type="button" class="btn btn-outline-primary answer-2">2번답</button>
 							</div>
 							<div>
-								<button type="button" class="btn btn-outline-primary">1번답</button>
+								<button type="button" class="btn btn-outline-primary answer-3">3번답</button>
 							</div>
 							<div>
-								<button type="button" class="btn btn-outline-primary">1번답</button>
+								<button type="button" class="btn btn-outline-primary answer-4">4번답</button>
 							</div>
 						</div>
 					</div>
@@ -45,6 +45,8 @@ function playMCQ() {
 	if(currentUrl !== newUrl){
 		history.pushState({ category:'MCQ', url: newUrl }, '', `?category=MCQ`);
 	}
+	loadQuestion();
+	
 }
 
 function MCQResultScreen() {
@@ -85,4 +87,80 @@ function MCQResultScreen() {
 		`;
 		
 	$("body").append(MCQResultHTML);
+}
+
+function loadQuestion() {
+    $.ajax({
+        url: 'gameNotePrint',
+        type: 'POST',
+        success: function(response) {
+            // 단어와 발음 출력
+            $('.MCQ-word').text(response.selectedWord.word);
+            // 발음이 있다면 출력 (이 부분은 단어 객체에 발음 정보가 있다고 가정하고 작성되었습니다)
+            if (response.selectedWord.pronunciation) {
+                $('.MCQ-pronunciation').text('[' + response.selectedWord.pronunciation + ']');
+            } else {
+                $('.MCQ-pronunciation').text('');
+            }
+
+            // 선택지 출력
+            $('.answer-1').text(response.options[0]);
+            $('.answer-2').text(response.options[1]);
+            $('.answer-3').text(response.options[2]);
+            $('.answer-4').text(response.options[3]);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function chosenAnswer() {
+	let chosenAnswer = $(this).text();
+	checkAnswer(chosenAnswer);
+}
+
+function checkAnswer(chosenAnswer) {
+	$.ajax({
+        url: 'checkMCQAnswer', 
+        type: 'POST',
+        data: {
+            answer: chosenAnswer
+        },
+        success: function(response) {
+            if (response.isCorrect) {
+				//정답
+            } else {
+                // 오답
+            }
+
+            updateProgress();
+
+            // 모든 문제 완료 확인
+            let current = parseInt($('.currentProblemNumber').text().split('/')[0]);
+            let total = parseInt($('.currentProblemNumber').text().split('/')[1]);
+            if (current >= total) {
+                // 모든 문제를 완료한 경우 결과 화면 표시
+                MCQResultScreen();
+            } else {
+                // 다음 문제 로드
+                loadQuestion();
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function updateProgress() {
+    let current = parseInt($('.currentProblemNumber').text().split('/')[0]);
+    let total = parseInt($('.currentProblemNumber').text().split('/')[1]);
+
+    current++;
+
+    $('.currentProblemNumber').text(current + "/" + total);
+
+    let progressPercentage = (current / total) * 100;
+    $('.progress-bar').css('width', progressPercentage + '%').attr('aria-valuenow', progressPercentage);
 }

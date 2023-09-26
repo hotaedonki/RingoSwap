@@ -14,6 +14,12 @@ $(document).ready(function () {
 	$('.flash-cards').on('click', playFlashCards);
 	$('.dictation').on('click', playDictation);
 	
+	//MCQ에서 객관식 정답 클릭
+	$('.MCQ-answer-box button').click(function() {
+		let chosenAnswer = $(this).text();
+		checkAnswer(chosenAnswer);
+	})
+	
 	//플래시카드에서 정답 출력
 	$('.flashCards-question-box').on('click', clickCard);
 	
@@ -44,7 +50,7 @@ function initializeWindowEventHandlers() {
 function popStateWindow(event) {
     let newUrl = window.location.href;
 	console.log(event);
-	console.log(event.category);
+	console.log(event.state.category);
     if(previousUrl === newUrl){
         return; //현재 url과 이전 url이 동일할경우, 아무 작업도 수행하지 않도록 리턴
     }

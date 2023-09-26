@@ -1,8 +1,3 @@
-const modalOptions = {
-	backdrop: true
-};
-
-
 function chooseDictation(event) {
 	const dictationSlideIndex = 2;
 	
@@ -39,7 +34,7 @@ function showWordListModal() {
 		
 		$('body').append(modalHTML);
 		
-		const modalElement = new bootstrap.Modal($("#wordlistModal")[0], modalOptions);
+		const modalElement = new bootstrap.Modal($("#wordlistModal")[0]);
 		modalElement.show();
 
         $('#wordlistModal').on('hidden.bs.modal', function () {
@@ -161,7 +156,7 @@ function showFormModal() {
 		$('body').append(modalHTML);
 			
 		gameSettingOpen();
-		const modalElement = new bootstrap.Modal($("#formModal")[0], modalOptions);
+		const modalElement = new bootstrap.Modal($("#formModal")[0]);
 		modalElement.show();
 	
 	    $('#formModal').on('hidden.bs.modal', function () {
@@ -232,7 +227,7 @@ function showCountOfItemsModal() {
 
 		countOfItemPrint();
 			
-		const modalElement = new bootstrap.Modal($("#countOfItemsModal")[0], modalOptions);
+		const modalElement = new bootstrap.Modal($("#countOfItemsModal")[0]);
 		modalElement.show();
 	
 	    $('#countOfItemsModal').on('hidden.bs.modal', function () {
@@ -264,7 +259,6 @@ function wordFilePrint(){
 }
 
 function gameSettingOpen(){
-	
     $.ajax({
         url:'gameSettingOpen',
         type:'post',
@@ -273,7 +267,7 @@ function gameSettingOpen(){
             console.log(setting);
 			const form = setting.form_type
 			const order = setting.order_type;
-			let formNum = (form == 'title_tomean') ? 1 : (form == 'mean_totitle') ? 2: ( form == 'title_only') ? 3: 4;
+			let formNum = (form == 'title') ? 1 : 2;
 			$('#form-radio'+formNum).click();
 			if(!setting.pron_show){
 				console.log("pron");
