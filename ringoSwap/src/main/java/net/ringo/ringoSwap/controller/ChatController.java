@@ -113,17 +113,37 @@ public class ChatController
 	@GetMapping(PathHandler.OPENCHATROOMENTER)
 	public String openChatRoomEnter(int chatroom_num, @AuthenticationPrincipal UserDetails user, Model model)
 	{
+		// 여기서 현재 방 인원수를 가져와서 최대 방 인원수보다 같거나 클 경우 진입 막기.
 		log.debug("move to open chat room - No.{}", chatroom_num);
 		
 		Chatroom chatroom = service.getChatroomById(chatroom_num);
 		
+		// 채팅방 유효성 검사
 		if (chatroom == null)
 		{
 			log.debug("chatroom의 정보를 찾을 수 없습니다.");
-			return "redirect:/";
+			return "chat/openChatMain";
 		}
 		
 		log.debug(chatroom.toString());
+		
+		// openchat일때만 접속 가능함.
+		if (!chatroom.getGen_category().equalsIgnoreCase("openchat"))
+		{
+			log.debug("openchat type이어야 접속할 수 있습니다.");
+			return "chat/openChatMain";
+		}
+		
+		// 채팅방에 들어온 다른 사람들 정보도 가져오기 위해 
+		ArrayList<ChatroomLink> chatLinks = service.getChatroomLinksByChatroomNum(chatroom.getChatroom_num());
+		log.debug("chat link size - {}", chatLinks.size());
+		
+		// 채팅방 최대 인원수보다 현재 참여 인원수 이상인 경우
+		if (chatroom.getCapacity() <= chatLinks.size())
+		{
+			log.debug("방 수용인원 초과! Chatroom num.{}", chatroom.getChatroom_num());
+			return "chat/openChatMain";
+		}
 		
 		// 내 고유번호 가져오기
 		int myUserNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
@@ -131,7 +151,7 @@ public class ChatController
 		if (myUserNum <= 0)
 		{
 			log.debug("User의 고유 번호가 없습니다.");
-			return "redirect:/";
+			return "chat/openChatMain";
 		}
 		
 		ChatroomLink chatroomLinkForSearch = new ChatroomLink();
@@ -152,19 +172,14 @@ public class ChatController
 			if (isAddedChatLink <= 0)
 			{
 				log.debug("채팅방 링크를 생성 실패하였습니다.");
-				return "redirect:/";
+				return "chat/openChatMain";
 			}
 			
 			log.debug("새 유저 입장! 채팅방 링크 생성 성공.");
 			
 			myChatroomLink = service.getChatroomLinkByUserNum(chatroomLinkForSearch);
 		}
-		
-		// 채팅방에 들어온 다른 사람들 정보도 확인하기 위해 링크들을 가져옴
-		ArrayList<ChatroomLink> chatLinks = service.getChatroomLinksByChatroomNum(chatroom.getChatroom_num());
-		log.debug("chat link size - {}", chatLinks.size());
-		
-		
+	
 		// 해당 채팅방에서 메시지들 가져오기
 		ArrayList<ChatCommon> messages = service.loadMessageByChatroomNum(chatroom.getChatroom_num());		
 		
