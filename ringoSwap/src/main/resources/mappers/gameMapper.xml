@@ -95,4 +95,8 @@
 		) where rownum &lt;= #{question_num}
 	</if>
 	</select>
+	<select id="wordWrongArraySearchByUserNum" resultType="DirWord">
+	select * from ringo_word_wrong
+	where user_num = #{user_num}
+	</select>
 </mapper>

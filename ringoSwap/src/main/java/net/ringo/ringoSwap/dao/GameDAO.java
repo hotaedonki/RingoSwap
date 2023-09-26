@@ -35,5 +35,7 @@ public interface GameDAO
 	int matchUseUpdate(HashMap<String, Object> map);
 	//게임세팅 정보값을 매개변수로 해당 세팅에 따라 정렬된 단어목록을 리턴하는 메서드
 	ArrayList<DirWord> wordArraySearchByGameSetting(GameSetting setting);
+	//사용자의 오답노트를 DB에서 검색해 출력하는 메서드
+	ArrayList<DirWord> wordWrongArraySearchByUserNum(int user_num);
 	
 }

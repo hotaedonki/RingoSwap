@@ -160,10 +160,15 @@ public class GameController
 		HashMap<String, Object> map = new HashMap<>();		//리턴용 변수
 		//회원번호를 매개변수로 사용자의 게임세팅 정보를 리턴
 		GameSetting setting = service.gameSettingSelectByUserNum(user_num);		
+		ArrayList<DirWord> wrongWordList;
 		
 		if(setting.getFile_num() == -1) {
 			map.put("setting", setting);
 			return map;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
+		}else if(setting.getFile_num() == -10) {
+			//file_num이 -10일경우, 해당 사용자의 오답노트를 리턴해 맵에 집어넣는다.
+			wrongWordList = service.wordWrongArraySearchByUserNum(user_num);
+			map.put("wrongWordList", wrongWordList);
 		}
 
 		log.debug("게임 프린트 세팅1 : {}", category);
@@ -172,32 +177,37 @@ public class GameController
 		
 		log.debug("게임 프린트 세팅2 : {}", setting);
 		log.debug("게임 프린트 워드리스트 : {}", wordList);
-
-		if(category.equals("MCQ")) {
-			// 2.1. 랜덤 단어 선택
-			Random random = new Random();
-		    int index = random.nextInt(wordList.size());
-		    DirWord selectedWord = wordList.get(index);
-		    // 2.2. 정답 설정
-		    String correctAnswer = selectedWord.getMean();
-		    // 2.3. 오답 설정
-		    Set<String> wrongAnswers = new HashSet<>();
-		    while (wrongAnswers.size() < 3) {
-		        int wrongIndex = random.nextInt(wordList.size());
-		        if (wrongIndex != index) {
-		            wrongAnswers.add(wordList.get(wrongIndex).getMean());
-		        }
-		    }
-
-		    // 2.4. 4개의 의미를 무작위 순서로 배치
-		    List<String> options = new ArrayList<>(wrongAnswers);
-		    options.add(correctAnswer);
-		    Collections.shuffle(options);
-		}
+		
 		map.put("setting", setting);
 		map.put("wordList", wordList);
 		
 		
 		return map;
+	}
+	
+	@ResponseBody
+	@PostMapping("MCQShufflePrint")
+	public List<String> MCQShufflePrint(ArrayList<DirWord> wordList, int index
+					, String correctAnswer, String formType){
+		// 2.1. 랜덤 단어 정의
+		Random random = new Random();
+		// 2.2. 오답 설정
+		Set<String> wrongAnswers = new HashSet<>();
+		while (wrongAnswers.size() < 3) {
+			int wrongIndex = random.nextInt(wordList.size());
+			if (wrongIndex != index) {
+				if(formType.equals("title")) {
+					wrongAnswers.add(wordList.get(wrongIndex).getMean());
+				}else {
+					wrongAnswers.add(wordList.get(wrongIndex).getWord());
+				}
+			}
+		}
+		// 2.4. 3개의 의미를 무작위 순서로 배치
+		List<String> options = new ArrayList<>(wrongAnswers);
+		options.add(correctAnswer);
+		Collections.shuffle(options);
+		
+		return options;
 	}
 }
