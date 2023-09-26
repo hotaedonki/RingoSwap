@@ -14,6 +14,12 @@ $(document).ready(function () {
 	$('.flash-cards').on('click', playFlashCards);
 	$('.dictation').on('click', playDictation);
 	
+	//MCQ에서 객관식 정답 클릭
+	$('.MCQ-answer-box button').click(function() {
+		let chosenAnswer = $(this).text();
+		checkAnswer(chosenAnswer);
+	})
+	
 	//플래시카드에서 정답 출력
 	$('.flashCards-question-box').on('click', clickCard);
 	

@@ -37,6 +37,32 @@
 	margin-bottom: 0px;
 }
 
+@media (max-width: 992px) {
+    .MCQ-answer-box .btn {
+        font-size: 1rem;
+		padding: 1.2rem 3rem;
+    }
+}
 
+@media (max-width: 824px) {
+    .MCQ-answer-box .btn {
+        font-size: 0.7rem;
+		padding: 1rem 2.4rem;
+    }
+}
+
+@media (max-width: 644px) {
+    .MCQ-answer-box .btn {
+        font-size: 0.5rem;
+		padding: 0.8rem 2rem;
+    }
+}
+
+@media (max-width: 422px) {
+    .MCQ-answer-box .btn {
+        font-size: 0.3rem;
+		padding: 0.5rem 1.4rem;
+    }
+}
 
 

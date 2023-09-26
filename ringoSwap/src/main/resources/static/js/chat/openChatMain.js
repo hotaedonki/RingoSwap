@@ -1,22 +1,20 @@
+let stompClient;
+let userNum;
+let subscriptionForUpdateChatroom;	// 방 정보 업데이트 이벤트를 구독할 때 구독 정보를 저장하는 객체
+
 $(document).ready(function()
 {
 	init();
 	connect();
 });
 
-let stompClient;
-let userNum;
-let subscriptionForUpdateChatroom;	// 방 정보 업데이트 이벤트를 구독할 때 구독 정보를 저장하는 객체 
-
 window.addEventListener('beforeunload', function(event) 
 {
-    if (stompClient !== null) 
-    {
-        stompClient.disconnect();
-    }
-    
-    // 원하는 경우, 사용자에게 경고 메시지를 표시할 수도 있습니다.
-    //event.returnValue = '';
+	if (stompClient !== null) 
+		stompClient.disconnect();
+
+	// 원하는 경우, 사용자에게 경고 메시지를 표시할 수도 있습니다.
+	//event.returnValue = '';
 });
 
 function init()
@@ -48,6 +46,23 @@ function connect()
     document.getElementById('searchInput').addEventListener('keyup', function()
     {
 		searchByTitle(document.getElementById('searchInput').value);
+	});
+	
+	// DM, OpenChat 버튼 이벤트 연결
+	let dm_btn = document.getElementById('DM_btn');
+    let openchat_btm = document.getElementById('OpenChat_btn');
+	
+	dm_btn.addEventListener('click', function()
+	{
+		dm_btn.style.backgroundColor = '#f4faf9';
+		openchat_btm.style.backgroundColor = '#a8e9dc';
+	});
+    
+    openchat_btm.addEventListener('click', function()
+	{
+		stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, {}, userNum);
+		openchat_btm.style.backgroundColor = '#f4faf9';
+        dm_btn.style.backgroundColor = '#a8e9dc';
 	});
     
     return true;
