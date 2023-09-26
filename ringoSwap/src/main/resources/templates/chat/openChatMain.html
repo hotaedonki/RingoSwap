@@ -156,6 +156,7 @@
                             <th>title</th>
                             <th>total</th><!-- 현참가인원수/인원제한 -->
                             <th>host</th>
+                            <th></th>
                         </tr>
                     </thead>
                     
@@ -175,6 +176,7 @@
                             <td><a th:href="@{/chat/openChatRoomEnter(chatroom_num=${room.chatroom_num})}" th:text=${room.title}></a> <!-- <p th:text="${room.title}"> </p> --></td>
                             <td><p th:text="${room.currentHeadCount + ' / ' + room.capacity}"></p></td>
                             <td><p th:text="${room.nickname}"></td><!--보이스룸 호스트 닉네임-->
+                            <td><a href="#">X</a></td><!--채팅방 삭제 아이콘, 권한 있는 방만 뜨도록.-->
                         </tr>
                     </tbody> 
                 </table>
@@ -243,13 +245,13 @@
                             </select>
                         </td>
                     </tr>
-                    <tr>
+<!--                <tr>
                         <th>use voice</th>
                         <td>
                             <label><input type="radio" name="voice_use" value="yes"> yes &nbsp;</label>
                             <label><input type="radio" name="voice_use" value="no"> no</label>
                         </td>
-                    </tr>
+                    </tr>-->
                     <!-- 태그 전용 박스 주석 -->
                     <!--
                     <tr class="tag_box">
@@ -270,9 +272,8 @@
                 </table>
             </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="createChatRoom()">Create</button>
-                    <button type="button"
-                    3 class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="createRoom" class="btn btn-primary" onclick="createChatRoom()">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
