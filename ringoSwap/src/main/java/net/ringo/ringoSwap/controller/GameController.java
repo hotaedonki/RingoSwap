@@ -152,6 +152,7 @@ public class GameController
 		if(setting.getFile_num() == -1) {
 			return null;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
 		}
+		log.debug("setting", setting);
 		//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
 		ArrayList<DirWord> wordList = service.wordArraySearchByGameSetting(setting);
 		map.put("setting", setting);
