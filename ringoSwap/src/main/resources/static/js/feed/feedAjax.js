@@ -534,8 +534,20 @@ function feedTranslate(){
 // 채팅 메시지 보내기, 만약 채팅방이 존재하지 않으면 일회성 토큰 방식으로 DM 채팅방 생성 및 참가
 function sendDM()
 {
-	let nickName = document.getElementById('nickname').textContent;
-	alert(nickName);
+	/*
+	encodeURIComponent 함수를 사용하여 nickname 값을 인코딩
+	이렇게 해야 URL에 안전하게 값을 포함시킬 수 있음. 
+	특히, nickname 값에 특수 문자나 공백 등이 포함될 경우에 문제가 발생할 수 있으므로,
+	이런 값을 URL에 포함시킬 때는 반드시 인코딩해야함.
+	*/
+	let nickname = document.getElementById('nickname').textContent;
+	let url = `/ringo/chat/checkExistenceDMChatRoom?nickname=${encodeURIComponent(nickname)}`;
 	
-	fetch(`/ringo/chat/checkExistenceDMChatRoom`)
+	fetch(url)
+		.then(response => response.json())
+		.then(data => {
+			console.log(data);
+			// 결과가 false일시 DM 채팅방이 없으므로 새로 생성
+			// true일시는 방을 생성 후 방으로 이동
+		});
 }

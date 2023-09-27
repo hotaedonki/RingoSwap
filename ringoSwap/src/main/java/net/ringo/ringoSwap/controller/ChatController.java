@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
@@ -436,7 +437,7 @@ public class ChatController
 	}
 	
 	@GetMapping(PathHandler.CHECKEXISTENCEDMCHATROOM)
-	public ResponseEntity<Boolean> checkExistenceDMChatRoom(@RequestBody String nickname, @AuthenticationPrincipal UserDetails user)
+	public ResponseEntity<Boolean> checkExistenceDMChatRoom(String nickname, @AuthenticationPrincipal UserDetails user)
 	{
 		log.debug("check Existence DM Chat Room . . .");
 		
