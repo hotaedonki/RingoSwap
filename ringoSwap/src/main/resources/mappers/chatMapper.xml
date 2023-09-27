@@ -24,6 +24,20 @@
 	</insert>
 	
 	<!-- DM 채팅방 만들기 -->
+	<insert id="createDMChatroom" parameterType="java.util.Map">
+		insert into ringo_dm_chatroom
+			(
+				dm_chatroom_num
+				, user_num1
+				, user_num2
+			)
+			values
+			(
+				ringo_dm_chatroom_seq
+				, #{user_num1}
+				, #{user_num2}
+			)
+	</insert>
 	
 	<!-- 자신이 참가한 채팅방을 DB에 기록 -->
 	<insert id="createChatroomLink" parameterType="ChatroomLink">
@@ -330,5 +344,22 @@
             c.lang_category = #{lang_category}
 	    ORDER BY 
 	        c.modifie_date DESC
+	</select>
+	
+	<!-- DM 채팅방의 고유 번호 중 가장 큰 것을 가져온다. -->
+	<select id="getMaxDMChatroomNum" resultType="int">
+		select
+	    	max(dm_chatroom_num) as dm_chatroom_num
+	    from 
+	    	ringo_dm_chatroom
+	</select>
+	
+	<select id="getDMChatroomByDMChatroomNum" parameterType="int" resultType="DM_Chatroom">
+		select
+			*
+		from
+			ringo_dm_chatroom
+		where
+			dm_chatroom_num = #{dm_chatroom_num}
 	</select>
 </mapper>

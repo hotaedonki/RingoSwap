@@ -8,6 +8,7 @@ import org.springframework.web.socket.WebSocketSession;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
+import net.ringo.ringoSwap.domain.DM_Chatroom;
 import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
 import net.ringo.ringoSwap.domain.custom.OpenChatroomInfo;
 
@@ -57,4 +58,6 @@ public interface ChatService
 	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms();
 	// 자신이 참가한 채팅방 목록을 제목으로 검색하여 가져온다.
 	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(Map<String, Object> params);
+	// DM 채팅방을 만들고 자신이 만들었던 DM 채팅방을 가져온다.
+	public DM_Chatroom createDMChatroomAndGetNewChatroom(Map<String, Object> params);
 }

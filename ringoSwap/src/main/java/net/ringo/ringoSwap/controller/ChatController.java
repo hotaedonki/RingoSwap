@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
@@ -31,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
+import net.ringo.ringoSwap.domain.DM_Chatroom;
 import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
 import net.ringo.ringoSwap.domain.custom.OpenChatroomInfo;
 import net.ringo.ringoSwap.enums.webService.MessageType;
@@ -53,7 +55,8 @@ public class ChatController
 	@Value("${spring.servlet.multipart.location}")
 	String uploadPath;
 	
-	Map<String, Chatroom> tokenStore = new HashMap<>();
+	Map<String, Map<String, Object>> tokensUsersInfoDMChat = new HashMap<>();
+	Map<String, DM_Chatroom> tokensCreateDMChat = new HashMap<>();
 	
 	//채팅서비스의 메인페이지로 이동하는 컨트롤러 메서드
 	@GetMapping(PathHandler.OPENCHATMAIN)
@@ -313,7 +316,7 @@ public class ChatController
 	        return mapper.writeValueAsString("empty title");
 	    }
 		
-		Map<String, Object> params = new HashMap();
+		Map<String, Object> params = new HashMap<>();
 	
 		params.put("userNum", userNum);
 		// 와일드 카드 검사를 위해 '%' 추가
@@ -324,14 +327,107 @@ public class ChatController
 		return mapper.writeValueAsString(chatroomThumbnails);
 	}
 	
-	// DM 채팅방을 만들기 전에 일회성 토큰을 먼저 발행하여 다른 URL 접근시 방을 생성할 수 없도록 한다.
-	@GetMapping(PathHandler.CREATEDMCHATROOM)
-	public ResponseEntity<Map<String, String>> createDMChatroom(String nickname) 
+	// DM 채팅방을 만들기 전에 일회성 토큰을 먼저 발행하여 악성 유저가 주소를 아용하여 방을 계속 만들지 못하도록 방지한다. 그리고 RequestBody를 사용하여 json이 알맞은 데이터 타입으로 변환하게끔 한다.
+	@PostMapping(PathHandler.GETCREDFORMAKEDMCHATROOM)
+	public ResponseEntity<Map<String, String>> getCredForMakeDMChatroom(@RequestBody String nickname, @AuthenticationPrincipal UserDetails user)
 	{
 		String token = UUID.randomUUID().toString();
-		//Chatroom newDMChatroom = service.createDMChatroomAndGetNewChatroom();
-		return null;
-	}	
+		
+		if (user.getUsername() == null)
+		{
+			log.debug("유효하지 않은 유저입니다. 로그인 바람.");
+			return null;
+		}
+			
+		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		if (userNum <= 0)
+		{
+			log.debug("DB에 유요하지 않은 유저입니다. 가입 요망.");
+			return null;
+		}
+		
+		int otherUserNum = mService.getUserIdByNickname(nickname);
+		
+		if (otherUserNum <= 0)
+		{
+			log.debug("DB에 유요하지 않은 상대 유저입니다.");
+			return null;
+		}
+		
+		Map<String, Object> params = new HashMap<>();
+		
+		params.put("user_num1", userNum);
+		params.put("user_num2", otherUserNum);
+		
+		tokensUsersInfoDMChat.put(token, params);
+		
+	    Map<String, String> response = new HashMap<>();
+	    response.put("token", token);
+	    return ResponseEntity.ok(response);
+	}
+	
+	// DM 채팅방을 만들기 전에 일회성 토큰을 먼저 발행하여 추후 다른 URL 접근시 방을 생성할 수 없도록 한다.
+	@PostMapping(PathHandler.CREATEDMCHATROOM)
+	public ResponseEntity<Map<String, String>> createDMChatroom(@RequestBody String token) 
+	{
+		if (!tokensUsersInfoDMChat.containsKey(token))
+		{
+			log.debug("user info dm chat에 유효하지 않은 토큰입니다 - {}" , token);
+			return null;
+		}
+		
+		Map<String, Object> usersInfoDMChat = tokensUsersInfoDMChat.get(token);
+		
+		if (usersInfoDMChat == null)
+		{
+			log.debug("userinfoDMChat을 가져오지 못했습니다.");
+			return null;
+		}
+		// 사용한 키는 삭제
+		tokensUsersInfoDMChat.remove(token);
+		
+		String newToken = UUID.randomUUID().toString();
+		DM_Chatroom dmChatroom = service.createDMChatroomAndGetNewChatroom(usersInfoDMChat);
+		
+		if (dmChatroom == null)
+		{
+			log.debug("dmChatRoom을 가져오지 못했습니다.");
+			return null;
+		}
+		
+		tokensCreateDMChat.put(newToken, dmChatroom);
+		
+		Map<String, String> response = new HashMap<>();
+		response.put("token", newToken);
+		return ResponseEntity.ok(response);
+	}
+	
+	// 방을 만든 직후에 채팅방에서 일회성 토큰 유효성 검사를 마친 후 들어가기 위한 경로
+	@GetMapping(PathHandler.ENTERDMCHATMAINAFTERCREATEROOM)
+	public String enterDMChatMainAfterCreateRoom(String token, Model model)
+	{
+		if (!tokensCreateDMChat.containsKey(token))
+		{
+			log.debug("create dm chat에 유효하지 않은 토큰입니다");
+			return "/feed/feedMain";
+		}
+		
+		DM_Chatroom dmChatroom = tokensCreateDMChat.get(token);
+		
+		if (dmChatroom == null)
+		{
+			log.debug("dmChatroom을 가져오지 못했습니다.");
+			return "/feed/feedMain";
+		}
+		
+		// 사용한 키는 삭제
+		tokensCreateDMChat.remove(token);
+		
+		model.addAttribute("dmChatroom", dmChatroom);
+		
+		return "/chat/dmChatMain";
+	}
 	
 	@EventListener
 	public void webSocketDisconnectListener(SessionDisconnectEvent event)
