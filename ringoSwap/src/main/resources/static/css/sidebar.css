@@ -313,3 +313,19 @@ body.dark .sidebar li a:hover .text{
 .home {
     -ms-overflow-style: none;
 }
+
+.city-name {
+    position: absolute; /* 상위 요소를 기준으로 위치를 고정합니다. */
+    bottom: 20px; /* 화면 하단에서 10px 위에 위치하도록 설정합니다. */
+    right: 150px; /* 화면 좌측에서 10px 떨어진 곳에 위치하도록 설정합니다. */
+    opacity: 0.9; /* 투명도를 약간 줍니다. (선택 사항) */
+    background-color: rgba(0, 0, 0, 0.5); /* 배경에 약간의 투명도를 주어 텍스트가 잘 보이도록 합니다. */
+    padding: 14px 10px 0 10px; /* 내부 패딩을 설정하여 텍스트와 경계 사이에 약간의 간격을 줍니다. */
+    border-radius: 5px; /* 경계를 둥글게 만듭니다. */
+}
+
+.profile-pic-li {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+}

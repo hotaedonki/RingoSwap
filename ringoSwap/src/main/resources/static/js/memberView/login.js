@@ -1,46 +1,12 @@
-const passwordInputs = $('#password, #confirmPassword, #newPassword, #confirmNewPassword');
-const doNotMatchPassword = $(".doNotMatchPassword");
-
-$(document).ready(function() {       
-    $('#searchID').click(() => toggleVisibility('#loginForm', '#paintSearchID')); // 아이디 찾기 폼을 보여준다
-    $('#searchPW').click(() => toggleVisibility('#loginForm', '#paintSearchPW')); // 비밀번호 찾기 폼을 보여준다
-    $('.PWcheckbtn').click(gotoResetPasswordPage); // 비밀번호 재설정 폼을 보여준다
-    $('.resetPassword').click(resetPassword) // 비밀번호를 재설정한다.
-    $('#signUp').click(() => toggleVisibility('#loginForm', '#signUpForm')); // 회원가입 폼을 보여준다
-    $('.Register_btn').click(joinCheck); // 회원가입을 완료한다
-    $('#idCheck_Btn').click(memberIdCheck); // 아이디 중복확인
-    $('.sendCode').click(emailConfirm); // 존재하는 이메일인지 확인하고, 인증코드를 전송한다.
-    $('.sendCodeForPassword').click(emailConfirmForPassword); // 존재하는 아이디와 이메일인지 확인하고, 인증코드를 전송한다.
-    $('.confirmCode').click(searchIDCode); // 인증코드와 사용자가 입력한 코드가 일치하는지 확인한다.
-    $('#checkIdBtn').click(paintID); // 인증코드가 일치한다면 해당 사용자의 ID를 화면에 표시한다.
-	passwordInputs.on('keyup', checkPasswordMatch); // 비밀번호와 비밀번호 확인이 일치하는지 확인한다.	
-});
-
 function checkPasswordMatch() {
-    const currentId = $(this).attr('id');
-    let password, confirmPassword;
-
-    if (currentId === 'password' || currentId === 'confirmPassword') {
-        password = $('#password').val();
-        confirmPassword = $('#confirmPassword').val();
-    } else {
-        password = $('#newPassword').val();
-        confirmPassword = $('#confirmNewPassword').val();
-    }
-
-    const message = password !== confirmPassword ? "비밀번호가 일치하지 않습니다." : "비밀번호가 일치합니다.";
-    const color = password !== confirmPassword ? "red" : "black";
-    doNotMatchPassword.text(message).css("color", color);
-    
-    if (message === "비밀번호가 일치하지 않습니다.")
-    	return false;
-    
-    return true;
-}
-
-function toggleVisibility(hideElement, showElement) {
-    $(hideElement).addClass("hidden");
-    $(showElement).removeClass("hidden");
+	const newPassword = $('#password').val();
+	const confirmPassword = $('#confirmPassword').val();
+	
+	if(newPassword === confirmPassword && newPassword !== '') {
+		$('#confirmPassword').addClass('is-valid').removeClass('is-invalid');
+	} else {
+		$('#confirmPassword').addClass('is-invalid').removeClass('is-valid');
+	}
 }
 
 function memberIdCheck() {
@@ -116,16 +82,58 @@ function showModal(title, message, buttons, callback) {
     });
 }
 
+
 function isValidEmail(email) {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return regex.test(email);
 }
 
-function emailConfirm() {
+function UsedEmail(email) {
+	let isUsed = false;
+	
+	$.ajax({
+		url: 'emailCheck'
+		, type: 'post'
+		, data: { email: email }
+		, async: false
+		, success: function(response) {
+			isUsed = response;
+		}
+	})
+	return isUsed;
+}
+
+function emailConfirm(event) {
     const btn = event.target;
     const dataId = btn.getAttribute('data-id');
     let email = $('#email' + dataId).val();
+    if (!isValidEmail(email)) {
+        alert('유효하지 않은 이메일 주소입니다.');
+        return; // 종료
+    }
+    
+    if(UsedEmail(email)) {
+		alert('이미 사용중인 이메일 주소입니다.');
+		return;
+	}
 
+    alert(`${email}로 인증코드를 전송하였습니다.`);
+	
+    $.ajax({
+        url: 'emailConfirm',
+        type: 'post',
+        data: { email: email },
+        success: function() {
+            
+        }
+    });
+}
+
+function emailConfirmForSearchID(event) {
+	const btn = event.target;
+    const dataId = btn.getAttribute('data-id');
+    let email = $('#email' + dataId).val();
+    
     if (!isValidEmail(email)) {
         alert('유효하지 않은 이메일 주소입니다.');
         return; // 종료
@@ -143,7 +151,8 @@ function emailConfirm() {
     });
 }
 
-function searchIDCode() {
+
+function searchIDCode(event) {
     const btn = event.target;
     const dataId = btn.getAttribute('data-id');
     const userCode = $("#code" + dataId).val();
@@ -157,14 +166,14 @@ function searchIDCode() {
         success: function(response) {
             switch (response) {
                 case 'VERIFIED':
-                    resultMessage.text("코드가 일치합니다.").css("color", "black");
+                    resultMessage.text("The code matches.").css("color", "black");
                     break;
                 case 'INCORRECT':
                 case 'CHECKINPUT':
-                    resultMessage.text("코드가 일치하지 않습니다.").css("color", "red");
+                    resultMessage.text("The code does not match.").css("color", "red");
                     break;
                 default:
-                    resultMessage.text("알 수 없는 오류 발생.").css("color", "red");
+                    resultMessage.text("An unknown error occurred.").css("color", "red");
                     break;
             }
         }
@@ -172,17 +181,43 @@ function searchIDCode() {
 }
 
 function paintID() {
-    const dbEmails = {
-        user_id: "taeho",
-        email: "h4@example.com"
-    };
-    
+	const email = $('#email2').val();
     const resultMessage = $(".resultMessage2");
     const paintIDElement = $(".paintID");
     
-    if (resultMessage.text() === "코드가 일치합니다.") {
-        paintIDElement.text(`이메일에 해당하는 ID는 ${dbEmails.user_id} 입니다.`).css("color", "black");
+    if (resultMessage.text() === "The code matches.") {
+    
+	    $.ajax({
+			url:'userIDByEmail'
+			, type: 'post'
+			, data: { email: email}
+			, success: function(user_id) {
+				 paintIDElement.text(`이메일에 해당하는 ID는 ${user_id} 입니다.`).css("color", "black");
+			}		
+		})
+	} else {
+		alert('코드를 먼저 올바르게 입력하세요.')
+	}   
+}
+
+function submitSignUp() {
+    if (joinCheck()) { 
+        submitSignUpForm();
     }
+}
+
+function nicknameCheck(nickname) {
+	let isUsed = false;
+	
+	$.ajax({
+		url: 'nicknameCheck'
+		, type: 'post'
+		, data: { nickname: nickname }
+		, success: function(response) {
+			isUsed = response;
+		}
+	})
+	return isUsed;
 }
 
 function joinCheck() {
@@ -190,14 +225,14 @@ function joinCheck() {
     const password = $('#password').val();
     const first_name = $('#first_name').val();
     const last_name = $('#last_name').val();
-    const username = $('#username').val(); // Nickname
+    const nickname = $('#username').val(); // Nickname
     const gender = $('#gender').val();
     const birth_date = new Date($('#birth_date').val());
     const currentYear = new Date().getFullYear();
     const email = $('#email1').val();
     const native_lang = $('#native_lang').val();
     const target_lang = $('#target_lang').val();
-    const checkEmail = $('#resultMessage1').val();
+    const checkEmail = $('#resultMessage1').text();
     
     if (user_id.length < 4 || user_id.length > 10) {
         alert('ID는 3 ~ 10자로 입력해주세요.');
@@ -210,7 +245,7 @@ function joinCheck() {
 		return false;
 	}
 	
-	if (doNotMatchPassword.text() === "비밀번호가 일치하지 않습니다.") 
+	if ($('#confirmPassword').hasClass('is-invalid')) 
 	{
 		alert('비밀번호가 일치하지 않습니다.');
         return false;
@@ -226,8 +261,13 @@ function joinCheck() {
         return false;
     }
 
-	if (username === '') {
+	if (nickname === '') {
 		alert('닉네임을 입력해주세요.')
+		return false;
+	}
+	
+	if(nicknameCheck(nickname)) {
+		alert('이미 사용중인 닉네임입니다.')
 		return false;
 	}
 	
@@ -251,11 +291,11 @@ function joinCheck() {
 		return false;
 	}
 	
-	if (checkEmail.text() === "코드가 일치하지 않습니다."){
+	if (checkEmail === "The code does not match."){
 		alert("코드가 일치하지 않습니다.")
 		return false;
 	}
-	
+
 	if (native_lang === null || native_lang.length <= 0) {
 		alert("모국어를 선택해주세요.");
 		return false;
@@ -270,12 +310,7 @@ function joinCheck() {
 	    alert("모국어와 배우고 싶은 언어는 동일할 수 없습니다.");
 	    return false;
 	}
-    
-    if (!checkSession()) {
-		return false;
-	}
-    
-    removeAllSessionJoin();
+
     return true;
 }
 
@@ -299,10 +334,10 @@ function emailConfirmForPassword() {
 
 function gotoResetPasswordPage() {
 	const resultMessage = $(".resultMessage3");
+	console.log("코드일치?", resultMessage)
 	
-	if (resultMessage.text() === "코드가 일치합니다.") {
-		$('#resetPassword').removeClass('hidden')
-		$('#paintSearchPW').addClass('hidden')
+	if (resultMessage.text() === "The code matches.") {
+		showResetPassword();
 	} else {
 		alert('코드를 확인해주세요.')
 	} 
@@ -338,8 +373,47 @@ function resetPassword() {
    
 }
 
+function getSignUpData() {
+    return {
+        user_id: $('#user_id').val(),
+        password: $('#password').val(),
+        confirmPassword: $('#confirmPassword').val(),
+        first_name: $('#first_name').val(),
+        last_name: $('#last_name').val(),
+        nickname: $('#username').val(),
+        gender: $('#gender').val(),
+        birth_date: $('#birth_date').val(),
+        email: $('#email1').val(),
+        verificationCode: $('#code1').val(),
+        native_lang: $('#native_lang').val(),
+        target_lang: $('#target_lang').val(),
+        introduction: $('#introduction').val()
+    };
+}
 
-// 가입시 세션 검사
+function submitSignUpForm() {
+    const data = getSignUpData();
+	console.log(data);
+    $.ajax({
+        type: 'POST',
+        url: 'join',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(response) {
+			alert('가입되었습니다!');
+            window.location.href = "../member/login";
+        },
+        error: function(error) {
+            console.error('Error during sign up:', error);
+        }
+    });
+}
+
+function returnToHome() {
+	window.location.href = '../member/login';
+}
+
+/*
 function checkSession() {
 	$.ajax({
 		url:'checkSession'
@@ -378,4 +452,4 @@ function removeAllSessionJoin()
 			alert(e);
 		}
 	});
-}
+}*/

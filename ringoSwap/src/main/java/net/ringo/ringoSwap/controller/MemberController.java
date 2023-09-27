@@ -61,8 +61,9 @@ public class MemberController
 		return "/memberView/join";
 	}
 	
+	@ResponseBody
 	@PostMapping(PathHandler.JOIN)
-	public String join(Member m)
+	public String join(@RequestBody Member m)
 	{	
 		log.debug("[ Join... ]");
 		log.debug(m.toString());
@@ -118,6 +119,37 @@ public class MemberController
 		}
 		resetSession(session, SessionNameHandler.isVerifiedID, true);
 		return true;
+	}
+	
+	//이메일 중복확인
+	@ResponseBody
+	@PostMapping(PathHandler.EMAILCHECK)
+	public boolean emailCheck(String email) {
+		int count = service.emailCheck(email);
+		log.debug("이메일 존재여부 : {}", count);
+		return count > 0;
+	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.NICKNAMECHECK)
+	public boolean nicknameCheck(String nickname) {
+		int count = service.nicknameCheck(nickname);
+		return count > 0;
+	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.USERIDBYEMAIL)
+	public String userIDByEmail(String email) {
+		String user_id = service.userIDByEmail(email);
+		
+		return user_id;
+	}
+	
+	@ResponseBody
+	@PostMapping(PathHandler.PRINTMYPROFILEPHOTO)
+	public String printMyProfilePhoto(@AuthenticationPrincipal UserDetails user) {
+		
+		return user.getUsername();
 	}
 	
 	// 이메일 전송 
@@ -186,10 +218,10 @@ public class MemberController
 	@PostMapping(PathHandler.RESETPASSWORD)
 	public boolean resetPassword(String password, 
 			String user_id) {
-		
+		log.debug("유저 아이디{}", user_id);
 		Member member = service.memberSearchById(user_id);
 		String currentPassword = member.getPassword();
-		
+		log.debug("멤버{}", member);
 		log.debug("패스워드 넣기 전{}", member.getPassword());
 		
 		member.setPassword(password);
@@ -199,7 +231,7 @@ public class MemberController
 		
 		String newPassword = member.getPassword(); 
 		
-		if(currentPassword.equals(newPassword)) {
+		if (currentPassword != null && currentPassword.equals(newPassword)) {
 			return false;
 		} else {
 			return true;
@@ -207,6 +239,7 @@ public class MemberController
 		
 	}
 	
+	@ResponseBody
 	@PostMapping(PathHandler.CHECKSESSION)
 	public JoinState checkSession(HttpSession session)
 	{
@@ -352,7 +385,8 @@ public class MemberController
 	@GetMapping("memberProfilePrint")
 	public void memberProfilePrint(String user_id
 					, HttpServletRequest request
-					, HttpServletResponse response) {
+					, HttpServletResponse response
+					, @AuthenticationPrincipal UserDetails user) {
 		log.debug("request 출력 {}", request.getRemoteAddr());
 		//해당글의 첨부파일명 확인
 		Member member = service.memberSearchById(user_id); //글에 대한 정보를 읽어옴(savedfile 포함)
@@ -424,10 +458,14 @@ public class MemberController
 	}
 	//----------------[마이페이지 기능 종료]----------->>>>>>>>>>>>
 	
+	//로그인된 상태에서만 작동
 	@ResponseBody
 	@PostMapping("nicknamePrint") 
 	public String nicknamePrint(@AuthenticationPrincipal UserDetails user) {
-	return service.nicknameByUserId(user.getUsername());	
+		if (user == null) {
+	        return "로그인 중 아님";
+	    }
+		return service.nicknameByUserId(user.getUsername());	
 	}
 	
 	@ResponseBody

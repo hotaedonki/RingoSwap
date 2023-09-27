@@ -46,7 +46,27 @@ public class MemberServiceImple implements MemberService
 		Member member = dao.memberSearchById(user_id);
 		return member.getUser_num();
 	}
+	
+	@Override
+	public int emailCheck(String email) {
+		return dao.emailCheck(email);
+	}
+	
+	@Override
+	public int nicknameCheck(String nickname) {
+		return dao.nicknameCheck(nickname);
+	}
 
+	@Override
+	public String userIDByEmail(String email) {
+		return dao.userIDByEmail(email);
+	}
+
+	@Override
+	public String printMyProfilePhoto(String user_id) {
+		return dao.printMyProfilePhoto(user_id);
+	}
+	
 	@Override
 	public Member emailConfirmForPassword(HashMap<String, String> parameters) {
 		return dao.emailConfirmForPassword(parameters);
@@ -258,5 +278,6 @@ public class MemberServiceImple implements MemberService
 	public Member memberSearchByNum(int user_num) {
 		return dao.memberSearchByNum(user_num);
 	}
+
 
 }
