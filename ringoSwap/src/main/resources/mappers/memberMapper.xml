@@ -130,6 +130,22 @@
 		from ringo_member
 		where user_num = #{user_num}
 	</select>
+	<!--  -->
+	<update id="memberUpdatePersonalInfo" parameterType="java.util.HashMap">
+	update ringo_member
+	set gender = #{gender}
+		<if test="nickname != '' "> , nickname = #{nickname}</if>
+		<if test="password != '' "> , password = #{password}</if>
+		, target_lang = #{target_lang}
+		, trans_lang = #{trans_lang}
+		<if test="reveal_follow == 'public' ">
+			, follow_open = 'Y'
+		</if>
+		<if test="reveal_follow == 'private' ">
+			, follow_open = 'N'
+		</if>
+	where user_id = #{user_id}
+	</update>
 	<!-- 마이페이지 종료 -->
 	<!-- 팔로우/팔로워 기능 시작 -->
 	<!-- 특정 문자열이 포함된 닉네임을 가진 모든 회원의 회원번호를 리턴하는 select문 -->

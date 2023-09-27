@@ -36,9 +36,9 @@ public interface MemberService
 	//사용자가 설정한 멤버태그 배열을 member_taglink에 insert하는 테이블
 	public int memberTagLinkInsertArray(String[] tagNameList, int user_num);
 
-	//----------------[마이페이지 기능 종료]----------->>>>>>>>>>>>
+	//----------------[ 기능 종료]----------->>>>>>>>>>>>
 
-	//<<<<<<<<<<<------[ 시작]----------------------
+	//<<<<<<<<<<<------[ 마이페이지 시작]----------------------
 	//해당 id유저의 정보를 전부 가져옴
 	public Member memberSearchById(String user_id);
 	//해당 id유저의 정보를 전부 가져옴
@@ -51,7 +51,9 @@ public interface MemberService
 
 	//특정 유저의 닉네임을 기반으로 검색한 값에서 회원번호만 리턴하는 메서드
 	public ArrayList<Integer> memberByNicknameReturnUserNum(String nickname);
-	//----------------[ 기능 종료]----------->>>>>>>>>>>>
+	//개인정보 수정 메서드
+	public int memberUpdatePersonalInfo(HashMap<String, Object> map);
+	//----------------[ 마이페이지 기능 종료]----------->>>>>>>>>>>>
 
 	//<<<<<<<<<<<------[ 팔로우 관련 기능 시작]----------------------
 	//특정 사용자의 특정 범위의 팔로워 수를 리턴하는 메서드

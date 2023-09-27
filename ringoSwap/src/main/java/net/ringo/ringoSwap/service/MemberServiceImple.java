@@ -159,6 +159,12 @@ public class MemberServiceImple implements MemberService
 		return dao.memberByNicknameReturnUserNum(nickname);
 	}
 
+	//개인정보 수정 메서드
+	@Override
+	public int memberUpdatePersonalInfo(HashMap<String, Object> map) {
+		log.debug("정보 {} ", map);
+		return dao.memberUpdatePersonalInfo(map);
+	}
 	//----------------[마이페이지 기능 종료]----------->>>>>>>>>>>>
 	
 	
