@@ -11,7 +11,6 @@
 				, host_num
 				, title
 				, lang_category
-				, gen_category
 				, capacity
 			)
 			values
@@ -20,10 +19,11 @@
 				, #{host_num}
 				, #{title}
 				, #{lang_category}
-				, 'openchat'
 				, #{capacity}
 			)
 	</insert>
+	
+	<!-- DM 채팅방 만들기 -->
 	
 	<!-- 자신이 참가한 채팅방을 DB에 기록 -->
 	<insert id="createChatroomLink" parameterType="ChatroomLink">
@@ -187,8 +187,6 @@
 			*
 		from
 			ringo_chatroom
-		where
-			gen_category = 'openchat'
 		order by
 			modifie_date desc
 	</select>

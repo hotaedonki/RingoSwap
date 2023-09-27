@@ -3,10 +3,12 @@ package net.ringo.ringoSwap.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -50,6 +52,8 @@ public class ChatController
 	
 	@Value("${spring.servlet.multipart.location}")
 	String uploadPath;
+	
+	Map<String, Chatroom> tokenStore = new HashMap<>();
 	
 	//채팅서비스의 메인페이지로 이동하는 컨트롤러 메서드
 	@GetMapping(PathHandler.OPENCHATMAIN)
@@ -126,13 +130,6 @@ public class ChatController
 		}
 		
 		log.debug(chatroom.toString());
-		
-		// openchat일때만 접속 가능함.
-		if (!chatroom.getGen_category().equalsIgnoreCase("openchat"))
-		{
-			log.debug("openchat type이어야 접속할 수 있습니다.");
-			return "chat/openChatMain";
-		}
 		
 		// 채팅방에 들어온 다른 사람들 정보도 가져오기 위해 
 		ArrayList<ChatroomLink> chatLinks = service.getChatroomLinksByChatroomNum(chatroom.getChatroom_num());
@@ -327,6 +324,15 @@ public class ChatController
 		return mapper.writeValueAsString(chatroomThumbnails);
 	}
 	
+	// DM 채팅방을 만들기 전에 일회성 토큰을 먼저 발행하여 다른 URL 접근시 방을 생성할 수 없도록 한다.
+	@GetMapping(PathHandler.CREATEDMCHATROOM)
+	public ResponseEntity<Map<String, String>> createDMChatroom(String nickname) 
+	{
+		String token = UUID.randomUUID().toString();
+		//Chatroom newDMChatroom = service.createDMChatroomAndGetNewChatroom();
+		return null;
+	}	
+	
 	@EventListener
 	public void webSocketDisconnectListener(SessionDisconnectEvent event)
 	{
@@ -338,5 +344,4 @@ public class ChatController
 
         log.info("headAccessor : {}", headerAccessor);
 	}
-
 }
