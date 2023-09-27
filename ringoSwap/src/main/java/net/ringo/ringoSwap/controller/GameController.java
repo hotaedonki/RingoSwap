@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -23,6 +24,7 @@ import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirWord;
 import net.ringo.ringoSwap.domain.GameSetting;
 import net.ringo.ringoSwap.domain.SingleDifficulty;
+import net.ringo.ringoSwap.domain.dto.MCQDTO;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.GameService;
 import net.ringo.ringoSwap.service.MemberService;
@@ -80,10 +82,10 @@ public class GameController
 	//해당 사용자가 지정한 단어장 분류 파일의 파일번호를 매개변수로 DB를 수정하는 메서드
 	@ResponseBody
 	@PostMapping("fileWordUpdate")
-	public int fileWordUpdate(int file_num, @AuthenticationPrincipal UserDetails user) {
+	public int fileWordUpdate(int file_num, String select, @AuthenticationPrincipal UserDetails user) {
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		
-		int methodResult = service.fileWordUpdate(file_num, user_num);
+		int methodResult = service.fileWordUpdate(file_num, select, user_num);
 		
 		return methodResult;
 	}
@@ -98,7 +100,7 @@ public class GameController
 	//해당 사용자의 게임설정을 업데이트하는 메서드
 	@ResponseBody
 	@PostMapping("gameSettingUpdate")
-	public int gameSettingOpen(GameSetting setting
+	public int gameSettingUpdate(GameSetting setting
 					, @AuthenticationPrincipal UserDetails user) {
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		setting.setUser_num(user_num);
@@ -160,20 +162,21 @@ public class GameController
 		HashMap<String, Object> map = new HashMap<>();		//리턴용 변수
 		//회원번호를 매개변수로 사용자의 게임세팅 정보를 리턴
 		GameSetting setting = service.gameSettingSelectByUserNum(user_num);		
-		ArrayList<DirWord> wrongWordList;
+		ArrayList<DirWord> wordList;
 		
 		if(setting.getFile_num() == -1) {
 			map.put("setting", setting);
 			return map;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
 		}else if(setting.getFile_num() == -10) {
 			//file_num이 -10일경우, 해당 사용자의 오답노트를 리턴해 맵에 집어넣는다.
-			wrongWordList = service.wordWrongArraySearchByUserNum(user_num);
-			map.put("wrongWordList", wrongWordList);
+			wordList = service.wordWrongArraySearchByUserNum(user_num);
+			map.put("wordList", wordList);
+		}else {
+			//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
+			wordList = service.wordArraySearchByGameSetting(setting);
 		}
 
 		log.debug("게임 프린트 세팅1 : {}", category);
-		//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
-		ArrayList<DirWord> wordList = service.wordArraySearchByGameSetting(setting);
 		
 		log.debug("게임 프린트 세팅2 : {}", setting);
 		log.debug("게임 프린트 워드리스트 : {}", wordList);
@@ -187,25 +190,29 @@ public class GameController
 	
 	@ResponseBody
 	@PostMapping("MCQShufflePrint")
-	public List<String> MCQShufflePrint(ArrayList<DirWord> wordList, int index
-					, String correctAnswer, String formType){
+	public List<String> MCQShufflePrint(@RequestBody MCQDTO dto){
+		log.debug("워드목록 {}",dto.getWordList());
+		log.debug("순번 {}",dto.getIndex());
+		log.debug("정답 {}",dto.getCorrectAnswer());
+		log.debug("타입 {}",dto.getFormType());
 		// 2.1. 랜덤 단어 정의
 		Random random = new Random();
 		// 2.2. 오답 설정
 		Set<String> wrongAnswers = new HashSet<>();
 		while (wrongAnswers.size() < 3) {
-			int wrongIndex = random.nextInt(wordList.size());
-			if (wrongIndex != index) {
-				if(formType.equals("title")) {
-					wrongAnswers.add(wordList.get(wrongIndex).getMean());
+			int wrongIndex = random.nextInt(dto.getWordList().size());
+			log.debug("오답출력 {}",wrongIndex);
+			if (wrongIndex != dto.getIndex()) {
+				if(dto.getFormType().equals("title")) {
+					wrongAnswers.add(dto.getWordList().get(wrongIndex).getMean());
 				}else {
-					wrongAnswers.add(wordList.get(wrongIndex).getWord());
+					wrongAnswers.add(dto.getWordList().get(wrongIndex).getWord());
 				}
 			}
 		}
 		// 2.4. 3개의 의미를 무작위 순서로 배치
 		List<String> options = new ArrayList<>(wrongAnswers);
-		options.add(correctAnswer);
+		options.add(dto.getCorrectAnswer());
 		Collections.shuffle(options);
 		
 		return options;

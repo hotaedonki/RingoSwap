@@ -31,9 +31,10 @@ public class GameServiceImple implements GameService{
 	}
 	//file_num을 매개변수로 DB를 수정하는 메서드
 	@Override
-	public int fileWordUpdate(int file_num, int user_num) {
-		HashMap<String, Integer> map = new HashMap<>();
+	public int fileWordUpdate(int file_num, String select, int user_num) {
+		HashMap<String, Object> map = new HashMap<>();
 		map.put("file_num", file_num);
+		map.put("select", select);
 		map.put("user_num", user_num);
 		log.debug("맵 {}", map);
 		return dao.fileWordUpdate(map);

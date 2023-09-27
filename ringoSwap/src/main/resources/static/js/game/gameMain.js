@@ -298,11 +298,16 @@ function countOfItemPrint(){
 //게임에 사용할 단어장 정보를 수정하는 함수
 function wordListUpdate(){
 	let num = $('#wordlistModal .word-list-group').find('input[type="checkbox"]:checked').data('file-num');
+	let select = none;
+	if($('.select-all').pron('checked')){
+		select = all;
+	}
+	
 	console.log(num);
 	$.ajax({
 		url:'fileWordUpdate',
 		type:'post',
-		data:{file_num : num},
+		data:{file_num : num, select : select},
 		success:function(res){
 			console.log('성공');
 		},
