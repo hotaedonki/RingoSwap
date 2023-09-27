@@ -19,6 +19,7 @@ import net.ringo.ringoSwap.dao.MemberDAO;
 import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
+import net.ringo.ringoSwap.domain.DM_Chatroom;
 import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
 import net.ringo.ringoSwap.domain.custom.OpenChatroomInfo;
 import net.ringo.ringoSwap.enums.webService.MessageType;
@@ -234,5 +235,24 @@ public class ChatServiceImple implements ChatService
 	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(Map<String, Object> params) 
 	{
 		return dao.getChatroomThumbnailsByTitle(params);
+	}
+
+	@Override
+	public DM_Chatroom createDMChatroomAndGetNewChatroom(Map<String, Object> params) 
+	{
+		int isCreatedDMChatroom =  dao.createDMChatroom(params);
+		
+		// 0 이하인 경우엔 DM 채팅방 생성 실패
+		if (isCreatedDMChatroom <= 0)
+		{
+			return null;
+		}
+		
+		// dm_chatroom_num의 최대값을 불러옴. 최대값이 가장 최근에 만들어진(= 지금 만들어진 글)이기 때문에 이 값을 저장함
+		int maxDMChatroomNum = dao.getMaxDMChatroomNum();
+		
+		DM_Chatroom dmChatroom = dao.getDMChatroomByDMChatroomNum(maxDMChatroomNum);
+		
+		return dmChatroom;
 	}
 }

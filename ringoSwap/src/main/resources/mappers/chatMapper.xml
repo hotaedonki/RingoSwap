@@ -11,7 +11,6 @@
 				, host_num
 				, title
 				, lang_category
-				, gen_category
 				, capacity
 			)
 			values
@@ -20,8 +19,23 @@
 				, #{host_num}
 				, #{title}
 				, #{lang_category}
-				, 'openchat'
 				, #{capacity}
+			)
+	</insert>
+	
+	<!-- DM 채팅방 만들기 -->
+	<insert id="createDMChatroom" parameterType="java.util.Map">
+		insert into ringo_dm_chatroom
+			(
+				dm_chatroom_num
+				, user_num1
+				, user_num2
+			)
+			values
+			(
+				ringo_dm_chatroom_seq
+				, #{user_num1}
+				, #{user_num2}
 			)
 	</insert>
 	
@@ -187,8 +201,6 @@
 			*
 		from
 			ringo_chatroom
-		where
-			gen_category = 'openchat'
 		order by
 			modifie_date desc
 	</select>
@@ -332,5 +344,22 @@
             c.lang_category = #{lang_category}
 	    ORDER BY 
 	        c.modifie_date DESC
+	</select>
+	
+	<!-- DM 채팅방의 고유 번호 중 가장 큰 것을 가져온다. -->
+	<select id="getMaxDMChatroomNum" resultType="int">
+		select
+	    	max(dm_chatroom_num) as dm_chatroom_num
+	    from 
+	    	ringo_dm_chatroom
+	</select>
+	
+	<select id="getDMChatroomByDMChatroomNum" parameterType="int" resultType="DM_Chatroom">
+		select
+			*
+		from
+			ringo_dm_chatroom
+		where
+			dm_chatroom_num = #{dm_chatroom_num}
 	</select>
 </mapper>

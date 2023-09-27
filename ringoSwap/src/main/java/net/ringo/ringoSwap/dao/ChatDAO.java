@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
+import net.ringo.ringoSwap.domain.DM_Chatroom;
 import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
 import net.ringo.ringoSwap.domain.custom.OpenChatroomInfo;
 import net.ringo.ringoSwap.domain.ChatCommon;
@@ -63,4 +64,10 @@ public interface ChatDAO
 	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms();
 
 	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(Map<String, Object> params);
+
+	public int createDMChatroom(Map<String, Object> params);
+
+	public int getMaxDMChatroomNum();
+
+	public DM_Chatroom getDMChatroomByDMChatroomNum(int maxDMChatroomNum);
 }

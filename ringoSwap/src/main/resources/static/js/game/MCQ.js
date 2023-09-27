@@ -1,3 +1,5 @@
+let index = 0;		//전역변수
+
 function playMCQ() {
     //history API기능을 위한 url변수
     const currentUrl = window.location.href;
@@ -89,11 +91,13 @@ function MCQResultScreen() {
 	$("body").append(MCQResultHTML);
 }
 
-function loadQuestion() {
+function loadQuestion(answer) {
     $.ajax({
-        url: 'gameNotePrint',
+        url: 'MCQShufflePrint',
         type: 'POST',
-        success: function(response) {
+		data: {wordList: wordList, index: index, correctAnswer : answer, formType: printSet},
+		dataType: 'json',
+        success: function(options) {
             // 단어와 발음 출력
             $('.MCQ-word').text(response.selectedWord.word);
             // 발음이 있다면 출력 (이 부분은 단어 객체에 발음 정보가 있다고 가정하고 작성되었습니다)
@@ -104,10 +108,10 @@ function loadQuestion() {
             }
 
             // 선택지 출력
-            $('.answer-1').text(response.options[0]);
-            $('.answer-2').text(response.options[1]);
-            $('.answer-3').text(response.options[2]);
-            $('.answer-4').text(response.options[3]);
+            $('.answer-1').text(options[0]);
+            $('.answer-2').text(options[1]);
+            $('.answer-3').text(options[2]);
+            $('.answer-4').text(options[3]);
         },
         error: function(error) {
             console.log(error);

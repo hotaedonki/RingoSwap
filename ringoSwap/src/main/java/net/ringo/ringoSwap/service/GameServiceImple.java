@@ -73,4 +73,9 @@ public class GameServiceImple implements GameService{
 	public ArrayList<DirWord> wordArraySearchByGameSetting(GameSetting setting){
 		return dao.wordArraySearchByGameSetting(setting);
 	}
+	//사용자의 오답노트를 리턴하는 메서드
+	@Override
+	public ArrayList<DirWord> wordWrongArraySearchByUserNum(int user_num){
+		return dao.wordWrongArraySearchByUserNum(user_num);
+	}
 }

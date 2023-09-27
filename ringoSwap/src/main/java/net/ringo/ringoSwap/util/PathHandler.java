@@ -43,6 +43,9 @@ public class PathHandler
 	public final static String LOADCHATROOMS = "loadChatRooms";
 	public final static String LOADMESSAGE = "loadMessage";
 	public final static String SEARCHCHATROOMBYLANG = "searchChatroomByLang";
+	public final static String GETCREDFORMAKEDMCHATROOM = "getCredForMakeDMChatroom";
+	public final static String CREATEDMCHATROOM = "createDMChatroom";
+	public final static String ENTERDMCHATMAINAFTERCREATEROOM = "enterDMChatMainAfterCreateRoom";
 	public final static String MM_OPENCHATROOMENTER = "/chat/openChatRoomEnter/{chatroomID}";
 	public final static String MM_OPENCHATROOMMESSAGE = "/chat/openChatRoom/message/{chatroomID}";
 	public final static String MM_LOADJOINEDCHATROOMLISTREALTIME = "/chat/openChatMain/loadJoinedChatroomListRealTime/{chatroom_num}";
