@@ -331,6 +331,8 @@ public class ChatController
 	@PostMapping(PathHandler.GETCREDFORMAKEDMCHATROOM)
 	public ResponseEntity<Map<String, String>> getCredForMakeDMChatroom(@RequestBody String nickname, @AuthenticationPrincipal UserDetails user)
 	{
+		log.debug("get Cred For Make DM Chat room . . .");
+		
 		String token = UUID.randomUUID().toString();
 		
 		if (user.getUsername() == null)
@@ -343,7 +345,7 @@ public class ChatController
 		
 		if (userNum <= 0)
 		{
-			log.debug("DB에 유요하지 않은 유저입니다. 가입 요망.");
+			log.debug("DB에 유효하지 않은 유저입니다. 가입 요망.");
 			return null;
 		}
 		
@@ -351,7 +353,7 @@ public class ChatController
 		
 		if (otherUserNum <= 0)
 		{
-			log.debug("DB에 유요하지 않은 상대 유저입니다.");
+			log.debug("DB에 유효하지 않은 상대 유저입니다.");
 			return null;
 		}
 		
@@ -371,6 +373,8 @@ public class ChatController
 	@PostMapping(PathHandler.CREATEDMCHATROOM)
 	public ResponseEntity<Map<String, String>> createDMChatroom(@RequestBody String token) 
 	{
+		log.debug("create DM Chat room . . .");
+		
 		if (!tokensUsersInfoDMChat.containsKey(token))
 		{
 			log.debug("user info dm chat에 유효하지 않은 토큰입니다 - {}" , token);
@@ -407,6 +411,8 @@ public class ChatController
 	@GetMapping(PathHandler.ENTERDMCHATMAINAFTERCREATEROOM)
 	public String enterDMChatMainAfterCreateRoom(String token, Model model)
 	{
+		log.debug("enter DM Chat Main After Create Room . . .");
+		
 		if (!tokensCreateDMChat.containsKey(token))
 		{
 			log.debug("create dm chat에 유효하지 않은 토큰입니다");
@@ -427,6 +433,43 @@ public class ChatController
 		model.addAttribute("dmChatroom", dmChatroom);
 		
 		return "/chat/dmChatMain";
+	}
+	
+	@GetMapping(PathHandler.CHECKEXISTENCEDMCHATROOM)
+	public ResponseEntity<Boolean> checkExistenceDMChatRoom(@RequestBody String nickname, @AuthenticationPrincipal UserDetails user)
+	{
+		log.debug("check Existence DM Chat Room . . .");
+		
+		Map<String, Object> userNums = new HashMap<>();
+		
+		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		if (userNum <= 0)
+		{
+			log.debug("DB에 유요하지 않은 유저입니다. 가입 요망.");
+			return ResponseEntity.ok(false);
+		}
+		
+		int otherUserNum = mService.getUserIdByNickname(nickname);
+		
+		if (otherUserNum <= 0)
+		{
+			log.debug("DB에 유효하지 않은 상대 유저입니다.");
+			return ResponseEntity.ok(false);
+		}
+		
+		userNums.put("user_num1", userNum);
+		userNums.put("user_num2", otherUserNum);
+		
+		DM_Chatroom dmChatroom = service.getDMChatroomByUserNums(userNums);
+		
+		if (dmChatroom == null)
+		{
+			log.debug("dmChatroom 정보를 가져올 수 없습니다.");
+			return ResponseEntity.ok(false);
+		}
+		
+		return ResponseEntity.ok(true);
 	}
 	
 	@EventListener

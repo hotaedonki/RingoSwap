@@ -354,6 +354,7 @@
 	    	ringo_dm_chatroom
 	</select>
 	
+	<!-- DM 채팅방 고유 번호를 이용해 DM 채팅방 정보를 가져온다. -->
 	<select id="getDMChatroomByDMChatroomNum" parameterType="int" resultType="DM_Chatroom">
 		select
 			*
@@ -361,5 +362,17 @@
 			ringo_dm_chatroom
 		where
 			dm_chatroom_num = #{dm_chatroom_num}
+	</select>
+	
+	<!-- 유저 고유 번호들을 이용해 채팅방 정보를 가져온다 -->
+	<select id="getDMChatroomByUserNums" parameterType="java.util.Map" resultType="DM_Chatroom">
+		select
+			*
+		from
+			ringo_dm_chatroom
+		where
+			(user_num1 = #{user_num1} and user_num2 = #{user_num2})
+			or
+			(user_num1 = #{user_num2} and user_num2 = #{user_num1})
 	</select>
 </mapper>

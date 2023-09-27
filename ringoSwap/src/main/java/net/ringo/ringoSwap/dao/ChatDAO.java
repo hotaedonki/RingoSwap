@@ -70,4 +70,6 @@ public interface ChatDAO
 	public int getMaxDMChatroomNum();
 
 	public DM_Chatroom getDMChatroomByDMChatroomNum(int maxDMChatroomNum);
+
+	public DM_Chatroom getDMChatroomByUserNums(Map<String, Object> userNums);
 }

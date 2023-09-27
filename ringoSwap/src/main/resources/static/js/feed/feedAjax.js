@@ -530,3 +530,12 @@ function feedTranslate(){
         }
     })
 }
+
+// 채팅 메시지 보내기, 만약 채팅방이 존재하지 않으면 일회성 토큰 방식으로 DM 채팅방 생성 및 참가
+function sendDM()
+{
+	let nickName = document.getElementById('nickname').textContent;
+	alert(nickName);
+	
+	fetch(`/ringo/chat/checkExistenceDMChatRoom`)
+}

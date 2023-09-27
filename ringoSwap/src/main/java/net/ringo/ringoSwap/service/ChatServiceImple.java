@@ -255,4 +255,10 @@ public class ChatServiceImple implements ChatService
 		
 		return dmChatroom;
 	}
+
+	@Override
+	public DM_Chatroom getDMChatroomByUserNums(Map<String, Object> userNums) 
+	{
+		return dao.getDMChatroomByUserNums(userNums);
+	}
 }

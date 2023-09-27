@@ -60,4 +60,6 @@ public interface ChatService
 	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(Map<String, Object> params);
 	// DM 채팅방을 만들고 자신이 만들었던 DM 채팅방을 가져온다.
 	public DM_Chatroom createDMChatroomAndGetNewChatroom(Map<String, Object> params);
+	// DM 채팅방 정보를 유저 1, 2 고유 번호를 조회하여 가져온다.
+	public DM_Chatroom getDMChatroomByUserNums(Map<String, Object> userNums);
 }
