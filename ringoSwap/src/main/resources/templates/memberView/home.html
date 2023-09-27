@@ -77,15 +77,15 @@
 					<li class=""><a th:href="@{/notification/notificationMain}">
 							<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
 					</a></li>
-					<div sec:authorize="isAuthenticated()">
-						<li class=""><a th:href="@{/member/myPage}"> <span
-								class="profile-pic-li" data-tooltip="프로필 사진으로 이동합니다."> <span
-									class="profile-pic"> <img th:src="@{../img/2.jpg}"
-										alt="Your Profile Picture">
-								</span>
+					<li class="">
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/myPage}"> 
+							<img th:src="@{../img/고양.jpg}" class="profile-pic-li"
+								data-tooltip="프로필 사진으로 이동합니다."> <span class="profile-pic">
 							</span> <span class="text nav-text">Profile</span>
-						</a></li>
-					</div>
+							</a>
+						</div>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -95,8 +95,8 @@
 		<div id="center">
 			<h3 id="clock">00:00</h3>
 			<div id="greeting-container">
-			    <p id="greeting">Welcome, </p>
-			    <p class="text-light" id="kiminonawa"></p>
+				<p id="greeting">Welcome,</p>
+				<p class="text-light" id="kiminonawa"></p>
 			</div>
 		</div>
 		<div sec:authorize="!isAuthenticated()">
@@ -108,12 +108,9 @@
 			</form>
 		</div>
 		<button id="toDo" onclick="toggleToDo()" class="btn btn-outline-light">ToDo</button>
-		<div id="todo-container" style="display: none;">
-			<form id="todo-form">
-				<input type="text" placeholder="What will you do?">
-				<button type="submit" id="Add">Add</button>
-			</form>
-			<ul id="todo-list"></ul>
+
+		<div class="city-name">
+			<p class="show-name"></p>
 		</div>
 	</section>
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>

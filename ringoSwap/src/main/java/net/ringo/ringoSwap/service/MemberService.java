@@ -25,7 +25,12 @@ public interface MemberService
 	//자신의 id값을 매개변수로 DB에서 select문을 돌려 user_num값을 리턴받는 메서드
 	public int memberSearchByIdReturnUserNum(String nickname);
 	
-
+	//이메일로 아이디 찾아오기
+	public String userIDByEmail(String email);
+	
+	//현재 로그인한 유저의 프로필사진 가져오기
+	public String printMyProfilePhoto(String user_id);
+	
 	// 이메일과 아이디가 같으면 멤버를 반환
 	public Member emailConfirmForPassword(HashMap<String, String> parameters);
 
@@ -80,4 +85,8 @@ public interface MemberService
 	public boolean isPasswordMatching(Member member);
 	//유저넘값으로 멤버 정보 가져오기
 	public Member memberSearchByNum(int user_num);
+
+	public int emailCheck(String email);
+
+	public int nicknameCheck(String nickname);
 }

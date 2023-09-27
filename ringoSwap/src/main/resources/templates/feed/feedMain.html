@@ -88,10 +88,9 @@
 					</a></li>
 					<li class="">
 						<div sec:authorize="isAuthenticated()">
-							<a th:href="@{/member/myPage}"> <span class="profile-pic-li"
+							<a th:href="@{/member/myPage}"> 
+							<img th:src="@{../img/고양.jpg}" class="profile-pic-li"
 								data-tooltip="프로필 사진으로 이동합니다."> <span class="profile-pic">
-										<img th:src="@{../img/2.jpg}" alt="Your Profile Picture">
-								</span>
 							</span> <span class="text nav-text">Profile</span>
 							</a>
 						</div>

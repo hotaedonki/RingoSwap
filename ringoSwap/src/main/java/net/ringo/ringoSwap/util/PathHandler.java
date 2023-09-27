@@ -13,7 +13,11 @@ public class PathHandler
 	public final static String HOME = "home";
 	public final static String LOGIN = "login";
 	public final static String IDCHECK = "idCheck";
+	public final static String EMAILCHECK = "emailCheck";
+	public final static String NICKNAMECHECK = "nicknameCheck";
+	public final static String USERIDBYEMAIL = "userIDByEmail";
 	public final static String EMAILCONFIRM = "emailConfirm";
+	public final static String PRINTMYPROFILEPHOTO = "printMyProfilePhoto";
 	public final static String CHECKVERIFYCODE = "checkverifycode";
 	public final static String GETMEMBER = "getMember";
 	public final static String EMAILCONFIRMFORPASSWORD = "emailConfirmForPassword";

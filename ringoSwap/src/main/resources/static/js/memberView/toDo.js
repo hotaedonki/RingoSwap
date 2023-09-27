@@ -1,9 +1,25 @@
+showToDoList();
+
 const toDoForm = document.getElementById("todo-form");
 const toDoInput = document.querySelector("#todo-form input");
 const toDoList = document.getElementById("todo-list");
 
 let todos = [];
 //localStorage에는 문자열만 저장되기 때문에 json~을 통해서 배열처럼 생긴 문자열로 저장
+
+function showToDoList() {
+	const toDoList = `
+		<div id="todo-container" style="display: none;">
+			<form id="todo-form">
+				<input type="text" placeholder="What will you do?">
+				<button type="submit" id="Add">Add</button>
+			</form>
+			<ul id="todo-list"></ul>
+		</div>`;
+		
+		$('body').append(toDoList);
+}
+
 function saveTodos() {
     localStorage.setItem("todos", JSON.stringify(todos));
 }
@@ -53,8 +69,6 @@ function toggleToDo() {
     }
 }
 
-toDoForm.addEventListener("submit", TodoSubmit);
-
 const savedTodos = localStorage.getItem("todos");
 
 if(savedTodos !== null) {
@@ -62,3 +76,6 @@ if(savedTodos !== null) {
     todos = parsedTodos;
     parsedTodos.forEach(showTodo); 
 }
+
+
+toDoForm.addEventListener("submit", TodoSubmit);

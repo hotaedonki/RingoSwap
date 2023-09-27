@@ -31,10 +31,10 @@ section {
   transform: translate(-50%, -50%);
   width: 750px;
   height: 600px;
-  border-radius: var(--button-radius);
   padding: 10px;
   box-shadow: 0 0.9rem 1.7rem rgba(0, 0, 0, 0.25),
     0 0.7rem 0.7rem rgba(0, 0, 0, 0.22);
+  opacity: 0.96;
 }
 .container_form {
   position: absolute;
@@ -46,37 +46,6 @@ section {
   width: 50%;
   left: 25%;
 }
-
-/* Button Styles */
-
-.btn:not(#toDo) {
-  background-color: var(--blue);
-  background-image: linear-gradient(90deg, var(--blue) 0%, var(--lightblue) 74%);
-  border-radius: 10px;
-  border: 1px solid var(--blue);
-  color: var(--white);
-  cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: bold;
-  letter-spacing: 0.1rem;
-  padding: 0.9rem 3rem;
-  text-transform: uppercase;
-  transition: transform 80ms ease-in;
-}
-
-.form > .btn {
-  margin-top: 1rem;
-}
-
-.btn:active {
-  transform: scale(0.95);
-}
-
-.btn:focus {
-  outline: none;
-}
-
-/* Form Styles */
 
 .form, .form_search {
   background-color: var(--white);
@@ -103,16 +72,9 @@ section {
   width: 100%;
 }
 
-.input_IDForPassword {
-  width: 400px;
-}
 
 .introduceBox {
   margin: 5px 0 0 0;
-}
-
-.hidden {
-  display: none;
 }
 
 .container_signup_form, .container_search_form {
@@ -187,57 +149,6 @@ h2 {
   margin-bottom: 20px;
 }
 
-.E_btn {
-  background-color: var(--blue);
-  background-image: linear-gradient(90deg, var(--blue) 0%, var(--lightblue) 74%);
-  border-radius: 10px;
-  border: 1px solid var(--blue);
-  color: var(--white);
-  width: 40%;
-  height: 30%;
-  cursor: pointer;
-  font-family: Roboto;
-  font-size: 12px;
-  font-weight: bold;
-  margin: 5px 0 10px 15px;
-  padding: 10px;
-}
-
-.Register_btn {
-  background-color: var(--blue);
-  background-image: linear-gradient(90deg, var(--blue) 0%, var(--lightblue) 74%);
-  border-radius: 20px;
-  border: 1px solid var(--blue);
-  color: var(--white);
-  cursor: pointer;
-  font-family: Roboto;
-  text-align: center;
-  font-size: 24px;
-  letter-spacing: 0.1rem;
-  padding: 15px;
-  text-transform: uppercase;
-  transition: transform 80ms ease-in;
-  margin: 0 0 20px 0;
-}
-
-.form > .Register_btn {
-  margin-top: 1.5rem;
-}
-
-.Register_btn:active {
-  transform: scale(0.95);
-}
-
-.Register_btn:focus {
-  outline: none;
-}
-
-.id-section, .email-section, .verification-section {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
 .searchIDPW {
   margin: 15px 0 0 0;
   font-size: 20px;
@@ -245,15 +156,13 @@ h2 {
   overflow: hidden;
 }
 
-#searchID, #searchPW {
-  color: blue;
-  text-decoration: none;
-  cursor: pointer;
-  padding: 10px;
+.form-group .form-control {
+	margin-bottom: 18px;
+	height:120%;
 }
 
-#searchID:hover, #searchPW:hover {
-  text-decoration: underline;
+#searchID, #searchPW {
+	cursor: pointer;
 }
 
 

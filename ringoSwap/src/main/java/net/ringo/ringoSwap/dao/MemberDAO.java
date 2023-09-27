@@ -25,6 +25,18 @@ public interface MemberDAO
 	//매개변수로 받은 사용자의 id로 DB에서 검색하여 나온 회원 정보를 리턴합니다.
 	public Member memberSearchById(String user_id);
 	
+	//존재하는 이메일인지 체크
+	public int emailCheck(String email);
+	
+	//존재하는 닉네임인지 체크
+	public int nicknameCheck(String nickname);
+	
+	//이메일로 아이디 찾아오기
+	public String userIDByEmail(String email);
+	
+	//현재 로그인한 유저의 프로필사진 가져오기
+	public String printMyProfilePhoto(String user_id);
+	
 	// 이메일과 아이디가 같으면 멤버를 반환.
 	public Member emailConfirmForPassword(HashMap<String, String> parameters);
 	
@@ -81,5 +93,6 @@ public interface MemberDAO
 	public String getEncodedPasswordByUserNum(int user_num);
 	// 유저넘으로 멤버값 가져오기
 	public Member memberSearchByNum(int user_num);
+
 
 }

@@ -1,37 +1,32 @@
-const img = [
-    "1.jpg",
-    "2.jpg",
-    "3.jpg",
-    "4.jpg",
-    "5.jpg",
-    "6.jpg",
+const images = [
+    { fileName: "1.png", placeName: "Kinkakuji" },
+    { fileName: "2.png", placeName: "Minato Mirai" },
+    { fileName: "3.png", placeName: "Daedunsan Mountain" },
+    { fileName: "4.png", placeName: "Amsterdam" },
+    { fileName: "5.png", placeName: "Sydney Opera House" },
+    { fileName: "6.png", placeName: "Itsukushima Shrine" },
+    { fileName: "7.png", placeName: "Arakurayama Sengen Park" },
+    { fileName: "8.png", placeName: "Dubai" },
+    { fileName: "9.png", placeName: "Kuala Lumpur" },
+    { fileName: "10.png", placeName: "Hongkong" },
+    { fileName: "11.png", placeName: "Singapore" },
+    { fileName: "12.png", placeName: "Big Ben" },
+    { fileName: "13.png", placeName: "Venice" },
+    { fileName: "14.png", placeName: "Grand Canyon" },
+    { fileName: "15.png", placeName: "Arc de Triomphe" },
+    { fileName: "16.png", placeName: "Kyoto" }
 ];
 
-
 function setBackgroundImage() {
-    const randomImage = img[Math.floor(Math.random() * img.length)];
-    $('#home').css('background-image', `url('../img/${randomImage}')`);
-}
-
-// usernamePrint 함수 안에서 username을 가져온 후 밑줄 길이를 조절하는 코드 추가
-function usernamePrint() {
-    const kiminonawaInput = $("#kiminonawa");
-
-    $.ajax({
-        url: 'nicknamePrint',
-        type: 'post',
-        success: function(username) {
-            kiminonawaInput.text(" " + username);
-        },
-        error: function(error) {
-            console.error(error);
-        }
-    });
+    const randomImageObj = images[Math.floor(Math.random() * images.length)];
+    const imageUrl = `url('../img/background/${randomImageObj.fileName}')`;
+    $(".show-name").text(randomImageObj.placeName);
+    $('#home').css('background-image', imageUrl);
+    
+    setInterval(setBackgroundImage, 10000);
 }
 
 
-// 페이지 로드 후 실행
-$(document).ready(function() {
-    usernamePrint();
-    setBackgroundImage();
+$(document).ready(function() {   
+    setBackgroundImage();  
 });
