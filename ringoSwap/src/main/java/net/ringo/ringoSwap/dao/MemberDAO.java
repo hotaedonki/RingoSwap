@@ -63,6 +63,8 @@ public interface MemberDAO
 	public int memberUpdateProfile(Member m);
 	//사용자의 수정한 계정 정보 매개변수로 가져가 DB를 수정하는 메서드
 	public int memberUpdateAccount(Member m);
+	//사용자의 개인정보 수정 정보를 매개변수로 DB에 전달하여 member테이블을 수정하는 메서드
+	public int memberUpdatePersonalInfo(HashMap<String, Object> map);
 	//회원의 닉네임을 기반으로 해당 문자열이 포함된 닉네임을 가진 모든 사용자의 회원번호를 리턴하는 메서드.
 	public ArrayList<Integer> memberByNicknameReturnUserNum(String nickname);
 	//특정 사용자의 특정 범위의 팔로워 회원 목록을 리턴하는 메서드

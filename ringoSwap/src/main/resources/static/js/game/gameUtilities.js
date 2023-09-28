@@ -3,6 +3,8 @@ let wordList = [];      //게임용 단어목록 저장을 위한 전역변수 �
 let answerList =[];     //게임용 각 질문당 정답여부를 기록하는 전역변수 배열
 let printSet = 'title';   //게임용 질문의 형식을 지정하는 전역변수
 let pronShow = false;    //게임용 발음부를 보일지 여부를 지정하는 전역변수
+let wrongType = false;   //게임용 오답노트인지를 체크하는 전역변수
+
 function confirmExit() {	
 	const currentGame = getCurrentGame();
 	

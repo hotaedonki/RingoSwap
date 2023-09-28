@@ -83,6 +83,7 @@ function dictationResultScreen() {
 	
     
 	$("body").append(dictationResultHTML);
+	$('.dictation-container').remove();
     dictationAnswerPrint();
 }
 //단어목록을 전역변수에 저장
@@ -109,6 +110,9 @@ function dictationQuestionSave(){
             if(setting.order_type){
                 printSet = setting.order_type;
             }
+			if(res.setting.file_num === -10){       //오답노트인지 여부를 체크
+				wrongType = true;
+			}
             wordList = res.wordList;
             console.log(wordList);
             count = 0;      //count변수 초기화

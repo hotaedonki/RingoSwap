@@ -35,10 +35,16 @@ function updateInfo() {
     const password = $('#inputNewPassword').val();
     const checkPassword = $('#inputCheckNewPassword').val();
     const emailCode = $('#inputValid').val();
+    let target = $('input[name="targetLangRadios"]:checked').closest('.form-check').find('label').text().trim();
+    let trans = $('input[name="transLangRadios"]:checked').data('trans-lang');
+    console.log(target);
+    console.log(trans);
 
-    if (!nickname) {
-        alert('Nickname cannot be empty.');
-        return false;
+    if (nickname.length <3 || nickname.length > 20) {
+        if(nickname){
+            alert('Nickname should be between 3 and 20 characters.');
+            return false;
+        }
     }
 
     if (password) {
@@ -46,7 +52,6 @@ function updateInfo() {
             alert('Passwords do not match.');
             return false;
         }
-
         if (password.length < 4 || password.length > 10) {
             alert('Password should be between 4 and 10 characters.');
             return false;
@@ -61,20 +66,20 @@ function updateInfo() {
     if (!confirm('Do you want to update your personal information?')) {
         return false;
     }
+	
 
-    const dataToSend = {
-	    nickname: nickname,
+    let dataToSend = {
+	    nickname: nickname ? nickname : null,
 	    password: password ? password : null,
 	    gender: $('#exampleSelect1').val(),
-	    target_lang: $('input[name="optionsRadios"]:checked').closest('.form-check').find('label').text().trim(),
-	    trans_lang: $('input[name="optionsRadios"]:checked').closest('.form-check-translang').find('label').text().trim(),
+	    target_lang: languageTranser(target),
+	    trans_lang: trans,
 	    reveal_follow: $('#flexSwitchCheckDefault').is(':checked') ? 'public' : 'private'
 	};
-	
+
 	if (emailChanged) {
 	    dataToSend.email = $('input[placeholder="Email"]').val();
 	}
-
 
     $.ajax({
         url: 'updatePersonalInfo',
@@ -82,6 +87,7 @@ function updateInfo() {
         data: dataToSend,
         success: function(res) {
             alert("업데이트 성공!!")
+            window.location.href = res;
         },
         error: function(error) {
             console.log(error);
@@ -99,8 +105,25 @@ function revealFollow() {
 
 $(document).ready(function() {
 	$('.submit-password').on('click', checkPassword);
+	$('#InputPassword1').on('keyup', function(event){
+        if(event.which == 13){
+            checkPassword();
+        }
+    });
 	$(document).on('click', '#sendEmail', sendEmail);
 	$(document).on('input', '#inputNewPassword, #inputCheckNewPassword', passwordCheck);
 	$(document).on('click', '.submit-info', updateInfo);
 	$(document).on('change', '#flexSwitchCheckDefault', revealFollow);
 });
+
+function languageTranser(lang){
+    let result = null;
+    if(lang === 'Korean'){
+        result = 'ko';
+    }else if(lang ==='Japenese'){
+        result = 'ja';
+    }else if(lang === 'English'){
+        result = 'en';
+    }
+    return result;
+}

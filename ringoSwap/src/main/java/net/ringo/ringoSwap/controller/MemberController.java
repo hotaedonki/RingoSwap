@@ -346,6 +346,28 @@ public class MemberController
 	}
 	
 	@ResponseBody
+	@PostMapping("/updatePersonalInfo")
+	public String updatePersonalInfo(String nickname, String password, String gender, String target_lang
+					, String trans_lang, String reveal_follow, @AuthenticationPrincipal UserDetails user) 
+	{
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("nickname", nickname);
+		map.put("password", password);
+		map.put("user_id", user.getUsername());
+		map.put("gender", gender);
+		map.put("target_lang", target_lang);
+		map.put("trans_lang", trans_lang);
+		map.put("reveal_follow", reveal_follow);
+		log.debug("정보 {} ", map);
+
+		int methodResult = service.memberUpdatePersonalInfo(map);
+		if(methodResult == 0) {
+		    return "/ringo/member/updatePersonalInfo";
+		}
+	    return "/ringo/member/"+PathHandler.MYPAGE;
+	}
+	
+	@ResponseBody
 	@PostMapping("checkPassword")
 	public Map<String, Object> checkPassword(@AuthenticationPrincipal UserDetails user, String password) {
 	    Map<String, Object> response = new HashMap<>();
