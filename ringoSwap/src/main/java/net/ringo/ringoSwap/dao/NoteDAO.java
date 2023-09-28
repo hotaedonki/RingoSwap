@@ -71,5 +71,7 @@ public interface NoteDAO
 	int wordUpdateOne(DirWord word);
 	// 마지막 단어인지 체크
 	int checkLastWord(HashMap<String, Object> checkMap);
+	//단어장에서 단어를 추가/수정/삭제할때마다 단어장의 수정일자 정보를 현재 시각으로 수정하는 메서드
+	int wordFileUpdate(HashMap<String, Integer> map);
 	
 }

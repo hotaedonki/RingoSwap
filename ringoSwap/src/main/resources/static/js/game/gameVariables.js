@@ -35,6 +35,8 @@ $(document).ready(function () {
 
 	//클릭이벤트 처리
 	clickEventFunction();
+	//엔터키로 작동하는 이벤트 처리
+	enterEventFunction();
 });
 
 
@@ -80,4 +82,13 @@ function clickEventFunction(){
 	$(document).on('click', '.form-update', gameSettingUpdate);
 	$(document).on('click', '.questionNum-update', questionNumUpdate);
 	$(document).on('click', '#flexSwitchCheckDefault', matchUseUpdate);
+}
+
+function enterEventFunction(){
+	$(document).on('keyup', '.form-control', function(event){
+		if(event.which == 13){
+			nextQuestionPrint();
+		}
+
+	});
 }

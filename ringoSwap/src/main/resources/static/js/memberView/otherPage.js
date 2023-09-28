@@ -31,6 +31,7 @@ function printOtherPeoplePage() {
        let target = printOtherPeopleLanguage(member.target_lang);
        let tagArr = member.tagList;
        $('#profilePicInput').attr('src', '../member/memberProfilePrint?user_id='+member.user_id);
+       $('#backPicInput').attr('src', '../member/memberBackPrint?user_id='+member.user_id);
        $('.nativeLanguage').attr('src', native);
        $('.targetLanguage').attr('src', target);
        
@@ -72,5 +73,7 @@ $(document).ready(function() {
   printOtherPeoplePage();
   printOtherPeopleLanguage();
   $(document).on('click', '.goToOtherPeopleFeed', goToOtherPeopleFeed);
+  $(document).on('click', '#follower-btn a', followerSearch);
+  $(document).on('click', '#follow-btn a', followeeSearch);
 });
 

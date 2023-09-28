@@ -73,37 +73,37 @@ function printPersonalInfoPage(res) {
 				<fieldset class="form-group">
 					<label for="exampleSelect1" class="form-label mt-4">Language I want to learn</label>
 					<div class="form-check disabled">
-						<input class="form-check-input" type="radio" name="optionsRadios"
-							id="optionsRadios1" value="option3" disabled=""> <label
+						<input class="form-check-input" type="radio" name="targetLangRadios"
+							id="targetLangRadios1" value="option3" disabled=""> <label
 							class="form-check-label ko" for="optionsRadios3"> Korean </label>
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="radio" name="optionsRadios"
-							id="optionsRadios2" value="option1" checked=""> <label
+						<input class="form-check-input" type="radio" name="targetLangRadios"
+							id="targetLangRadios2" value="option1" checked=""> <label
 							class="form-check-label ja" for="optionsRadios1"> Japenese </label>
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="radio" name="optionsRadios"
-							id="optionsRadios3" value="option2"> <label
+						<input class="form-check-input" type="radio" name="targetLangRadios"
+							id="targetLangRadios3" value="option2"> <label
 							class="form-check-label en" for="optionsRadios2"> English </label>
 					</div>
 				</fieldset>
 				<fieldset class="form-group">
 					<label for="exampleSelect1" class="form-label mt-4">Translate to the selected language</label>
 					<div class="form-check">
-						<input class="form-check-input" type="radio" name="optionsRadios"
-							id="optionsRadios4" value="option3" disabled=""> <label
-							class="form-check-translang ko" for="optionsRadios3"> Korean </label>
+						<input class="form-check-input" type="radio" name="transLangRadios" data-trans-lang="ko"
+							id="transLangRadios1" value="option3"> <label
+							class="lang-check ko" for="optionsRadios3"> Korean </label>
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="radio" name="optionsRadios"
-							id="optionsRadios5" value="option1" checked=""> <label
-							class="form-check-translang ja" for="optionsRadios1"> Japanese </label>
+						<input class="form-check-input" type="radio" name="transLangRadios" data-trans-lang="ja"
+							id="transLangRadios2" value="option1" checked=""> <label
+							class="lang-check ja" for="optionsRadios1"> Japanese </label>
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="radio" name="optionsRadios"
-							id="optionsRadios6" value="option2"> <label
-							class="form-check-translang en" for="optionsRadios2"> English </label>
+						<input class="form-check-input" type="radio" name="transLangRadios" data-trans-lang="en"
+							id="transLangRadios3" value="option2"> <label
+							class="lang-check en" for="optionsRadios2"> English </label>
 					</div>
 				</fieldset>
 				<fieldset class="form-group mb-5">

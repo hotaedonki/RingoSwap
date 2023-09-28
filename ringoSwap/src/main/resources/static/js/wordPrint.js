@@ -204,7 +204,8 @@ function handleAddButtonClick() {
             word: word,
             mean: meaning,
             pron: pronunciation,
-            description: description
+            description: description,
+            file_num: file_num_saver
         }).done(function(response) {
             // Toast 메시지 표시
             alert(response);
@@ -234,7 +235,8 @@ function handleAddButtonClick() {
    function handleWordDeleteButtonClick() {
 		console.log(currentWordNum + "삭제 카드 번호");
 		$.post("wordDeleteOne", {
-			word_num: currentWordNum
+			word_num: currentWordNum,
+            file_num : file_num_saver
 			}).done(function(response) {
 				window.location.href = '../note/noteMain';
 				

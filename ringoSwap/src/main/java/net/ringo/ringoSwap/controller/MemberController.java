@@ -349,6 +349,28 @@ public class MemberController
 	}
 	
 	@ResponseBody
+	@PostMapping("/updatePersonalInfo")
+	public String updatePersonalInfo(String nickname, String password, String gender, String target_lang
+					, String trans_lang, String reveal_follow, @AuthenticationPrincipal UserDetails user) 
+	{
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("nickname", nickname);
+		map.put("password", password);
+		map.put("user_id", user.getUsername());
+		map.put("gender", gender);
+		map.put("target_lang", target_lang);
+		map.put("trans_lang", trans_lang);
+		map.put("reveal_follow", reveal_follow);
+		log.debug("정보 {} ", map);
+
+		int methodResult = service.memberUpdatePersonalInfo(map);
+		if(methodResult == 0) {
+		    return "/ringo/member/updatePersonalInfo";
+		}
+	    return "/ringo/member/"+PathHandler.MYPAGE;
+	}
+	
+	@ResponseBody
 	@PostMapping("checkPassword")
 	public Map<String, Object> checkPassword(@AuthenticationPrincipal UserDetails user, String password) {
 	    Map<String, Object> response = new HashMap<>();
@@ -415,7 +437,36 @@ public class MemberController
 		}
 		return;
 	}
-	
+	//마이페이지의 배경사진을 불러오는 메서드
+		@GetMapping("memberBackPrint")
+		public void memberBackPrint(String user_id
+						, HttpServletRequest request
+						, HttpServletResponse response) {
+			log.debug("request 출력 {}", request.getRemoteAddr());
+			//해당글의 첨부파일명 확인
+			Member member = service.memberSearchById(user_id); //글에 대한 정보를 읽어옴(savedfile 포함)
+			//파일의 경로를 이용해서 FileInputStream 객체 생성
+			String fullPath = uploadPath+"/"+member.getSaved_background(); //전체 경로 생성
+			
+			//response를 통해 파일 전송
+			try { //header부분 정보를 주며, 한글 이름일 수도 있으니 UTF-8형식으로 넘긴다.
+				response.setHeader("Content-Disposition", " attachment;filename="+ URLEncoder.encode(member.getOriginal_background(), "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace(); 
+			}
+			try {
+				FileInputStream in = new FileInputStream(fullPath); //input
+				ServletOutputStream out = response.getOutputStream(); //output
+				//파일 복사
+				FileCopyUtils.copy(in, out);
+				//스트림 닫기
+				in.close();
+				out.close();
+			}  catch (IOException e) {
+				e.printStackTrace();
+			}
+			return;
+		}
 	//프로필 수정 페이지로 이동
 	@GetMapping(PathHandler.MODIFYPROFILE)
 	public String modifyProfile()
@@ -427,7 +478,7 @@ public class MemberController
 	@ResponseBody
 	@PostMapping("memberModifyProfile")
 	public void memberModifyProfile(String introduction, String target_lang, MultipartFile profileUpload
-					,@AuthenticationPrincipal UserDetails user)				//MultipartFile profileUpload로 
+					, MultipartFile backUpload, @AuthenticationPrincipal UserDetails user)
 	{
 		int user_num = service.memberSearchByIdReturnUserNum(user.getUsername());
 		Member mem = service.memberSearchById(user.getUsername());
@@ -438,13 +489,26 @@ public class MemberController
 			log.debug("삭제경로 {}", deletefile);
 			String savedfile = FileService.saveFile(profileUpload, uploadPath);		//새 프로필 사진파일 저장
 			log.debug("저장경로 {}", savedfile);
-			if(!savedfile.isEmpty()) {
+			if(!savedfile.isEmpty()  || savedfile.equals("20230908.jpg")) {
 				boolean d = FileService.deleteFile(deletefile);		//기존 프로필 사진파일 삭제
 				log.debug("del여부 {}", d);
 			}
 			mem.setOriginal_profile(profileUpload.getOriginalFilename());
 			mem.setSaved_profile(savedfile);
 		}
+		if(backUpload != null && !backUpload.isEmpty()) {
+			String deletefile = uploadPath + "/" + mem.getSaved_background();
+			log.debug("삭제경로 {}", deletefile);
+			String savedfile = FileService.saveFile(backUpload, uploadPath);		//새 배경 사진파일 저장
+			log.debug("저장경로 {}", savedfile);
+			if(!savedfile.isEmpty() || savedfile.equals("20230909.jpg")) {
+				boolean d = FileService.deleteFile(deletefile);		//기존 배경 사진파일 삭제
+				log.debug("del여부 {}", d);
+			}
+			mem.setOriginal_background(backUpload.getOriginalFilename());
+			mem.setSaved_background(savedfile);
+		}
+		
 		mem.setIntroduction(introduction);
 		mem.setTarget_lang(target_lang);
 		mem.setUser_num(user_num);

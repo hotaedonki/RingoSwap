@@ -198,7 +198,7 @@
 	<!-- 메모장 작성 완료 후 수정한 작성파일을 DB로 보내 수정하는 메서드 -->
 	<update id="fileTextUpdateOne" parameterType="java.util.HashMap">
 	update ringo_file
-	set file_text = #{file_text}
+	set file_text = #{file_text}, modifie_date = sysdate
 	where user_num =#{user_num} and file_num = #{file_num}
 	</update>
 	<!-- 단어 수정전 수정할 단어 객체를 DB에서 검색해서 리턴하는 메서드 -->
@@ -245,11 +245,17 @@
 	    </if>
 	</select>
 
-	<!-- 수정한 단어 객체를 DB에 전달해 수정하는 메서드 -->
+	<!-- 수정한 단어 객체를 DB에 전달해 수정하는 update문 -->
 	<update id="wordUpdateOne" parameterType="DirWord">
 	update ringo_word
 	set word = #{word}, mean = #{mean}, pron = #{pron}, description = #{description}
 	where user_num = #{user_num} and word_num = #{word_num}
+	</update>
+	<!-- 단어장에 단어삽입, 단어수정시 단어장의 modifie_date를 수정하는 update문 -->
+	<update id="wordFileUpdate" parameterType="java.util.HashMap">
+	update ringo_file
+	set modifie_date = sysdate
+	where file_num = #{file_num} and user_num = #{user_num}
 	</update>
 	
 	<delete id="wordDeleteOne" parameterType="java.util.HashMap">

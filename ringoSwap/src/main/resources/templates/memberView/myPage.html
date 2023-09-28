@@ -98,7 +98,8 @@
 			<div class="row mb-4">
 				<!-- 프로필 사진 및 수정 버튼 -->
 				<div class="col-md-6 card profile-card">
-					<img th:src="@{../img/5.jpg}" alt="배경사진" class="card-img-top">
+					<img th:src="@{../img/5.jpg}" alt="배경사진" id="backPicInput" class="card-img-top"
+					style="height: 100%;">
 					<img th:src="@{../img/123.png}" alt="프로필 사진" id="profilePicInput"
 						style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; width: 200px; height: 200px;">
 					<!-- 버튼들을 중앙에 배치하기 위한 div -->
@@ -167,6 +168,7 @@
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
 	<script th:src="@{../js/memberView/sidebar.js}"></script>
 	<script th:src="@{../js/memberView/myPage.js}"></script>
+	<script th:src="@{../js/memberView/memberFollow.js}"></script>
 
 </body>
 </html>

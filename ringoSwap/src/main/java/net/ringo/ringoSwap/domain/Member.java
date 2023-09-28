@@ -31,6 +31,8 @@ public class Member implements UserDetails
 	//null 가능 부
 	String original_profile;		//프로필 사진 실제 파일 이름
 	String saved_profile;		//프로필 사진 저장경로에서의 이름
+	String original_background;		//배경사진 실제 이름
+	String saved_background;			//배경사진 저장 이름
 	String introduction;			//계정의 자기소개문구
 	String mbti;					//계정의 MBTI값
 	int point;						//계정의 무료재화 수치
@@ -59,10 +61,11 @@ public class Member implements UserDetails
 				+ "{%d} : point {%d} : cash {%s} : rewrite_time {%s} : role_name \n"
 				+ "{%s} : ranking_open {%s} : email_open {%s} : follow_open {%s} : gps_open {%s} : trans_lang \n"
 				+ "{%b} : enabled \n"
-				+ "{%d} : fr_count {%d} : fe_count {%s} : tag_list, {%s} : tagList \n"
+				+ "{%d} : fr_count {%d} : fe_count {%s} : tag_list, {%s} : tagList \n, original_background : {%s}, saved_background : {%s}"
 						, user_num, user_id, password, nickname, first_name, last_name, gender, birth_date, email, native_lang, target_lang
 						, original_profile, saved_profile, introduction, mbti, point, cash, rewrite_time, role_name
-						, ranking_open, email_open, follow_open, gps_open, trans_lang, enabled, fr_count, fe_count, tag_list, tagList);
+						, ranking_open, email_open, follow_open, gps_open, trans_lang, enabled, fr_count, fe_count, tag_list, tagList
+						, original_background, saved_background);
 	}
 	
 	@Override
