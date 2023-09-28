@@ -1,20 +1,23 @@
 function checkPasswordMatch() {
-	const newPassword = $('#password').val();
-	const confirmPassword = $('#confirmPassword').val();
+	const newPassword = $('#password, #newPassword').val();
+	const confirmPassword = $('#confirmPassword, #confirmNewPassword').val();
 	
 	if(newPassword === confirmPassword && newPassword !== '') {
-		$('#confirmPassword').addClass('is-valid').removeClass('is-invalid');
+		$('#confirmPassword, #confirmNewPassword').addClass('is-valid').removeClass('is-invalid');
 	} else {
-		$('#confirmPassword').addClass('is-invalid').removeClass('is-valid');
+		$('#confirmPassword, #confirmNewPassword').addClass('is-invalid').removeClass('is-valid');
 	}
 }
 
 function memberIdCheck() {
     const user_id = $('#user_id').val();
     console.log(user_id.length);
+    
+    $('.id-length-check-modal').remove();
+    
     if(user_id.length < 4 || user_id.length > 10) {
 		$("body").append(`
-			<div class="modal show" tabindex="-1">
+			<div class="modal show id-length-check-modal" tabindex="-1">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -31,7 +34,7 @@ function memberIdCheck() {
               </div>
             </div>
 		`)
-		$('.modal').modal('show');
+		$('.id-length-check-modal').modal('show');
 		return;
 	}
 	
@@ -54,8 +57,10 @@ function memberIdCheck() {
 }
 
 function showModal(title, message, buttons, callback) {
+	$('.id-check-modal').remove();
+	
     $("body").append(`
-        <div class="modal show" tabindex="-1">
+        <div class="modal show id-check-modal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -72,7 +77,7 @@ function showModal(title, message, buttons, callback) {
             </div>
         </div>
     `);
-    $('.modal').modal('show');
+    $('.id-check-modal').modal('show');
 
     $(".modal-btn").on("click", function() {
         const chosen = $(this).attr("data-choice");
@@ -138,6 +143,11 @@ function emailConfirmForSearchID(event) {
         alert('유효하지 않은 이메일 주소입니다.');
         return; // 종료
     }
+    
+    if(!UsedEmail(email)) {
+		alert('존재하지 않는 이메일 주소입니다.');
+		return;
+	}
 
     alert(`${email}로 인증코드를 전송하였습니다.`);
 	

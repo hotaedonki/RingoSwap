@@ -91,7 +91,7 @@ public class MemberController
 	 */
 	@GetMapping(PathHandler.LOGIN)
 	public String login()
-	{
+	{	 
 		return "memberView/loginForm";
 	}
 
@@ -148,7 +148,10 @@ public class MemberController
 	@ResponseBody
 	@PostMapping(PathHandler.PRINTMYPROFILEPHOTO)
 	public String printMyProfilePhoto(@AuthenticationPrincipal UserDetails user) {
-		
+		log.debug("프로필 프린트가 되는지~ 안되는지~");
+		if (user == null) {
+	        return "로그인 중 아님";
+	    }
 		return user.getUsername();
 	}
 	

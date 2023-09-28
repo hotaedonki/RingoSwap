@@ -29,7 +29,7 @@
 	<nav class="sidebar close">
 		<header>
 			<div class="image-text logo-area">
-				<span class="image"> <img th:src="@{../img/sidebar.png}"
+				<span class="image"> <img th:src="@{../img/로고.png}"
 					alt="">
 				</span>
 
@@ -82,9 +82,8 @@
 					<li class="">
 						<div sec:authorize="isAuthenticated()">
 							<a th:href="@{/member/myPage}"> 
-							<img th:src="@{../img/고양.jpg}" class="profile-pic-li"
-								data-tooltip="프로필 사진으로 이동합니다."> <span class="profile-pic">
-							</span> <span class="text nav-text">Profile</span>
+							<span id="profileImagePlaceholder" data-tooltip="프로필 사진으로 이동합니다."></span>
+            				<span class="text nav-text">Profile</span>
 							</a>
 						</div>
 					</li>
@@ -134,7 +133,7 @@
 				</div>
 				<div class="modal-body">Invalid username or password.</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
+					<button type="button" class="btn btn-secondary close-failureUrl-modal"
 						data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>

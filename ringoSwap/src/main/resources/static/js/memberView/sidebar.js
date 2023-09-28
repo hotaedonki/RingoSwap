@@ -8,16 +8,24 @@ toggle.addEventListener("click" , () =>{
 
 function printMyProfilePhoto() {
 	$.ajax({
-		url: 'printMyProfilePhoto'
+		url: '../member/printMyProfilePhoto'
 		, type: 'post'
 		, success: function(user_id) {
 			console.log(user_id)
-			$('.profile-pic-li').attr('src', '../member/memberProfilePrint?user_id=' + user_id);
+			if(user_id !== "로그인 중 아님") {
+				 let imgElem = $('<img>', {
+		            'src': '../member/memberProfilePrint?user_id=' + user_id,
+		            'class': 'profile-pic-li',
+		            'data-tooltip': '프로필 사진으로 이동합니다.'
+       		});
+        
+        $('#profileImagePlaceholder').replaceWith(imgElem);
+			}
+
 		}, 
 		error: function(error) {
 			console.log(error);
 		}
-		
 	})
 }
 

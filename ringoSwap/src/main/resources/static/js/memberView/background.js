@@ -17,16 +17,60 @@ const images = [
     { fileName: "16.png", placeName: "Kyoto" }
 ];
 
+let interval;
+
 function setBackgroundImage() {
     const randomImageObj = images[Math.floor(Math.random() * images.length)];
-    const imageUrl = `url('../img/background/${randomImageObj.fileName}')`;
-    $(".show-name").text(randomImageObj.placeName);
-    $('#home').css('background-image', imageUrl);
+    const imageUrl = `../img/background/${randomImageObj.fileName}`;
     
-    setInterval(setBackgroundImage, 10000);
+    const img = new Image();
+    img.src = imageUrl;
+    img.onload = function() {
+        $(".show-name").text(randomImageObj.placeName);
+        $('#home').css('background-image', `url('${imageUrl}')`);
+    };
 }
 
+function startInterval() {
+    if (!interval) {
+        interval = setInterval(setBackgroundImage, 10000);
+    }
+}
 
-$(document).ready(function() {   
-    setBackgroundImage();  
+function stopInterval() {
+    clearInterval(interval);
+    interval = null;
+}
+
+$(document).ready(function() {
+    setBackgroundImage();
+    startInterval();
+	usernamePrint();
+	
+    $(document).on("visibilitychange", function() {
+        if (document.visibilityState === 'visible') {
+            setBackgroundImage();
+            startInterval();
+        } else {
+            stopInterval();
+        }
+    });
 });
+
+function usernamePrint() {
+    const kiminonawaInput = $("#kiminonawa");
+    $.ajax({
+        url: 'nicknamePrint',
+        type: 'post',
+        success: function(username) {
+			if(username === "로그인 중 아님") {
+				return false;
+			}
+			console.log(username);
+            kiminonawaInput.text(" " + username);
+        },
+        error: function(error) {
+            console.error(error);
+        }
+    });
+}
