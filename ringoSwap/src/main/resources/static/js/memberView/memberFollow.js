@@ -1,6 +1,14 @@
 function followerSearch(){
     let nickname = $('.justify-content-center .searchFollower').val();
     console.log("팔로우 닉네임 : ", nickname)
+    let userId = $('#userId').val();
+    let check = $('#followOpen').val();
+    if(check === 'N'){
+		if(!memberIdCheck(userId)){
+            //자기정보를 보는 것이 아닌이상, 팔로워 공개가 'N'으로 설정된 회원의 팔로워 팔로우를 볼 수 없음
+            return;
+        }
+	}
     $.ajax({
         url: "../feed/followerSearch",
         type: "post",
@@ -34,6 +42,14 @@ function followerSearch(){
 }
 function followeeSearch(){
     let nickname = $('.justify-content-center .searchFollow').val();
+    let userId = $('#userId').val();
+    let check = $('#followOpen').val();
+    if(check === 'N'){
+		if(!memberIdCheck(userId)){
+            //자기정보를 보는 것이 아닌이상, 팔로워 공개가 'N'으로 설정된 회원의 팔로워 팔로우를 볼 수 없음
+            return;
+        }
+	}
     $.ajax({
         url: "../feed/followeeSearch",
         type: "post",

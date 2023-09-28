@@ -520,6 +520,15 @@ public class MemberController
 		int methodResult = service.memberUpdateAccount(m);
 		log.debug("{} - modifyProfile", m);
 	}
+
+	//현재 사용중인 사용자의 계정ID값을 리턴하는 메서드
+	@ResponseBody
+	@PostMapping("currentUserIdSearch")
+	public String currentUserIdSearch(@AuthenticationPrincipal UserDetails user)
+	{
+		return user.getUsername();
+	}
+	
 	//----------------[마이페이지 기능 종료]----------->>>>>>>>>>>>
 	
 	//로그인된 상태에서만 작동

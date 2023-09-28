@@ -60,5 +60,7 @@ $(document).ready(function() {
   $(document).on('click', '.goToOtherPeopleFeed', goToOtherPeopleFeed);
   $(document).on('click', '#follower-btn a', followerSearch);
   $(document).on('click', '#follow-btn a', followeeSearch);
+	
+  memberPrint();
 });
 

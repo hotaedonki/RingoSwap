@@ -1,7 +1,7 @@
 
 
  $(document).ready(function() {
-
+    modifyMemberPrint();
     $('#profilePicInput').click(profileFileInput);  //프로필 클릭시 원하는 사진을 업로드해서 해당 사진으로 프로필 사진을 변경하는 이벤트
     $('.card-img-top').click(backgroundFileInput);   //배경사진 클릭시 원하는 사진을 업로드해서 해당 사진으로 프로필 사진을 변경하는 이벤트
     // 이벤트 핸들러 바인딩
@@ -23,7 +23,7 @@
     }
 });
 /* 멤버정보를 출력하는 함수 */
-function memberPrint(){
+function modifyMemberPrint(){
     $.ajax({
         url: 'myMemberPrint',
         type: 'POST',
@@ -61,7 +61,6 @@ function memberPrint(){
         }
     });
 }
-
 function toggleHobbyButtonClass() {
     // 취미 버튼 클래스 전환
     $(this).toggleClass('btn-outline-primary btn-primary');
@@ -195,20 +194,6 @@ function sendProfileModification() {
 		});
 	}
 
-    //받은 객체에 따라 DB에 집어넣을 수 있는 문자열로 변경해서 리턴하는 함수
-    function setTargetLanguage(){
-        let lang = $(".targetLanguage").attr('src');
-        if(lang === languageImages["한국어"]){
-            lang = 'ko';
-        }else if(lang === languageImages["일본어"]){
-            lang = 'ja';
-        }else if(lang === languageImages["영어"]){
-            lang = 'en';
-        }else{
-            lang = 'ko';
-        }
-        return lang;
-    }
 
     function prepareFormData(introduction, desiredLanguage, profilePic, backgroundPic) {
         // 수정 데이터를 FormData 객체에 저장
@@ -219,14 +204,6 @@ function sendProfileModification() {
         formData.append("backgroundPic", backgroundPic);
         return formData;
     }
-
-    function selectDesiredLanguage() {
-        // 선택된 언어에 따라 이미지 변경
-        let selectedLanguage = $(this).data('language');
-        changeLanguageImage(selectedLanguage);
-        $('#languageModal').modal('hide');
-    }
-
 
     function loadGameData() {
         // 게임 데이터 로드
@@ -288,3 +265,42 @@ function sendProfileModification() {
         $('.profile-info .targetLanguage').attr('src', languageImages[language]);
     }
 
+// 변수 및 설정
+const languageImages = {
+    "한국어": "../img/한국어.jpg",
+    "일본어": "../img/일본어.jpg",
+    "영어": "../img/영어.jpg"
+};
+
+/* 입력된 언어코드 문자열을 해당 언어의 이미지로 변환하는 함수 */
+function printLanguage(lang){
+    if(lang === 'ko'){
+        lang = languageImages["한국어"];
+    }else if(lang === 'ja'){
+        lang = languageImages["일본어"];
+    }else if(lang === 'en'){
+        lang = languageImages["영어"];
+    }
+    return lang;
+}
+    //받은 객체에 따라 DB에 집어넣을 수 있는 문자열로 변경해서 리턴하는 함수
+    function setTargetLanguage(){
+        let lang = $(".targetLanguage").attr('src');
+        if(lang === languageImages["한국어"]){
+            lang = 'ko';
+        }else if(lang === languageImages["일본어"]){
+            lang = 'ja';
+        }else if(lang === languageImages["영어"]){
+            lang = 'en';
+        }else{
+            lang = 'ko';
+        }
+        return lang;
+    }
+
+    function selectDesiredLanguage() {
+        // 선택된 언어에 따라 이미지 변경
+        let selectedLanguage = $(this).data('language');
+        changeLanguageImage(selectedLanguage);
+        $('#languageModal').modal('hide');
+    }

@@ -44,6 +44,7 @@ CREATE VIEW ringo_member_with_mypage AS
 		, M.native_lang, M.target_lang, M.trans_lang
 		, M.introduction, M.original_profile, M.saved_profile
 		, M.original_background, M.saved_background
+        , M.follow_open
 		, COALESCE(FW.fw_cnt, 0) as fe_count				--팔로워 수를 기록하는 속성
 		, COALESCE(FE.fe_cnt, 0) as fr_count				--팔로우 수를 기록하는 속성
 	from ringo_member M
