@@ -115,9 +115,11 @@
 					<!-- 팔로워, 팔로우, 언어 정보 -->
 					<div class="card-body profile-info">
 						<div style="min-width: 400px;" class="d-flex">
-							<a th:href="@{/member/follower}" style="font-size: 1.4em;" class="text-primary">팔로워
+							<a style="font-size: 1.4em;" class="text-primary f" data-bs-toggle="modal"
+							data-bs-target="#followerModal" id="follower-btn">팔로워
 								<span class="follower-cnt">100</span></a>
-							<a th:href="@{/member/follow}" style="margin-left: 10px; font-size: 1.4em;" class="text-primary">팔로우
+							<a style="margin-left: 10px; font-size: 1.4em;" class="text-primary f" data-bs-toggle="modal"
+							data-bs-target="#followerModal" id="follow-btn">팔로우
 								<span class="followee-cnt">150</span></a>
 							<button class="btn btn-primary ms-auto goToOtherPeopleFeed"></button>
 						</div>
@@ -159,6 +161,7 @@
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
 	<script th:src="@{../js/memberView/sidebar.js}"></script>
 	<script th:src="@{../js/memberView/otherPage.js}"></script>
+	<script th:src="@{../js/memberView/memberFollow.js}"></script>
 
 </body>
 </html>

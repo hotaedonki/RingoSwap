@@ -221,6 +221,9 @@ public class NoteController
       inputword.setUser_num(user_num);
       
       int num = service.wordCreateOne(inputword);
+      if(num != 0) {
+    	  int methodResult = service.wordFileUpdate(user_num, inputword.getFile_num());
+      }
       log.debug("단어 생성 성공{}", num);
    }
    //-----------[ 노트 생성기능 종료 ]-------------->>>>>>>>>>>>>>
@@ -273,8 +276,8 @@ public class NoteController
    
    @ResponseBody
    @PostMapping("wordDeleteOne")
-   public String wordDeleteOne(@AuthenticationPrincipal UserDetails user,
-		   @RequestParam(name="word_num", defaultValue="0") int word_num) {
+   public String wordDeleteOne(@AuthenticationPrincipal UserDetails user, int file_num
+		   , @RequestParam(name="word_num", defaultValue="0") int word_num) {
 	   int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 	   HashMap<String, Integer> map = new HashMap<>();
 	   map.put("user_num", user_num);
@@ -284,6 +287,7 @@ public class NoteController
 	   if(deleteResult==0) {
 	         return word_num+"번 단어 삭제 실패";
 	      }
+	   deleteResult = service.wordFileUpdate(user_num, file_num);
 	   return word_num + "번 단어 삭제 완료";
    }	
    
@@ -377,7 +381,7 @@ public class NoteController
       log.debug("수정 내용 출력 : {}", word);
       word.setUser_num(user_num);
       int methodResult = service.wordUpdateOne(word);
-      
+      methodResult = service.wordFileUpdate(user_num, word.getFile_num());
       return "수정성공";
    }
    

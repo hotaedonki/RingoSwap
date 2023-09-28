@@ -158,4 +158,12 @@ public class NoteServiceImple implements NoteService{
 	public int checkLastWord(HashMap<String, Object> checkMap) {
 		return dao.checkLastWord(checkMap);
 	}
+	//단어장에서 단어를 추가/수정/삭제할때마다 단어장의 수정일자 정보를 현재 시각으로 수정하는 메서드
+	@Override
+	public int wordFileUpdate(int user_num, int file_num){
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("user_num", user_num);
+		map.put("file_num", file_num);
+		return dao.wordFileUpdate(map);
+	}
 }
