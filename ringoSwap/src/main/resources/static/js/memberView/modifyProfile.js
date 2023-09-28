@@ -1,9 +1,4 @@
-// 변수 및 설정
-const languageImages = {
-    "한국어": "../img/한국어.jpg",
-    "일본어": "../img/일본어.jpg",
-    "영어": "../img/영어.jpg"
-};
+
 
  $(document).ready(function() {
 
@@ -26,7 +21,6 @@ const languageImages = {
 
         $(window).on('beforeunload', saveChangesBeforeExit);  // 페이지 종료 전 변경 사항 저장 이벤트
     }
-    memberPrint();
 });
 /* 멤버정보를 출력하는 함수 */
 function memberPrint(){
