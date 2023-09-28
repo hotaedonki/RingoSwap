@@ -12,10 +12,6 @@ const languageImages = {
     // 이벤트 핸들러 바인딩
     bindEventHandlers();
 
-    // 초기 데이터 로딩
-    //loadGameData();
-    //loadPurchasedItems();
-
     function bindEventHandlers() {
         // 각 이벤트에 대한 핸들러 바인딩
         $(document)
@@ -40,10 +36,23 @@ function memberPrint(){
             $('.introduction').html(member.introduction);
             $('.follower-cnt').text(member.fr_count);
             $('.followee-cnt').text(member.fe_count);
-             let native = printLanguage(member.native_lang);
-             let target = printLanguage(member.target_lang);
+            
+            let native = printLanguage(member.native_lang);
+            let target = printLanguage(member.target_lang);
             let tagArr = member.tagList;
-            $('#profilePicInput').attr('src', './memberProfilePrint?user_id='+member.user_id);
+            
+            // 프로필 이미지 동적 생성
+		    $('#profilePicInput').attr('src', './memberProfilePrint?user_id=' + member.user_id);
+		    
+		    // 배경 이미지 동적 생성 (이미지 URL은 원하는 값으로 설정)
+		    let backImgElem = $('<img>', {
+		        'src': '../img/5.jpg', 
+		        'alt': '배경사진',
+		        'class': 'card-img-top'
+		    });
+    
+		    $('#backPicInput').replaceWith(backImgElem)
+		    
             $('.nativeLanguage').attr('src', native);
             $('.targetLanguage').attr('src', target);
             

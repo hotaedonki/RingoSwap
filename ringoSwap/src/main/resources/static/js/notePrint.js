@@ -2,43 +2,6 @@
 let ca = 'ko';
 let st = 'input';
 
-// 문서 준비가 완료되면 실행
-$(document).ready(function(){
-    dirPrint();
-    latestFilePrint();      //가장 최근 수정한 메모장or단어장 출력 함수
-    // 정렬 방식 설정
-    $('.sortBtn').click(sortEvent);
-    $('#createFolder').click(dirCreate);
-    // 노트, 단어장 생성
-    $('#createNote').click(() => fileCreate('note'));
-    $('#createWord').click(() => fileCreate('word'));
-    $(document).on('click', '.dir-btn', highlightSelectedFolder);
-    $(document).on('click', '.dirOpen', dirOpen);
-    $(document).on('click', '.dirDelete', dirDelete);
-    $(document).on('click', '.yes', closeModal);
-
-    window.addEventListener('load', function () {
-        const fileNum = getUrlParam('file');
-        const fileType = getUrlParam('type');
-        if (fileNum) {
-            // 파일 번호가 URL에 있을 경우 해당 텍스트 객체 열기
-            console.log('객체 열기');
-            fileOpenUrl(fileNum, fileType);
-        }
-    });
-    
-	$(".dropdown-item.sortBtn").click(function() {
-	    // sortBtnMain의 현재 텍스트를 가져옴
-	    let currentMainText = $(".sortBtnMain").text();
-	    
-	    // 클릭한 .dropdown-item.sortBtn의 텍스트를 가져옴
-	    let selectedText = $(this).text();
-	    
-	    // 두 텍스트를 서로 바꿈
-	    $(".sortBtnMain").text(selectedText);
-	    $(this).text(currentMainText);
-	});
-});
 
 // 폴더 버튼을 클릭할 때의 이벤트 처리
 function highlightSelectedFolder() {
@@ -62,7 +25,6 @@ function getUrlParam(param) {
 
 // 폴더 정보를 출력하는 ajax 함수
 function dirPrint(){
-    console.log("폴더 출력하기");
     $.ajax({
         url: 'dirPrint',
         type: 'post',
@@ -337,7 +299,6 @@ function fileModify() {
     // 수정 버튼을 클릭하면
     $("#modifyFileName").off().click(function() {
         let newFileName = $("#newFileNameInput").val(); // 새로운 파일 이름을 가져옵니다.
-		console.log(newFileName);
         // AJAX 호출로 서버에 파일 이름 변경을 요청합니다.
         $.ajax({
             url: 'fileModify',  // 해당 URL을 변경할 필요가 있을 수 있습니다.
@@ -367,7 +328,7 @@ function fileSave(){
         file_num : file_num_saver,
         file_text : content
     }).done(function(txt){
-        console.log(txt);
+		alert("저장 되었습니다!")
     }).fail(function() {
         // 실패했을 때 실행할 코드
         console.log("error");
@@ -384,15 +345,12 @@ function fileSave(){
 //폴더 삭제기능
 function dirDelete(){
     let num = $(this).attr('data-dir-num');
-    console.log(num);
 
     $.post("dirDeleteOne", {
         dir_num : num
     })
     .done(function(txt) {
-        // 성공했을 때 실행할 코드
-        console.log("success"+txt);
-        
+        // 성공했을 때 실행할 코드     
         dirPrint();
     })
     .fail(function() {
@@ -407,7 +365,6 @@ function dirDelete(){
 function fileDelete(){
     let fnum = $(this).data('file-num');
     let dnum = $(this).data('dir-num');
-    console.log(fnum, dnum);
     
 	$("#deleteModal").modal('show');	
 	
@@ -432,3 +389,41 @@ function fileDelete(){
 function closeModal() {
    $(this).closest(".modal").modal("hide");
 }
+
+
+// 문서 준비가 완료되면 실행
+$(document).ready(function(){
+    dirPrint();
+    latestFilePrint();      //가장 최근 수정한 메모장or단어장 출력 함수
+    // 정렬 방식 설정
+    $('.sortBtn').click(sortEvent);
+    $('#createFolder').click(dirCreate);
+    // 노트, 단어장 생성
+    $('#createNote').click(() => fileCreate('note'));
+    $('#createWord').click(() => fileCreate('word'));
+    $(document).on('click', '.dir-btn', highlightSelectedFolder);
+    $(document).on('click', '.dirOpen', dirOpen);
+    $(document).on('click', '.dirDelete', dirDelete);
+    $(document).on('click', '.yes', closeModal);
+
+    window.addEventListener('load', function () {
+        const fileNum = getUrlParam('file');
+        const fileType = getUrlParam('type');
+        if (fileNum) {
+            // 파일 번호가 URL에 있을 경우 해당 텍스트 객체 열기
+            fileOpenUrl(fileNum, fileType);
+        }
+    });
+    
+	$(".dropdown-item.sortBtn").click(function() {
+	    // sortBtnMain의 현재 텍스트를 가져옴
+	    let currentMainText = $(".sortBtnMain").text();
+	    
+	    // 클릭한 .dropdown-item.sortBtn의 텍스트를 가져옴
+	    let selectedText = $(this).text();
+	    
+	    // 두 텍스트를 서로 바꿈
+	    $(".sortBtnMain").text(selectedText);
+	    $(this).text(currentMainText);
+	});
+});

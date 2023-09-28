@@ -29,7 +29,7 @@
 	<nav class="sidebar close">
 		<header>
 			<div class="image-text logo-area">
-				<span class="image"> <img th:src="@{../img/sidebar.png}"
+				<span class="image"> <img th:src="@{../img/로고.png}"
 					alt="">
 				</span>
 
@@ -82,9 +82,8 @@
 					<li class="">
 						<div sec:authorize="isAuthenticated()">
 							<a th:href="@{/member/myPage}"> 
-							<img th:src="@{../img/고양.jpg}" class="profile-pic-li"
-								data-tooltip="프로필 사진으로 이동합니다."> <span class="profile-pic">
-							</span> <span class="text nav-text">Profile</span>
+							<span id="profileImagePlaceholder" data-tooltip="프로필 사진으로 이동합니다."></span>
+            				<span class="text nav-text">Profile</span>
 							</a>
 						</div>
 					</li>
@@ -100,20 +99,14 @@
 			<div class="row mb-4 profile-section">
 				<!-- 프로필 사진 및 수정 버튼 -->
 				<div class="col-lg-6 card profile-card">
-					<img th:src="@{../img/5.jpg}" alt="배경사진" id="backPicInput"
-						class="card-img-top"> <input type="file"
-						id="backgroundFileInput" style="display: none;"> <img
-						th:src="@{../img/123.png}" alt="프로필 사진" id="profilePicInput"
-						style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; width: 200px; height: 200px;">
-					<input type="file" id="profileFileInput" style="display: none;">
-					<!-- 버튼들을 중앙에 배치하기 위한 div -->
-					<div
-						class="profile-buttons d-flex justify-content-center align-items-center">
-						<button type="button" class="btn btn-info btn-lg modify"
-							style="margin-right: 20px;">수정 완료</button>
-						<button type="button" class="btn btn-info btn-lg"
-							th:href="@{/member/updatePersonalInfo}">개인정보 수정</button>
-					</div>
+					<img alt="배경사진" id="backPicInput" class="card-img-top">
+				    <input type="file" id="backgroundFileInput" style="display: none;">
+				    <img alt="프로필 사진" id="profilePicInput" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; width: 200px; height: 200px;">
+				    <input type="file" id="profileFileInput" style="display: none;">
+				    <div class="profile-buttons d-flex justify-content-center align-items-center">
+				        <button type="button" class="btn btn-info btn-lg modify" style="margin-right: 20px;">수정 완료</button>
+				        <button type="button" class="btn btn-info btn-lg" th:href="@{/member/updatePersonalInfo}">개인정보 수정</button>
+				    </div>
 				</div>
 				<!-- 닉네임 및 자기소개 -->
 				<div class="col-lg-5 mt-4">

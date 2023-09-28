@@ -3,13 +3,11 @@ const limit = 5;
 
 function feedPrint(optionalRes, newLoad = true) {
     let text = $('#searchInput').val();
-    console.log(text);
     
     const urlParams = new URLSearchParams(window.location.search);
     const nickname = urlParams.get('nickname');
 
     if (optionalRes) {
-		console.log("해시태그 클릭 후 feedPrint 반환 값 ", optionalRes)
         renderFeeds(optionalRes, newLoad);
         return;
     }
@@ -37,7 +35,6 @@ function feedPrint(optionalRes, newLoad = true) {
 	    }
     }
 	
-	console.log(nickname);
     // nickname이 유효하면 data 객체에 추가합니다.
     if (nickname) {
         data.nickname = nickname;
@@ -48,7 +45,6 @@ function feedPrint(optionalRes, newLoad = true) {
         type: "post",
         data: data,
         success: function(res) {	
-			console.log(res)
             renderFeeds(res, newLoad);
         },
         error: function(error) {
@@ -62,26 +58,19 @@ function renderFeeds(res, newLoad) {
 	if(newLoad) {
 		$(".feed-display-area .col-12").empty();
 	}
-	
-	console.log("renderFeeds의 res값: ", res)
+
 	let feeds = res.feedList;
 	let likeCheck = res.likeCheckMap;
 	let replyCount = res.replyCountMap;
     $(".left-area, .middle-area").show();
 	$("#feedDetail").hide();
 	
-	console.log(feeds);
-	console.log(replyCount);
-	
 	feeds.forEach(feed => {
 		feedPhotoPrint(feed.feed_num);
-		console.log('replyCount map:', replyCount);
-console.log('Current feed number:', feed.feed_num);
 	     let likeButtonClass = likeCheck[feed.feed_num] === 1 ? "bi-heart-fill" : "bi-heart";
 	     let replyCountForThisFeed = replyCount[feed.feed_num] || 0;
 		 //해시태그에 css적용
 		 let styledContent = hashtagHighlightAndClick(feed.contents);
-	     console.log(feed);
 		$('.feed-display-area .col-12').append(`
             <div class="card feed-card main-card" data-feed-num="${feed.feed_num}">
                 <div class="card-header feed-header"> 
@@ -105,8 +94,7 @@ console.log('Current feed number:', feed.feed_num);
     });
     $(".feed-display-area .col-12").show();
     $('#load-more').remove();
-    console.log('완성');
-        
+
     if (feeds.length < limit) {
         $(".feed-display-area .col-12").append(`
             <div id="end-message" style="text-align: center; margin: 10px 0; color: gray;">마지막입니다</div>
@@ -152,7 +140,6 @@ function feedDetail() {
 		type: "post",
 		data: {feed_num : feedNum},
 		success: function(detail) {
-			console.log(detail.feed);
 			$(".feed-display-area .col-12").hide();
 			$(".left-area, .middle-area").hide();
 			//사진과 댓글 출력
@@ -188,7 +175,6 @@ function feedDetail() {
                     </div>
                 </div>
             `);
-            console.log("히스토리 : ", history);
 			$("#feedDetail").show();
 			if(currentUrl !== newUrl){
                 history.pushState({ feed_num : detail.feed.feed_num, url: newUrl }, '', `?feed=${detail.feed.feed_num}`);
@@ -204,7 +190,6 @@ function feedPhotoPrint(feed_num) {
 	//사진 출력 작업이 끝날때까지 다른작업x 
     return new Promise(async (resolve, reject) => {
         let photoContainer = null;
-        console.log("포토프린트 확인: ", feed_num);
 
         try {
             let photos = await $.ajax({
@@ -213,7 +198,6 @@ function feedPhotoPrint(feed_num) {
                 data: { feed_num: feed_num },
             });
 
-            console.log('Photos received:', photos);
             photoContainer = document.querySelector(`.feed-image-list[data-feed-num="${feed_num}"]`);
 
             if (photos && photos.length > 1) {
@@ -266,16 +250,10 @@ function createPost() {
 	
 	const hashtags = content.match(/#[^\s#]+/g) || [];
 	feedData.append('hashtagsJson', JSON.stringify(hashtags));
-	
-	console.log("피드 데이터와 해시태그 값 : ", $('#chatInput').val(), hashtags);
-	
+
     for (let i = 0; i < selectedImages.length; i++) {
         feedData.append('photos', selectedImages[i]);
     }
-    
-    for (let pair of feedData.entries()) {
-    console.log(pair[0]+ ', ' + pair[1]); 
-	}
 
 	$.ajax({
         url: "feedWrite",
@@ -284,7 +262,6 @@ function createPost() {
         contentType: false, // 필수: Content-Type 헤더를 설정하지 않도록 설정
         data: feedData,     // FormData 객체를 전송합니다
         success: function(response) {
-			console.log("성공");
             let content = $(".emojionearea-editor").html();
 		    $(".emojionearea-editor").html('');
             $('#imagePreviewContainer').html(''); 
@@ -323,7 +300,6 @@ function clickLikeFeed() {
 
 function feedDelete(){
     let feed_num = $(this).data('feed-num');
-    console.log(feed_num);
 	let call = confirm("피드를 삭제하시겠습니까?");
     if(!call){
         return;
@@ -357,7 +333,6 @@ function followerSearch(){
         success:function(followerList){
             if(followerList){
                 $('.followerBox').html('');
-                console.log(followerList);
                 followerList.forEach(follower => {
                     $('.followerBox').append(`
                     <div>
@@ -389,7 +364,6 @@ function followeeSearch(){
         data: {nickname : nickname},
         dataType:'json',
         success:function(followeeList){
-            console.log(followeeList);
             if(followeeList){
                 $('.followBox').html('');
                 followeeList.forEach(followee => {

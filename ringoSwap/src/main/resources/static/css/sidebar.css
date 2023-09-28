@@ -132,12 +132,13 @@ header .image-text .profession{
 
 .sidebar header .image img{
     width: 40px;
-    border-radius: 6px;
+    margin-bottom: 8px;
+    height: 57px;
 }
 
 .sidebar header .toggle{
     position: absolute;
-    top: 50%;
+    top: 90%;
     right: -28px;
     transform: translateY(-50%) rotate(180deg);
     height: 25px;
@@ -254,7 +255,7 @@ body.dark .sidebar li a:hover .text{
     left: 170px;
     height: 100vh;
     width: calc(100% - 170px);
-    transition: var(--tran-05);
+    transition: 1s;
     overflow: auto;
 }
 .home .text{

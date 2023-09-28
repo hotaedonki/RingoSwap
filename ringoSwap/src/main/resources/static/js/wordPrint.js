@@ -1,23 +1,4 @@
-$(document).ready(function() {
-    let originalWordList = ""; 
-    let currentWordNum;
 
-    // "추가" 버튼 클릭 이벤트 핸들러
-    $("button:contains('추가')").click(handleAddButtonClick);
-    // "저장" 버튼 클릭 이벤트 핸들러
-    $(document).on('click', '.save-btn', handleSaveButtonClick);
-    // "돌아가기" 버튼 클릭 이벤트 핸들러
-    $(document).on('click', '.back-btn', handleBackButtonClick);
-    // 단어 수정
-    $(document).on('click', '.modifyWord', handleModifyWordClick);
-    // "수정" 버튼 클릭 이벤트 핸들러
-    $(document).on('click', '.word-modify-btn', handleWordModifyButtonClick);
-    // "삭제" 버튼 클릭 이벤트 핸들러
-    $(document).on('click', '.word-delete-btn', handleWordDeleteButtonClick);
-    // 앞뒤 단어로 이동
-    $(document).on('click', '.carousel-control-next, .carousel-control-prev', handleWordNavigation);
-    
-});
 
 function handleAddButtonClick() {
       originalWordList = $(".wordList").html();
@@ -329,4 +310,24 @@ function handleAddButtonClick() {
 	    currentWordNum = wordInfo.word_num;  // 현재 단어 번호 업데이트
 	}
 
+$(document).ready(function() {
+    let originalWordList = ""; 
+    let currentWordNum;
+
+    // "추가" 버튼 클릭 이벤트 핸들러
+    $("button:contains('추가')").click(handleAddButtonClick);
+    // "저장" 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.save-btn', handleSaveButtonClick);
+    // "돌아가기" 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.back-btn', handleBackButtonClick);
+    // 단어 수정
+    $(document).on('click', '.modifyWord', handleModifyWordClick);
+    // "수정" 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.word-modify-btn', handleWordModifyButtonClick);
+    // "삭제" 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.word-delete-btn', handleWordDeleteButtonClick);
+    // 앞뒤 단어로 이동
+    $(document).on('click', '.carousel-control-next, .carousel-control-prev', handleWordNavigation);
+    
+});
    

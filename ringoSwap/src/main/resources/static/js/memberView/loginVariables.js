@@ -1,7 +1,5 @@
-
-
 $(document).ready(function() {   
-	usernamePrint();
+	failureUrl();
     $(document).on('click', '#searchID', showSearchIDForm);
 	$(document).on('click', '#searchPW', showSearchPWForm);
 	$(document).on('click', '.PWcheckbtn', gotoResetPasswordPage);
@@ -16,10 +14,4 @@ $(document).ready(function() {
 	$(document).on('click', '.submit-check-ID', paintID);
 	$(document).on('input', '#password, #confirmPassword, #newPassword, #confirmNewPassword', checkPasswordMatch);
 	$(document).on('click', '.return-to-home', returnToHome);
-	
-	const urlParams = new URLSearchParams(window.location.search);
-    const error = urlParams.get('error');
-    if (error) {
-        $('#loginErrorModal').modal('show');
-    }
 });

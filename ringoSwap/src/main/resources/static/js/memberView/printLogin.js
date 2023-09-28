@@ -1,21 +1,26 @@
 
 // usernamePrint 함수 안에서 username을 가져온 후 밑줄 길이를 조절하는 코드 추가
-function usernamePrint() {
-    const kiminonawaInput = $("#kiminonawa");
 
-    $.ajax({
-        url: 'nicknamePrint',
-        type: 'post',
-        success: function(username) {
-			if(username = "로그인 중 아님") {
-				return false;
-			}
-            kiminonawaInput.text(" " + username);
-        },
-        error: function(error) {
-            console.error(error);
+
+function failureUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+    if (error) {
+		console.log("아이");
+        
+        const loginErrorModal = new bootstrap.Modal(document.getElementById('loginErrorModal'));
+        loginErrorModal.show();
+        
+         urlParams.delete('error');
+        
+        // 현재 URL에서 error 파라미터를 제거
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        if (urlParams.toString()) {
+            newUrl += '?' + urlParams.toString();
         }
-    });
+        history.replaceState(null, null, newUrl);
+        
+    }
 }
 
 function showSignUpForm() {
@@ -79,6 +84,8 @@ function showSignUpForm() {
 					</div>
 				</div>
 			</div>`
+			
+			$('.container_signup_form').remove();
 			
 			$('#loginForm').hide();
 			$('body').append(signUpForm);
@@ -151,12 +158,11 @@ function showResetPassword() {
 				<div class="form_search">
 					<h1 class="h1">Update Password</h1>
 					<br> <br>
-					<div class="newPassword-section">
-						<input type="password" placeholder="New password" class="input"
-							name="password" id="newPassword"> <input type="password"
-							placeholder="Confirm password" class="input" name="password"
-							id="confirmNewPassword"> <span
-							class="doNotMatchPassword"></span>
+					<div class="newPassword-section">						
+						<div class="form-group w-100">
+						  <input type="password" class="form-control form-control-lg" placeholder="New Password" name="password" id="newPassword">
+						  <input type="password" placeholder="Confirm Password" class="form-control password-check form-control-lg" name="confirmNewPassword" id="confirmNewPassword">
+						  <div class="invalid-feedback">not correct</div>
 						<button type="button" class="btn btn-info resetPassword">Update</button>
 						<button type="button" class="btn btn-info return-to-home">Return</button>
 					</div>
@@ -166,5 +172,4 @@ function showResetPassword() {
 		
 		$('.paintSearchPW').hide();
 		$('body').append(resetPassword);
-		setBackgroundImage();
 }

@@ -18,12 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
     @Autowired
     private DataSource dataSource;
-
-    @Bean
-    public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
-        return new CustomAuthenticationFailureHandler();
-    }
-    
+    	
     //설정
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -44,10 +39,10 @@ public class WebSecurityConfig {
         .and()
         .formLogin()					
         .loginPage("/member/login")	
+        .failureUrl("/member/login?error=true")
         .loginProcessingUrl("/member/login").permitAll()
         .usernameParameter("user_id")
         .passwordParameter("password")
-        .failureHandler(new CustomAuthenticationFailureHandler())
         .and()
         .logout()
         .logoutUrl("/member/logout")
