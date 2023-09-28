@@ -486,7 +486,7 @@ public class MemberController
 			log.debug("삭제경로 {}", deletefile);
 			String savedfile = FileService.saveFile(profileUpload, uploadPath);		//새 프로필 사진파일 저장
 			log.debug("저장경로 {}", savedfile);
-			if(!savedfile.isEmpty()  || savedfile.equals('20230908.jpg')) {
+			if(!savedfile.isEmpty()  || savedfile.equals("20230908.jpg")) {
 				boolean d = FileService.deleteFile(deletefile);		//기존 프로필 사진파일 삭제
 				log.debug("del여부 {}", d);
 			}
@@ -498,7 +498,7 @@ public class MemberController
 			log.debug("삭제경로 {}", deletefile);
 			String savedfile = FileService.saveFile(backUpload, uploadPath);		//새 배경 사진파일 저장
 			log.debug("저장경로 {}", savedfile);
-			if(!savedfile.isEmpty() || savedfile.equals('20230909.jpg')) {
+			if(!savedfile.isEmpty() || savedfile.equals("20230909.jpg")) {
 				boolean d = FileService.deleteFile(deletefile);		//기존 배경 사진파일 삭제
 				log.debug("del여부 {}", d);
 			}
