@@ -166,100 +166,55 @@
 					<textarea id="noteTextarea">
 				</textarea>
 					<script>
-						tinymce
-							.init({
-								language : "ko_KR",
-								selector : '#noteTextarea',
-								selector : 'textarea',
-								height : '97vh',
-								menubar : false,
-								plugins : [ "advlist", "autolink", "lists",
-										"link", "image", "charmap",
-										"preview", "anchor",
-										"searchreplace", "visualblocks",
-										"code", "fullscreen",
-										"insertdatetime", "media", "table",
-										"code", "help", "wordcount", "save" ],
-								toolbar : 'formatselect fontselect fontsizeselect |'
-										+ ' forecolor backcolor |'
-										+ ' bold italic underline strikethrough |'
-										+ ' alignjustify alignleft aligncenter alignright |'
-										+ ' bullist numlist |'
-										+ ' table tabledelete |'
-										+ ' link image | ' + ' save ',
-								image_title : true,
-								automatic_uploads : true,
-								file_picker_types : 'image',
-								file_picker_callback: function(cb, value, meta) {
-								    let input = document.createElement('input');
-								    input.setAttribute('type', 'file');
-								    input.setAttribute('accept', 'image/*');
-								    input.onchange = function() {
-								        let file = this.files[0];
-								        let reader = new FileReader();
-								        reader.onload = function(e) {
-								            let img = new Image();
-								            img.onload = function() {
-								                let width = img.width;
-								                let height = img.height;
-								                
-								                if (width > 800 || height > 600) {
-								                    let scale = Math.min(800 / width, 600 / height);
-								                    width *= scale;
-								                    height *= scale;
-
-								                    let canvas = document.createElement('canvas');
-								                    let ctx = canvas.getContext('2d');
-								                    canvas.width = width;
-								                    canvas.height = height;
-								                    ctx.drawImage(img, 0, 0, width, height);
-								                    
-								                    img.src = canvas.toDataURL();
-								                }
-
-								                // 나머지 로직은 동일
-								                let id = 'blobid' + (new Date()).getTime();
-								                let blobCache = tinymce.activeEditor.editorUpload.blobCache;
-								                let base64 = img.src.split(',')[1];
-								                let blobInfo = blobCache.create(id, file, base64);
-								                blobCache.add(blobInfo);
-								                cb(blobInfo.blobUri(), {
-								                    title: file.name
-								                });
-								            };
-								            img.src = e.target.result;
-								        };
-								        reader.readAsDataURL(file);
-								    };
-								    input.click();
-								},
-								content_style : 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }',
-								save_onsavecallback : function() {
-									// 내용을 저장하는 함수를 호출
-									fileSave();
-								},
-								autosave_interval : 600000, //자동저장 설정 간격(10분 = 10*60*1000밀리초)
-								autosave_callback : function() {
-									//자동 저장될 때마다 아래 함수 fileSave를 호출합니다.
-									console.log('자동저장 작동');
-									fileSave();
-								},
-								setup : function(editor) {
-									editor.on('init',
-										function() {
-											// 에디터 초기화 이벤트 처리
-											// 여기에 추가적인 초기화 작업을 수행할 수 있습니다.
-											console.log('변환');
-											const fileNum = getUrlParam('file');
-											const fileType = getUrlParam('type');
-											console
-													.log(fileOpenUrl(
-															fileNum,
-															fileType));
-										});
-									// 다른 이벤트 핸들러를 여기에 추가할 수 있습니다.
-								}
+						tinymce.init({
+						language: "ko_KR",
+						selector: '#noteTextarea',
+						height: '97vh',
+						menubar: false,
+						plugins: ["advlist", "autolink", "lists", "link", "image", "charmap", "preview", "anchor", "searchreplace", "visualblocks", "code", "fullscreen", "insertdatetime", "media", "table", "code", "help", "wordcount", "save"],
+						toolbar: 'formatselect fontselect fontsizeselect |' + ' forecolor backcolor |' + ' bold italic underline strikethrough |' + ' alignjustify alignleft aligncenter alignright |' + ' bullist numlist |' + ' table tabledelete |' + ' link image | ' + ' save ',
+						image_title: true,
+						automatic_uploads: true,
+						file_picker_types: 'image',
+						file_picker_callback: function(cb, value, meta) {
+							let input = document.createElement('input');
+							input.setAttribute('type', 'file');
+							input.setAttribute('accept', 'image/*');
+							input.onchange = function() {
+								let file = this.files[0];
+								let reader = new FileReader();
+								reader.onload = function(e) {
+									let id = 'blobid' + (new Date()).getTime();
+									let blobCache = tinymce.activeEditor.editorUpload.blobCache;
+									let base64 = e.target.result.split(',')[1];
+									let blobInfo = blobCache.create(id, file, base64);
+									blobCache.add(blobInfo);
+									cb(blobInfo.blobUri(), {
+										title: file.name
+									});
+								};
+								reader.readAsDataURL(file);
+							};
+							input.click();
+						},
+						content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }',
+						save_onsavecallback: function() {
+							fileSave();
+						},
+						autosave_interval: 600000, // 10 minutes
+						autosave_callback: function() {
+							console.log('자동저장 작동');
+							fileSave();
+						},
+						setup: function(editor) {
+							editor.on('init', function() {
+								console.log('변환');
+								const fileNum = getUrlParam('file');
+								const fileType = getUrlParam('type');
+								console.log(fileOpenUrl(fileNum, fileType));
 							});
+						}
+					});
 					</script>
 				</div>
 			</div>
