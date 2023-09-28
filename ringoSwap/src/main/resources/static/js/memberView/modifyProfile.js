@@ -61,17 +61,6 @@ function memberPrint(){
         }
     });
 }
-/* 입력된 언어코드 문자열을 해당 언어의 이미지로 변환하는 함수 */
-function printLanguage(lang){
-    if(lang === 'ko'){
-        lang = languageImages["한국어"];
-    }else if(lang === 'ja'){
-        lang = languageImages["일본어"];
-    }else if(lang === 'en'){
-        lang = languageImages["영어"];
-    }
-    return lang;
-}
 
 function toggleHobbyButtonClass() {
     // 취미 버튼 클래스 전환

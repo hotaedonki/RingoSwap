@@ -44,17 +44,7 @@ function memberPrint(){
        }
    });
 }
-/*  */
-function printLanguage(lang){
-   if(lang === 'ko'){
-       lang = languageImages["한국어"];
-   }else if(lang === 'ja'){
-       lang = languageImages["일본어"];
-   }else if(lang === 'en'){
-       lang = languageImages["영어"];
-   }
-   return lang;
-}
+
 
 function goToMyFeed() {
 	const url = `../feed/feedMain?nickname=${myName}`;
