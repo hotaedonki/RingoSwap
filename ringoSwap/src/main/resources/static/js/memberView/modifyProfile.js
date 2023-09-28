@@ -44,9 +44,11 @@ function memberPrint(){
              let target = printLanguage(member.target_lang);
             let tagArr = member.tagList;
             $('#profilePicInput').attr('src', './memberProfilePrint?user_id='+member.user_id);
+            $('#backPicInput').attr('src', './memberBackPrint?user_id='+member.user_id);
             $('.nativeLanguage').attr('src', native);
             $('.targetLanguage').attr('src', target);
-            
+            console.log('./memberProfilePrint?user_id='+member.user_id);
+            console.log('./memberBackPrint?user_id='+member.user_id);
             if(tagArr && Array.isArray(tagArr)){
                 for(let i=0;i<tagArr.length;i++){
                     console.log(tagArr[i]);
@@ -65,7 +67,7 @@ function memberPrint(){
         }
     });
 }
-/*  */
+/* 입력된 언어코드 문자열을 해당 언어의 이미지로 변환하는 함수 */
 function printLanguage(lang){
     if(lang === 'ko'){
         lang = languageImages["한국어"];
@@ -77,54 +79,54 @@ function printLanguage(lang){
     return lang;
 }
 
-    function toggleHobbyButtonClass() {
-        // 취미 버튼 클래스 전환
-        $(this).toggleClass('btn-outline-primary btn-primary');
-    }
+function toggleHobbyButtonClass() {
+    // 취미 버튼 클래스 전환
+    $(this).toggleClass('btn-outline-primary btn-primary');
+}
 
-    function enableIntroductionEditing() {
-        // 자기소개 수정 활성화
-        let currentText = $(this).text();
-        let form = $('.form-control').text();
-        if(!form){
-            $(this).html(`<textarea class="form-control" onkeypress="enterPress(event)">${currentText}</textarea>
-            `);
-        }
+function enableIntroductionEditing() {
+    // 자기소개 수정 활성화
+    let currentText = $(this).text();
+    let form = $('.form-control').text();
+    if(!form){
+        $(this).html(`<textarea class="form-control" onkeypress="enterPress(event)">${currentText}</textarea>
+        `);
     }
+}
 
-    function enterPress(event){
-        if (event.key === 'Enter') {        // 자기소개 수정 완료 이벤트
-            updateIntroductionText();
-        }
+function enterPress(event){
+    if (event.key === 'Enter') {        // 자기소개 수정 완료 이벤트
+        updateIntroductionText();
     }
-    function updateIntroductionText() {
-        // 수정된 자기소개 텍스트 저장
-        let newValue = $('.form-control').val();
-        console.log(newValue);
-        $('.form-control').closest('.card-text').text(newValue);
-    }
+}
+function updateIntroductionText() {
+    // 수정된 자기소개 텍스트 저장
+    let newValue = $('.form-control').val();
+    console.log(newValue);
+    $('.form-control').closest('.card-text').text(newValue);
+}
 
-    function profileFileInput(){
-        //profilePicInput 객체 클릭시 profileFileInput객체에 사진 파일을 input하고 profilePicInput에 input한 사진을 띄우는 메서드
-            // profileFileInput 객체 클릭
-            const fileInput = document.getElementById('profileFileInput');
-            fileInput.click();
+function profileFileInput(){
+    //profilePicInput 객체 클릭시 profileFileInput객체에 사진 파일을 input하고 profilePicInput에 input한 사진을 띄우는 메서드
+        // profileFileInput 객체 클릭
+        const fileInput = document.getElementById('profileFileInput');
+        fileInput.click();
 
-            // 파일 선택 시 이벤트 처리
-            fileInput.addEventListener("change", function () {
-                const profilePicInput = document.getElementById("profilePicInput");
-                // 선택한 파일을 읽기
-                const selectedFile = fileInput.files[0];
-                if (selectedFile) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        // 읽어온 이미지를 profilePicInput에 표시
-                        profilePicInput.src = e.target.result;
-                    };
-                reader.readAsDataURL(selectedFile);
-                }
-            });
-    }
+         // 파일 선택 시 이벤트 처리
+        fileInput.addEventListener("change", function () {
+            const profilePicInput = document.getElementById("profilePicInput");
+            // 선택한 파일을 읽기
+            const selectedFile = fileInput.files[0];
+            if (selectedFile) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    // 읽어온 이미지를 profilePicInput에 표시
+                    profilePicInput.src = e.target.result;
+                };
+            reader.readAsDataURL(selectedFile);
+            }
+        });
+}
     function backgroundFileInput(){
         //배경 사진을 변경하는 함수
         const backInput = document.getElementById('backgroundFileInput');
@@ -147,39 +149,40 @@ function printLanguage(lang){
     }
 
 
-    /* 수정한 프로필 정보를 수집 및 전송하는 함수부 */
-    function sendProfileModification() {
-        // 프로필 수정 정보 수집 및 전송
-        let updatedTags = collectUpdatedTags();
-        let introduction = $('.introduction').text();              //자기소개
-        let desiredLanguage = setTargetLanguage();      //배우고 싶은 언어
-        let profileData = new FormData();            //프로필 사진 사진객체
-        let profileFileInput = document.querySelector('#profileFileInput');
-        profileData.append('profileUpload', profileFileInput.files[0]);
-        profileData.append('introduction', introduction);
-        profileData.append('target_lang', desiredLanguage);
+/* 수정한 프로필 정보를 수집 및 전송하는 함수부 */
+function sendProfileModification() {
+    // 프로필 수정 정보 수집 및 전송
+    let updatedTags = collectUpdatedTags();
+    let introduction = $('.introduction').text();              //자기소개
+    let desiredLanguage = setTargetLanguage();      //배우고 싶은 언어
+    let profileData = new FormData();
+    let profileFileInput = document.querySelector('#profileFileInput');								//프로필 사진 사진객체
+    let backgroundFileInput = document.querySelector('#backgroundFileInput');				//배경사진
+    profileData.append('profileUpload', profileFileInput.files[0]);
+    profileData.append('backUpload', backgroundFileInput.files[0]);
+    profileData.append('introduction', introduction);
+    profileData.append('target_lang', desiredLanguage);
 
-        let backFileInput = document.querySelector("#backgroundFileInput");           //배경사진
-		updateTags(updatedTags);		//해당 함수로 멤버태그 수정을 실시합니다.
-		let modify = '';
-        console.log('태그 : '+updatedTags);
-        $.ajax({
-            url: 'memberModifyProfile',
-            type: 'POST',
-            data: profileData,
-            contentType: false,
-            processData: false,
-            success: function() {
-                console.log('수정이 완료되었습니다.');
-                modify = '100';
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(`AJAX call failed: ${textStatus}, ${errorThrown}`);
-            }
-        });
-            window.location.href = "../member/myPage"; 
-        
-    }
+    console.log('수정 : '+profileData);
+	updateTags(updatedTags);		//해당 함수로 멤버태그 수정을 실시합니다.
+	let modify = '';
+    console.log('태그 : '+updatedTags);
+    $.ajax({
+        url: 'memberModifyProfile',
+        type: 'POST',
+        data: profileData,
+        contentType: false,
+        processData: false,
+        success: function() {
+            console.log('수정이 완료되었습니다.');
+            modify = '100';
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`AJAX call failed: ${textStatus}, ${errorThrown}`);
+        }
+    });
+        window.location.href = "../member/myPage"; 
+}
 	//클릭한 멤버태그를 전부 수집하는 함수입니다.
     function collectUpdatedTags() {
         // 수정된 태그 수집

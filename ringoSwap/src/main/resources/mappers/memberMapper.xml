@@ -137,6 +137,8 @@
         , rewrite_time=sysdate
         , original_profile=#{original_profile}
         , saved_profile=#{saved_profile}
+        , original_background=#{original_background}
+        , saved_background=#{saved_background}
 	where user_num = #{user_num}
 	</update>
 	<!-- 사용자의 수정한 계정 정보 매개변수로 가져가 DB를 수정하는 update문 -->
