@@ -14,7 +14,7 @@
 	margin-left: 5px;
 }
 
-.wordButton {
+.offButton {
 	z-index: 10; /* textarea 앞에 위치 */
 	position: absolute;
 	top: 10px; /* 상단에서 10px 떨어진 위치에 배치 */
@@ -170,4 +170,23 @@
 /* IE */
 .home {
     -ms-overflow-style: none;
+}
+
+@media (max-width: 768px) {
+	span.word {
+		font-size: 14px;
+	}
+	
+    .word-content span {
+        font-size: 11px; 
+    }
+}
+
+@media (max-width: 524px) {
+	span.word {
+		font-size: 10px;
+	}
+    .word-content span {
+        font-size: 7px; 
+    }
 }

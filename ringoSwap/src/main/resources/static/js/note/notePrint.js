@@ -1,12 +1,15 @@
-// 함수처리용 변수값 설정 (검색 및 정렬을 위한 변수)
-let ca = 'ko';
-let st = 'input';
-
-
 // 폴더 버튼을 클릭할 때의 이벤트 처리
 function highlightSelectedFolder() {
-    $('.btn-dark').removeClass('btn-dark').addClass('btn-outline-dark');
-    $(this).removeClass('btn-outline-dark').addClass('btn-dark');
+    if ($(this).hasClass('btn-dark')) {
+        // 이미 btn-dark 상태이면, 하위 목록을 제거하고 btn-dark를 btn-outline-dark로 변경
+        $(this).removeClass('btn-dark').addClass('btn-outline-dark');
+        $('#dirPrint' + $(this).data('dir-num')).html('');
+        $('#filePrint' + $(this).data('dir-num')).html('');
+    } else {
+        // 아니면, 기존의 btn-dark 폴더를 btn-outline-dark로 변경하고 현재 폴더를 btn-dark로 변경
+        $('.btn-dark').removeClass('btn-dark').addClass('btn-outline-dark');
+        $(this).removeClass('btn-outline-dark').addClass('btn-dark');
+    }
 }
 
 // 정렬 방식을 설정하는 함수
@@ -15,6 +18,18 @@ function sortEvent() {
     s = s === '생성순' ? 'input' : s === '제목순' ? 'title' : 'modifie';
     st = s;
     dirPrint();
+}
+
+function sortBtnNameChange() {
+    // sortBtnMain의 현재 텍스트를 가져옴
+    let currentMainText = $(".sortBtnMain").text();
+    
+    // 클릭한 .dropdown-item.sortBtn의 텍스트를 가져옴
+    let selectedText = $(this).text();
+    
+    // 두 텍스트를 서로 바꿈
+    $(".sortBtnMain").text(selectedText);
+    $(this).text(currentMainText);
 }
 
 //URL로부터 파일 번호를 얻어오는 함수
@@ -73,6 +88,17 @@ function dirCreate() {
     });
 }
 
+function folderClose() {
+    const folderBtn = $('.btn-dark.dir-btn'); 
+
+    if (folderBtn.length) {  
+        folderBtn.removeClass('btn-dark').addClass('btn-outline-dark');
+        const dirNum = folderBtn.attr('data-dir-num');
+        $('#dirPrint' + dirNum).html('');
+        $('#filePrint' + dirNum).html('');
+    }
+}
+
 // 해당 폴더를 부모 폴더로 설정하고 파일을 생성하는 함수
 function fileCreate(fileType){
     let dir_num = $('.btn-dark').attr('data-dir-num');
@@ -101,7 +127,11 @@ function fileCreate(fileType){
 function dirOpen() {
     let num = $(this).data('dir-num');
     console.log(num);
-
+    
+    // 만약 현재 폴더가 btn-dark 상태가 아니라면 하위 목록을 불러오지 않고 종료
+    if (!$(this).hasClass('btn-dark')) {
+        return;
+    }
     // 하위 폴더 불러오기
     $.ajax({
         url: 'dirOpenDirectory',
@@ -233,6 +263,7 @@ function loadPage(pageNumber) {
             let str1 = '';
             let str2 = '';
             let cnt = 0;
+
             $(wordList).each(function(i, item) {
                 if (cnt < 7) {
                     str1 += `<li class="list-group-item word-card modifyWord" data-word-num="${item.word_num}" data-pron="${item.pron}" data-mean="${item.mean}">
@@ -338,27 +369,29 @@ function fileSave(){
     });
 }
 
-
-
-
 /* Delete 함수 목록 시작부 */
 //폴더 삭제기능
 function dirDelete(){
     let num = $(this).attr('data-dir-num');
+    $('#deleteFolderModal').modal('show');
 
-    $.post("dirDeleteOne", {
-        dir_num : num
-    })
-    .done(function(txt) {
-        // 성공했을 때 실행할 코드     
-        dirPrint();
-    })
-    .fail(function() {
-        // 실패했을 때 실행할 코드
-        console.log("error");
-    })
-    .always(function() {
-        // 항상 실행할 코드
+    // 모달에서 확인 버튼을 클릭하면
+    $('#confirmFolderDelete').off('click').on('click', function() {
+        $.post("dirDeleteOne", {
+            dir_num : num
+        })
+        .done(function(txt) {
+            // 성공했을 때 실행할 코드     
+            dirPrint();
+            $('#deleteFolderModal').modal('hide'); // 모달 숨기기
+        })
+        .fail(function() {
+            // 실패했을 때 실행할 코드
+            console.log("error");
+        })
+        .always(function() {
+            // 항상 실행할 코드
+        });
     });
 }
 //파일 삭제기능
@@ -443,40 +476,15 @@ function printNote() {
 	});
 }
 
-// 문서 준비가 완료되면 실행
-$(document).ready(function(){
-    dirPrint();
-    latestFilePrint();      //가장 최근 수정한 메모장or단어장 출력 함수
-    // 정렬 방식 설정
-    $('.sortBtn').click(sortEvent);
-    $('#createFolder').click(dirCreate);
-    // 노트, 단어장 생성
-    $('#createNote').click(() => fileCreate('note'));
-    $('#createWord').click(() => fileCreate('word'));
-    $(document).on('click', '.dir-btn', highlightSelectedFolder);
-    $(document).on('click', '.dirOpen', dirOpen);
-    $(document).on('click', '.dirDelete', dirDelete);
-    $(document).on('click', '.yes', closeModal);
-    printNote();
 
-    window.addEventListener('load', function () {
-        const fileNum = getUrlParam('file');
-        const fileType = getUrlParam('type');
-        if (fileNum) {
-            // 파일 번호가 URL에 있을 경우 해당 텍스트 객체 열기
-            fileOpenUrl(fileNum, fileType);
-        }
-    });
-    
-	$(".dropdown-item.sortBtn").click(function() {
-	    // sortBtnMain의 현재 텍스트를 가져옴
-	    let currentMainText = $(".sortBtnMain").text();
-	    
-	    // 클릭한 .dropdown-item.sortBtn의 텍스트를 가져옴
-	    let selectedText = $(this).text();
-	    
-	    // 두 텍스트를 서로 바꿈
-	    $(".sortBtnMain").text(selectedText);
-	    $(this).text(currentMainText);
-	});
-});
+function offCanvasButtonPrint() {
+	const button = `
+		<button class="btn btn-primary wordOffcanvas" type="button"
+			data-bs-toggle="offcanvas"
+			data-bs-target="#offcanvasWithBothOptions"
+			aria-controls="offcanvasWithBothOptions">
+			<i class="bi bi-arrows-angle-expand"></i>
+		</button>`;
+		
+		$('.wordButton').append(button);
+}

@@ -102,20 +102,7 @@
 
 	<main class="home custom-container">
 		<div class="container">
-			<div class="row noteHome">
-				<div class="col-1">
-					<div class="noteItem"
-						style="position: fixed; top: 5px; right: 30px; z-index:5555">
-						<h5 class="noteTitle"></h5>
-						<button class="btn btn-primary noteOffcanvas " type="button"
-							data-bs-toggle="offcanvas"
-							data-bs-target="#offcanvasWithBothOptions"
-							aria-controls="offcanvasWithBothOptions">
-							<i class="bi bi-arrows-angle-expand"></i>
-						</button>
-					</div>
-				</div>
-			</div>
+			
 			<div class="noteOrWord">
 				<div class="row wordMain-content">
 					<div class="col-12">
@@ -126,12 +113,7 @@
 								<h2 class="wordListName"></h2>
 								<div class="wordButton">
 									<button class="btn btn-primary add-btn">추가</button>
-									<button class="btn btn-primary wordOffcanvas" type="button"
-										data-bs-toggle="offcanvas"
-										data-bs-target="#offcanvasWithBothOptions"
-										aria-controls="offcanvasWithBothOptions">
-										<i class="bi bi-arrows-angle-expand"></i>
-									</button>
+									
 								</div>
 							</div>
 
@@ -162,6 +144,10 @@
 					</div>
 				</div>
 				<div class="noteMain-content">
+						<div class="noteItem wordButton"
+							style="position: fixed; top: 7px; right: 15px; z-index:5555">
+							<h5 class="noteTitle"></h5>
+						</div>
 					<textarea id="noteTextarea">
 				</textarea>
 
@@ -244,6 +230,29 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- 폴더 삭제 -->
+	<div class="modal fade deleteFolder" id="deleteFolderModal" tabindex="-1"
+		aria-labelledby="deleteFolderModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteFolderModalLabel">Delete Folder</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>Are you sure you want to delete this folder?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger yes" id="confirmFolderDelete">Confirm
+						Delete</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<!-- 파일 삭제 -->
 	<div class="modal fade deleteFile" id="deleteModal" tabindex="-1"
@@ -267,7 +276,6 @@
 			</div>
 		</div>
 	</div>
-
 	<!-- ========================폴더 출력 오프캔버스=================== -->
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true"
 		tabindex="-1" id="offcanvasWithBothOptions"
@@ -318,8 +326,9 @@
 
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
 	<script th:src="@{../js/memberView/sidebar.js}"></script>
-	<script th:src="@{../js/notePrint.js}"></script>
-	<script th:src="@{../js/wordPrint.js}"></script>
+	<script th:src="@{../js/note/noteVariables.js}"></script>
+	<script th:src="@{../js/note/notePrint.js}"></script>
+	<script th:src="@{../js/note/wordPrint.js}"></script>
 
 </body>
 </html>

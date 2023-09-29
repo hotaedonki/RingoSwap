@@ -336,13 +336,12 @@ function followerSearch(){
                 followerList.forEach(follower => {
                     $('.followerBox').append(`
                     <div>
-                    <span class="showOffcanvasWithUserData" data-user-name="${follower.follower_name}">
+                    <span class="showOffcanvasWithUserData follower-area-margin" data-user-name="${follower.follower_name}">
                         <img src="../member/memberProfilePrint?user_id=${follower.follower_id}" style="width:25px; height:25px; border-radius:12px;" alt="Profile Picture" />
-                        <span >${follower.follower_name}</span>
-                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" />
+                        <span style="margin-right: 10px;">${follower.follower_name}</span>
+                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" /> <-->
                         <img src="../img/일본어.jpg" alt="Learning Language" style="width:25px; height:25px; border-radius:12px;" />
                     </span>
-                        <button type="button" class="btn btn-primary">팔로우</button>
                     </div>
                     `);
                 })
@@ -372,7 +371,7 @@ function followeeSearch(){
                     <div class="d-flex justify-content-between align-items-center">
 	                    <span class="showOffcanvasWithUserData " data-user-name="${followee.followee_name}">
 	                        <img src="../member/memberProfilePrint?user_id=${followee.followee_id}" alt="Profile Picture" style="width:25px; height:25px; border-radius:12px;" />
-	                        <span >${followee.followee_name}</span>
+	                        <span style="margin-right: 10px;">${followee.followee_name}</span>
 	                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" /> <-->
 	                        <img src="../img/일본어.jpg" alt="Learning Language" style="width:25px; height:25px; border-radius:12px;" />
 	                    </span>
