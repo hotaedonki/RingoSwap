@@ -391,6 +391,58 @@ function closeModal() {
 }
 
 
+function printNote() {
+	tinymce.init({
+	    language: "ko_KR",
+	    selector: '#noteTextarea',
+	    height: '97vh',
+	    menubar: false,
+	    plugins: ["advlist", "autolink", "lists", "link", "image", "charmap", "preview", "anchor", "searchreplace", "visualblocks", "code", "fullscreen", "insertdatetime", "media", "table", "code", "help", "wordcount", "save"],
+	    toolbar: 'formatselect fontselect fontsizeselect |' + ' forecolor backcolor |' + ' bold italic underline strikethrough |' + ' alignjustify alignleft aligncenter alignright |' + ' bullist numlist |' + ' table tabledelete |' + ' link image | ' + ' save ',
+	    image_title: true,
+	    automatic_uploads: true,
+	    file_picker_types: 'image',
+	    file_picker_callback: function(cb, value, meta) {
+	        let input = document.createElement('input');
+	        input.setAttribute('type', 'file');
+	        input.setAttribute('accept', 'image/*');
+	        input.onchange = function() {
+	            let file = this.files[0];
+	            let reader = new FileReader();
+	            reader.onload = function(e) {
+	                let id = 'blobid' + (new Date()).getTime();
+	                let blobCache = tinymce.activeEditor.editorUpload.blobCache;
+	                let base64 = e.target.result.split(',')[1];
+	                let blobInfo = blobCache.create(id, file, base64);
+	                blobCache.add(blobInfo);
+	                cb(blobInfo.blobUri(), {
+	                    title: file.name
+	                });
+	            };
+	            reader.readAsDataURL(file);
+	        };
+	        input.click();
+	    },
+	    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }',
+	    save_onsavecallback: function() {
+	        fileSave();
+	    },
+	    autosave_interval: 600000, // 10 minutes
+	    autosave_callback: function() {
+	        console.log('자동저장 작동');
+	        fileSave();
+	    },
+	    setup: function(editor) {
+	        editor.on('init', function() {
+	            console.log('변환');
+	            const fileNum = getUrlParam('file');
+	            const fileType = getUrlParam('type');
+	            console.log(fileOpenUrl(fileNum, fileType));
+	        });
+	    }
+	});
+}
+
 // 문서 준비가 완료되면 실행
 $(document).ready(function(){
     dirPrint();
@@ -405,6 +457,7 @@ $(document).ready(function(){
     $(document).on('click', '.dirOpen', dirOpen);
     $(document).on('click', '.dirDelete', dirDelete);
     $(document).on('click', '.yes', closeModal);
+    printNote();
 
     window.addEventListener('load', function () {
         const fileNum = getUrlParam('file');
