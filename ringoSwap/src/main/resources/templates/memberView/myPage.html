@@ -116,6 +116,8 @@
 					<div class="card mb-4" style="height: 150px;">
 						<div class="card-body">
 							<h5 class="card-title nickname"></h5>
+							<input type="hidden" id="userId">
+							<input type="hidden" id="followOpen">
 							<p class="card-text introduction"></p>
 						</div>
 					</div>
@@ -166,6 +168,7 @@
 	<!-- ... (하단 코드 생략) ... -->
 
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{../js/memberView/memberPageVariables.js}"></script>
 	<script th:src="@{../js/memberView/sidebar.js}"></script>
 	<script th:src="@{../js/memberView/myPage.js}"></script>
 	<script th:src="@{../js/memberView/memberFollow.js}"></script>

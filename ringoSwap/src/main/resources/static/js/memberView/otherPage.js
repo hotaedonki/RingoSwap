@@ -1,9 +1,4 @@
 let nickname;  // Global variable to hold the nickname value
-const myPagelanguage = {
-   "한국어": "../img/한국어.jpg",
-   "일본어": "../img/일본어.jpg",
-   "영어": "../img/영어.jpg"
-};
 
 function getnicknameFromUrl() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -52,16 +47,6 @@ function printOtherPeoplePage() {
   });
 }
 
-function printOtherPeopleLanguage(lang){
-   if(lang === 'ko'){
-       lang = myPagelanguage["한국어"];
-   }else if(lang === 'ja'){
-       lang = myPagelanguage["일본어"];
-   }else if(lang === 'en'){
-       lang = myPagelanguage["영어"];
-   }
-   return lang;
-}
 
 function goToOtherPeopleFeed() {
 	const url = `../feed/feedMain?nickname=${nickname}`;
@@ -75,5 +60,7 @@ $(document).ready(function() {
   $(document).on('click', '.goToOtherPeopleFeed', goToOtherPeopleFeed);
   $(document).on('click', '#follower-btn a', followerSearch);
   $(document).on('click', '#follow-btn a', followeeSearch);
+	
+  memberPrint();
 });
 
