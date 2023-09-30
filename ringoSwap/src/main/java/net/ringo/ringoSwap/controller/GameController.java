@@ -169,7 +169,7 @@ public class GameController
 			return map;	//file_num이 설정되어있지 않을 경우, 게임실행이 불가하기에 null값을 리턴
 		}else if(setting.getFile_num() == -10) {
 			//file_num이 -10일경우, 해당 사용자의 오답노트를 리턴해 맵에 집어넣는다.
-			wordList = service.wordWrongArraySearchByUserNum(user_num);
+			wordList = service.wordWrongArraySearchByUserNum(setting);
 			map.put("wordList", wordList);
 		}else {
 			//회원정보에 기록된 file_num을 매개변수로 해당 단어장 정보를 리턴
@@ -216,5 +216,15 @@ public class GameController
 		Collections.shuffle(options);
 		
 		return options;
+	}
+	
+	@ResponseBody
+	@PostMapping("/wrongWordInsert")
+	public void wrongWordInsert(@AuthenticationPrincipal UserDetails user
+			, @RequestBody  List<DirWord> wrongWordListJson) {
+		log.debug("오답목록 {}",wrongWordListJson);
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		log.debug("아이디 {}",user_num);
+		int methodResult = service.wordWrongArrayInsert(wrongWordListJson);
 	}
 }

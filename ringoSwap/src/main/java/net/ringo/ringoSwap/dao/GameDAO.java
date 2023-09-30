@@ -3,6 +3,7 @@ package net.ringo.ringoSwap.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -36,6 +37,10 @@ public interface GameDAO
 	//게임세팅 정보값을 매개변수로 해당 세팅에 따라 정렬된 단어목록을 리턴하는 메서드
 	ArrayList<DirWord> wordArraySearchByGameSetting(GameSetting setting);
 	//사용자의 오답노트를 DB에서 검색해 출력하는 메서드
-	ArrayList<DirWord> wordWrongArraySearchByUserNum(int user_num);
+	ArrayList<DirWord> wordWrongArraySearchByUserNum(GameSetting setting);
+	//오답노트에 해당 오답이 존재하는지 확인하는 메서드
+	int wordWrongSearch(int word_num);
+	//오답을 오답노트에 입력하는 메서드
+	int wordWrongArrayInsert(DirWord word);
 	
 }

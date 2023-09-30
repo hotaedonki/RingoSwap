@@ -22,8 +22,8 @@ function printOtherPeoplePage() {
        $('.follower-cnt').html(member.fr_count);
        $('.followee-cnt').html(member.fe_count);
        $('.goToOtherPeopleFeed').html(member.nickname + "님의 피드가기");
-       let native = printOtherPeopleLanguage(member.native_lang);
-       let target = printOtherPeopleLanguage(member.target_lang);
+       let native = printLanguage(member.native_lang);
+       let target = printLanguage(member.target_lang);
        let tagArr = member.tagList;
        $('#profilePicInput').attr('src', '../member/memberProfilePrint?user_id='+member.user_id);
        $('#backPicInput').attr('src', '../member/memberBackPrint?user_id='+member.user_id);
@@ -56,11 +56,9 @@ function goToOtherPeopleFeed() {
 $(document).ready(function() {
   getnicknameFromUrl();
   printOtherPeoplePage();
-  printOtherPeopleLanguage();
   $(document).on('click', '.goToOtherPeopleFeed', goToOtherPeopleFeed);
   $(document).on('click', '#follower-btn a', followerSearch);
   $(document).on('click', '#follow-btn a', followeeSearch);
 	
-  memberPrint();
 });
 

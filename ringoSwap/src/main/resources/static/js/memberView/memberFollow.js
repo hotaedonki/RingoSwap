@@ -10,9 +10,9 @@ function followerSearch(){
         }
 	}
     $.ajax({
-        url: "../feed/followerSearch",
+        url: "otherFollowerSearch",
         type: "post",
-        data: {nickname : nickname},
+        data: {nickname : nickname, userId : userId},
         dataType:'json',
         success:function(followerList){
             if(followerList){
@@ -51,9 +51,9 @@ function followeeSearch(){
         }
 	}
     $.ajax({
-        url: "../feed/followeeSearch",
+        url: "otherFolloweeSearch",
         type: "post",
-        data: {nickname : nickname},
+        data: {nickname : nickname, userId : userId},
         dataType:'json',
         success:function(followeeList){
             console.log(followeeList);
