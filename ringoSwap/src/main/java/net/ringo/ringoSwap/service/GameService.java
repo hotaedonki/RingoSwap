@@ -2,6 +2,7 @@ package net.ringo.ringoSwap.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirWord;
@@ -30,6 +31,8 @@ public interface GameService {
 	//사용자의 게임세팅 정보에 따라 정렬된 단어 목록을 리턴하는 메서드
 	public ArrayList<DirWord> wordArraySearchByGameSetting(GameSetting setting);
 	//사용자의 오답노트를 리턴하는 메서드
-	public ArrayList<DirWord> wordWrongArraySearchByUserNum(int user_num);
+	public ArrayList<DirWord> wordWrongArraySearchByUserNum(GameSetting setting);
+	//오답을 입력하는 메서드
+	public int wordWrongArrayInsert(List<DirWord> wrongWordList);
 
 }

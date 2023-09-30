@@ -2,6 +2,7 @@ package net.ringo.ringoSwap.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,7 +77,20 @@ public class GameServiceImple implements GameService{
 	}
 	//사용자의 오답노트를 리턴하는 메서드
 	@Override
-	public ArrayList<DirWord> wordWrongArraySearchByUserNum(int user_num){
-		return dao.wordWrongArraySearchByUserNum(user_num);
+	public ArrayList<DirWord> wordWrongArraySearchByUserNum(GameSetting setting){
+		return dao.wordWrongArraySearchByUserNum(setting);
+	}
+	//오답을 입력하는 메서드
+	@Override
+	public int wordWrongArrayInsert(List<DirWord> wrongWordList) {
+		int methodResult = 0;
+		for(DirWord word : wrongWordList) {
+			methodResult = dao.wordWrongSearch(word.getWord_num());
+			if(methodResult !=0) {
+				continue;
+			}
+			methodResult = dao.wordWrongArrayInsert(word);
+		}
+		return methodResult;
 	}
 }

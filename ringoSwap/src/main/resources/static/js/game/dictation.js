@@ -173,6 +173,7 @@ function nextQuestionPrint(){
 //정답페이지에서 각 문제의 정답여부를 출력하는 함수
 function dictationAnswerPrint(){
     let cnt = 0;
+    let wrongWord = [];
     wordList.forEach(word => {
         $('.vertical-line').append(`
             <div class="col-12 show-dictation-result-word" id="answer${cnt}" style="width : 50%">
@@ -190,11 +191,13 @@ function dictationAnswerPrint(){
             $(`#answer${cnt}`).append(`
                 <i class="bi bi-x red"></i>
             `);
+            wrongWord.push(wordList[cnt]);
         }
         cnt++
     });
     if(!pronShow){
         $('.dictation-result-pronunciation').hide();
     }
-
+    console.log(JSON.stringify({wrongWordList : wrongWord}));
+    wrongInsert(wrongWord);
 }

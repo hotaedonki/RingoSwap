@@ -574,4 +574,43 @@ public class MemberController
 		log.debug("친구목록 {}", friendList);
 		return friendList;
 	}
+	
+	//<<<<<<<<<<------[ 팔로우/팔로워 기능 시작 ]------------------------
+	@ResponseBody
+	@PostMapping("otherFollowerSearch")
+	public ArrayList<MemberFollow> otherFollowerSearch(String nickname, String userId){
+		int user_num = service.memberSearchByIdReturnUserNum(userId);
+		HashMap<String, Object> map = new HashMap<>();		//followerArraySearch메서드용 해쉬맵 변수
+		log.debug("번호 {}", user_num);
+		ArrayList<Integer> followerList = service.memberByNicknameReturnUserNum(nickname); 
+		if(followerList.isEmpty()) {		//followerList변수가 비어있음 = 검색된 팔로워가 없는 것이므로 이후 검색 메서드 구동은 스킵한다.
+			ArrayList<MemberFollow> none = null;
+			return none;
+		}
+		map.put("followee_num", user_num);
+		map.put("follower_num", followerList);
+		log.debug("맵 {}",map);
+		ArrayList<MemberFollow> followerSearch = service.followerArraySearch(map);
+		
+		return followerSearch;
+	}
+
+	@ResponseBody
+	@PostMapping("otherFolloweeSearch")
+	public ArrayList<MemberFollow> otherFolloweeSearch(String nickname, String userId){
+		int user_num = service.memberSearchByIdReturnUserNum(userId);
+		HashMap<String, Object> map = new HashMap<>();		//followerArraySearch메서드용 해쉬맵 변수
+		log.debug("번호 {}", user_num);
+		ArrayList<Integer> followeeList = service.memberByNicknameReturnUserNum(nickname); 
+		if(followeeList.isEmpty()) {		//followerList변수가 비어있음 = 검색된 팔로워가 없는 것이므로 이후 검색 메서드 구동은 스킵한다.
+			ArrayList<MemberFollow> none = null;
+			return none;
+		}
+		map.put("follower_num", user_num);
+		map.put("followee_num", followeeList);
+		log.debug("맵 {}",map);
+		ArrayList<MemberFollow> followeeSearch = service.followeeArraySearch(map);
+		
+		return followeeSearch;
+	}
 }

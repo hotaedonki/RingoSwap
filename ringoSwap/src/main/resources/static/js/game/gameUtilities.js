@@ -103,3 +103,19 @@ function gameSettingPrint(){
         }
     })
 }
+
+//오답노트에 오답 목록을 집어넣는 기능
+function wrongInsert(wrongWord){
+    $.ajax({
+		url:'wrongWordInsert',
+		type:'post',
+        contentType: 'application/json;charset=UTF-8',
+		data:JSON.stringify(wrongWord),
+		success:function(){
+			console.log('입력성공');
+		},
+        error:function(e){
+            console.log(e);
+        }
+	})
+}
