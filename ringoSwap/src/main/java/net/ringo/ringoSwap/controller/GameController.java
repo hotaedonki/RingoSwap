@@ -227,4 +227,13 @@ public class GameController
 		log.debug("아이디 {}",user_num);
 		int methodResult = service.wordWrongArrayInsert(wrongWordListJson);
 	}
+	@ResponseBody
+	@PostMapping("/wrongWordDelete")
+	public void wrongWordDelete(@AuthenticationPrincipal UserDetails user
+			, @RequestBody  List<DirWord> rightWordList) {
+		log.debug("오답목록 {}",rightWordList);
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		log.debug("아이디 {}",user_num);
+		int methodResult = service.wordWrongArrayDelete(rightWordList);
+	}
 }

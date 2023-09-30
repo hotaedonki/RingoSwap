@@ -42,5 +42,7 @@ public interface GameDAO
 	int wordWrongSearch(int word_num);
 	//오답을 오답노트에 입력하는 메서드
 	int wordWrongArrayInsert(DirWord word);
+	//단어목록을 오답노트에서 삭제하는 메서드
+	int wordWrongArrayDelete(List<DirWord> rightWordList);
 	
 }

@@ -151,4 +151,12 @@
 	insert into ringo_word_wrong(word_num, user_num, word, pron, mean, description)
 	values (#{word_num}, #{user_num}, #{word}, #{pron}, #{mean}, #{description})
 	</insert>
+	<!-- 정답을 맞춘 오답목록을 오답노트에서 삭제하는 delete문 -->
+	<delete id="wordWrongArrayDelete" parameterType="list">
+	delete from ringo_word_wrong
+	where word_num in
+	<foreach item="item" index="index" collection="list" open="(" separator=", " close=")">
+		#{item.word_num}
+	</foreach>
+	</delete>
 </mapper>

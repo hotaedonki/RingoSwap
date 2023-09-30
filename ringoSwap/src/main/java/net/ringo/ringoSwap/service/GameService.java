@@ -34,5 +34,7 @@ public interface GameService {
 	public ArrayList<DirWord> wordWrongArraySearchByUserNum(GameSetting setting);
 	//오답을 입력하는 메서드
 	public int wordWrongArrayInsert(List<DirWord> wrongWordList);
+	//해당 단어목록을 오답노트에서 삭제하는 메서드
+	public int wordWrongArrayDelete(List<DirWord> rightWordList);
 
 }

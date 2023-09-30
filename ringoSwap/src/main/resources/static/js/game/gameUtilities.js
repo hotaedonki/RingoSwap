@@ -119,3 +119,18 @@ function wrongInsert(wrongWord){
         }
 	})
 }
+//오답노트에 오답 목록을 삭제하는 기능
+function wrongDelete(rightWord){
+    $.ajax({
+		url:'wrongWordDelete',
+		type:'post',
+        contentType: 'application/json;charset=UTF-8',
+		data:JSON.stringify(rightWord),
+		success:function(){
+			console.log('삭제성공');
+		},
+        error:function(e){
+            console.log(e);
+        }
+	})
+}

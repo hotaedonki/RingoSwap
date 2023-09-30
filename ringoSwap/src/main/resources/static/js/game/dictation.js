@@ -173,7 +173,8 @@ function nextQuestionPrint(){
 //정답페이지에서 각 문제의 정답여부를 출력하는 함수
 function dictationAnswerPrint(){
     let cnt = 0;
-    let wrongWord = [];
+	let rightWord = [];			//오답노트에서 답을 맞춘 오답들을 삭제하는데 사용하는 배열 변수
+    let wrongWord = [];         //오답노트에 기재할 오답들을 기록하는 배열 변수
     wordList.forEach(word => {
         $('.vertical-line').append(`
             <div class="col-12 show-dictation-result-word" id="answer${cnt}" style="width : 50%">
@@ -187,6 +188,8 @@ function dictationAnswerPrint(){
             $(`#answer${cnt}`).append(`
                 <i class="bi bi-circle blue"></i>
             `);
+            rightWord.push(wordList[cnt]);
+			console.log(rightWord);
         }else{
             $(`#answer${cnt}`).append(`
                 <i class="bi bi-x red"></i>
@@ -198,6 +201,12 @@ function dictationAnswerPrint(){
     if(!pronShow){
         $('.dictation-result-pronunciation').hide();
     }
-    console.log(JSON.stringify({wrongWordList : wrongWord}));
-    wrongInsert(wrongWord);
+    console.log(wrongType);
+	if(wrongType){
+        console.log(rightWord);
+		wrongDelete(rightWord);
+	}else{
+        console.log(JSON.stringify({wrongWordList : wrongWord}));
+		wrongInsert(wrongWord);
+	}
 }

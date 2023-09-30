@@ -93,4 +93,13 @@ public class GameServiceImple implements GameService{
 		}
 		return methodResult;
 	}
+	//해당 단어목록을 오답노트에서 삭제하는 메서드
+	@Override
+	public int wordWrongArrayDelete(List<DirWord> rightWordList) {
+		int methodResult = 0;
+		if(rightWordList != null && !rightWordList.isEmpty()) {
+			methodResult = dao.wordWrongArrayDelete(rightWordList);
+		}
+		return methodResult;
+	}
 }
