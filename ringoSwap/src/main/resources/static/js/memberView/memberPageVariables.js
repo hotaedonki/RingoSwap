@@ -4,7 +4,7 @@ const languageImages = {
     "일본어": "../img/일본어.jpg",
     "영어": "../img/영어.jpg"
 };
-
+let myNickname;
 /* 입력된 언어코드 문자열을 해당 언어의 이미지로 변환하는 함수 */
 function printLanguage(lang){
     if(lang === 'ko'){
@@ -41,26 +41,21 @@ function printLanguage(lang){
     
 //해당 사용자가 현 페이지 주인계정과 동일한 ID값을 가지는지 확인하는 함수
 function memberIdCheck(pageUserId){
-    let currentUserid = null;
+    let currentUserId = null;
     $.ajax({
         url:'/ringo/member/currentUserIdSearch',
         type:"post",
         dataType:'json',
         success:function(id){
-            currentUserid = id;
+            currentUserId = id;
         },
         error:function(e){
             console.log(e);
         }
     })
-    if(currentUserid === pageUserId){
+    if(currentUserId === pageUserId){
         return true;
     }else {
         return false;
     }
 }
-
-$(document).ready(function() {
-	$(document).on('show.bs.modal', '.followModalClass', followPrivacy);
-    $(document).on('show.bs.modal', '.followerModalClass', followPrivacy);
-})

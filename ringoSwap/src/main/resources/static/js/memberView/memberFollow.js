@@ -1,6 +1,6 @@
 function followPrivacy() {
 	let type = $(this).hasClass('follower-btn');
-	
+	let nickname = $('.nickname').text();
 	console.log(type, nickname);
 	$.ajax ({
 		url: 'followPrivacy'
@@ -11,7 +11,9 @@ function followPrivacy() {
 			if(public) {
                 if(type) followerSearch();
  				else followeeSearch();
-			}	
+            }else{
+                alert('팔로우 비공개 회원입니다.');
+            }
 		},
 		error: function(error) {
 			console.log(error);
@@ -20,10 +22,12 @@ function followPrivacy() {
 }
 
 function followerSearch(){
+    let search = $('.searchFollower').val();
+    userId = $('#userId').val();
     $.ajax({
         url: "otherFollowerSearch",
         type: "post",
-        data: {nickname : nickname, userId : userId},
+        data: {nickname : search, userId : userId},
         dataType:'json',
         success:function(followerList){
             if(followerList){
@@ -52,10 +56,12 @@ function followerSearch(){
     });
 }
 function followeeSearch(){
+    let search = $('.searchFollow').val();
+    userId = $('#userId').val();
     $.ajax({
         url: "otherFolloweeSearch",
         type: "post",
-        data: {nickname : nickname, userId : userId},
+        data: {nickname : search, userId : userId},
         dataType:'json',
         success:function(followeeList){
             console.log(followeeList);
@@ -86,9 +92,23 @@ function followeeSearch(){
     });
 }
 
-    
+function enterEventHandler(){
+	$(document).on('keyup', '.searchFollower', function(event){
+		if(event.which == 13){
+			followerSearch();
+		}
+
+	});
+	$(document).on('keyup', '.searchFollow', function(event){
+		if(event.which == 13){
+			followeeSearch();
+		}
+
+	});
+}
     
 $(document).ready(function() {   
 	$(document).on('click', '.follower-btn', followPrivacy);
 	$(document).on('click', '.follow-btn', followPrivacy);
+    enterEventHandler();
 });

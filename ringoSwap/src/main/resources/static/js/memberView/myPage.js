@@ -3,7 +3,7 @@ function bringMyName() {
 		url: 'nicknamePrint'
 		, type: 'post'
 		, success: function(name) {
-			nickname = name;
+			myNickname = name;
 		}, error: function(error) {
 			console.log(error);
 		}
