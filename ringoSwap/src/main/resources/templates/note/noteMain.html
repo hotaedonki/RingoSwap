@@ -37,8 +37,7 @@
 	<nav class="sidebar close">
 		<header>
 			<div class="image-text logo-area">
-				<span class="image"> <img th:src="@{../img/로고.png}"
-					alt="">
+				<span class="image"> <img th:src="@{../img/로고.png}" alt="">
 				</span>
 
 				<div class="text logo-text">
@@ -89,9 +88,9 @@
 					</a></li>
 					<li class="">
 						<div sec:authorize="isAuthenticated()">
-							<a th:href="@{/member/myPage}"> 
-							<span id="profileImagePlaceholder" data-tooltip="프로필 사진으로 이동합니다."></span>
-            				<span class="text nav-text">Profile</span>
+							<a th:href="@{/member/myPage}"> <span
+								id="profileImagePlaceholder" data-tooltip="프로필 사진으로 이동합니다."></span>
+								<span class="text nav-text">Profile</span>
 							</a>
 						</div>
 					</li>
@@ -102,7 +101,7 @@
 
 	<main class="home custom-container">
 		<div class="container">
-			
+
 			<div class="noteOrWord">
 				<div class="row wordMain-content">
 					<div class="col-12">
@@ -113,7 +112,7 @@
 								<h2 class="wordListName"></h2>
 								<div class="wordButton">
 									<button class="btn btn-primary add-btn">추가</button>
-									
+
 								</div>
 							</div>
 
@@ -144,10 +143,10 @@
 					</div>
 				</div>
 				<div class="noteMain-content">
-						<div class="noteItem wordButton"
-							style="position: fixed; top: 7px; right: 15px; z-index:5555">
-							<h5 class="noteTitle"></h5>
-						</div>
+					<div class="noteItem wordButton"
+						style="position: fixed; top: 7px; right: 15px; z-index: 5555">
+						<h5 class="noteTitle"></h5>
+					</div>
 					<textarea id="noteTextarea">
 				</textarea>
 
@@ -230,14 +229,16 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- 폴더 삭제 -->
-	<div class="modal fade deleteFolder" id="deleteFolderModal" tabindex="-1"
-		aria-labelledby="deleteFolderModalLabel" aria-hidden="true">
+	<div class="modal fade deleteFolder" id="deleteFolderModal"
+		tabindex="-1" aria-labelledby="deleteFolderModalLabel"
+		aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="deleteFolderModalLabel">Delete Folder</h5>
+					<h5 class="modal-title" id="deleteFolderModalLabel">Delete
+						Folder</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
@@ -245,8 +246,8 @@
 					<p>Are you sure you want to delete this folder?</p>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-danger yes" id="confirmFolderDelete">Confirm
-						Delete</button>
+					<button type="button" class="btn btn-danger yes"
+						id="confirmFolderDelete">Confirm Delete</button>
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">Cancel</button>
 				</div>
@@ -272,6 +273,49 @@
 						Delete</button>
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" tabindex="-1" id="fileCreateErrorModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Error</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true"></span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Please select a folder first.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" tabindex="-1" id="langSelectModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">language</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true"></span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Please choose a language to use.</p>
+				</div>
+				<div class="modal-footer">
+				<button type="button" class="btn btn-primary ko" data-bs-dismiss="modal">Korean</button>
+				<button type="button" class="btn btn-primary ja" data-bs-dismiss="modal">Japanese</button>
+				<button type="button" class="btn btn-primary en" data-bs-dismiss="modal">English</button>
 				</div>
 			</div>
 		</div>

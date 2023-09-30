@@ -1,8 +1,5 @@
 {
   "dependencies": {
     "bootstrap": "^5.3.1"
-  },
-  "devDependencies": {
-    "prettier": "^3.0.2"
   }
 }

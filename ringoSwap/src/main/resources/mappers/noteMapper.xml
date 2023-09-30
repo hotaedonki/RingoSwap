@@ -51,9 +51,6 @@
 		select *
 		from ringo_file
 		where dir_num = #{dir_num}
-		<if test="category != 'all'">
-			and lang_type = #{category}
-		</if>
 		order by 
 		<choose>
 			<when test="sort eq 'input'">
@@ -126,9 +123,9 @@
 	<!-- 매개변수로 받은 file객체를 통해 DB에 새로운 file정보를 생성하는 insert문 -->
 	<insert id="fileCreateOne" parameterType="DirFile">
 		insert into
-		ringo_file(file_num, dir_num, user_num, title, file_type)
+		ringo_file(file_num, dir_num, user_num, title, file_type, lang_type)
 		values(ringo_file_seq.nextval, #{dir_num}, #{user_num}, #{title},
-		#{file_type})
+		#{file_type}, #{lang_type})
 	</insert>
 	<!-- 매개변수로 받은 photo 배열을 통해 DB에 file_photo 배열을 생성하는 insert문 -->
 	<insert id="filePhotoArrayInsert">

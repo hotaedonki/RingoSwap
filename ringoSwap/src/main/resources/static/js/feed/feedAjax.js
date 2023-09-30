@@ -21,9 +21,13 @@ function feedPrint(optionalRes, newLoad = true) {
 	
 	if (newLoad) {
 		if(nickname) {
-	            $(".friend-list-row").prepend(`
-	                <button id="view-all-posts-button" class="btn btn-primary mb-3">전체 글 보기</button>
-	            `);
+	            const existingButton = $('#view-all-posts-button');
+        
+		        if (!existingButton.length) { // 버튼이 없으면 추가
+		            $(".friend-list-row").prepend(`
+		                <button id="view-all-posts-button" class="btn btn-primary mb-3">전체 글 보기</button>
+		            `);
+		        }
 	            
 	            // "전체 글 보기" 버튼 클릭 이벤트 핸들러
 	            $('#view-all-posts-button').on('click', function() {
@@ -62,6 +66,7 @@ function renderFeeds(res, newLoad) {
 	let feeds = res.feedList;
 	let likeCheck = res.likeCheckMap;
 	let replyCount = res.replyCountMap;
+	
     $(".left-area, .middle-area").show();
 	$("#feedDetail").hide();
 	
@@ -481,7 +486,7 @@ function feedTranslate(){
     let trans = $(this).closest('.card-body').find('.content-translate');
     let text = trans.text();
     let target = $('#translateLang').val();
-    console.log(text);
+    console.log(trans, text, target);
     
     $.ajax({
         url:'/ringo/translate/feed',
@@ -489,7 +494,7 @@ function feedTranslate(){
         data:{text : text, targetLang : target},
         dataType:'text',
         success:function(translateText){
-            console.log('번역성공');
+			console.log(translateText);
             if(text == translateText){
                 alert('동일한 언어로 번역할 수 없습니다.');
             }else{
@@ -499,7 +504,6 @@ function feedTranslate(){
         },
         error:function(e){
             console.log(e);
-            console.log('error');
         }
     })
 }

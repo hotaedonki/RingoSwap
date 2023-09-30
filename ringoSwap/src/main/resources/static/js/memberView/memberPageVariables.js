@@ -56,14 +56,13 @@ let myName;
                let native = printLanguage(member.native_lang);  //모국어
                let target = printLanguage(member.target_lang);  //학습 희망 언어
                let tagArr = member.tagList;                     //태그목록
-                $('#profilePicInput').attr('src', '../member/memberProfilePrint?user_id='+member.user_id);   //사진위치 지정후 출력
-                $('#backPicInput').attr('src', '../member/memberBackPrint?user_id='+member.user_id);
-                $('#followOpen').val(member.follow_open);       //타인에게 팔로우를 공개하는지 여부
+	           $('#profilePicInput').attr('src', '../member/memberProfilePrint?user_id='+member.user_id);   //사진위치 지정후 출력
+	           $('#backPicInput').attr('src', '../member/memberBackPrint?user_id='+member.user_id);
+	           $('#followOpen').val(member.follow_open);       //타인에게 팔로우를 공개하는지 여부
                $('.nativeLanguage').attr('src', native);        //모국어 출력
                $('.targetLanguage').attr('src', target);        //학습 희망 언어 출력
                $('#translateLang').val(member.trans_lang);      //번역할 언어 지정
-                console.log('./memberProfilePrint?user_id='+member.user_id);
-                console.log('./memberBackPrint?user_id='+member.user_id);
+         
                let str = '<h5 class="card-title">정보/취미</h5>';
                tagArr.forEach(tag => {
                 str += `<button type="button" class="btn btn-outline-primary btn-sm">${tag}</button>`;
@@ -79,31 +78,8 @@ let myName;
            }
        });
     }
-    
-    
-    
-//해당 사용자가 현 페이지 주인계정과 동일한 ID값을 가지는지 확인하는 함수
-function memberIdCheck(pageUserId){
-    let currentUserid = null;
-    $.ajax({
-        url:'/ringo/member/currentUserIdSearch',
-        type:"post",
-        dataType:'json',
-        success:function(id){
-            currentUserid = id;
-        },
-        error:function(e){
-            console.log(e);
-        }
-    })
-    if(currentUserid === pageUserId){
-        return true;
-    }else {
-        return false;
-    }
-}
 
-$(document).ready(function() {   
-	$(document).on('click', '#follower-btn a', followerSearch);
-	$(document).on('click', '#follow-btn a', followeeSearch);
-});
+$(document).ready(function() {
+	$(document).on('show.bs.modal', '.followModalClass', followeeSearch);
+    $(document).on('show.bs.modal', '.followerModalClass', followerSearch);
+})

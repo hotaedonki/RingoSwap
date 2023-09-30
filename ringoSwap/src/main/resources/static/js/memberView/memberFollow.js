@@ -1,14 +1,25 @@
+function followPrivacy() {
+	let type = $(this).hasClass('follower-btn');
+	
+	console.log(type, nickname);
+	$.ajax ({
+		url: 'followPrivacy'
+		, type: 'post'
+		, data: {nickname: nickname}
+		, success: function(public) {
+			console.log(public);
+			if(public) {
+                if(type) followerSearch();
+ 				else followeeSearch();
+			}	
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	})
+}
+
 function followerSearch(){
-    let nickname = $('.justify-content-center .searchFollower').val();
-    console.log("팔로우 닉네임 : ", nickname)
-    let userId = $('#userId').val();
-    let check = $('#followOpen').val();
-    if(check === 'N'){
-		if(!memberIdCheck(userId)){
-            //자기정보를 보는 것이 아닌이상, 팔로워 공개가 'N'으로 설정된 회원의 팔로워 팔로우를 볼 수 없음
-            return;
-        }
-	}
     $.ajax({
         url: "../feed/followerSearch",
         type: "post",
@@ -41,15 +52,6 @@ function followerSearch(){
     });
 }
 function followeeSearch(){
-    let nickname = $('.justify-content-center .searchFollow').val();
-    let userId = $('#userId').val();
-    let check = $('#followOpen').val();
-    if(check === 'N'){
-		if(!memberIdCheck(userId)){
-            //자기정보를 보는 것이 아닌이상, 팔로워 공개가 'N'으로 설정된 회원의 팔로워 팔로우를 볼 수 없음
-            return;
-        }
-	}
     $.ajax({
         url: "../feed/followeeSearch",
         type: "post",
@@ -83,3 +85,10 @@ function followeeSearch(){
         }
     });
 }
+
+    
+    
+$(document).ready(function() {   
+	$(document).on('click', '.follower-btn', followPrivacy);
+	$(document).on('click', '.follow-btn', followPrivacy);
+});

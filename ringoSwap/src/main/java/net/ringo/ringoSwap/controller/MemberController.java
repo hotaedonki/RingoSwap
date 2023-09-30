@@ -526,10 +526,18 @@ public class MemberController
 
 	//현재 사용중인 사용자의 계정ID값을 리턴하는 메서드
 	@ResponseBody
-	@PostMapping("currentUserIdSearch")
-	public String currentUserIdSearch(@AuthenticationPrincipal UserDetails user)
-	{
-		return user.getUsername();
+	@PostMapping("followPrivacy")
+	public boolean followPrivacy(@AuthenticationPrincipal UserDetails user,
+			String nickname) {
+		Member member = service.memberSearchByUsername(nickname);
+		if(member.getUser_id().equals(user.getUsername())) {
+			return true;
+		}
+		else if(member.getFollow_open().equals("N")) {
+			return false;
+		} 
+		
+		return true;
 	}
 	
 	//----------------[마이페이지 기능 종료]----------->>>>>>>>>>>>

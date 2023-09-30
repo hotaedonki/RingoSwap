@@ -127,10 +127,10 @@
 										<h5 class="card-title nickname mt-5"></h5>
 										<div onclick="event.stopPropagation();">
 											<a class="text-primary f" data-bs-toggle="modal"
-												data-bs-target="#followerModal">팔로워<span
+												data-bs-target=".followerModalClass">팔로워<span
 												class="follower-cnt"></span>
 											</a> <a style="margin-left: 10px;" class="text-primary f"
-												data-bs-toggle="modal" data-bs-target="#followModal">팔로우<span
+												data-bs-toggle="modal" data-bs-target=".followModalClass">팔로우<span
 												class="followee-cnt"></span>
 											</a>
 										</div>
@@ -240,7 +240,7 @@
 	</div>
 	
 	<!-- 팔로워 -->
-	<div class="modal fade" id="followerModal" tabindex="-1"
+	<div class="modal fade followerModalClass" id="followerModal" tabindex="-1"
 		aria-labelledby="followerModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -265,7 +265,7 @@
 	</div>
 	
 	<!-- 팔로우 -->
-	<div class="modal fade" id="followModal" tabindex="-1"
+	<div class="modal fade followModalClass" id="followModal" tabindex="-1"
 		aria-labelledby="followModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">

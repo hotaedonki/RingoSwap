@@ -100,20 +100,39 @@ function folderClose() {
 }
 
 // 해당 폴더를 부모 폴더로 설정하고 파일을 생성하는 함수
-function fileCreate(fileType){
+function sendFileInfo(fileType){
     let dir_num = $('.btn-dark').attr('data-dir-num');
     let title = $("#fileNameInput").val();
     let file_type = fileType;
-    console.log(dir_num);
-    console.log(file_type);
+    let lang_type;
+
+    if(dir_num === '' || dir_num === null || dir_num === undefined) {
+        $('#fileCreateErrorModal').modal('show');
+        return; 
+    }
+
+    if(file_type === 'word') {
+        $('#langSelectModal').modal('show');
+        $('#langSelectModal .btn').off('click').on('click', function() {
+            if($(this).hasClass('ko')) lang_type = 'ko';
+            else if($(this).hasClass('ja')) lang_type = 'ja';
+            else if($(this).hasClass('en')) lang_type = 'en';
+
+            createFile(dir_num, title, file_type, lang_type);
+        });
+    } else {
+        createFile(dir_num, title, file_type, null);
+    }
+}
+	
+function createFile(dir_num, title, file_type, lang_type) {
     $.ajax({
         url: 'fileCreateOne',
         type: 'post',
-        data: { dir_num: dir_num, title: title, file_type: file_type },
+        data: { dir_num: dir_num, title: title, file_type: file_type, lang_type: lang_type},
         success: function(response) {
             console.log(`${file_type}가 생성되었습니다.`);
             dirOpen.call($(`.dirOpen[data-dir-num=${dir_num}]`));
-            
             $("#fileNameInput").val("");
         },
         error: function(e) {
@@ -162,14 +181,14 @@ function dirOpen() {
     $.ajax({
         url: 'dirOpenFile',
         type: 'post',
-        data: { dir_num: num, category: ca, sort: st },
+        data: { dir_num: num, sort: st },
         dataType: 'json',
         success: function(list) {
             let str = '<ul>';
             console.log(list.title);
             $(list).each(function(n, item) {
 				let iconClass = (item.file_type === "note") ? "bi-journal" : "bi-file-word"
-				let langClass = (item.lang_type === "ko") ? "(한국어)" : (item.lang_type === "ja") ? "(일본어)" : "(영어)"
+				let langClass = (item.lang_type === "ko") ? "(kor)" : (item.lang_type === "ja") ? "(jap)" : "(eng)"
                 str += `<li style="position: relative; cursor:pointer;"><i class="bi ${iconClass} fileType" data-file-type="${item.file_type}"></i>
                             <span data-file-num="${item.file_num}" class="fileOpen">${item.title}</span>
                             <span>${langClass}</span>

@@ -95,10 +95,9 @@ public class NoteController
    //ajax를 통해 실행되는 하위 파일을 검색하여 그 목록을 리턴하는 메서드
    @ResponseBody
    @PostMapping("dirOpenFile")
-   public ArrayList<DirFile> dirOpenFile(int dir_num, String category, String sort){
+   public ArrayList<DirFile> dirOpenFile(int dir_num, String sort){
       HashMap<String, Object> map = new HashMap<>();
       map.put("dir_num", dir_num);
-      map.put("category", category);
       map.put("sort", sort);
       log.debug("파일열기 {}", map);
       ArrayList<DirFile> fileList = service.fileSelectByDirNum(map);
@@ -180,7 +179,7 @@ public class NoteController
    @ResponseBody
    @PostMapping("fileCreateOne")
    public DirFile fileCreate(@AuthenticationPrincipal UserDetails user
-               ,int dir_num, String title, String file_type) {
+               ,int dir_num, String title, String file_type, String lang_type) {
       //접속한 사용자의 id로 user_num값 획득
       log.debug("디렉토리넘버 파일생성확인용 {}",dir_num);
       int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
@@ -192,6 +191,7 @@ public class NoteController
       file.setDir_num(dir_num);
       file.setTitle(title);
       file.setFile_type(file_type);            //값이 notepad일경우 메모장 생성, word일경우 단어장 본체 생성
+      file.setLang_type(lang_type);
       //파일 생성
       log.debug("파일{}",file);
       int num = service.fileCreateOne(file);

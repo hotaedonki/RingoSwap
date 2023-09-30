@@ -44,8 +44,8 @@ function initializeDocumentClickHandlers() {
     $(document).on('click', '.unfollow_button', followDelete);
     $(document).on('click', '.goToOtherProfile', goToOtherProfile);
     $(document).on('click', '.translate', feedTranslate);
-    $(document).on('show.bs.modal', '#followModal', followeeSearch);
-    $(document).on('show.bs.modal', '#followerModal', followerSearch);
+    $(document).on('show.bs.modal', '.followModalClass', followeeSearch);
+    $(document).on('show.bs.modal', '.followerModalClass', followerSearch);
 }
 
 function initializeWindowEventHandlers() {

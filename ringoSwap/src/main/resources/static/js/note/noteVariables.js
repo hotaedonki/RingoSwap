@@ -15,8 +15,8 @@ $(document).ready(function() {
     $('.sortBtn').click(sortEvent);
     $('#createFolder').click(dirCreate);
     // 노트, 단어장 생성
-    $('#createNote').click(() => fileCreate('note'));
-    $('#createWord').click(() => fileCreate('word'));
+    $('#createNote').click(() => sendFileInfo('note'));
+    $('#createWord').click(() => sendFileInfo('word'));
     $(document).on('click', '.dir-btn', highlightSelectedFolder);
     $(document).on('click', '.dirOpen', dirOpen);
     $(document).on('click', '.dirDelete', dirDelete);
