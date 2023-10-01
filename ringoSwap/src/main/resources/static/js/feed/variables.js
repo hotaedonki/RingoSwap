@@ -46,6 +46,7 @@ function initializeDocumentClickHandlers() {
     $(document).on('click', '.translate', feedTranslate);
     $(document).on('show.bs.modal', '.followModalClass', followeeSearch);
     $(document).on('show.bs.modal', '.followerModalClass', followerSearch);
+    $(document).on('click', '#message_button', sendDM);
 }
 
 function initializeWindowEventHandlers() {

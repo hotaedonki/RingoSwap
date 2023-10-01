@@ -11,7 +11,7 @@ function followPrivacy() {
 			if(public) {
                 if(type) followerSearch();
  				else followeeSearch();
-			}	
+			}
 		},
 		error: function(error) {
 			console.log(error);

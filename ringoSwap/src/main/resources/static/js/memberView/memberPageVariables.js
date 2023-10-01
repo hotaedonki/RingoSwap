@@ -78,8 +78,3 @@ let myName;
            }
        });
     }
-
-$(document).ready(function() {
-	$(document).on('show.bs.modal', '.followModalClass', followeeSearch);
-    $(document).on('show.bs.modal', '.followerModalClass', followerSearch);
-})
