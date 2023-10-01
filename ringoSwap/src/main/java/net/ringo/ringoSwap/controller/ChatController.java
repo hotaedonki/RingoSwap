@@ -330,9 +330,12 @@ public class ChatController
 	
 	// DM 채팅방을 만들기 전에 일회성 토큰을 먼저 발행하여 악성 유저가 주소를 아용하여 방을 계속 만들지 못하도록 방지한다. 그리고 RequestBody를 사용하여 json이 알맞은 데이터 타입으로 변환하게끔 한다.
 	@PostMapping(PathHandler.GETCREDFORMAKEDMCHATROOM)
-	public ResponseEntity<Map<String, String>> getCredForMakeDMChatroom(@RequestBody String nickname, @AuthenticationPrincipal UserDetails user)
+	public ResponseEntity<Map<String, String>> getCredForMakeDMChatroom(@RequestBody Map<String, String> request, @AuthenticationPrincipal UserDetails user)
 	{
 		log.debug("get Cred For Make DM Chat room . . .");
+
+		String nickname = request.get("nickname");
+		log.debug("닉네임 출력 - {}", nickname);
 		
 		String token = UUID.randomUUID().toString();
 		
