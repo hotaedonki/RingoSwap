@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirWord;
+import net.ringo.ringoSwap.domain.GameLog;
 import net.ringo.ringoSwap.domain.GameSetting;
-import net.ringo.ringoSwap.domain.SingleDifficulty;
 import net.ringo.ringoSwap.domain.dto.MCQDTO;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.GameService;
@@ -247,5 +248,57 @@ public class GameController
 		}else {
 			return "삭제실패";
 		}
+	}
+	
+	//<<<<-------------[게임기록 기능 시작]------------------
+	@ResponseBody
+	@PostMapping("gameLogPrint")
+	public ArrayList<GameLog> gameLogPrint(@AuthenticationPrincipal UserDetails user){
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		ArrayList<GameLog> logList = service.gameLogSearchByUserNum(user_num);
+		return logList;
+	}
+	@ResponseBody
+	@PostMapping("gameLogInsert")
+	public int gameLogInsert(@AuthenticationPrincipal UserDetails user, @RequestParam("score") double score
+					, @RequestParam("game_category") String game_category , @RequestParam("file_num") int file_num
+					, @RequestParam("rightLength") Integer rightLength, @RequestParam("gameLength") Integer gameLength) {
+		//gameLog 정보삽입에 필요한 정보 호출
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		GameLog gameLog = new GameLog();
+		DirFile file;
+		if(file_num != -1 && file_num != -10) {
+			file = noteService.fileSelectByFileNum(file_num);
+		}else {
+			file = null;
+		}
+		//게임으로 획득할 포인트 계산 실행
+		log.debug("초기로그 : {}", gameLog);
+		log.debug("정답갯수 : {}", rightLength);
+		log.debug("총갯수 : {}", gameLength);
+		int point = service.gamePointCalcul(rightLength, gameLength);
+		log.debug("포인트 : {}", point);
+		//gameLog변수에 필요한 정보 삽입
+		gameLog.setScore(score);
+		gameLog.setGame_category(game_category);
+		gameLog.setFile_num(file_num);
+		gameLog.setUser_num(user_num);
+		gameLog.setPoint(point);
+		
+		if(file_num != -1 && file_num != -10) {
+			gameLog.setFile_title(file.getTitle());
+			gameLog.setLang_category(file.getLang_type());
+		}else if(file_num == -1) {
+			gameLog.setFile_title("단어장 전부");
+			gameLog.setLang_category("all");
+		}else {
+			gameLog.setFile_title("오답노트");
+			gameLog.setLang_category("all");
+		}
+		
+		log.debug("게임로그 정보 : {}", gameLog);
+		int methodResult = service.gameLogInsert(gameLog);
+		
+		return methodResult;
 	}
 }

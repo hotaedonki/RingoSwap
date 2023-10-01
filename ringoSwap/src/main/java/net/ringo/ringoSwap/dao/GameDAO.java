@@ -9,8 +9,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirWord;
+import net.ringo.ringoSwap.domain.GameLog;
 import net.ringo.ringoSwap.domain.GameSetting;
-import net.ringo.ringoSwap.domain.SingleDifficulty;
 
 
 @Mapper
@@ -20,7 +20,6 @@ public interface GameDAO
 	 * user_id를 매개변수로 가져가, 해당 사용자의 싱글게임 난이도 설정 정보를 select로 검색하여
 	 * 난이도 정보를 리턴값으로 받아오는 메서드.
 	 */
-	SingleDifficulty difficultyCall(String user_id);
 
 	//user_num을 매개변수로 file_type이 word인 파일목록을 리턴하는 메서드
 	ArrayList<DirFile> wordFileSelectByUserNum(int user_num);
@@ -44,5 +43,11 @@ public interface GameDAO
 	int wordWrongArrayInsert(DirWord word);
 	//단어목록을 오답노트에서 삭제하는 메서드
 	int wordWrongArrayDelete(List<DirWord> rightWordList);
+
+	//<<---------------------------[게임로그 기능 시작]-------------------------------
+	//사용자의 user_num을 매개변수로 해당 사용자의 게임로그 목록을 출력하는 메서드
+	ArrayList<GameLog> gameLogSearchByUserNum(int user_num);
+	//입력받은 게임로그 정보를 DB에 입력하는 메서드
+	int gameLogInsert(GameLog gameLog);
 	
 }

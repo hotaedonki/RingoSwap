@@ -4,6 +4,7 @@ let answerList =[];     //게임용 각 질문당 정답여부를 기록하는 �
 let printSet = 'title';   //게임용 질문의 형식을 지정하는 전역변수
 let pronShow = false;    //게임용 발음부를 보일지 여부를 지정하는 전역변수
 let wrongType = false;   //게임용 오답노트인지를 체크하는 전역변수
+let fileNum = 0;         //게임용 사용 단어장의 파일번호를 저장하는 전역변수
 
 function confirmExit() {	
 	const currentGame = getCurrentGame();
@@ -133,4 +134,33 @@ function wrongDelete(rightWord){
             console.log(e);
         }
 	})
+}
+
+function gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength){
+    console.log(score);
+    console.log(Gcategory);
+    console.log(rightLength);
+    console.log(gameLength);
+    $.ajax({
+        url:"gameLogInsert",
+        type:"post",
+        data:{score : parseFloat(score)
+            , game_category : Gcategory
+            , file_num : parseInt(fileNum)
+            , rightLength : parseInt(rightLength)
+            , gameLength : parseInt(gameLength)
+        },
+        dataType:'json',
+        success:function(res){
+            console.log(res);
+            if(res === 0){
+                console.log('삽입실패');
+            }else{
+                console.log('삽입성공');
+            }
+        },
+        error:function(e){
+            console.log(e);
+        }
+    })
 }

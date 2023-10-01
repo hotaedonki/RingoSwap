@@ -11,8 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.GameDAO;
 import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirWord;
+import net.ringo.ringoSwap.domain.GameLog;
 import net.ringo.ringoSwap.domain.GameSetting;
-import net.ringo.ringoSwap.domain.SingleDifficulty;
 
 @Service
 @Slf4j
@@ -20,10 +20,6 @@ public class GameServiceImple implements GameService{
 	@Autowired
 	GameDAO dao;
 	
-	@Override
-	public SingleDifficulty difficultyCall(String user_id) {
-		return dao.difficultyCall(user_id);
-	}
 
 	//user_num을 매개변수로 file_type이 word인 파일목록을 리턴하는 메서드
 	@Override
@@ -101,5 +97,37 @@ public class GameServiceImple implements GameService{
 			methodResult = dao.wordWrongArrayDelete(rightWordList);
 		}
 		return methodResult;
+	}
+
+	//<<---------------------------[게임로그 기능 시작]-------------------------------
+	//획득포인트 계산 메서드
+	@Override
+	public int gamePointCalcul(Integer rightLength, Integer gameLength) {
+	    if(rightLength == null || gameLength == null) {
+	        // Handle the error, e.g., return an error code or throw an exception
+	        throw new IllegalArgumentException("rightLength or gameLength cannot be null");
+	    }
+	    // Check if gameLength is zero to avoid division by zero
+	    if(gameLength == 0) {
+	        // Handle the error, e.g., return an error code or throw an exception
+	        throw new IllegalArgumentException("gameLength cannot be zero");
+	    }
+	    
+		//전체 문제수 X 2p 에 정답률을 곱한 값을 기본 획득 포인트로 계산, 그후 정답 1문제당 +4p, 오답 1문제당 -5p
+	    //상기 계산으로 나온 최종값을 / 10 한 정수값을 포인트로 배분한다.
+		int defaultPoint = (int)(((float)rightLength / gameLength) * 200);
+		int wrongLength = gameLength - rightLength;
+		int point = (defaultPoint + (rightLength * 4) - (wrongLength * 5)) / 10;
+		return point;
+	}
+	//사용자의 user_num을 매개변수로 해당 사용자의 게임로그 목록을 출력하는 메서드
+	@Override
+	public ArrayList<GameLog> gameLogSearchByUserNum(int user_num){
+		return dao.gameLogSearchByUserNum(user_num);
+	}
+	//게임로그를 DB에 입력하는 메서드
+	@Override
+	public int gameLogInsert(GameLog gameLog) {
+		return dao.gameLogInsert(gameLog);
 	}
 }
