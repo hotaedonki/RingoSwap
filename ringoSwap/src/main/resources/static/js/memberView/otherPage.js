@@ -13,6 +13,7 @@ function printOtherPeoplePage() {
     type: 'post',
     data: { nickname: nickname },
     success: function(member) {
+      $('#userId').val(member.user_id);
        $('.nickname').html(member.nickname);
        $('.introduction').html(member.introduction);
        $('.follower-cnt').html(member.fr_count);
@@ -23,6 +24,7 @@ function printOtherPeoplePage() {
        let tagArr = member.tagList;
        $('#profilePicInput').attr('src', '../member/memberProfilePrint?user_id='+member.user_id);
        $('#backPicInput').attr('src', '../member/memberBackPrint?user_id='+member.user_id);
+       $('#followOpen').val(member.follow_open);
        $('.nativeLanguage').attr('src', native);
        $('.targetLanguage').attr('src', target);
        
@@ -55,6 +57,5 @@ $(document).ready(function() {
   $(document).on('click', '.goToOtherPeopleFeed', goToOtherPeopleFeed);
   $(document).on('click', '#follower-btn a', followerSearch);
   $(document).on('click', '#follow-btn a', followeeSearch);
-
 });
 

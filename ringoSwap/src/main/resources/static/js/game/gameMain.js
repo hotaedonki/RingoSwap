@@ -248,9 +248,15 @@ function wordFilePrint(){
                     <li>
                         <input type="checkbox" data-file-num="${file.file_num}">
                         <span>${file.title}</span>
-                        </li>
+                    </li>
                 `);
             });
+			$('#wordlistModal .word-list-group').append(`
+			<li>
+				<input type="checkbox" data-file-num="-10">
+				<span>오답노트</span>
+			</li>
+		`);
         },
         error:function(e){
             console.log(e);
@@ -298,9 +304,9 @@ function countOfItemPrint(){
 //게임에 사용할 단어장 정보를 수정하는 함수
 function wordListUpdate(){
 	let num = $('#wordlistModal .word-list-group').find('input[type="checkbox"]:checked').data('file-num');
-	let select = none;
-	if($('.select-all').pron('checked')){
-		select = all;
+	let select = "none";
+	if($('.select-all').prop('checked')){
+		select = "all";
 	}
 	
 	console.log(num);

@@ -201,6 +201,8 @@ function checkAnswer(chosenAnswer) {
 }
 function gameAnswerPrint(){
     let cnt = 0;
+	let rightWord = [];			//오답노트에서 답을 맞춘 오답들을 삭제하는데 사용하는 배열 변수
+    let wrongWord = [];         //오답노트에 기재할 오답들을 기록하는 배열 변수
     wordList.forEach(word => {
         $('.vertical-line').append(`
             <div class="col-12 show-MCQ-result-word" id="answer${cnt}" style="width : 50%">
@@ -217,15 +219,25 @@ function gameAnswerPrint(){
             $(`#answer${cnt}`).append(`
                 <i class="bi bi-circle blue"></i>
             `);
+            rightWord.push(wordList[cnt]);
+			console.log(rightWord);
         }else{
             $(`#answer${cnt}`).append(`
                 <i class="bi bi-x red"></i>
             `);
+            wrongWord.push(wordList[cnt]);
         }
         cnt++
     });
     if(!pronShow){
         $('.dictation-result-pronunciation').hide();
     }
-
+    console.log(wrongType);
+	if(wrongType){
+        console.log(rightWord);
+		wrongDelete(rightWord);
+	}else{
+        console.log(JSON.stringify({wrongWordList : wrongWord}));
+		wrongInsert(wrongWord);
+	}
 }

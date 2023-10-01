@@ -69,7 +69,7 @@
 	 </update>
 	 
 	<!-- 게임세팅 정보값을 매개변수로 해당 세팅에 따라 정렬된 단어목록을 리턴하는 select문 -->
-	<select id="wordArraySearchByGameSetting" parameterType="java.util.HashMap">
+	<select id="wordArraySearchByGameSetting" parameterType="GameSetting" resultType="DirWord">
 	<if test="question_num != 0">
 		select * from(
 	</if>
@@ -107,8 +107,56 @@
 		) where rownum &lt;= #{question_num}
 	</if>
 	</select>
-	<select id="wordWrongArraySearchByUserNum" resultType="DirWord">
-	select * from ringo_word_wrong
-	where user_num = #{user_num}
+	
+	<select id="wordWrongArraySearchByUserNum"  parameterType="GameSetting" resultType="DirWord">
+	<if test="question_num != 0">
+		select * from(
+	</if>
+		select * 
+		from ringo_word_wrong
+		where user_num = #{user_num}
+		<if test="match_use == true">
+			and pron is not null
+		</if>
+		order by 
+		<choose>
+			<when test="order_type == 'first_one' ">
+				inputdate asc
+			</when>
+			<when test="order_type == 'latest' ">
+				inputdate desc
+			</when>
+			<when test="order_type == 'atoz' ">
+				word asc
+			</when>
+			<when test="order_type == 'ztoa' ">
+				word desc
+			</when>
+			<otherwise>
+				DBMS_RANDOM.VALUE
+			</otherwise>
+		</choose>
+	<if test="question_num != 0">
+		) where rownum &lt;= #{question_num}
+	</if>
 	</select>
+	<!-- 오답노트에 해당 오답이 존재하는지 확인하는 select문 -->
+	<select id="wordWrongSearch">
+	select count(*)
+	from ringo_word_wrong
+	where word_num = #{word_num}
+	</select>
+	<!-- 오답을 오답노트에 입력하는 insert문 -->
+	<insert id="wordWrongArrayInsert" parameterType="DirWord">
+	insert into ringo_word_wrong(word_num, user_num, word, pron, mean, description)
+	values (#{word_num}, #{user_num}, #{word}, #{pron}, #{mean}, #{description})
+	</insert>
+	<!-- 정답을 맞춘 오답목록을 오답노트에서 삭제하는 delete문 -->
+	<delete id="wordWrongArrayDelete" parameterType="list">
+	delete from ringo_word_wrong
+	where word_num in
+	<foreach item="item" index="index" collection="list" open="(" separator=", " close=")">
+		#{item.word_num}
+	</foreach>
+	</delete>
 </mapper>
