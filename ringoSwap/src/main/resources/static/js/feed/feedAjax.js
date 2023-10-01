@@ -520,11 +520,45 @@ function sendDM()
 	let nickname = document.getElementById('nickname').textContent;
 	let url = `/ringo/chat/checkExistenceDMChatRoom?nickname=${encodeURIComponent(nickname)}`;
 	
-	fetch(url)
-		.then(response => response.json())
-		.then(data => {
-			console.log(data);
-			// 결과가 false일시 DM 채팅방이 없으므로 새로 생성
-			// true일시는 방을 생성 후 방으로 이동
-		});
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            
+            if (data)	// 이미 DM방이 존재하는 경우
+            {
+				/*
+                // data 값이 true일 경우
+                return fetch('/trueEndpoint', {
+                    method: 'GET',
+                    // 필요한 다른 설정들
+                }).then(response => response.json()) // 이 fetch의 응답을 json으로 변환
+                  .then(trueData => {
+                      console.log(trueData);
+                      // true일 때의 fetch 응답을 처리하는 코드
+                  });
+                  */
+            } 
+            else	// DM방이 존재하지 않은 경우
+            {
+				
+                // data 값이 false일 경우
+                return fetch(`/ringo/chat/getCredForMakeDMChatroom`, {
+                    method: 'POST',
+                    headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						nickname: nickname
+                    })
+                }).then(response => response.json()) // 이 fetch의 응답을 json으로 변환
+                  .then(data => {
+                      console.log(data);
+                      // false일 때의 fetch 응답을 처리하는 코드
+                  });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);  // 오류 발생 시 로깅
+        });
 }
