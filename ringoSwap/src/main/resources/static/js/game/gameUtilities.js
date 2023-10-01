@@ -111,8 +111,8 @@ function wrongInsert(wrongWord){
 		type:'post',
         contentType: 'application/json;charset=UTF-8',
 		data:JSON.stringify(wrongWord),
-		success:function(){
-			console.log('입력성공');
+		success:function(res){
+			console.log(res);
 		},
         error:function(e){
             console.log(e);
@@ -126,8 +126,8 @@ function wrongDelete(rightWord){
 		type:'post',
         contentType: 'application/json;charset=UTF-8',
 		data:JSON.stringify(rightWord),
-		success:function(){
-			console.log('삭제성공');
+		success:function(res){
+			console.log(res);
 		},
         error:function(e){
             console.log(e);

@@ -220,20 +220,32 @@ public class GameController
 	
 	@ResponseBody
 	@PostMapping("/wrongWordInsert")
-	public void wrongWordInsert(@AuthenticationPrincipal UserDetails user
+	public String wrongWordInsert(@AuthenticationPrincipal UserDetails user
 			, @RequestBody  List<DirWord> wrongWordListJson) {
 		log.debug("오답목록 {}",wrongWordListJson);
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		log.debug("아이디 {}",user_num);
 		int methodResult = service.wordWrongArrayInsert(wrongWordListJson);
+		
+		if(methodResult != 0) {
+			return "오답기입 성공";
+		}else {
+			return "오답기입 실패";
+		}
 	}
 	@ResponseBody
 	@PostMapping("/wrongWordDelete")
-	public void wrongWordDelete(@AuthenticationPrincipal UserDetails user
+	public String wrongWordDelete(@AuthenticationPrincipal UserDetails user
 			, @RequestBody  List<DirWord> rightWordList) {
 		log.debug("오답목록 {}",rightWordList);
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 		log.debug("아이디 {}",user_num);
 		int methodResult = service.wordWrongArrayDelete(rightWordList);
+		
+		if(methodResult != 0) {
+			return "삭제성공";
+		}else {
+			return "삭제실패";
+		}
 	}
 }
