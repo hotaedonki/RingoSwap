@@ -49,6 +49,7 @@ function dictationResultScreen() {
     //정답갯수, 오답갯수를 변수 2개에 정의
     let trueCount = answerList.filter(value => value === true).length;
     let falseCount = answerList.filter(value => value === false).length;
+	let score = (trueCount / answerList.length) * 100;
 
 	const dictationResultHTML = `
 		<section class="home container dictation-result-container">
@@ -61,7 +62,7 @@ function dictationResultScreen() {
 				</div>
 				<div class="col-3 d-flex align-items-center flex-column">
 					<div>Accuracy</div>
-					<div class="dictation-accuracy-rate">100%</div>
+					<div class="dictation-accuracy-rate">${score}%</div>
 				</div>
 			</div>
 			<div class="row dictation-answer-and-wrongAnswer d-flex justify-content-center align-items-center">
@@ -116,6 +117,7 @@ function dictationQuestionSave(){
             wordList = res.wordList;
             console.log(wordList);
             count = 0;      //count변수 초기화
+			fileNum = res.setting.file_num;	//파일번호 설정
             $('#totalNum').text(res.wordList.length);      //문제 갯수 총합 출력
         
         	dictationQuestionPrint();
@@ -209,4 +211,11 @@ function dictationAnswerPrint(){
         console.log(JSON.stringify({wrongWordList : wrongWord}));
 		wrongInsert(wrongWord);
 	}
+	
+	let score = (rightWord.length / wordList.length) * 100;
+	let Gcategory = "mcq";
+	let rightLength = rightWord.length;
+	let gameLength = wordList.length;
+	console.log("정답률 : "+score);
+	gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength);
 }

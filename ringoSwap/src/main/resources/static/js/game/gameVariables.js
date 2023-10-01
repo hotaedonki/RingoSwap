@@ -37,6 +37,8 @@ $(document).ready(function () {
 	clickEventFunction();
 	//엔터키로 작동하는 이벤트 처리
 	enterEventFunction();
+	//게임로그 출력처리
+	gameLogPrint();
 });
 
 

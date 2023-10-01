@@ -6,12 +6,11 @@ import java.util.List;
 
 import net.ringo.ringoSwap.domain.DirFile;
 import net.ringo.ringoSwap.domain.DirWord;
+import net.ringo.ringoSwap.domain.GameLog;
 import net.ringo.ringoSwap.domain.GameSetting;
-import net.ringo.ringoSwap.domain.SingleDifficulty;
 
 public interface GameService {
 
-	public SingleDifficulty difficultyCall(String user_id);
 
 	//user_num을 매개변수로 file_type이 word인 파일목록을 리턴하는 메서드
 	public ArrayList<DirFile> wordFileSelectByUserNum(int user_num);
@@ -37,4 +36,11 @@ public interface GameService {
 	//해당 단어목록을 오답노트에서 삭제하는 메서드
 	public int wordWrongArrayDelete(List<DirWord> rightWordList);
 
+	//<<---------------------------[게임로그 기능 시작]-------------------------------
+	//획득포인트 계산 메서드
+	public int gamePointCalcul(Integer rightLength, Integer gameLength);
+	//사용자의 user_num을 매개변수로 해당 사용자의 게임로그 목록을 출력하는 메서드
+	public ArrayList<GameLog> gameLogSearchByUserNum(int user_num);
+	//게임로그를 DB에 입력하는 메서드
+	public int gameLogInsert(GameLog gameLog);
 }
