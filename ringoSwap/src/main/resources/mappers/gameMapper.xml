@@ -3,23 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="net.ringo.ringoSwap.dao.GameDAO">
-	<!-- 난이도 정보를 select로 불러오는 코드
-		ringo_member 테이블의 정보는 id대조용으로 사용하고 ringo_single_difficulty 테이블의 정보만 읽습니다.
-	 -->
-	<select id="difficultyCall" parameterType="String" resultType="SingleDifficulty">
-		select gs.user_num, m.user_id, m.nickname
-            , file_num
-            , form_type
-            , word_type
-            , description_show
-            , pron_show
-            , question_num
-            , answer_category
-		from ringo_game_setting gs, ringo_member m 
-		where gs.user_num = m.user_num and m.user_id = #{user_id}
-	</select>
-	
-	
 	<!-- 
 		user_num을 매개변수로 file_type이 word인 파일목록을 리턴하는 select문
 		note기능과 연동되는 기능입니다.
@@ -159,4 +142,16 @@
 		#{item.word_num}
 	</foreach>
 	</delete>
+	
+	<!-- 게임로그 기능 시작 -->
+	<!-- 사용자의 user_num을 매개변수로 해당 사용자의 게임로그 목록을 출력하는 select문 -->
+	<select id="gameLogSearchByUserNum" resultType="GameLog">
+	select * from ringo_game_log
+	where user_num = #{user_num}
+	</select>
+	<!-- 입력받은 게임로그 정보를 DB에 입력하는 insert문 -->
+	<insert id="gameLogInsert" parameterType="GameLog">
+	insert into ringo_game_log(gamelog_num, user_num, file_num, file_title, game_category, lang_category, score, point)
+	values (ringo_game_log_seq.nextval, #{user_num}, #{file_num}, #{file_title}, #{game_category}, #{lang_category}, #{score}, #{point})
+	</insert>
 </mapper>

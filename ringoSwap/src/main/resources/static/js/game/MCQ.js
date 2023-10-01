@@ -53,8 +53,9 @@ function playMCQ() {
 
 function MCQResultScreen() {
     //정답갯수, 오답갯수를 변수 2개에 정의
-    let trueCount = answerList.filter(value => value === true).length;
-    let falseCount = answerList.filter(value => value === false).length;
+    let trueCount = answerList.filter(value => value.kotae === true).length;
+    let falseCount = answerList.filter(value => value.kotae === false).length;
+	let score = (trueCount / answerList.length) * 100;
 
 	const MCQResultHTML = `
 		<section class="home container MCQ-result-container">
@@ -67,7 +68,7 @@ function MCQResultScreen() {
 				</div>
 				<div class="col-3 d-flex align-items-center flex-column">
 					<div>Accuracy</div>
-					<div class="MCQ-accuracy-rate">100%</div>
+					<div class="MCQ-accuracy-rate">${score}%</div>
 				</div>
 			</div>
 			<div class="row MCQ-answer-and-wrongAnswer d-flex justify-content-center align-items-center">
@@ -127,6 +128,7 @@ function gameQuestionSave(){
             index = 0;      //index변수 초기화
 			answer = null;	//answer변수 초기화
 			answerList = [];	//변수 초기화
+			fileNum = res.setting.file_num;	//파일번호 설정
             $('#totalNum').text(res.wordList.length);      //문제 갯수 총합 출력
         
         	gameQuestionPrint();
@@ -240,4 +242,11 @@ function gameAnswerPrint(){
         console.log(JSON.stringify({wrongWordList : wrongWord}));
 		wrongInsert(wrongWord);
 	}
+
+	let score = (rightWord.length / wordList.length) * 100;
+	let Gcategory = "mcq";
+	let rightLength = rightWord.length;
+	let gameLength = wordList.length;
+	console.log("정답률 : "+score);
+	gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength);
 }

@@ -615,14 +615,16 @@ create table ringo_game_setting (
 	constraint fk_user_num_sg	foreign key (user_num)	references ringo_member(user_num) on delete cascade
 );
 --싱글게임 로그를 기록하는 테이블
-create table ringo_game_log (
+    create table ringo_game_log (
 	gamelog_num		number				primary key,		--기본키
 	user_num				number				not null,				--왜래키
-	file_num				number				not null,				--단어장 번호를 기록하는 속성. 왜래키
+	file_num				number				not null,				--단어장 번호를 기록하는 속성. 왜래키X
 	file_title					varchar2(100)	not null,				--단어장 제목을 기록하는 속성. 왜래키X
-	game_category		varchar2(10) 	check(answer_category in('mcq', 'flashcard', 'dictation')),		--플레이한 게임의 종류를 기록하는 속성
-	lang_category		varchar2(2)		default 'ko' check(lang_category in ('ko', 'ja', 'en')),				--어떤 언어로 게임을 플레이 했는지 기록하는 속성
+	game_category		varchar2(10) 	check(game_category in('mcq', 'flashcard', 'dictation')),		--플레이한 게임의 종류를 기록하는 속성
+	lang_category		varchar2(2)		default 'ko' check(lang_category in ('ko', 'ja', 'en', 'all')),				--어떤 언어로 게임을 플레이 했는지 기록하는 속성
 	score					number		default 0,			--해당 게임의 성적
 	point						number		default 0,			--해당 게임으로 획득하는 포인트
 	inputdate				date			default sysdate,	--해당 게임을 진행한 날짜
+	constraint fk_user_num_gamelog	foreign key (user_num)	references ringo_member(user_num) on delete cascade
 );
+create sequence ringo_game_log_seq;
