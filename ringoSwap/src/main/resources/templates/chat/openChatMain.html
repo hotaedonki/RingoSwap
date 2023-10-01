@@ -1,80 +1,81 @@
 <!DOCTYPE html>
+<!-- Coding by CodingLab | www.codinglabweb.com -->
 <html xmlns:th="http://thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- ======== CSS ======== -->
-    <link rel="stylesheet"
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!----======== CSS ======== -->
+<link rel="stylesheet"
 	th:href="@{/bootstrap-5.3.1-dist/css/bootstrap.min.css}" />
-	<link rel="stylesheet" th:href="@{/css/sidebar.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/openchat.css}">
+<link rel="stylesheet" th:href="@{../css/sidebar.css}">
+<link rel="stylesheet" th:href="@{../css/openchat.css}">
 
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-    <!-- ======== JS ======== -->
-    <script th:src="@{/js/jquery-3.7.0.js}"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+	rel="stylesheet">
+<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+<!-- ======== JS ======== -->
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-  	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
-    <script th:src="@{/js/chat/openChatMain.js}"></script>
 </head>
 <body>
 	<input th:type="hidden" th:id="userNum" th:value="${userNum}">
-		<nav class="sidebar close">
-			<header>
-				<div class="image-text">
-					<span class="image"> <img th:src="@{../img/로고.png}"
-						alt="">
-					</span>
+	<nav class="sidebar close">
+		<header>
+			<div class="image-text logo-area">
+				<span class="image"> <img th:src="@{../img/로고.png}"
+					alt="">
+				</span>
 
-					<div class="text logo-text">
-						<span class="name">LingoSwap</span>
-					</div>
+				<div class="text logo-text">
+					<span class="name">LingoSwap</span>
 				</div>
-				<i class='bx bx-chevron-right toggle'></i>
-			</header>
+			</div>
+			<i class='bx bx-chevron-right toggle'></i>
+		</header>
 
-			<div class="menu-bar">
-				<div class="menu">
-					<ul class="menu-ul">
-						<li><a th:href="@{/member/home}"> <i
-								class='bx bx-home-alt icon'></i> <span class="text nav-text">Home</span>
-						</a></li>
+		<div class="menu-bar">
+			<div class="menu">
+				<ul class="menu-ul">
+					<li><a th:href="@{/member/home}"> <i
+							class='bx bx-home-alt icon'></i> <span class="text nav-text">Hoooome</span>
+					</a></li>
 
-						<li><a th:href="@{/feed/feedMain}"> <i
-								class='bx bx-detail icon'></i> <span class="text nav-text">Feed</span>
-						</a></li>
+					<li><a th:href="@{/feed/feedMain}"> <i
+							class='bx bx-detail icon'></i> <span class="text nav-text">Feed</span>
+					</a></li>
 
-						<li><a th:href="@{/note/noteMain}"> <i
-								class='bx bx-edit icon'></i> <span class="text nav-text">Note</span>
-						</a></li>
+					<li><a th:href="@{/note/noteMain}"> <i
+							class='bx bx-edit icon'></i> <span class="text nav-text">Note</span>
+					</a></li>
 
-						<li><a th:href="@{/chat/openChatMain}"> <i
-								class='bx bx-message-square-dots icon'></i> <span
-								class="text nav-text">Message</span>
-						</a></li>
+					<li><a th:href="@{/chat/openChatMain}"> <i
+							class='bx bx-message-square-dots icon'></i> <span
+							class="text nav-text">Message</span>
+					</a></li>
 
-						<li><a th:href="@{/game/gameMain}"> <i
-								class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
-						</a></li>
-					</ul>
-				</div>
-				<!-- ========================사이드바 하단=========================== -->
-				<div class="bottom-content">
-					<ul class="menu-ul">
-						<li class="">
-							<div sec:authorize="isAuthenticated()">
-								<a th:href="@{/member/logout}"> <i
-									class='bx bx-log-out icon'></i> <span class="text nav-text">Logout</span>
-								</a>
-							</div>
-						</li>
-
-						<li class=""><a th:href="@{/notification/notificationMain}">
-								<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
-						</a></li>
-						<li class="">
+					<li><a th:href="@{/game/gameMain}"> <i
+							class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
+					</a></li>
+				</ul>
+			</div>
+			<!-- ========================사이드바 하단=========================== -->
+			<div class="bottom-content">
+				<ul class="menu-ul">
+					<li class="">
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/logout}"> <i class='bx bx-log-out icon'></i>
+								<span class="text nav-text">Logout</span>
+							</a>
+						</div>
+					</li>
+					<li class=""><a th:href="@{/notification/notificationMain}">
+							<i class='bx bx-bell icon'></i><span class="text nav-text">Notifications</span>
+					</a></li>
+					<li class="">
 						<div sec:authorize="isAuthenticated()">
 							<a th:href="@{/member/myPage}"> 
 							<span id="profileImagePlaceholder" data-tooltip="프로필 사진으로 이동합니다."></span>
@@ -82,218 +83,183 @@
 							</a>
 						</div>
 					</li>
-					</ul>
-				</div>
+				</ul>
 			</div>
-		</nav>
-    <div class="container home">
-	    <div class="row">
-	        <div class="col-4 leftside">
-	            <div class="header">
-	                <div></div>
-	                <button type="button" class="btn btn-primary" th:id="DM_btn" style="background-color: #a8e9dc; border-color: #a8e9dc; color: #1f2e3d; font-size: 18px; font-weight: 500; box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);">DM</button>
-	                <button type="button" class="btn btn-primary" th:id="OpenChat_btn" style="background-color: #f4faf9; border-color: #a8e9dc; color: #1f2e3d; font-size: 18px; font-weight: 500; box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);">Open Chat</button>
-	                <div></div>
-	            </div>
-	            <!-- search -->
-				<div class="search_chat">
-					<div>
-						<input id="searchInput" type="text" placeholder="Search or start new chat">
-						<ion-icon name="search-outline"></ion-icon>
+		</div>
+	</nav>
+
+	<div class="container home">
+		<div class="row">
+			<div class="col-3">
+				<div class="card border-primary mb-3">
+					<div class="card-header">
+						<!-- DM & OpenChat Buttons -->
+						<div class="mb-2 d-center mb-3">
+							<button type="button" class="btn btn-primary me-2" th:id="DM_btn">DM</button>
+							<button type="button" class="btn btn-outline-primary ms-2"
+								th:id="OpenChat_btn">Open Chat</button>
+						</div>
+
+						<!-- Search Bar -->
+						<div class="mt-2 d-flex align-items-center position-relative">
+						    <input type="text" class="form-control" placeholder="Search chat title" id="searchInput">
+						    <i class="bi bi-search search-outline position-absolute" style="right: 10px; z-index: 2;"></i>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="chatlist">
+						
+						</div>
 					</div>
 				</div>
-				<!-- chat list-->
-	            <!-- 현재 동적 생성중 -->
-	            <div class="chatlist">
-	            	
-	            </div>
-	        </div>
-        </div>
-        <div class="col-8 rightside">
-            <!-- side navbar -->
-            <div class="header d-flex justify-content-center align-items-center">
-                <nav class="navbar navbar-expand-lg bg-body-tertiary" style= "font-weight:bold; border-radius: 0.8rem;" >
-                    <div class="container-fluid">
-                      <a class="navbar-brand" href="#"></a>
-                      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                      </button>
-                      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                        <ul class="navbar-nav">
-                          <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" th:href="@{/member/home}">Home</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modal1">New Room</a>
-                          </li>
-                          <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              Language
-                            </a>
-                            <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" th:href="@{/chat/openChatMain(lang_category='ko')}" name="ko">Korean</a></li>
-                              <li><a class="dropdown-item" th:href="@{/chat/openChatMain(lang_category='en')}" name="en">English</a></li>
-                              <li><a class="dropdown-item" th:href="@{/chat/openChatMain(lang_category='ja')}" name="ja">Japanese</a></li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </nav>
-            </div>
-            <!-- 보이스룸 목록 -->
-            <div class="chatroom_list_box">
-                <div class="toggle_btn">
-                    <ion-icon name="menu-outline"></ion-icon>
-                </div>
-                <table class="chatroom_list_table">
-                    <thead>
-                        <tr class="chatroom_list_thead">
-                            <th>lang</th>
-                            <th>title</th>
-                            <th>total</th><!-- 현참가인원수/인원제한 -->
-                            <th>host</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    
-                    <!--
-                    <tbody class="chatroom_list_tbody">
-                        <tr>
-                            <td>jpn</td>
-                            <td class="text_align_left">only use japanese</td>
-                            <td>3/6</td>
-                            <td class="text_align_left">일본어잘하고싶다</td>
-                        </tr>
-                    </tbody>
-                    -->
-                    <tbody th:each="room : ${openChatrooms}" class="chatroom_list_tbody">
-                        <tr>
-                            <td><input th:type="hidden" th:id="${room.chatroom_num}" th:value="${room.chatroom_num}"><p th:text="${room.lang_category}"></p></td>
-                            <td><a th:href="@{/chat/openChatRoomEnter(chatroom_num=${room.chatroom_num})}" th:text=${room.title}></a> <!-- <p th:text="${room.title}"> </p> --></td>
-                            <td><p th:text="${room.currentHeadCount + ' / ' + room.capacity}"></p></td>
-                            <td><p th:text="${room.nickname}"></td><!--보이스룸 호스트 닉네임-->
-                            <td><a href="#">X</a></td><!--채팅방 삭제 아이콘, 권한 있는 방만 뜨도록.-->
-                        </tr>
-                    </tbody> 
-                </table>
-            </div>
-            <!-- pagination -->
-            <div class="page_box">
-                <ul class="pagination">
-                    <li class="page-item disabled">
-                    <a class="page-link" href="#">&laquo;</a>
-                    </li>
-                    <li class="page-item active">
-                    <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                    <a class="page-link" href="#">4</a>
-                    </li>
-                    <li class="page-item">
-                    <a class="page-link" href="#">5</a>
-                    </li>
-                    <li class="page-item">
-                    <a class="page-link" href="#">&raquo;</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+			</div>
+			<div class="col-lg-9 ps-1 pe-1">
+				<div class="card border-primary mb-3">
+					<!-- side navbar -->
+					<div class="card-header">
+						<div
+							class="header d-flex justify-content-center align-items-center">
+							<nav class="navbar navbar-expand-lg bg-body-tertiary"
+								style="font-weight: bold; border-radius: 0.8rem;">
+								<div class="container-fluid">
+									<button class="navbar-toggler" type="button"
+										data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+										aria-controls="navbarNavDropdown" aria-expanded="false"
+										aria-label="Toggle navigation">
+										<span class="navbar-toggler-icon"></span>
+									</button>
+									<div class="collapse navbar-collapse" id="navbarNavDropdown">
+										<ul class="navbar-nav">
+											<li class="nav-item"><a class="nav-link active"
+												aria-current="page" th:href="@{/chat/openChatMain}">Reset
+													Room</a></li>
+											<li class="nav-item"><a class="nav-link" href="#"
+												data-bs-toggle="modal" data-bs-target="#modal1">New Room</a></li>
+											<li class="nav-item dropdown"><a
+												class="nav-link dropdown-toggle" href="#" role="button"
+												data-bs-toggle="dropdown" aria-expanded="false">
+													Language </a>
+												<ul class="dropdown-menu">
+													<li><a class="dropdown-item"
+														th:href="@{/chat/openChatMain(lang_category='ko')}"
+														name="ko">Korean</a></li>
+													<li><a class="dropdown-item"
+														th:href="@{/chat/openChatMain(lang_category='en')}"
+														name="en">English</a></li>
+													<li><a class="dropdown-item"
+														th:href="@{/chat/openChatMain(lang_category='ja')}"
+														name="ja">Japanese</a></li>
+												</ul></li>
+										</ul>
+									</div>
+								</div>
+							</nav>
+						</div>
+					</div>
+					<!-- 보이스룸 목록 -->
+					<div class="card-body chatroom_list_box d-center">
+						<table class="table table-hover ">
+							<thead>
+								<tr class="chatroom_list_thead">
+									<th scope="col">lang</th>
+									<th scope="col">title</th>
+									<th scope="col">total</th>
+									<!-- 현참가인원수/인원제한 -->
+									<th scope="col">host</th>
+									<th scope="col"></th>
+								</tr>
+							</thead>
+							<tbody th:each="room : ${openChatrooms}" >
+								<tr>
+									<td><input th:type="hidden" th:id="${room.chatroom_num}"
+										th:value="${room.chatroom_num}">
+										<p th:text="${room.lang_category}"></p></td>
+									<td><a
+										th:href="@{/chat/openChatRoomEnter(chatroom_num=${room.chatroom_num})}"
+										th:text=${room.title}></a> <!-- <p th:text="${room.title}"> </p> --></td>
+									<td><p
+											th:text="${room.currentHeadCount + ' / ' + room.capacity}"></p></td>
+									<td><p th:text="${room.nickname}"></td>
+									<!--채팅방 삭제 아이콘, 권한 있는 방만 뜨도록.-->
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<!-- pagination -->
+					<div class="card-footer d-center">
+						<div class="page_box">
+							<ul class="pagination">
+								<li class="page-item disabled"><a class="page-link"
+									href="#">&laquo;</a></li>
+								<li class="page-item active"><a class="page-link" href="#">1</a>
+								</li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item"><a class="page-link" href="#">4</a></li>
+								<li class="page-item"><a class="page-link" href="#">5</a></li>
+								<li class="page-item"><a class="page-link" href="#">&raquo;</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
-    <!-- New Room modal -->
-    <div class="modal fade" id="modal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Create New Chatting Room</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-            <div class="modal-body">
-                <table class="create_room_box">
-                    <tr>
-                        <th>title</th>
-                        <td><input type="text" placeholder="15자 이내로 입력해주세요" id="title"></td>
-                    </tr>
-                    <tr>
-                        <th>language</th>
-                        <td>
-                            <select autofocus id="lang_category">
-                                <option selected value="ko">Korean</option>
-                                <option value="en">English</option>
-                                <option value="ja">Japanese</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>capacity</th>
-                        <td>
-                            <select autofocus id="capacity">
-                                <option value="10" checked>10</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                            </select>
-                        </td>
-                    </tr>
-<!--                <tr>
-                        <th>use voice</th>
-                        <td>
-                            <label><input type="radio" name="voice_use" value="yes"> yes &nbsp;</label>
-                            <label><input type="radio" name="voice_use" value="no"> no</label>
-                        </td>
-                    </tr>-->
-                    <!-- 태그 전용 박스 주석 -->
-                    <!--
-                    <tr class="tag_box">
-                        <th>tag</th>
-                        <td>
-                            <label><input type="checkbox" name="tag" value="trip"> 여행</label>
-                            <label><input type="checkbox" name="tag" value="book"> 책</label>
-                            <label><input type="checkbox" name="tag" value="animal"> 동물</label>
-                            <label><input type="checkbox" name="tag" value="Celebrity"> 연예인</label>
-                            <br>
-                            <label><input type="checkbox" name="tag" value="study"> 공부</label>
-                            <label><input type="checkbox" name="tag" value="movie"> 영화</label>
-                            <label><input type="checkbox" name="tag" value="tvdrama"> 드라마</label>
-                            <label><input type="checkbox" name="tag" value="exercise"> 운동</label>
-                        </td>
-                    </tr>
-                    -->
-                </table>
-            </div>
-                <div class="modal-footer">
-                    <button type="button" id="createRoom" class="btn btn-primary" onclick="createChatRoom()">Create</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-	
-	  <script>
-	  document.addEventListener("DOMContentLoaded", function() {
-	      const toggleButton = document.querySelector('.toggle_btn');
-	      const leftSide = document.querySelector('.leftside');
-	        
-	      toggleButton.addEventListener('click', function() {
-	        if (leftSide.style.display === 'none') {
-	            leftSide.style.display = 'block';
-	        } else {
-	            leftSide.style.display = 'none';
-	        }
-	      });
-	    });
-	  </script>
-	
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script th:src="@{/js/memberView/sidebar.js}"></script>
+	<!-- New Room modal -->
+	<div class="modal fade" id="modal1" data-bs-backdrop="static"
+		data-bs-keyboard="false" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Create New Chatting Room</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<table class="create_room_box">
+						<tr>
+							<th>title</th>
+							<td><input type="text" placeholder="15자 이내로 입력해주세요"
+								id="title"></td>
+						</tr>
+						<tr>
+							<th>language</th>
+							<td><select autofocus id="lang_category">
+									<option selected value="ko">Korean</option>
+									<option value="en">English</option>
+									<option value="ja">Japanese</option>
+							</select></td>
+						</tr>
+						<tr>
+							<th>capacity</th>
+							<td><select autofocus id="capacity">
+									<option value="10" checked>10</option>
+									<option value="15">15</option>
+									<option value="20">20</option>
+							</select></td>
+						</tr>	
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="createRoom" class="btn btn-primary"
+						onclick="createChatRoom()">Create</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
+		<script th:src="@{/js/memberView/sidebar.js}"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+	<script th:src="@{/js/chat/openChatMain.js}"></script>
+
 </body>
 </html>

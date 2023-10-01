@@ -259,6 +259,7 @@ public class MemberServiceImple implements MemberService
 	
 	@Override
 	public int getUserIdByNickname(String nickname) {
+		log.debug("닉네임 값 in 임플 : {}", nickname);
 		return dao.getUserIdByNickname(nickname);
 	}
 	@Override

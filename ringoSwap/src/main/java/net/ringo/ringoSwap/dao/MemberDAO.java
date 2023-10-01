@@ -87,6 +87,7 @@ public interface MemberDAO
 	public ArrayList<MemberFollow> friendSelectByUserNum(int user_num);
 	//@멘션 기능을 위한 nickname으로 해당 유저의 num값을 가져오는 메서드 
 	public int getUserIdByNickname(String nickname);
+	//유저 아이디로 닉네임값을 가져옴	
 	public String nicknameByUserId(String userId);
 	// 유저 고유 번호로 닉네임을 가져온다.
 	public Member memberSearchByUsername(String nickname);

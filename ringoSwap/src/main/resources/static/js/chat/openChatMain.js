@@ -29,44 +29,40 @@ function init()
 }
 
 // 소켓을 만들어주는 역할을 하는 함수
-function connect()
-{
-	// 연결하고자하는 Socket 의 endPoint
+function connect() {
+    // 연결하고자하는 Socket 의 endPoint
     let socket = new SockJS('/ringo/ws-stomp');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, onConnected, onError);
     
-    if (stompClient === null)
-    {	
-		console.log("연결 실패. client를 찾을 수 없습니다.");
-    	return false;
+    if (stompClient === null) {	
+        console.log("연결 실패. client를 찾을 수 없습니다.");
+        return false;
     }
     
     // 검색 관련 이벤트 추가
-    document.getElementById('searchInput').addEventListener('keyup', function()
-    {
-		searchByTitle(document.getElementById('searchInput').value);
-	});
+    $('#searchInput').on('keyup', function() {
+        searchByTitle($(this).val());
+    });
 	
-	// DM, OpenChat 버튼 이벤트 연결
-	let dm_btn = document.getElementById('DM_btn');
-    let openchat_btm = document.getElementById('OpenChat_btn');
+    // DM, OpenChat 버튼 이벤트 연결
+    let $dm_btn = $('#DM_btn');
+    let $openchat_btm = $('#OpenChat_btn');
 	
-	dm_btn.addEventListener('click', function()
-	{
-		dm_btn.style.backgroundColor = '#f4faf9';
-		openchat_btm.style.backgroundColor = '#a8e9dc';
-	});
+    $dm_btn.on('click', function() {
+        $dm_btn.addClass('btn-primary').removeClass('btn-outline-primary');
+        $openchat_btm.addClass('btn-outline-primary').removeClass('btn-primary');
+    });
     
-    openchat_btm.addEventListener('click', function()
-	{
-		stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, {}, userNum);
-		openchat_btm.style.backgroundColor = '#f4faf9';
-        dm_btn.style.backgroundColor = '#a8e9dc';
-	});
+    $openchat_btm.on('click', function() {
+        stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, {}, userNum);
+        $openchat_btm.addClass('btn-primary').removeClass('btn-outline-primary');
+        $dm_btn.addClass('btn-outline-primary').removeClass('btn-primary');
+    });
     
     return true;
 }
+
 
 function onConnected() 
 {
@@ -95,7 +91,7 @@ function createChatRoom()
 	let title = document.getElementById('title').value;
 	let lang_category = document.getElementById('lang_category').value;
 	let capacity = document.getElementById('capacity').value;
-	
+
 	if (title.length <= 1)
 	{
 		alert("방제는 최소 두 글자 이상이어야합니다.");
@@ -150,58 +146,31 @@ function loadJoinedChatroomListRealTime(data)
 
 function createChatroomThumbnail(chatroom_num, title, inputdate, message)
 {
-	 // chatlist의 div 요소 접근
-    let chatlist = document.querySelector('.chatlist');
-    
+	// chatlist의 div 요소 접근
+    let $chatlist = $('.chatlist');
+
     // 새로운 block div 요소를 생성
-    let blockDiv = document.createElement('div');
-    blockDiv.className = 'block';
-    
-    // details div 요소를 생성
-    let detailsDiv = document.createElement('div');
-    detailsDiv.className = 'details';
-    blockDiv.appendChild(detailsDiv);
-    
-    // listHead div 요소를 생성, details에 append
-    let listHeadDiv = document.createElement('div');
-    listHeadDiv.className = 'listHead';
-    detailsDiv.appendChild(listHeadDiv);
-    
-    // hidden input 요소를 생성, chatroom_num 값을 설정
-    let hiddenInput = document.createElement('input');
-    hiddenInput.type = 'hidden';
-    hiddenInput.value = chatroom_num;
-    listHeadDiv.appendChild(hiddenInput);
-    
-    // h5 요소를 생성, title 값을 설정
-    let h5 = document.createElement('h5');
-    h5.textContent = title;
-    listHeadDiv.appendChild(h5);
-    
-    // p 요소를 생성, time 클래스를 추가하며 inputdate 값을 설정
-    let timeP = document.createElement('p');
-    timeP.className = 'time';
-    timeP.textContent = inputdate;
-    listHeadDiv.appendChild(timeP);
-    
-    // message_p div 요소를 생성, details에 append
-    let messageDiv = document.createElement('div');
-    messageDiv.className = 'message_p';
-    detailsDiv.appendChild(messageDiv);
-    
-    // p 요소를 생성, message 값을 설정
-    let messageP = document.createElement('p');
-    messageP.textContent = message;
-    messageDiv.appendChild(messageP);
-    
-    // 생성한 blockDiv 요소를 chatlist에 append
-    chatlist.appendChild(blockDiv);
-    
+    let $blockDiv = $('<div>').addClass('block');
+    // details, listHead div 요소를 생성 및 내용 추가
+    let $detailsDiv = $('<div>').addClass('details').append(
+        $('<div>').addClass('listHead').append(
+            $('<input>').attr('type', 'hidden').val(chatroom_num),
+            $('<h5>').text(title),
+            $('<p>').addClass('time').text(inputdate)
+        ),
+        $('<div>').addClass('message_p').append(
+            $('<p>').text(message)
+        )
+    );
+    // blockDiv에 detailsDiv 추가 및 chatlist에 blockDiv 추가
+    $blockDiv.append($detailsDiv).appendTo($chatlist);
+	$blockDiv.append('<hr>');
     // blockDiv 클릭 이벤트 리스너 추가
-    blockDiv.addEventListener('click', function() 
-    {
+    $blockDiv.on('click', function() {
         moveToChatroom(chatroom_num);
     });
+    
+    //메시지 보낸사람 닉네임받아오기
 }
 
 function moveToChatroom(chatroom_num) 
