@@ -228,7 +228,9 @@ function latestFilePrint(){
             dataType: 'json',
             success: function(file){
                 console.log(file);
-                if(file.fileIsNone === '1'){
+                if(file.fileIsNone === 1){
+                    fileOpenUrl('-1', 'note', 1);
+                    return;
                 }
 
                 fileOpenUrl(file.file_num, file.file_type, 1);
@@ -240,6 +242,15 @@ function latestFilePrint(){
 }
 
 function fileOpenUrl(fileNum, fileType, pageNumber = 1){
+	console.log('fileOpenUrl 호출됨: ', fileNum, fileType, pageNumber);
+    if(fileNum === '-1'){
+        let str =`아직 어떠한 파일도 생성하지 않았습니다! 단어장이나 메모장을 생성해주세요!`;
+        console.log(str);
+        tinymce.activeEditor.setContent(str);  
+        history.pushState({ file_num: fileNum, file_type: fileType }, '', `?file=-1&type=note`);
+        return;
+    }
+    
     file_num_saver = fileNum;
     
     if(fileType === 'note'){

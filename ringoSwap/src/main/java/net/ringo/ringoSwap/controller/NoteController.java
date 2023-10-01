@@ -147,7 +147,8 @@ public class NoteController
    public DirFile fileOpenLatestOne(@AuthenticationPrincipal UserDetails user) {
 	   int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 	   DirFile file = service.fileSelectByModifieDate(user_num);
-	   if(file.equals(null)) {
+	   if(file == null) {
+		   file = new DirFile();
 		   file.setFileIsNone(1);
 	   }
 	   
