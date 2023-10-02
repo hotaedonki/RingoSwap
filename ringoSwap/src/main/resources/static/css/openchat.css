@@ -77,10 +77,77 @@ i {
   height: 20px;
   background: linear-gradient(225deg,#fff 0%, #fff 50%, transparent 50%, transparent);
 }
-.chatbox {
+
+.chatbox, .chat-box {
   list-style-type: none; 
+  border-radius: 0px;
+  border-right: 0;
 }
 
+.chat-list-area{
+	border-radius: 6px 0 0 6px;
+	border-right: 0;
+}
+
+.chat-room-list-area, .participants-area {
+	border-radius: 0 6px 6px 0;
+}
+
+/* Chatroom Block Styles */
+.chatroom-block {
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+.chatroom-block:hover {
+    background-color: #f2f2f2;
+}
+
+.chatroom-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.chatroom-time {
+    font-size: 0.8em;
+    color: #888;
+    margin-left: auto; 
+}
+
+.chatroom-message {
+    font-size: 1em;
+    color: #555;
+    margin-top: 5px;
+}
+
+.listHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.emojionearea {
+	width: calc(100% - 80px);
+	height: 38px;
+	min-height: 38px;	
+	max-height: 38px;
+	margin-left: 20px;
+}
+
+.input-group {
+	flex-wrap: nowrap;
+}
+
+.bi-image {
+	font-size: 28px;
+}
+
+.nickname-label {
+    font-weight: bold; 
+    color: #333; 
+    margin-right: 5px; 
+}
 
 
 

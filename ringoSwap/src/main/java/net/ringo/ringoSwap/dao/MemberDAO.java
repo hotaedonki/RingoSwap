@@ -2,6 +2,8 @@ package net.ringo.ringoSwap.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -96,6 +98,7 @@ public interface MemberDAO
 	public String getEncodedPasswordByUserNum(int user_num);
 	// 유저넘으로 멤버값 가져오기
 	public Member memberSearchByNum(int user_num);
+	public List<Map<String, Object>> getAllUserNumsAndNicknamesByChatroomNum(int chatroom_num);
 
 
 }

@@ -144,35 +144,6 @@ function loadJoinedChatroomListRealTime(data)
 	});
 }
 
-function createChatroomThumbnail(chatroom_num, title, inputdate, message)
-{
-	// chatlist의 div 요소 접근
-    let $chatlist = $('.chatlist');
-
-    // 새로운 block div 요소를 생성
-    let $blockDiv = $('<div>').addClass('block');
-    // details, listHead div 요소를 생성 및 내용 추가
-    let $detailsDiv = $('<div>').addClass('details').append(
-        $('<div>').addClass('listHead').append(
-            $('<input>').attr('type', 'hidden').val(chatroom_num),
-            $('<h5>').text(title),
-            $('<p>').addClass('time').text(inputdate)
-        ),
-        $('<div>').addClass('message_p').append(
-            $('<p>').text(message)
-        )
-    );
-    // blockDiv에 detailsDiv 추가 및 chatlist에 blockDiv 추가
-    $blockDiv.append($detailsDiv).appendTo($chatlist);
-	$blockDiv.append('<hr>');
-    // blockDiv 클릭 이벤트 리스너 추가
-    $blockDiv.on('click', function() {
-        moveToChatroom(chatroom_num);
-    });
-    
-    //메시지 보낸사람 닉네임받아오기
-}
-
 function moveToChatroom(chatroom_num) 
 {
     // chatroom 페이지로 이동하면서 chatroom_num을 파라미터로 전달
@@ -249,3 +220,4 @@ function searchResultByTitle(data)
 		createChatroomThumbnail(item.chatroom_num, item.title, item.inputdate, item.message);
 	});
 }
+

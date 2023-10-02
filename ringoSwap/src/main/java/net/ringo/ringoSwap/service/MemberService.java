@@ -2,6 +2,8 @@ package net.ringo.ringoSwap.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.MemberFollow;
@@ -91,4 +93,6 @@ public interface MemberService
 	public int emailCheck(String email);
 
 	public int nicknameCheck(String nickname);
+	
+	public List<Map<String, Object>> getAllUserNumsAndNicknamesByChatroomNum(int chatroom_num);
 }

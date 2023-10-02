@@ -270,4 +270,12 @@
 		from ringo_member_with_mypage
 		where nickname = #{nickname}
 	</select>
+	
+	<select id="getAllUserNumsAndNicknamesByChatroomNum" parameterType="int" resultType="map">
+	    SELECT DISTINCT m.nickname, c.user_num
+	    FROM ringo_chat_common c
+	    JOIN ringo_member_with_mypage m ON c.user_num = m.user_num
+	    WHERE c.chatroom_num = #{chatroomNum}
+	</select>
+	
 </mapper>

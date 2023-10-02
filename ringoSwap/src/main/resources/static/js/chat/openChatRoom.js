@@ -6,11 +6,37 @@ let myChatroomLinkInfo;
 let myUserNum;
 let url;
 let subscriptionForUpdateChatroom;
+let emojioneAreaInstance;
 
 $(document).ready(function()
 {
 	init();
 	connect();
+	
+	const emojiArea = $("#msg_input").emojioneArea({
+		pickerPosition: "top",
+	});
+	
+	emojioneAreaInstance = emojiArea[0].emojioneArea;
+
+	emojioneAreaInstance.on("keyup", function(editor, event) {
+        if (event.which === 13) {
+            event.preventDefault();
+            let messageText = emojioneAreaInstance.getText();
+
+            if (messageText.trim() !== '') {
+                $("#msg_submit").click();
+                emojioneAreaInstance.setText('');
+            }
+        }
+    });
+    
+    const storedNicknames = localStorage.getItem('nicknameCache');
+    let localNicknameCache = {};
+    if (storedNicknames) {
+        localNicknameCache = JSON.parse(storedNicknames);
+    }
+    setNicknamesForExistingMessages(localNicknameCache);
 });
 
 window.addEventListener('beforeunload', function(event) 
@@ -72,7 +98,7 @@ function connect()
 	// 연결하고자하는 Socket 의 endPoint
     let socket = new SockJS('/ringo/ws-stomp');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, onConnected, onError);
+    stompClient.connect({}, onConnected);
     
     if (stompClient === null)
     {	
@@ -89,7 +115,7 @@ function connect()
 			chat_num: "", // 채팅 번호
 			user_num: myUserNum, // 사용자 번호
 			chatroom_num: chatroomNum, // 채팅방 번호
-			message: document.getElementById("msg_input").value, // 메시지 내용
+			message: emojioneAreaInstance.getText().trim(), // 메시지 내용
 			inputdate: "", // 입력 날짜
 			origin_file: "", // 원본 파일
 			saved_file: "", // 저장된 파일
@@ -97,7 +123,7 @@ function connect()
 		};
 			
         stompClient.send('/pub/chat/openChatRoom/message/' + chatroomNum, {}, JSON.stringify(chatCommon));
-        document.getElementById("msg_input").value = '';
+        emojioneAreaInstance.setText('');;
     });
     
      // 검색 관련 이벤트 추가
@@ -124,7 +150,7 @@ function connect()
 }
 
 // 접속할 시에 보낼 함수 
-function onConnected() 
+function onConnected()
 {
 	// ChatCommon 객체를 생성
 	const chatCommon = 
@@ -159,13 +185,46 @@ function onConnected()
 	
 	// 검색창에 방 제목을 입력할 시 결과를 받기 위해 이벤트 연결
 	stompClient.subscribe('/sub/chat/openChatMain/searchByTitle/' + myUserNum, searchResultByTitle);
+
+	const storedNicknames = localStorage.getItem('nicknameCache');
+    if (storedNicknames) {
+        nicknameCache = JSON.parse(storedNicknames);
+    }
+    
+    console.log(storedNicknames, nicknameCache)
+    
+	// 채팅방에 입장할 때 사용자의 닉네임 로드
+    loadAllNicknamesForChatroom(chatroomNum);
+    // 이미 존재하는 메시지들의 닉네임을 설정
 }
 
-// 접속 실패 후, 에러 발생시 실행하는 함수
-function onError(error) 
-{
-    connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
-    connectingElement.style.color = 'red';
+function setNicknamesForExistingMessages(nicknameCache) {
+    $('#msg_chatBoxArea li').each(function() {
+        const userNum = $(this).attr('data-user-num'); 
+        console.log('UserNum:', userNum); // 사용자 번호 출력
+        console.log('Nickname from cache:', nicknameCache[userNum]); // 캐시에서 가져온 닉네임 출력
+
+        const nickname = nicknameCache[userNum] || 'Unknown';
+        $(this).find('.nickname-label').text(nickname + ": ");
+    });
+}
+
+
+function loadAllNicknamesForChatroom(chatroomNum) {
+    $.ajax({
+        url: 'allUserNickname',
+        type: 'post',
+        data: { chatroom_num: chatroomNum },
+        success: function(data) {
+            data.forEach(user => {
+                nicknameCache[user.USER_NUM] = user.NICKNAME;
+            });
+        localStorage.setItem('nicknameCache', JSON.stringify(nicknameCache));
+        },
+        error: function(error) {
+            console.error("Error fetching nicknames:", error);
+        }
+    });
 }
 
 // 입장, 퇴장 시에 실행하는 함수
@@ -174,52 +233,39 @@ function onMessageForState(message)
 	console.log(message);
 }
 
-// 채팅 메시지를 받을때 실행하는 함수
-function onMessageReceived(message) 
-{
-    //console.log(message);
+function onMessageReceived(message) {
     // message의 body 속성을 가져와서 파싱
     const bodyString = message.body;
-    
-    if (bodyString) 
-    {
-        try 
-        {
+    if (bodyString) {
+        try {
             const bodyObj = JSON.parse(bodyString);
             const messageValue = bodyObj.message;
             const type = bodyObj.type;
             const userNumData = bodyObj.user_num;
             
             if (type == null)
-            	return;
-            	
-            switch (type)
-            {
-				// case가 TALK인 경우에는 새 메시지를 추가해서 붙혀준다.
-				case 'TALK':
-					console.log("메시지:", messageValue);
-					createChatMsgBox(userNumData, messageValue);
-					
-					// 채팅방 정보를 가져오기 위한 호출
-					stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroomNum, {}, myUserNum);
-					scrollDown();
-					break;
-			}
-			
-			return;
-        } 
-        catch (error) 
-        {
+                return;
+
+            // 캐시에서 닉네임을 바로 조회. 닉네임 캐시에서 사용자 번호를 기반으로 닉네임을 조회합니다.
+            const nickname = nicknameCache[userNumData] || 'Unknown';
+            switch (type) {
+                case 'TALK':
+                    createChatMsgBox(userNumData, messageValue, nickname); // 닉네임 인자를 전달합니다.
+                    
+                    stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroomNum, {}, myUserNum);
+                    scrollDown();
+                    break;
+            }
+        } catch (error) {
             console.error("JSON 파싱 에러:", error);
             return;
         }
-    } 
-    else 
-    {
+    } else {
         console.error("body가 존재하지 않습니다.");
         return;
     }
 }
+
 
 function scrollDown()
 {
@@ -227,29 +273,23 @@ function scrollDown()
     chatBox.scrollTop = chatBox.scrollHeight; // 스크롤을 맨 아래로 이동
 }
 
-// user_num이 자신의 아이디면 
-function createChatMsgBox(userNum, message)
-{
-	const liElement = document.createElement('li');
-	const pElement = document.createElement('p');
+// createChatMsgBox 함수에 nickname 인자를 추가
+function createChatMsgBox(userNum, message, nickname = '') {
+    let $liElement = $('<li></li>').attr('data-user-num', userNum);
+    let $pElement = $('<p></p>').attr('text', message).text(message);
+    let $nicknameElement = $('<span></span>').addClass('nickname-label').text(nickname + ": ");
 
-	if (userNum == myUserNum)
-	{
-		liElement.classList.add('chat', 'outcoming');
-	}
-	else
-	{
-		liElement.classList.add('chat', 'incoming');
-	}
-	pElement.setAttribute('text', message);
-	pElement.textContent = message;  // 실제 텍스트 내용도 '안녕'으로 설정
+    if (userNum == myUserNum) {
+        $liElement.addClass('chat outcoming');
+    } else {
+        $liElement.addClass('chat incoming').append($nicknameElement);
+    }
 
-	// 3. div의 자식으로 p를 추가
-	liElement.appendChild(pElement);
-
-	// 4. 부모 태그에 div 추가 (예를 들어, body 태그가 부모일 경우)
-	document.getElementById('msg_chatBoxArea').appendChild(liElement);
+    $liElement.append($pElement);
+    $('#msg_chatBoxArea').append($liElement);
 }
+
+
 
 function loadJoinedChatroomListRealTime(data)
 {
@@ -270,33 +310,6 @@ function loadJoinedChatroomListRealTime(data)
 	jsonData.forEach(item => {
 		createChatroomThumbnail(item.chatroom_num, item.title, item.inputdate, item.message);
 	});
-}
-
-function createChatroomThumbnail(chatroom_num, title, inputdate, message)
-{
-	// chatlist의 div 요소 접근
-    let $chatlist = $('.chatlist');
-
-    // 새로운 block div 요소를 생성
-    let $blockDiv = $('<div>').addClass('block');
-    // details, listHead div 요소를 생성 및 내용 추가
-    let $detailsDiv = $('<div>').addClass('details').append(
-        $('<div>').addClass('listHead').append(
-            $('<input>').attr('type', 'hidden').val(chatroom_num),
-            $('<h5>').text(title),
-            $('<p>').addClass('time').text(inputdate)
-        ),
-        $('<div>').addClass('message_p').append(
-            $('<p>').text(message)
-        )
-    );
-    // blockDiv에 detailsDiv 추가 및 chatlist에 blockDiv 추가
-    $blockDiv.append($detailsDiv).appendTo($chatlist);
-	$blockDiv.append('<hr>');
-    // blockDiv 클릭 이벤트 리스너 추가
-    $blockDiv.on('click', function() {
-        moveToChatroom(chatroom_num);
-    });
 }
 
 function moveToChatroom(chatroom_num) 
@@ -375,6 +388,8 @@ function searchResultByTitle(data)
 		createChatroomThumbnail(item.chatroom_num, item.title, item.inputdate, item.message);
 	});
 }
+
+
 /*
 	참고 - 메시지 보내는 예시
 	

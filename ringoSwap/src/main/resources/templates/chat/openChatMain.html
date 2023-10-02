@@ -90,8 +90,8 @@
 
 	<div class="container home">
 		<div class="row">
-			<div class="col-3">
-				<div class="card border-primary mb-3">
+			<div class="col-3 pe-0">
+				<div class="card border-primary mb-3 chat-list-area">
 					<div class="card-header">
 						<!-- DM & OpenChat Buttons -->
 						<div class="mb-2 d-center mb-3">
@@ -113,8 +113,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-9 ps-1 pe-1">
-				<div class="card border-primary mb-3">
+			<div class="col-lg-9 ps-0">
+				<div class="card border-primary mb-3 chat-room-list-area">
 					<!-- side navbar -->
 					<div class="card-header">
 						<div
@@ -260,6 +260,7 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
 	<script th:src="@{/js/chat/openChatMain.js}"></script>
+	<script th:src="@{/js/chat/chatUtilities.js}"></script>
 
 </body>
 </html>

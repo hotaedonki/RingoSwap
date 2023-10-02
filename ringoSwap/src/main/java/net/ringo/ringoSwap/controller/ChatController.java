@@ -2,6 +2,7 @@ package net.ringo.ringoSwap.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -223,6 +224,14 @@ public class ChatController
 		return nickName + "님이 입장하셨습니다!";
 	}
 	
+	@ResponseBody
+	@PostMapping("allUserNickname")
+	public List<Map<String, Object>> allUserNickname(int chatroom_num) {
+		List<Map<String, Object>> nicknamesAndUserNums = mService.getAllUserNumsAndNicknamesByChatroomNum(chatroom_num);
+		log.debug("닉네임 가져오는지 : {} ", nicknamesAndUserNums);
+		return nicknamesAndUserNums;
+	}
+	
 	@MessageMapping(PathHandler.MM_OPENCHATROOMMESSAGE)
 	@SendTo(PathHandler.ST_OPENCHATROOMMESSAGE)
 	public ChatCommon sendMessage(@DestinationVariable int chatroomID, @Payload ChatCommon chat)
@@ -231,7 +240,7 @@ public class ChatController
 		
 		// 채팅을 보낼때 DB에 저장된 후에 다시 돌아옴.
 		ChatCommon dbChat = service.insertChatCommonAndGetChatCommon(chat);
-		
+		log.info("dbchat : {}", dbChat);
 		if (dbChat == null)
 		{
 			log.debug("dbChat이 존재하지 않습니다!");

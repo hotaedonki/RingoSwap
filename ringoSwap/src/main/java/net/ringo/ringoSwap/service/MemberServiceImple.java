@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -284,6 +286,10 @@ public class MemberServiceImple implements MemberService
 	@Override
 	public Member memberSearchByNum(int user_num) {
 		return dao.memberSearchByNum(user_num);
+	}
+	@Override
+	public List<Map<String, Object>> getAllUserNumsAndNicknamesByChatroomNum(int chatroom_num) {
+		return dao.getAllUserNumsAndNicknamesByChatroomNum(chatroom_num);
 	}
 
 
