@@ -95,13 +95,21 @@ public class ChatController
 	}
 	
 	@GetMapping(PathHandler.DMCHATWITHROOMID)
-	public String goDMChatMainAfterCreateRoom(@RequestParam("dmRoomId") int dmRoomId, Model model)
+	public String dmChat(@RequestParam("dmRoomId") int dmRoomId, @AuthenticationPrincipal UserDetails user, Model model)
 	{
 	    log.debug("go DM Chat Main After Create Room . . .");
+	    
+		if (user == null || user.getUsername() == null || user.getUsername().length() <= 0)
+		{
+			log.debug("user의 정보를 찾을 수 없습니다.");
+			return "memberView/home";
+		}
+		
 	    log.debug("dmRoomId - {}", dmRoomId);
 	    model.addAttribute("dmRoomId", dmRoomId);
 	    return "chat/dmChat";
 	}
+	
 	
 	@MessageMapping(PathHandler.MM_LOADJOINEDCHATROOMLISTREALTIME)
 	@SendTo(PathHandler.ST_LOADJOINEDCHATROOMLISTREALTIME)
