@@ -1,6 +1,6 @@
 function bringMyName() {
 	$.ajax({
-		url: 'nicknamePrint'
+		url: '../member/nicknamePrint'
 		, type: 'post'
 		, success: function(name) {
 			myNickname = name;

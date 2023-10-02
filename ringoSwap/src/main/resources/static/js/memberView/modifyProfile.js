@@ -11,7 +11,7 @@
         // 각 이벤트에 대한 핸들러 바인딩
         $(document)
             .on('click', '.hobbyButton button', toggleHobbyButtonClass) // 취미 버튼 클릭 이벤트
-            .on('click', '.card-text', enableIntroductionEditing)  // 자기소개 수정 활성화 이벤트
+            .on('click', '.introducer', enableIntroductionEditing)  // 자기소개 수정 활성화 이벤트
             .on('click', '.modify', sendProfileModification)  // 프로필 수정 이벤트
             .on('click', '.languageSelect', selectDesiredLanguage);  // 언어 선택 이벤트
 
@@ -68,10 +68,10 @@ function toggleHobbyButtonClass() {
 
 function enableIntroductionEditing() {
     // 자기소개 수정 활성화
-    let currentText = $(this).text();
+    let currentText = $(this).find('.card-text').text();
     let form = $('.form-control').text();
     if(!form){
-        $(this).html(`<textarea class="form-control" onkeypress="enterPress(event)">${currentText}</textarea>
+        $(this).find('.card-text').html(`<textarea class="form-control" onkeypress="enterPress(event)">${currentText}</textarea>
         `);
     }
 }
@@ -264,13 +264,6 @@ function sendProfileModification() {
         // 선택된 언어에 따라 프로필 이미지 변경
         $('.profile-info .targetLanguage').attr('src', languageImages[language]);
     }
-
-// 변수 및 설정
-const languageImages = {
-    "한국어": "../img/한국어.jpg",
-    "일본어": "../img/일본어.jpg",
-    "영어": "../img/영어.jpg"
-};
 
 /* 입력된 언어코드 문자열을 해당 언어의 이미지로 변환하는 함수 */
 function printLanguage(lang){

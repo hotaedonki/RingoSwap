@@ -330,3 +330,7 @@ body.dark .sidebar li a:hover .text{
 	height: 40px;
 	border-radius: 50%;
 }
+
+.sidebar.close .text.logo-text {
+    display: none;
+}

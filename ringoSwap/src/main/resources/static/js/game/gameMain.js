@@ -377,3 +377,40 @@ function matchUseUpdate(){
         }
     })
 }
+function gameLogPrint(){
+	$.ajax({
+		url:'gameLogPrint',
+		type:"post",
+		dataType:"json",
+		success:function(logList){
+			console.log(logList);
+			if(logList.length === 0){
+				console.log('비었다');
+				return;
+			}
+			logList.forEach(log => {
+				let point = log.point;
+				if(log.point >= 1){
+					point = '+'+log.point;
+				}
+				$('.log-card').append(`
+				<div class="game-log">
+					<div>
+						<span class="file-title" data-file-num="${log.file_num}">사용 단어장 : ${log.file_title}</span>
+						<span class="game-category">게임분류 : ${log.game_category}</span>
+						<span class="language-category">사용언어 : ${log.lang_category}</span>
+					</div>
+					<div>
+						<span class="score-print" data-game-score="${log.score}">점수 : ${log.score}</span>
+						<span class="point-print" data-game-point="${log.point}">획득 포인트 : ${point}</span><br>
+						<span class="date-print">플레이 시각 : ${log.inputdate}</span>
+					</div>
+				</div>
+				`);
+			});
+		},
+		error:function(e){
+			console.log(e);
+		}
+	})
+}

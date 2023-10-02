@@ -9,8 +9,8 @@ $(document).ready(function() {
 	// 문서 준비가 완료되면 실행
     dirPrint();
     offCanvasButtonPrint();
-    latestFilePrint();  //가장 최근 수정한 메모장or단어장 출력 함수
     printNote();    
+    latestFilePrint();  //가장 최근 수정한 메모장or단어장 출력 함수
     // 정렬 방식 설정
     $('.sortBtn').click(sortEvent);
     $('#createFolder').click(dirCreate);
