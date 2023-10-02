@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,6 +66,11 @@ public class ChatController
 	{
 		log.debug("move to chat/openChatMain . . .");
 		
+		if (user == null || user.getUsername() == null || user.getUsername().length() <= 0)
+		{
+			return "memberView/home";
+		}
+		
 		// user의 이름으로 user_num을 가져온다.
 		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
 		
@@ -86,6 +92,15 @@ public class ChatController
 		model.addAttribute("userNum", userNum);
 		
 		return "/chat/openChatMain";
+	}
+	
+	@GetMapping(PathHandler.DMCHATMAINWITHROOMID)
+	public String goDMChatMainAfterCreateRoom(@RequestParam("dmRoomId") int dmRoomId, Model model)
+	{
+	    log.debug("go DM Chat Main After Create Room . . .");
+	    log.debug("dmRoomId - {}", dmRoomId);
+	    model.addAttribute("dmRoomId", dmRoomId);
+	    return "chat/dmChatMain";
 	}
 	
 	@MessageMapping(PathHandler.MM_LOADJOINEDCHATROOMLISTREALTIME)
@@ -375,9 +390,11 @@ public class ChatController
 	
 	// DM 채팅방을 만들기 전에 일회성 토큰을 먼저 발행하여 추후 다른 URL 접근시 방을 생성할 수 없도록 한다.
 	@PostMapping(PathHandler.CREATEDMCHATROOM)
-	public ResponseEntity<Map<String, String>> createDMChatroom(@RequestBody String token) 
+	public ResponseEntity<Map<String, String>> createDMChatroom(@RequestBody Map<String, String> request) 
 	{
 		log.debug("create DM Chat room . . .");
+		
+		String token = request.get("token");
 		
 		if (!tokensUsersInfoDMChat.containsKey(token))
 		{
@@ -412,15 +429,19 @@ public class ChatController
 	}
 	
 	// 방을 만든 직후에 채팅방에서 일회성 토큰 유효성 검사를 마친 후 들어가기 위한 경로
+	@ResponseBody
 	@GetMapping(PathHandler.ENTERDMCHATMAINAFTERCREATEROOM)
-	public String enterDMChatMainAfterCreateRoom(String token, Model model)
+	public Map<String, String> enterDMChatMainAfterCreateRoom(String token, Model model)
 	{
 		log.debug("enter DM Chat Main After Create Room . . .");
+		
+		Map<String, String> response = new HashMap<>();
 		
 		if (!tokensCreateDMChat.containsKey(token))
 		{
 			log.debug("create dm chat에 유효하지 않은 토큰입니다");
-			return "/feed/feedMain";
+			response.put("redirectUrl", "/ringo/feed/feedMain");
+			return response;
 		}
 		
 		DM_Chatroom dmChatroom = tokensCreateDMChat.get(token);
@@ -428,7 +449,8 @@ public class ChatController
 		if (dmChatroom == null)
 		{
 			log.debug("dmChatroom을 가져오지 못했습니다.");
-			return "/feed/feedMain";
+			response.put("redirectUrl", "/ringo/feed/feedMain");
+			return response;
 		}
 		
 		// 사용한 키는 삭제
@@ -436,7 +458,8 @@ public class ChatController
 		
 		model.addAttribute("dmChatroom", dmChatroom);
 		
-		return "/chat/dmChatMain";
+		response.put("redirectUrl", "/ringo/chat/dmChatMain?dmRoomId=" + dmChatroom.getDm_chatroom_num());
+		return response;
 	}
 	
 	@GetMapping(PathHandler.CHECKEXISTENCEDMCHATROOM)

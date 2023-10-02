@@ -520,45 +520,94 @@ function sendDM()
 	let nickname = document.getElementById('nickname').textContent;
 	let url = `/ringo/chat/checkExistenceDMChatRoom?nickname=${encodeURIComponent(nickname)}`;
 	
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            
-            if (data)	// 이미 DM방이 존재하는 경우
-            {
+	fetch(url)
+		.then(response => response.json())
+		.then(data => 
+		{
+			
+			console.log(data);
+
+			if (data)	// 이미 DM방이 존재하는 경우
+			{
 				/*
-                // data 값이 true일 경우
-                return fetch('/trueEndpoint', {
-                    method: 'GET',
-                    // 필요한 다른 설정들
-                }).then(response => response.json()) // 이 fetch의 응답을 json으로 변환
-                  .then(trueData => {
-                      console.log(trueData);
-                      // true일 때의 fetch 응답을 처리하는 코드
-                  });
-                  */
-            } 
-            else	// DM방이 존재하지 않은 경우
-            {
-				
-                // data 값이 false일 경우
-                return fetch(`/ringo/chat/getCredForMakeDMChatroom`, {
-                    method: 'POST',
-                    headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						nickname: nickname
-                    })
-                }).then(response => response.json()) // 이 fetch의 응답을 json으로 변환
-                  .then(data => {
-                      console.log(data);
-                      // false일 때의 fetch 응답을 처리하는 코드
-                  });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);  // 오류 발생 시 로깅
-        });
+				// data 값이 true일 경우
+				return fetch('/trueEndpoint', {
+					method: 'GET',
+					// 필요한 다른 설정들
+				}).then(response => response.json()) // 이 fetch의 응답을 json으로 변환
+				  .then(trueData => {
+					  console.log(trueData);
+					  // true일 때의 fetch 응답을 처리하는 코드
+				  });
+				  */
+			}
+			else	// DM방이 존재하지 않은 경우
+			{
+
+				// data 값이 false일 경우
+				return fetch(`/ringo/chat/getCredForMakeDMChatroom`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							nickname: nickname
+						})
+					}).then(response => response.json()) // 이 fetch의 응답을 json으로 변환
+					.then(tokenValue => // tokenValue의 결과 값을 받는 곳
+					{
+						if (tokenValue === null) 
+						{
+							console.log("일회성 토큰 생성 실패 - DM방 인증 정보 만들기 실패");
+							return;
+						}
+						
+						console.log(tokenValue);
+						
+						// 토큰을 만든 후에 방을 생성한다.
+						return fetch(`/ringo/chat/createDMChatroom`,
+							{
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify({
+									token: tokenValue.token
+								})
+							}).then(response => response.json())
+							.then(roomToken => // roomToken의 결과 값을 받는 곳
+							{
+								if (roomToken === null)
+								{
+									console.log("일회성 토큰 생성 실패 - 해당 방의 인증 정보 가져오기 실패");
+									return;
+								}
+								
+								let encodedToken = encodeURIComponent(roomToken.token);
+								let enterChatroomUrl = `/ringo/chat/enterDMChatMainAfterCreateRoom?token=${encodedToken}`;
+
+								return fetch(enterChatroomUrl, { method: 'GET' }) // GET 방식으로 변경
+									.then(response => response.json())
+									.then(responseData => 
+									{
+										if (!responseData.redirectUrl) 
+										{
+											console.log("roomURL 불러오기 실패");
+											return;
+										}
+										
+										console.log(responseData.redirectUrl);
+										
+										// 이 부분에서 responseData.redirectUrl을 사용하여 페이지를 리다이렉션하거나 필요한 작업을 수행합니다.
+										window.location.href = responseData.redirectUrl;
+										
+									}); // enterChatroomUrl end
+							}); // roomToken.then end
+					}); // tokenValue.then end
+			} // else end
+		})
+		.catch(error => {
+			console.error('Error:', error);  // 오류 발생 시 로깅
+		});
 }
