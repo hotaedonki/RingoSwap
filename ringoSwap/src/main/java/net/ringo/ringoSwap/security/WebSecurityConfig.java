@@ -28,7 +28,6 @@ public class WebSecurityConfig {
         		"/**",
         		"/bootstrap/**",
         		"/member/**",
-        		"/chat/**",
         		"/feed/**",
         		"/game/gameMain",
                 "/img/**",

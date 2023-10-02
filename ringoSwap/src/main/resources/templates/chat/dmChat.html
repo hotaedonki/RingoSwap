@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!-- Coding by CodingLab | www.codinglabweb.com -->
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!----======== CSS ======== -->
+<link rel="stylesheet"
+	th:href="@{/bootstrap-5.3.1-dist/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{../css/sidebar.css}">
+<link rel="stylesheet" th:href="@{../css/openchat.css}">
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+	rel="stylesheet">
+<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'
+	rel='stylesheet'>
+<!-- ======== JS ======== -->
+<script th:src="@{/js/jQuery-3.7.0.js}"></script>
+</head>
+<body>
+	<input type="hidden" id="chatroom" th:value="${chatroom}">
+	<input type="hidden" id="myChatroomLink" th:value="${myChatroomLink}">
+	<input type="hidden" id="chatLinks" th:value="${chatLinks}">
+
+	<nav class="sidebar close">
+		<header>
+			<div class="image-text">
+				<span class="image"> <img th:src="@{../img/로고.png}" alt="">
+				</span>
+
+				<div class="text logo-text">
+					<span class="name">LingoSwap</span>
+				</div>
+			</div>
+			<i class='bx bx-chevron-right toggle'></i>
+		</header>
+
+		<div class="menu-bar">
+			<div class="menu">
+				<ul class="menu-ul">
+					<li><a th:href="@{/member/home}"> <i
+							class='bx bx-home-alt icon'></i> <span class="text nav-text">Home</span>
+					</a></li>
+
+					<li><a th:href="@{/feed/feedMain}"> <i
+							class='bx bx-detail icon'></i> <span class="text nav-text">Feed</span>
+					</a></li>
+
+					<li><a th:href="@{/note/noteMain}"> <i
+							class='bx bx-edit icon'></i> <span class="text nav-text">Note</span>
+					</a></li>
+
+					<li><a th:href="@{/chat/openChatMain}"> <i
+							class='bx bx-message-square-dots icon'></i> <span
+							class="text nav-text">Message</span>
+					</a></li>
+
+					<li><a th:href="@{/game/gameMain}"> <i
+							class='bx bx-game icon'></i> <span class="text nav-text">Game</span>
+					</a></li>
+				</ul>
+			</div>
+			<!-- ========================사이드바 하단=========================== -->
+			<div class="bottom-content">
+				<ul class="menu-ul">
+					<li class="">
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/logout}"> <i class='bx bx-log-out icon'></i>
+								<span class="text nav-text">Logout</span>
+							</a>
+						</div>
+					</li>
+
+					<li class=""><a th:href="@{/notification/notificationMain}">
+							<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
+					</a></li>
+					<li class="">
+						<div sec:authorize="isAuthenticated()">
+							<a th:href="@{/member/myPage}"> <span
+								id="profileImagePlaceholder" data-tooltip="프로필 사진으로 이동합니다."></span>
+								<span class="text nav-text">Profile</span>
+							</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container home">
+		<div class="row">
+			<div class="col-lg-3">
+				<div class="card border-primary mb-3">
+					<div class="card-header">
+						<!-- DM & OpenChat Buttons -->
+						<div class="mb-2 d-center mb-3">
+							<button type="button" class="btn btn-primary me-2" th:id="DM_btn">DM</button>
+							<button type="button" class="btn btn-outline-primary ms-2"
+								th:id="OpenChat_btn">Open Chat</button>
+						</div>
+
+						<!-- Search Bar -->
+						<div class="mt-2 d-flex align-items-center position-relative">
+							<input type="text" class="form-control"
+								placeholder="Search chat title" id="searchInput"> <i
+								class="bi bi-search search-outline position-absolute"
+								style="right: 10px; z-index: 2;"></i>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="chatlist"></div>
+					</div>
+				</div>
+			</div>
+			<!--채팅 화면-->
+			<div class="col-lg-7 ps-1 pe-1">
+				<div class="card">
+					<div class="card-header">Chat Room</div>
+					<!-- chatbox -->
+					<ul class="chatbox list-group list-group-flush h-100"
+						id="msg_chatBoxArea">
+						<li class="msg_content" id="msg_chatBoxArea">
+							<div th:each="msg, i : ${messages}">
+								<div th:switch="${msg.user_num}">
+									<div th:case="${myChatroomLink.user_num}"
+										class="chat outcoming">
+										<p th:text="${msg.message}"></p>
+									</div>
+									<div th:case="*" class="chat incoming">
+										<p th:text="${msg.message}"></p>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+					<!-- chat input -->
+					<div class="card-footer">
+						<div class="input-group">
+							<input type="text" id="msg_input" class="form-control"
+								placeholder="메세지를 입력하세요">
+							<button type="submit" id="msg_submit" class="btn btn-primary">Send</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 참가자 목록 -->
+			<div class="col-lg-2 pe-0">
+				<div class="card border-primary mb-3">
+					<div class="card-header">Participants</div>
+					<div class="card-body">
+						<div class="participants_list">
+							<div class="participants"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/js/memberView/sidebar.js}"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+	<script th:src="@{/js/chat/openChatRoom.js}"></script>
+</body>
+</html>

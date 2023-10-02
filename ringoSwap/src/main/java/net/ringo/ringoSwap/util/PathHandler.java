@@ -30,7 +30,7 @@ public class PathHandler
 	
 	// Chat
 	public final static String CHAT = "chat";
-	public final static String DMCHATMAIN = "dmChatMain";
+	public final static String DMCHATWITHROOMID = "dmChat";
 	public final static String OPENCHATMAIN = "openChatMain";
 	public final static String OPENCHATROOM = "openChatRoom";
 	public final static String OPENCHATROOMENTER = "openChatRoomEnter";
