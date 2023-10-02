@@ -94,13 +94,13 @@ public class ChatController
 		return "/chat/openChatMain";
 	}
 	
-	@GetMapping(PathHandler.DMCHATMAINWITHROOMID)
+	@GetMapping(PathHandler.DMCHATWITHROOMID)
 	public String goDMChatMainAfterCreateRoom(@RequestParam("dmRoomId") int dmRoomId, Model model)
 	{
 	    log.debug("go DM Chat Main After Create Room . . .");
 	    log.debug("dmRoomId - {}", dmRoomId);
 	    model.addAttribute("dmRoomId", dmRoomId);
-	    return "chat/dmChatMain";
+	    return "chat/dmChat";
 	}
 	
 	@MessageMapping(PathHandler.MM_LOADJOINEDCHATROOMLISTREALTIME)
@@ -458,7 +458,7 @@ public class ChatController
 		
 		model.addAttribute("dmChatroom", dmChatroom);
 		
-		response.put("redirectUrl", "/ringo/chat/dmChatMain?dmRoomId=" + dmChatroom.getDm_chatroom_num());
+		response.put("redirectUrl", "/ringo/chat/dmChat?dmRoomId=" + dmChatroom.getDm_chatroom_num());
 		return response;
 	}
 	
