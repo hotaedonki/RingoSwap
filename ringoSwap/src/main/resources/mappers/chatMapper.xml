@@ -375,4 +375,5 @@
 			or
 			(user_num1 = #{user_num2} and user_num2 = #{user_num1})
 	</select>
+	
 </mapper>

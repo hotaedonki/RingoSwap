@@ -7,6 +7,7 @@ let myUserNum;
 let url;
 let subscriptionForUpdateChatroom;
 let emojioneAreaInstance;
+let userCache = {}; 
 
 $(document).ready(function()
 {
@@ -31,12 +32,8 @@ $(document).ready(function()
         }
     });
     
-    const storedNicknames = localStorage.getItem('nicknameCache');
-    let localNicknameCache = {};
-    if (storedNicknames) {
-        localNicknameCache = JSON.parse(storedNicknames);
-    }
-    setNicknamesForExistingMessages(localNicknameCache);
+    console.log(userCache);
+    setNicknamesForExistingMessages(userCache);
 });
 
 window.addEventListener('beforeunload', function(event) 
@@ -186,27 +183,29 @@ function onConnected()
 	// 검색창에 방 제목을 입력할 시 결과를 받기 위해 이벤트 연결
 	stompClient.subscribe('/sub/chat/openChatMain/searchByTitle/' + myUserNum, searchResultByTitle);
 
-	const storedNicknames = localStorage.getItem('nicknameCache');
-    if (storedNicknames) {
-        nicknameCache = JSON.parse(storedNicknames);
-    }
-    
-    console.log(storedNicknames, nicknameCache)
-    
 	// 채팅방에 입장할 때 사용자의 닉네임 로드
     loadAllNicknamesForChatroom(chatroomNum);
-    // 이미 존재하는 메시지들의 닉네임을 설정
 }
 
-function setNicknamesForExistingMessages(nicknameCache) {
-    $('#msg_chatBoxArea li').each(function() {
-        const userNum = $(this).attr('data-user-num'); 
-        console.log('UserNum:', userNum); // 사용자 번호 출력
-        console.log('Nickname from cache:', nicknameCache[userNum]); // 캐시에서 가져온 닉네임 출력
+function setNicknamesForExistingMessages(userCache) {
+    const chatMessages = document.querySelectorAll('#msg_chatBoxArea li');
 
-        const nickname = nicknameCache[userNum] || 'Unknown';
-        $(this).find('.nickname-label').text(nickname + ": ");
+    chatMessages.forEach(chatMessage => {
+        const userNum = chatMessage.getAttribute('data-user-num');
+        const messageContent = chatMessage.querySelector('p').textContent;
+
+        // userCache에서 사용자 정보를 조회
+        const userDetails = userCache[userNum] || {};
+        const nickname = userDetails.nickname || 'Unknown';
+        const inputdate = userDetails.inputdate || 'Unknown date';
+
+        // createChatMsgBox 함수를 활용하여 새로운 메시지 박스를 생성
+        const newChatMessageBox = createChatMsgBox(userNum, messageContent, nickname, inputdate);
+        
+        // 기존의 메시지 박스를 새로 생성한 메시지 박스로 대체
+        chatMessage.parentNode.replaceChild(newChatMessageBox, chatMessage);
     });
+    scrollDown();
 }
 
 
@@ -217,15 +216,38 @@ function loadAllNicknamesForChatroom(chatroomNum) {
         data: { chatroom_num: chatroomNum },
         success: function(data) {
             data.forEach(user => {
-                nicknameCache[user.USER_NUM] = user.NICKNAME;
+                userCache[user.USER_NUM] = {
+                    nickname: user.NICKNAME,
+                    user_id: user.USER_ID,
+			        inputdate: user.FORMATTED_INPUTDATE
+                };
+                addParticipantToParticipantsList(user);
             });
-        localStorage.setItem('nicknameCache', JSON.stringify(nicknameCache));
+        setNicknamesForExistingMessages(userCache);
         },
         error: function(error) {
             console.error("Error fetching nicknames:", error);
         }
     });
 }
+function addParticipantToParticipantsList(user) {
+    const userNum = user.USER_NUM;
+    if (!$(`.participant-item[data-user-num='${userNum}']`).length) {
+        const profileImageUrl = user.USER_ID ? '../member/memberProfilePrint?user_id=' + user.USER_ID : ''; // 기본 이미지 URL이 필요하다면 수정해야 합니다.
+        const nickname = user.NICKNAME || 'Unknown';
+
+        // 사용자의 닉네임과 프로필 사진을 포함하는 HTML 요소 생성
+        let $participantDiv = $('<div></div>').addClass('participant-item mb-3').attr('data-user-num', userNum);
+        let $profilePicElement = $('<img>').attr('src', profileImageUrl).addClass('participant-profile-pic');
+        let $nicknameElement = $('<span></span>').addClass('participant-nickname').text(nickname);
+
+        $participantDiv.append($profilePicElement).append($nicknameElement);
+
+        // 생성된 HTML 요소를 participants_list에 추가
+        $('.participants_list .participants').append($participantDiv);
+    }
+}
+
 
 // 입장, 퇴장 시에 실행하는 함수
 function onMessageForState(message)
@@ -236,6 +258,7 @@ function onMessageForState(message)
 function onMessageReceived(message) {
     // message의 body 속성을 가져와서 파싱
     const bodyString = message.body;
+    console.log(bodyString);
     if (bodyString) {
         try {
             const bodyObj = JSON.parse(bodyString);
@@ -247,11 +270,14 @@ function onMessageReceived(message) {
                 return;
 
             // 캐시에서 닉네임을 바로 조회. 닉네임 캐시에서 사용자 번호를 기반으로 닉네임을 조회합니다.
-            const nickname = nicknameCache[userNumData] || 'Unknown';
-            switch (type) {
-                case 'TALK':
-                    createChatMsgBox(userNumData, messageValue, nickname); // 닉네임 인자를 전달합니다.
-                    
+            const userDetails = userCache[userNumData] || {};
+		    const nickname = userDetails.nickname || 'Unknown';
+		    const inputdate = userDetails.inputdate || 'Unknown date';
+		
+		    switch (type) {
+		        case 'TALK':
+					const newMessageElement = createChatMsgBox(userNumData, messageValue, nickname, inputdate);
+					document.querySelector('.chatbox').appendChild(newMessageElement);
                     stompClient.send('/pub/chat/openChatMain/loadJoinedChatroomListRealTime/' + chatroomNum, {}, myUserNum);
                     scrollDown();
                     break;
@@ -270,24 +296,43 @@ function onMessageReceived(message) {
 function scrollDown()
 {
 	let chatBox = document.querySelector('.chatbox'); // 채팅 박스에 대한 참조
+	console.log(chatBox);
     chatBox.scrollTop = chatBox.scrollHeight; // 스크롤을 맨 아래로 이동
 }
 
-// createChatMsgBox 함수에 nickname 인자를 추가
-function createChatMsgBox(userNum, message, nickname = '') {
-    let $liElement = $('<li></li>').attr('data-user-num', userNum);
-    let $pElement = $('<p></p>').attr('text', message).text(message);
-    let $nicknameElement = $('<span></span>').addClass('nickname-label').text(nickname + ": ");
-
-    if (userNum == myUserNum) {
-        $liElement.addClass('chat outcoming');
-    } else {
-        $liElement.addClass('chat incoming').append($nicknameElement);
+function createChatMsgBox(userNum, message, nickname = '', inputdate = '') {
+    let profilePic;
+    const userDetails = userCache[userNum] || {};
+    const userId = userDetails.user_id;
+    let profileImageUrl = profilePic; // 기본값 설정
+    if(userId) {
+        profileImageUrl = '../member/memberProfilePrint?user_id=' + userId;
     }
 
-    $liElement.append($pElement);
-    $('#msg_chatBoxArea').append($liElement);
+    let $liElement = $('<li></li>').attr('data-user-num', userNum).addClass('chat-message');
+    let $contentDiv = $('<div></div>').addClass('msg_content row');
+    let $nicknameDateElement = $('<div></div>').addClass('user-info col-12 row')
+                                               .append($('<span></span>').addClass('nickname').text(nickname))
+                                               .append($('<span></span>').addClass('message-date').text(inputdate));
+    let $profilePicElement = $('<img>').attr('src', profileImageUrl).addClass('profile-pic col-3 me-0 ms-2 pe-0 ps-0');
+    let $pElementRow = $('<div></div>').addClass('col-9 row');
+    let $pElement = $('<p></p>').addClass('col-12 message-area').text(message);
+
+    if (userNum == myUserNum) {
+        $liElement.addClass('chat outcoming').append($pElement);
+    } else {
+        $pElementRow.append($nicknameDateElement)
+                    .append($pElement);
+        $contentDiv.append($profilePicElement)
+                   .append($pElementRow);
+        $liElement.addClass('chat incoming').append($contentDiv);
+    }
+
+    return $liElement[0];
 }
+
+
+
 
 
 

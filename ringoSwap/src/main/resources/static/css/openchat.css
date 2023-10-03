@@ -13,7 +13,7 @@
 	margin-top: 15px;
 }
 
-i {
+i, .participant-item, .profile-pic, .user-info {
  cursor: pointer;	
 }
 
@@ -21,9 +21,8 @@ i {
   position: relative;
   width: 100%;
   height: calc(100% - 140px);
-  padding: 50px;
+  padding: 20px 50px;
   overflow-y: auto;
-  background-color: #E2E2E2;
 }
 .chat {
   position: relative;
@@ -31,13 +30,21 @@ i {
   width: 100%;
   margin: 5px 0;
 }
+
+.profile-pic, .participant-profile-pic {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
 .chat p {
   position: relative;
   right: 0;
   text-align: right;
-  max-width: 65%;
+  width: auto;
   padding: 12px;
-  background: #e2f4f0;
+  background-color: rgb(108, 195, 213);
+  color:white;
   border-radius: 10px;
   font-size: 0.9em;
 }
@@ -48,24 +55,21 @@ i {
   right: -12px;
   width: 20px;
   height: 20px;
-  background: linear-gradient(135deg,#e2f4f0 0%, #e2f4f0 50%, transparent 50%, transparent);
+  background: linear-gradient(135deg,#6cc3d5 0%, #6cc3d5 50%, transparent 50%, transparent);
 }
-.chat p span {
-  display: block;
-  margin-top: 5px;
-  font-size: 0.85em;
-  opacity: 0.5;
-}
+
 .outcoming {
   justify-content: flex-end;
-  margin: 15px 0;
+  left:30px;
 }
 .incoming {
   justify-content: flex-start;
   margin-bottom: 2px;
+  right:30px;
 }
 .incoming p {
-  background: #fff;
+  background-color: rgb(120, 194, 173);
+  color: white;
   text-align: left;
 }
 .chat.incoming p::before {
@@ -75,7 +79,7 @@ i {
   left: -12px;
   width: 20px;
   height: 20px;
-  background: linear-gradient(225deg,#fff 0%, #fff 50%, transparent 50%, transparent);
+  background: linear-gradient(225deg,#78c2ad 0%, #78c2ad 50%, transparent 50%, transparent);
 }
 
 .chatbox, .chat-box {
@@ -147,6 +151,19 @@ i {
     font-weight: bold; 
     color: #333; 
     margin-right: 5px; 
+}
+
+.message-date {
+    font-size: 0.7em; 
+    color: #888; 
+}
+
+.nickname {
+	margin-left: -1px;
+}
+
+.message-area {
+	margin: 5px 0 0 15px;
 }
 
 

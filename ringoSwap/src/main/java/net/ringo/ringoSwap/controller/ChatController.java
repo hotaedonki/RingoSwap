@@ -161,7 +161,7 @@ public class ChatController
 		
 		// 채팅방에 들어온 다른 사람들 정보도 가져오기 위해 
 		ArrayList<ChatroomLink> chatLinks = service.getChatroomLinksByChatroomNum(chatroom.getChatroom_num());
-		log.debug("chat link size - {}", chatLinks.size());
+		log.debug("chat link - {}", chatLinks);
 		
 		// 채팅방 최대 인원수보다 현재 참여 인원수 이상인 경우
 		if (chatroom.getCapacity() <= chatLinks.size())
@@ -209,7 +209,7 @@ public class ChatController
 		ArrayList<ChatCommon> messages = service.loadMessageByChatroomNum(chatroom.getChatroom_num());		
 		
 		if (messages != null)
-			log.debug("total messages : {}", messages.size());
+			log.debug("total messages : {}", messages);
 		else
 			log.debug("message data is null!");
 		
@@ -217,6 +217,8 @@ public class ChatController
 		model.addAttribute("myChatroomLink", myChatroomLink);
 		model.addAttribute("chatLinks", chatLinks);
 		model.addAttribute("messages", messages);
+		
+		log.debug("chatroom : {} , myChatroomLink : {} , chatLinks : {} , messages : {}", chatroom, myChatroomLink, chatLinks, messages);
 		
 		return "chat/openChatRoom";
 	}

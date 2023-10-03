@@ -58,3 +58,7 @@ function timeDifferenceInChat(current, previous) {
         return Math.floor(elapsed/msPerYear) + '년 전';   
     }
 }
+
+$(document).ready(function() {
+	$(document).on('click', '.showOffcanvasWithUserData', showOffcanvasWithUserData);
+});
