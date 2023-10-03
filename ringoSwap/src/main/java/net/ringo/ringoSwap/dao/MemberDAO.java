@@ -100,5 +100,6 @@ public interface MemberDAO
 	public Member memberSearchByNum(int user_num);
 	public List<Map<String, Object>> getAllUserNumsAndNicknamesByChatroomNum(int chatroom_num);
 
-
+	// 회원가입시 생성된 회원번호를 기반으로 ringo_game_setting테이블에 insert하는 메서드
+	public int memberGameSettingInsert(int user_num);
 }
