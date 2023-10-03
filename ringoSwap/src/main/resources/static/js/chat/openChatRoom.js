@@ -237,7 +237,7 @@ function addParticipantToParticipantsList(user) {
         const nickname = user.NICKNAME || 'Unknown';
 
         // 사용자의 닉네임과 프로필 사진을 포함하는 HTML 요소 생성
-        let $participantDiv = $('<div></div>').addClass('participant-item mb-3').attr('data-user-num', userNum);
+        let $participantDiv = $('<div></div>').addClass('participant-item mb-3 showOffcanvasWithUserData').attr('data-user-num', userNum).attr('data-user-name', nickname);
         let $profilePicElement = $('<img>').attr('src', profileImageUrl).addClass('participant-profile-pic');
         let $nicknameElement = $('<span></span>').addClass('participant-nickname').text(nickname);
 
@@ -311,10 +311,10 @@ function createChatMsgBox(userNum, message, nickname = '', inputdate = '') {
 
     let $liElement = $('<li></li>').attr('data-user-num', userNum).addClass('chat-message');
     let $contentDiv = $('<div></div>').addClass('msg_content row');
-    let $nicknameDateElement = $('<div></div>').addClass('user-info col-12 row')
+    let $nicknameDateElement = $('<div></div>').addClass('user-info col-12 row showOffcanvasWithUserData').attr('data-user-name', nickname)
                                                .append($('<span></span>').addClass('nickname').text(nickname))
                                                .append($('<span></span>').addClass('message-date').text(inputdate));
-    let $profilePicElement = $('<img>').attr('src', profileImageUrl).addClass('profile-pic col-3 me-0 ms-2 pe-0 ps-0');
+    let $profilePicElement = $('<img>').attr('src', profileImageUrl).addClass('profile-pic col-3 me-0 ms-2 pe-0 ps-0 showOffcanvasWithUserData').attr('data-user-name', nickname);
     let $pElementRow = $('<div></div>').addClass('col-9 row');
     let $pElement = $('<p></p>').addClass('col-12 message-area').text(message);
 
@@ -330,11 +330,6 @@ function createChatMsgBox(userNum, message, nickname = '', inputdate = '') {
 
     return $liElement[0];
 }
-
-
-
-
-
 
 function loadJoinedChatroomListRealTime(data)
 {
@@ -433,28 +428,3 @@ function searchResultByTitle(data)
 		createChatroomThumbnail(item.chatroom_num, item.title, item.inputdate, item.message);
 	});
 }
-
-
-/*
-	참고 - 메시지 보내는 예시
-	
-	// ChatCommon 객체를 생성
-	const chatCommon = 
-	{
-		type: 'ENTER', // MessageType.ENTER와 동일
-		chat_num: "", // 채팅 번호
-		user_num: myUserNum, // 사용자 번호
-		chatroom_num: chatroomNum, // 채팅방 번호
-		message: "", // 메시지 내용
-		inputdate: "", // 입력 날짜
-		origin_file: "", // 원본 파일
-		saved_file: "", // 저장된 파일
-		photo_size: 0 // 사진 크기
-	};
-
-	// stompClient.send()를 사용하여 메시지 전송
-	stompClient.send('/pub/chat/openChatRoomEnter/' + chatroomNum, {}, JSON.stringify(chatCommon));
-	
-	! 전달할 값이 없는 경우에는
-	stompClient.send('/pub/chat/openChatRoomEnter/' + chatroomNum, {}, "");
-*/
