@@ -138,7 +138,7 @@ function gameQuestionSave(){
         }
     })
 }
-function gameQuestionPrint(){
+function gameQuestionPrint(){	//gameQuestionSave함수로 저장한 단어목록을 게임형식에 맞게 문제로 변환하여 출력하는 함수
 	let word = wordList[index];
 	$('#currentNum').text(index + 1);
 	if(printSet == 'title'){
@@ -154,7 +154,7 @@ function gameQuestionPrint(){
 	loadQuestion(answer);
 }
 
-function loadQuestion(answer) {
+function loadQuestion(answer) {		//각 문제마다 해당 문제의 객관식 답안목록을 랜덤으로 뽑아서 출력하는 함수
     $.ajax({
         url: 'MCQShufflePrint',
         type: 'POST',
@@ -184,13 +184,14 @@ function chosenAnswer() {
 	checkAnswer(chosenAnswer);
 }
 
-function checkAnswer(chosenAnswer) {
+function checkAnswer(chosenAnswer) {		//답안을 클릭했을때 발생하는 함수
 	if(chosenAnswer === answer){
 		answerList[index] = {kotae:true, answer: chosenAnswer};
 	}else {
 		answerList[index] = {kotae:false, answer: chosenAnswer};
 	}
 	console.log(answerList[index]);
+	index++;	//index 카운터 증가
 	if(index >= wordList.length){
 		// 모든 문제를 완료한 경우 결과 화면 표시
 		alert('모든 문제를 풀었습니다.');
@@ -199,7 +200,6 @@ function checkAnswer(chosenAnswer) {
 		// 다음 문제 로드
 		gameQuestionPrint();
 	}
-	index++;	//index 카운터 증가
 }
 function gameAnswerPrint(){
     let cnt = 0;

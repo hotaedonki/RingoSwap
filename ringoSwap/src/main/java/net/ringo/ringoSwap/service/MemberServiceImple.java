@@ -33,7 +33,10 @@ public class MemberServiceImple implements MemberService
 	public int insertMember(Member m) 
 	{
 		m.setPassword(passwordEncoder.encode(m.getPassword()));
-		return dao.insertMember(m);
+		dao.insertMember(m);
+		int user_num = m.getUser_num();
+		log.debug("생성 번호 {}", user_num);
+		return dao.memberGameSettingInsert(user_num);
 	}
 	/*
 	 * 입력한 id가 중복되는 값이 있는지 계정DB를 참조하여 확인하는 메서드입니다

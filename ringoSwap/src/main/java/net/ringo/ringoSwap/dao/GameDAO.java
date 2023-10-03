@@ -49,5 +49,7 @@ public interface GameDAO
 	ArrayList<GameLog> gameLogSearchByUserNum(int user_num);
 	//입력받은 게임로그 정보를 DB에 입력하는 메서드
 	int gameLogInsert(GameLog gameLog);
+	//획득한 포인트를 사용자의 포인트 점수에 기입하는 메서드
+	int memberUpdatePoint(HashMap<String, Integer> map);
 	
 }

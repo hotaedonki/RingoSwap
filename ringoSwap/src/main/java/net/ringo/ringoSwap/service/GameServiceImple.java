@@ -128,6 +128,12 @@ public class GameServiceImple implements GameService{
 	//게임로그를 DB에 입력하는 메서드
 	@Override
 	public int gameLogInsert(GameLog gameLog) {
-		return dao.gameLogInsert(gameLog);
+		HashMap<String, Integer> map = new HashMap<>();
+		
+		int methodResult = dao.gameLogInsert(gameLog);
+		map.put("user_num", gameLog.getUser_num());
+		map.put("point", gameLog.getPoint());
+		methodResult = dao.memberUpdatePoint(map);
+		return methodResult;
 	}
 }

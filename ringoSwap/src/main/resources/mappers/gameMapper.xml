@@ -154,4 +154,11 @@
 	insert into ringo_game_log(gamelog_num, user_num, file_num, file_title, game_category, lang_category, score, point)
 	values (ringo_game_log_seq.nextval, #{user_num}, #{file_num}, #{file_title}, #{game_category}, #{lang_category}, #{score}, #{point})
 	</insert>
+	
+	<!-- 획득한 포인트를 사용자의 포인트에 추가하는 update문 -->
+	<update id="memberUpdatePoint" parameterType="java.util.HashMap">
+	update ringo_member
+	set point = point + #{point}
+	where user_num = #{user_num}
+	</update>
 </mapper>
