@@ -85,7 +85,6 @@ i, .participant-item, .profile-pic, .user-info {
 .chatbox, .chat-box {
   list-style-type: none; 
   border-radius: 0px;
-  border-right: 0;
 }
 
 .chat-list-area{
@@ -97,6 +96,9 @@ i, .participant-item, .profile-pic, .user-info {
 	border-radius: 0 6px 6px 0;
 }
 
+.participants-area {
+	border-left: 0;
+}
 /* Chatroom Block Styles */
 .chatroom-block {
     padding: 10px;
@@ -165,6 +167,3 @@ i, .participant-item, .profile-pic, .user-info {
 .message-area {
 	margin: 5px 0 0 15px;
 }
-
-
-

@@ -13,7 +13,7 @@ function printOtherPeoplePage() {
     type: 'post',
     data: { nickname: nickname },
     success: function(member) {
-      $('#userId').val(member.user_id);
+       $('#userId').val(member.user_id);
        $('.nickname').html(member.nickname);
        $('.introduction').html(member.introduction);
        $('.follower-cnt').html(member.fr_count);

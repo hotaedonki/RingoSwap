@@ -39,10 +39,9 @@ function followerSearch(){
                     <span class="showOffcanvasWithUserData" data-user-name="${follower.follower_name}">
                         <img src="../member/memberProfilePrint?user_id=${follower.follower_id}" style="width:25px; height:25px; border-radius:12px;" alt="Profile Picture" />
                         <span >${follower.follower_name}</span>
-                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" />
+                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" /> <-->
                         <img src="../img/일본어.jpg" alt="Learning Language" style="width:25px; height:25px; border-radius:12px;" />
                     </span>
-                        <button type="button" class="btn btn-primary">팔로우</button>
                     </div>
                     `);
                 })
@@ -58,6 +57,10 @@ function followerSearch(){
 function followeeSearch(){
     let search = $('.searchFollow').val();
     userId = $('#userId').val();
+    
+    // 현재 페이지의 URL 확인
+    let currentPage = window.location.href;
+
     $.ajax({
         url: "otherFolloweeSearch",
         type: "post",
@@ -69,6 +72,13 @@ function followeeSearch(){
                 $('.followBox').html('');
                 followeeList.forEach(followee => {
                     console.log(followee);
+                    
+                    let buttonHtml = '';
+                    // currentPage가 "mypage"를 포함하면 버튼 HTML 추가
+                    if (currentPage.includes("myPage")) {
+                        buttonHtml = `<button type="button" class="btn btn-primary unfollow_button" data-nickname="${followee.followee_name}">Unfollow</button>`;
+                    }
+
                     $('.followBox').append(`
                     <div class="d-flex justify-content-between align-items-center">
 	                    <span class="showOffcanvasWithUserData " data-user-name="${followee.followee_name}">
@@ -77,7 +87,7 @@ function followeeSearch(){
 	                        <img src="../img/영어.jpg" alt="Native Language" style="width:25px; height:25px; border-radius:12px;" /> <-->
 	                        <img src="../img/일본어.jpg" alt="Learning Language" style="width:25px; height:25px; border-radius:12px;" />
 	                    </span>
-	                        <button type="button" class="btn btn-primary unfollow_button" data-nickname="${followee.followee_name}">Unfollow</button>
+	                    ${buttonHtml}
                     </div>
                     `);
                 })
@@ -91,6 +101,7 @@ function followeeSearch(){
         }
     });
 }
+
 
 function enterEventHandler(){
 	$(document).on('keyup', '.searchFollower', function(event){
@@ -106,9 +117,29 @@ function enterEventHandler(){
 
 	});
 }
-    
+
+function unFollow() {
+	let unfollowName = $(this).data('nickname');
+	console.log(unfollowName);
+    $.ajax({
+        url: "../feed/userFollowDelete",
+        type: "post",
+        data: {nickname : unfollowName},
+        dataType:'json',
+        success:function(result){
+			$('.unfollow_button').hide();
+			$('.btn-close').click();
+			memberPrint();
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
 $(document).ready(function() {   
 	$(document).on('click', '.follower-btn', followPrivacy);
 	$(document).on('click', '.follow-btn', followPrivacy);
+	$(document).on('click', '.unfollow_button', unFollow);
     enterEventHandler();
 });

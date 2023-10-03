@@ -59,6 +59,9 @@ function goToMyFeed() {
 }
 
 
+
+    
+
  $(document).ready(function(){
    memberPrint();
    bringMyName();

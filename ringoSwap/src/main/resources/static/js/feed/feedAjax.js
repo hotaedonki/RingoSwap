@@ -481,32 +481,52 @@ function friendPrint(){
 /*
     content-translate : 번역기능을 적용할 텍스트는 무조건 이러한 명칭의 클래스를 붙여야 합니다.
 */
-function feedTranslate(){
+function feedTranslate() {
     console.log('번역번역');
     let trans = $(this).closest('.card-body').find('.content-translate');
-    let text = trans.text();
+    let originalText = trans.text();
     let target = $('#translateLang').val();
-    console.log(trans, text, target);
-    
-    $.ajax({
-        url:'/ringo/translate/feed',
-        type: "post",
-        data:{text : text, targetLang : target},
-        dataType:'text',
-        success:function(translateText){
-			console.log(translateText);
-            if(text == translateText){
-                alert('동일한 언어로 번역할 수 없습니다.');
-            }else{
-                trans.html(translateText);
+
+    // 해시태그와 그 외의 텍스트를 분리하기 위한 정규표현식 사용
+    let hashtagRegex = /#[^\s#]+/g;
+    let parts = originalText.split(hashtagRegex).filter(part => part.trim() !== "");  // 빈 문자열 제거
+
+
+    // 해시태그가 아닌 부분만 번역하기 위한 작업
+    let translatedPartsPromises = parts.map(part => {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/ringo/translate/feed',
+                type: 'post',
+                data: { text: part, targetLang: target },
+                dataType: 'text',
+                success: function(translateText) {
+                    resolve(translateText);
+                },
+                error: function(e) {
+                    reject(e);
+                }
+            });
+        });
+    });
+
+    // 모든 번역 작업이 완료되면 결과를 합쳐서 출력
+    Promise.all(translatedPartsPromises).then(translatedParts => {
+        let translatedText = "";
+        let hashtags = [...originalText.matchAll(hashtagRegex)];
+        for (let i = 0; i < translatedParts.length; i++) {
+            translatedText += translatedParts[i];
+            if (hashtags[i]) {
+                translatedText += hashtags[i][0];
             }
-            console.log('적용완료');
-        },
-        error:function(e){
-            console.log(e);
         }
-    })
+        let styledTranslatedText = hashtagHighlightAndClick(translatedText);
+		trans.html(styledTranslatedText);
+    }).catch(error => {
+        console.error(error);
+    });
 }
+
 
 // 채팅 메시지 보내기, 만약 채팅방이 존재하지 않으면 일회성 토큰 방식으로 DM 채팅방 생성 및 참가
 function sendDM()

@@ -98,7 +98,7 @@
 	</nav>
 	<div class="container home">
 		<div class="row">
-			<div class="col-lg-3 pe-0">
+			<div class="col-md-3 pe-0 hide-chat-list">
 				<div class="card border-primary mb-3 chat-list-area">
 					<div class="card-header">
 						<!-- DM & OpenChat Buttons -->
@@ -122,9 +122,19 @@
 				</div>
 			</div>
 			<!--채팅 화면-->
-			<div class="col-lg-7 ps-0 pe-0">
+			<div class="col-md-7 ps-0 pe-0 chat-box-area">
 				<div class="card border-primary mb-3 chat-box">
-					<div class="card-header">Chat Room</div>
+					<div
+						class="card-header d-flex justify-content-between align-items-center">
+						<!-- 좌측 버튼 추가 -->
+						<button id="toggleChatList" class="btn btn-sm btn-primary">Toggle
+							Chat List</button>
+						<!-- 중앙 텍스트 -->
+						<span>Chat Room</span>
+						<!-- 우측 버튼 추가 -->
+						<button id="toggleParticipants" class="btn btn-sm btn-primary">Toggle
+							Participants</button>
+					</div>
 					<!-- chatbox -->
 					<ul class="chatbox list-group list-group-flush h-100"
 						id="msg_chatBoxArea">
@@ -133,7 +143,7 @@
 							<div th:if="${msg.user_num == myChatroomLink.user_num}"
 								class="msg_content chat outcoming">
 								<p th:text="${msg.message}"></p>
-							</div> 
+							</div>
 							<div th:if="${msg.user_num != myChatroomLink.user_num}"
 								class="msg_content chat incoming">
 								<span class="nickname-label"></span>
@@ -152,7 +162,7 @@
 				</div>
 			</div>
 			<!-- 참가자 목록 -->
-			<div class="col-lg-2 ps-0 pe-0 ">
+			<div class="col-md-2 ps-0 pe-0 hide-participants">
 				<div class="card border-primary mb-3 participants-area">
 					<div class="card-header">Participants</div>
 					<div class="card-body">
@@ -164,8 +174,61 @@
 			</div>
 		</div>
 	</div>
-	
-	
+
+
+	<div class="offcanvas offcanvas-start" data-bs-scroll="true"
+		tabindex="-1" id="offcanvasWithBothOptions-chat"
+		aria-labelledby="offcanvasWithBothOptionsLabel-chat">
+		<div class="offcanvas-header text-center my-3">
+			<h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel-chat">User
+				Profile</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+				aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body text-center">
+			<div id="userProfileContent-chat">
+				<!-- 프로필 사진과 사용자 이름 -->
+				<a href="javascript:void(0);" class="goToOtherProfile-chat">
+					<div
+						class="d-flex align-items-center mb-3 my-3 justify-content-center">
+						<img id="original_profile-chat" src="" alt="User Profile Picture"
+							class="posterImage rounded-circle me-3"
+							style="width: 90px; height: 90px;"
+							data-username="someUsername-chat">
+						<h5 id="nickname-chat" class="mb-0 fs-3"></h5>
+					</div>
+				</a>
+
+				<!-- 타겟 언어와 모국어 -->
+				<div
+					class="d-flex align-items-center mb-3 my-4 justify-content-center">
+					<img id="target_lang_img-chat" src="" alt="Target Language"
+						class="me-4" style="width: 50px; height: 50px;">
+					<p class="my-auto mx-1" style="margin: 0;"><--></p>
+					<img id="native_lang_img-chat" src="" alt="Native Language"
+						class="ms-4" style="width: 50px; height: 50px;">
+				</div>
+
+				<!-- 팔로우 및 메시지 버튼 -->
+				<div class="d-flex mb-3 my-4 justify-content-center">
+					<button type="button"
+						class="btn btn-primary me-3 follow_button-chat"
+						style="width: 96.63px;">Follow</button>
+					<button type="button"
+						class="btn btn-primary me-3 unfollow_button-chat"
+						style="width: 96.63px;">Unfollow</button>
+					<button type="button" id="message_button-chat"
+						class="btn btn-primary ms-3">Message</button>
+				</div>
+
+				<!-- 사용자 소개 -->
+				<p id="introduction-chat" class="my-4"></p>
+			</div>
+		</div>
+	</div>
+
+
+
 	<script th:src="@{/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js}"></script>
 	<script
 		src="https://cdn.jsdelivr.net/emojione/2.2.7/lib/js/emojione.min.js"></script>
@@ -176,7 +239,9 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
-	<script th:src="@{/js/chat/openChatRoom.js}"></script>
 	<script th:src="@{/js/chat/chatUtilities.js}"></script>
+	<script th:src="@{/js/chat/openChatRoom.js}"></script>
+
+
 </body>
 </html>
