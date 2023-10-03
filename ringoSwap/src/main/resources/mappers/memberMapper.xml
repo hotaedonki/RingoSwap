@@ -278,6 +278,9 @@
 	    WHERE c.chatroom_num = #{chatroomNum}
 	</select>
 
-
+	<insert id="memberGameSettingInsert">
+	 insert  into ringo_game_setting(user_num) 
+	 values(#{user_num})
+	</insert>
 	
 </mapper>

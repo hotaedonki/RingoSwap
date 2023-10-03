@@ -37,4 +37,3 @@ $(document).ready(function() {
 	printMyProfilePhoto();
 	$(document).on('click', '.logo-area', goHome);
 });
-
