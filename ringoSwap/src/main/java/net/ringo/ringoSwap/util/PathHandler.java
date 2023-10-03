@@ -47,6 +47,7 @@ public class PathHandler
 	public final static String CREATEDMCHATROOM = "createDMChatroom";
 	public final static String CHECKEXISTENCEDMCHATROOM = "checkExistenceDMChatRoom";
 	public final static String ENTERDMCHATMAINAFTERCREATEROOM = "enterDMChatMainAfterCreateRoom";
+	public final static String GETDMCHATROOMLINK = "getDMChatroomLink";
 	public final static String MM_OPENCHATROOMENTER = "/chat/openChatRoomEnter/{chatroomID}";
 	public final static String MM_OPENCHATROOMMESSAGE = "/chat/openChatRoom/message/{chatroomID}";
 	public final static String MM_LOADJOINEDCHATROOMLISTREALTIME = "/chat/openChatMain/loadJoinedChatroomListRealTime/{chatroom_num}";

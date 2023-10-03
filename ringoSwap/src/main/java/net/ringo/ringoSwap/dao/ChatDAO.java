@@ -72,4 +72,6 @@ public interface ChatDAO
 	public DM_Chatroom getDMChatroomByDMChatroomNum(int maxDMChatroomNum);
 
 	public DM_Chatroom getDMChatroomByUserNums(Map<String, Object> userNums);
+
+	public DM_Chatroom getDMChatroomByDMChatroomNumAnduserNum(Map<String, Object> params);
 }

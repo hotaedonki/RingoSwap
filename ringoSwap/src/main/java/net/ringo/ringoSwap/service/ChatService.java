@@ -62,4 +62,6 @@ public interface ChatService
 	public DM_Chatroom createDMChatroomAndGetNewChatroom(Map<String, Object> params);
 	// DM 채팅방 정보를 유저 1, 2 고유 번호를 조회하여 가져온다.
 	public DM_Chatroom getDMChatroomByUserNums(Map<String, Object> userNums);
+	// DM 채팅방 정보를 내 유저 번호와 고유 번호로 조회하여 가져온다.
+	public DM_Chatroom getDMChatroomByDMChatroomNumAnduserNum(Map<String, Object> params);
 }

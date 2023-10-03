@@ -376,4 +376,17 @@
 			(user_num1 = #{user_num2} and user_num2 = #{user_num1})
 	</select>
 	
+	<!-- 내 고유 번호와 채팅방 고유 번호를 이용해 채팅방 정보를 가져온다 -->
+    <select id="getDMChatroomByDMChatroomNumAnduserNum" parameterType="java.util.Map" resultType="DM_Chatroom">
+		select
+			*
+		from
+			ringo_dm_chatroom
+		where
+		(
+			(user_num1 = #{userNum} and user_num2 = #{userNum})
+		)
+		and
+			dm_chatroom_num = #{dmRoomId}
+    </select>
 </mapper>
