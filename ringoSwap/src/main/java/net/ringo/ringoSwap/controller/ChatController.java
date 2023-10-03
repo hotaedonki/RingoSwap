@@ -98,12 +98,31 @@ public class ChatController
 	@GetMapping(PathHandler.DMCHATWITHROOMID)
 	public String dmChat(@RequestParam("dmRoomId") int dmRoomId, @AuthenticationPrincipal UserDetails user, Model model)
 	{
-	    log.debug("go DM Chat Main After Create Room . . .");
+		log.debug("go DM Chat Main After Create Room . . .");
 	    
 		if (user == null || user.getUsername() == null || user.getUsername().length() <= 0)
 		{
 			log.debug("user의 정보를 찾을 수 없습니다.");
 			return "memberView/home";
+		}
+		
+		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		if (userNum <= 0)
+		{
+			log.debug("DB에 등록되지 않은 유저입니다");
+			return "memberView/home";
+		}
+		
+		Map<String, Object> params = new HashMap<>();
+		params.put("userNum", userNum);
+		params.put("dmRoomId", dmRoomId);
+		
+		DM_Chatroom dmChatroom = service.getDMChatroomByDMChatroomNumAnduserNum(params);
+		
+		if (dmChatroom == null)
+		{
+			log.debug("dmChatroom의 정보를 찾을 수 없습니다.");
 		}
 		
 	    log.debug("dmRoomId - {}", dmRoomId);
@@ -492,7 +511,7 @@ public class ChatController
 		
 		if (userNum <= 0)
 		{
-			log.debug("DB에 유요하지 않은 유저입니다. 가입 요망.");
+			log.debug("DB에 유효하지 않은 유저입니다. 가입 요망.");
 			return ResponseEntity.ok(false);
 		}
 		
@@ -516,6 +535,59 @@ public class ChatController
 		}
 		
 		return ResponseEntity.ok(true);
+	}
+	
+	@PostMapping(PathHandler.GETDMCHATROOMLINK)
+	public ResponseEntity<Map<String, String>> getDMChatroomLink(@RequestBody Map<String, String> request, @AuthenticationPrincipal UserDetails user)
+	{
+		String nickname = request.get("nickname");
+		
+		if (nickname == null)
+		{
+			return null;
+		}
+		
+		log.debug("get dm chat room link . . .");
+		log.debug("get dm chat room link / nickname - {}", nickname);
+		
+		if (user == null || user.getUsername() == null)
+		{
+			return null;
+		}
+		
+		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
+
+		if (userNum <= 0)
+		{
+			return null;
+		}
+		
+		int otherUserNum = mService.getUserIdByNickname(nickname);
+		
+		if (otherUserNum <= 0)
+		{
+			log.debug("DB에 유효하지 않은 상대 유저입니다.");
+			return null;
+		}
+		
+		Map<String, Object> userNums = new HashMap<>();
+		
+		userNums.put("user_num1", userNum);
+		userNums.put("user_num2", otherUserNum);
+		
+		DM_Chatroom dmChatroom = service.getDMChatroomByUserNums(userNums);
+		
+		if (dmChatroom == null)
+		{
+			log.debug("dmChatroom 정보를 가져올 수 없습니다.");
+			return null;
+		}
+		
+		Map<String, String> response = new HashMap<>();
+
+		response.put("redirectUrl", "/ringo/chat/dmChat?dmRoomId=" + dmChatroom.getDm_chatroom_num());
+
+		return ResponseEntity.ok(response);
 	}
 	
 	@EventListener

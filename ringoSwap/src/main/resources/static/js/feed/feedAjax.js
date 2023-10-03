@@ -544,22 +544,29 @@ function sendDM()
 		.then(response => response.json())
 		.then(data => 
 		{
-			
-			console.log(data);
-
+			//console.log(data);
 			if (data)	// 이미 DM방이 존재하는 경우
 			{
-				/*
-				// data 값이 true일 경우
-				return fetch('/trueEndpoint', {
-					method: 'GET',
-					// 필요한 다른 설정들
-				}).then(response => response.json()) // 이 fetch의 응답을 json으로 변환
-				  .then(trueData => {
-					  console.log(trueData);
-					  // true일 때의 fetch 응답을 처리하는 코드
-				  });
-				  */
+				return fetch(`/ringo/chat/getDMChatroomLink`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							nickname: nickname
+						})
+					}).then(response => response.json()) // 이 fetch의 응답을 json으로 변환
+					.then(responseData => 
+					{
+						if (!responseData.redirectUrl) 
+						{
+							console.log("roomURL 불러오기 실패");
+							return;
+						}
+						//console.log(responseData.redirectUrl);
+						window.location.href = responseData.redirectUrl;
+					});
 			}
 			else	// DM방이 존재하지 않은 경우
 			{
@@ -617,7 +624,7 @@ function sendDM()
 											return;
 										}
 										
-										console.log(responseData.redirectUrl);
+										//console.log(responseData.redirectUrl);
 										
 										// 이 부분에서 responseData.redirectUrl을 사용하여 페이지를 리다이렉션하거나 필요한 작업을 수행합니다.
 										window.location.href = responseData.redirectUrl;
