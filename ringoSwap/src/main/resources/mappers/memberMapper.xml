@@ -4,7 +4,7 @@
 
 <mapper namespace="net.ringo.ringoSwap.dao.MemberDAO">
 	<!-- 회원정보를 memberDB로 전송하여 회원정보를 insert하는 코드 -->
-	<insert id="insertMember" parameterType="Member">
+	<insert id="insertMember" parameterType="Member" useGeneratedKeys="true"  keyProperty="user_num" keyColumn="user_num">
 		insert into ringo_member
 			(user_num, user_id, password, nickname
 			, first_name, last_name, gender, birth_date
@@ -19,6 +19,9 @@
             <when test="introduction == null">null</when>
             <otherwise>#{introduction}</otherwise>
           </choose>)
+          <selectKey resultType="int" keyProperty="user_num" order="AFTER">
+          select ringo_member_seq.currval from dual
+          </selectKey>
 	</insert>
 	
 	<!-- 회원가입시 입력한 id에 중복이 존재하는지 확인하는 select문 -->
