@@ -384,7 +384,7 @@
 			ringo_dm_chatroom
 		where
 		(
-			(user_num1 = #{userNum} and user_num2 = #{userNum})
+			(user_num1 = #{userNum} or user_num2 = #{userNum})
 		)
 		and
 			dm_chatroom_num = #{dmRoomId}
