@@ -43,6 +43,8 @@ function playDictation() {
 
         dictationQuestionSave();
         $(document).on('click', '#button-addon2', nextQuestionPrint);
+
+		startProgressBar("dictation");
 }
 
 function dictationResultScreen() {
@@ -167,55 +169,67 @@ function nextQuestionPrint(){
 
     if(count >= wordList.length){
         alert('마지막 문제입니다');
+        clearInterval(interval);
         dictationResultScreen();
     }else {
         dictationQuestionPrint();
+        startProgressBar();
     }
 }
-//정답페이지에서 각 문제의 정답여부를 출력하는 함수
-function dictationAnswerPrint(){
+function dictationAnswerPrint() {
     let cnt = 0;
-	let rightWord = [];			//오답노트에서 답을 맞춘 오답들을 삭제하는데 사용하는 배열 변수
-    let wrongWord = [];         //오답노트에 기재할 오답들을 기록하는 배열 변수
+    let rightWord = [];
+    let wrongWord = [];
+
     wordList.forEach(word => {
-        $('.vertical-line').append(`
-            <div class="col-12 show-dictation-result-word" id="answer${cnt}" style="width : 50%">
-                <i class="bi bi-pen></i>
-                <span class="dictation-result-word">${word.word} | </span>
-                <span class="dictation-result-pronunciation">${word.pron} | </span>
-                <span class="dictation-result-mean">${word.mean}</span>
+        let questionHTML = `
+            <div class="col-6 mb-3">
+                <div class="question-block">
+                    <h5><i class="bi bi-pen"></i> Question ${cnt + 1}</h5>
+                    <span class="dictation-result-word">단어 : ${word.word} | </span>
+                    <span class="dictation-result-pronunciation"> 발음 : ${word.pron} | </span>
+                    <span class="dictation-result-mean"> 정답 : ${word.mean}</span>
+                </div>
             </div>
-        `);
-        if(answerList[cnt]){
-            $(`#answer${cnt}`).append(`
-                <i class="bi bi-circle blue"></i>
-            `);
+        `;
+
+        let answerHTML = `
+            <div class="col-6 mb-3">
+                <div class="answer-block">
+                    <h5>Answer ${cnt + 1}</h5>
+                    <span>정답 : ${answerList[cnt].answer}</span>
+                    ${answerList[cnt].kotae ? '<i class="bi bi-circle blue"></i>' : '<i class="bi bi-x red"></i>'}
+                </div>
+            </div>
+        `;
+
+        $('.vertical-line').append(questionHTML + answerHTML);
+        
+        if (answerList[cnt].kotae) {
             rightWord.push(wordList[cnt]);
-			console.log(rightWord);
-        }else{
-            $(`#answer${cnt}`).append(`
-                <i class="bi bi-x red"></i>
-            `);
+        } else {
             wrongWord.push(wordList[cnt]);
         }
-        cnt++
+
+        cnt++;
     });
-    if(!pronShow){
+
+    if (!pronShow) {
         $('.dictation-result-pronunciation').hide();
     }
     console.log(wrongType);
-	if(wrongType){
+    if (wrongType) {
         console.log(rightWord);
-		wrongDelete(rightWord);
-	}else{
-        console.log(JSON.stringify({wrongWordList : wrongWord}));
-		wrongInsert(wrongWord);
-	}
-	
-	let score = (rightWord.length / wordList.length) * 100;
-	let Gcategory = "mcq";
-	let rightLength = rightWord.length;
-	let gameLength = wordList.length;
-	console.log("정답률 : "+score);
-	gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength);
+        wrongDelete(rightWord);
+    } else {
+        console.log(JSON.stringify({ wrongWordList: wrongWord }));
+        wrongInsert(wrongWord);
+    }
+
+    let score = (rightWord.length / wordList.length) * 100;
+    let Gcategory = "dictation"; // 수정: mcq에서 dictation으로 변경
+    let rightLength = rightWord.length;
+    let gameLength = wordList.length;
+    console.log("정답률 : " + score);
+    gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength);
 }
