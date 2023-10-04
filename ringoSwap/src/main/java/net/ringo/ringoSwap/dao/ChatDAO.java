@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
@@ -60,9 +61,9 @@ public interface ChatDAO
 
 	public ArrayList<Integer> loadChatRoomNumsByUserNum(int userNum);
 
-	public ArrayList<OpenChatroomInfo> searchChatroomByLang(String lang_category);
+	public ArrayList<OpenChatroomInfo> searchChatroomByLang(String lang_category, RowBounds rb);
 
-	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms();
+	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms(RowBounds rb);
 
 	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(Map<String, Object> params);
 
@@ -85,4 +86,8 @@ public interface ChatDAO
 	public List<Integer> getEmptyChatrooms();
 
 	public void deleteChatroom(int chatroomNum);
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByNickname(Map<String, Object> params);
+	
+	//현재 존재하는 모든 채팅방 갯수를 리턴하는 메서드
+	public int chatRoomSelectTotal();
 }

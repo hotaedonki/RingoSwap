@@ -45,6 +45,7 @@ import net.ringo.ringoSwap.domain.custom.OpenChatroomInfo;
 import net.ringo.ringoSwap.enums.webService.MessageType;
 import net.ringo.ringoSwap.service.ChatService;
 import net.ringo.ringoSwap.service.MemberService;
+import net.ringo.ringoSwap.util.PageNavigator;
 import net.ringo.ringoSwap.util.PathHandler;
 
 @Slf4j
@@ -61,13 +62,20 @@ public class ChatController
 	
 	@Value("${spring.servlet.multipart.location}")
 	String uploadPath;
+	//채팅방 목록의 페이지당 글 수
+	@Value("${user.chatting.page}")
+	int countPerPage;
+	//채팅방 목록의 페이지 이동 링크 수
+	@Value("${user.board.pageGroup}")
+	int pagePerGroup;
 	
 	Map<String, Map<String, Object>> tokensUsersInfoDMChat = new HashMap<>();
 	Map<String, DM_Chatroom> tokensCreateDMChat = new HashMap<>();
 	
 	//채팅서비스의 메인페이지로 이동하는 컨트롤러 메서드
 	@GetMapping(PathHandler.OPENCHATMAIN)
-	public String chatMain(String lang_category, Model model, @AuthenticationPrincipal UserDetails user)
+	public String chatMain(String lang_category, Model model, @AuthenticationPrincipal UserDetails user
+					, @RequestParam(name="page", defaultValue ="1" ) int page)
 	{
 		log.debug("move to chat/openChatMain . . .");
 		
@@ -76,16 +84,21 @@ public class ChatController
 			return "memberView/home";
 		}
 		
+		PageNavigator navi = service.chatRoomPageNavigator(pagePerGroup, countPerPage, page);
+		
 		// user의 이름으로 user_num을 가져온다.
 		int userNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
 		
 		ArrayList<OpenChatroomInfo> openChatrooms = new ArrayList<>();
 		
 		// 언어 필터 관련해서 값이 있으면
-		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja")))
-			openChatrooms = service.searchChatroomByLang(lang_category);
+		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja"))){
+			openChatrooms = service.searchChatroomByLang(navi, lang_category);
+			model.addAttribute("langCategory", lang_category);
+			log.debug("{}", lang_category);
+		}
 		else
-			openChatrooms = service.getAllOpenchatrooms();
+			openChatrooms = service.getAllOpenchatrooms(navi);
 		
 		// chatRoomNums이 있는 경우(= 한개 이상 링크(ringo_chatroom_link)가 있는 경우) chat room의 정보를 가져온다.
 		if (openChatrooms != null && openChatrooms.size() > 0)
@@ -97,6 +110,29 @@ public class ChatController
 		model.addAttribute("userNum", userNum);
 		
 		return "/chat/openChatMain";
+	}
+	
+	@ResponseBody
+	@GetMapping("chatMainPrint")
+	public HashMap<String, Object> chatMainPrint(String lang_category
+					, @RequestParam(name="page", defaultValue ="1" ) int page){
+		HashMap<String, Object> map =new HashMap<>();			//return용 hashmap 변수
+		PageNavigator navi = service.chatRoomPageNavigator(pagePerGroup, countPerPage, page);
+		
+		
+		ArrayList<OpenChatroomInfo> openChatrooms = new ArrayList<>();
+		
+		// 언어 필터 관련해서 값이 있으면
+		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja")))
+			openChatrooms = service.searchChatroomByLang(navi, lang_category);
+		else
+			openChatrooms = service.getAllOpenchatrooms(navi);
+
+		map.put("navi", navi);
+		map.put("openChatrooms", openChatrooms);
+		log.debug("채팅룸 네비-해시맵 {}", map);
+		
+		return map;
 	}
 	
 	@GetMapping(PathHandler.DMCHATWITHROOMID)
@@ -393,11 +429,13 @@ public class ChatController
 	
 	// 언어 기준으로 검색시 선택한 언어만 표시될 수 있도록 오픈채팅방 목록을 가져옴.
 	@GetMapping(PathHandler.SEARCHCHATROOMBYLANG)
-	public String searchChatroomByLang(String lang_category, Model model)
+	public String searchChatroomByLang(String lang_category, Model model
+					, @RequestParam(name="page", defaultValue ="1" ) int page)
 	{
 		log.debug("search Chatroom By Lang . . .");
+		PageNavigator navi = service.chatRoomPageNavigator(pagePerGroup, countPerPage, page);
 		
-		ArrayList<OpenChatroomInfo> openChatrooms = service.searchChatroomByLang(lang_category);
+		ArrayList<OpenChatroomInfo> openChatrooms = service.searchChatroomByLang(navi, lang_category);
 		
 		if (openChatrooms == null || openChatrooms.size() <= 0)
 		{
@@ -431,6 +469,30 @@ public class ChatController
 		params.put("title", "%" + title + "%");
 
 		ArrayList<ChatroomThumbnail> chatroomThumbnails = service.getChatroomThumbnailsByTitle(params);
+		
+		return mapper.writeValueAsString(chatroomThumbnails);
+	}
+	
+	// 내가 참가한 DM 채팅방 목록들 중에 상대방 이름과 일치한 목록을 보여줌
+	@MessageMapping(PathHandler.MM_SEARCHBYOTHERNICKNAME)
+	@SendTo(PathHandler.ST_SEARCHBYOTHERNICKNAME)
+	public String searchByOtherNickname(@DestinationVariable int userNum, String nickname) throws Exception
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		
+		if (nickname == null || nickname.trim().isEmpty()) 
+		{
+	        // 검색어가 비어 있을 경우의 처리
+	        return mapper.writeValueAsString("empty nickname");
+	    }
+		
+		Map<String, Object> params = new HashMap<>();
+		
+		params.put("userNum", userNum);
+		// 와일드 카드 검사를 위해 '%' 추가
+		params.put("nickname", "%" + nickname + "%");
+		
+		ArrayList<ChatroomThumbnail> chatroomThumbnails = service.getChatroomThumbnailsByNickname(params);
 		
 		return mapper.writeValueAsString(chatroomThumbnails);
 	}

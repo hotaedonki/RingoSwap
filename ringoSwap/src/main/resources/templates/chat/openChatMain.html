@@ -114,6 +114,7 @@
 				<div class="card border-primary mb-3 chat-room-list-area">
 					<!-- side navbar -->
 					<div class="card-header">
+						<input type="hidden" class="langCategory" th:val="${langCategory}">
 						<div
 							class="header d-flex justify-content-center align-items-center">
 							<nav class="navbar navbar-expand-lg bg-body-tertiary"
@@ -166,8 +167,8 @@
 									<th scope="col"></th>
 								</tr>
 							</thead>
-							<tbody th:each="room : ${openChatrooms}" >
-								<tr>
+							<tbody class="chat-main-printer">
+								<tr th:each="room : ${openChatrooms}" >
 									<td><input th:type="hidden" th:id="${room.chatroom_num}"
 										th:value="${room.chatroom_num}">
 										<p th:text="${room.lang_category}"></p></td>

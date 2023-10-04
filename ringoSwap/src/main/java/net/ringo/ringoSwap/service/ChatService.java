@@ -12,6 +12,7 @@ import net.ringo.ringoSwap.domain.ChatroomLink;
 import net.ringo.ringoSwap.domain.DM_Chatroom;
 import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
 import net.ringo.ringoSwap.domain.custom.OpenChatroomInfo;
+import net.ringo.ringoSwap.util.PageNavigator;
 
 public interface ChatService 
 {
@@ -54,9 +55,9 @@ public interface ChatService
 	public ArrayList<Integer> loadChatRoomNumsByUserNum(int userNum);
 
 	// 오픈 채팅방 정보들을 언어 필터 기준으로 가져온다.
-	public ArrayList<OpenChatroomInfo> searchChatroomByLang(String lang_category);
+	public ArrayList<OpenChatroomInfo> searchChatroomByLang(PageNavigator navi, String lang_category);
 	// 모든 오픈 채팅방 정보를 가져온다.
-	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms();
+	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms(PageNavigator navi);
 	// 자신이 참가한 채팅방 목록을 제목으로 검색하여 가져온다.
 	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByTitle(Map<String, Object> params);
 	// DM 채팅방을 만들고 자신이 만들었던 DM 채팅방을 가져온다.
@@ -75,4 +76,9 @@ public interface ChatService
 	public List<Integer> getEmptyChatrooms();
 
 	public void deleteChatroom(int chatroomNum);
+	// 자신이 참가한 DM 채팅방 중에 상대방 닉네임을 검색해서 가져온다.
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByNickname(Map<String, Object> params);
+
+	//네비게이터를 채팅룸에 맞게 정이하는 메서드
+	public PageNavigator chatRoomPageNavigator(int pagePerGroup, int countPerPage, int page);
 }

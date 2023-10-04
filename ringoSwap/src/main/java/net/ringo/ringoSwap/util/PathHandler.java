@@ -55,6 +55,7 @@ public class PathHandler
 	public final static String MM_SEARCHBYTITLE = "/chat/openChatMain/searchByTitle/{userNum}";
 	public final static String MM_LOADDMCHATROOMNUMSBYUSERNUM = "/chat/DMChat/loadDMChatRoomNumsByUserNum/{userNum}";
 	public final static String MM_LOADJOINEDDMCHATROOMLISTREALTIME = "/chat/DMChat/loadJoinedDMChatroomListRealTime/{DMRoomNum}";
+	public final static String MM_SEARCHBYOTHERNICKNAME = "/chat/DMChat/searchByOtherNickname/{userNum}";
 	public final static String ST_OPENCHATROOMMESSAGE = "/sub/chat/openChatRoom/message/{chatroomID}";
 	public final static String ST_OPENCHATROOMMESSAGESTATE = "/sub/chat/openChatRoom/message/state/{chatroomID}";
 	public final static String ST_LOADJOINEDCHATROOMLISTREALTIME = "/sub/chat/openChatMain/loadJoinedChatroomListRealTime/{chatroom_num}";
@@ -62,6 +63,7 @@ public class PathHandler
 	public final static String ST_SEARCHBYTITLE = "/sub/chat/openChatMain/searchByTitle/{userNum}";
 	public final static String ST_LOADDMCHATROOMNUMSBYUSERNUM = "/sub/chat/DMChat/loadDMChatRoomNumsByUserNum/{userNum}";
 	public final static String ST_lOADJOINEDDMCHATROOMLISTREALTIME = "/sub/chat/DMChat/loadJoinedDMChatroomListRealTime/{DMRoomNum}";
+	public final static String ST_SEARCHBYOTHERNICKNAME = "/sub/chat/DMChat/searchByOtherNickname/{userNum}";
 	
 	// Setting for Web socket, stomp, sockjs . . .
 	public final static String WS_STOMP = "/ws-stomp";

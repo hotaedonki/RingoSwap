@@ -81,13 +81,27 @@ function connect()
 		return false;
 	}
 	
-	
 	// 검색 관련 이벤트 추가
     $('#searchInput').on('keyup', function() {
-        searchByTitle($(this).val());
+        searchByOtherNickname($(this).val());
     });
     
+   	let $dm_btn = $('#DM_btn');
+    let $openchat_btm = $('#OpenChat_btn');
 	
+	$dm_btn.on('click', function() {
+		stompClient.send('/pub/chat/DMChat/loadDMChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);
+        $dm_btn.addClass('btn-primary').removeClass('btn-outline-primary');
+        $openchat_btm.addClass('btn-outline-primary').removeClass('btn-primary');
+    });
+    
+    $openchat_btm.on('click', function() {
+        //stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);
+        $openchat_btm.addClass('btn-primary').removeClass('btn-outline-primary');
+        $dm_btn.addClass('btn-outline-primary').removeClass('btn-primary');
+    });
+    
+    return true;
 }
 
 function onConnected()
@@ -104,7 +118,8 @@ function onConnected()
 	stompClient.subscribe('/sub/chat/DMChat/loadDMChatRoomNumsByUserNum/' + myUserNum, loadDMChatRoomNumsByUserNum);
 	
 	// 검색창에 방 제목을 입력할 시 결과를 받기 위해 이벤트 연결
-	stompClient.subscribe('/sub/chat/DMChat/searchByTitle/' + myUserNum, searchResultByTitleDMChat);
+	stompClient.subscribe('/sub/chat/DMChat/searchByOtherNickname/' + myUserNum, searchResultByOtherNicknameDMChat);
+	
 }
 
 // 입장, 퇴장 시에 실행하는 함수
@@ -186,11 +201,6 @@ function moveToDMChatroom(dmRoomId)
     window.location.href = "/ringo/chat/dmChat?dmRoomId=" + dmRoomId;
 }
 
-function searchResultByTitleDMChat(data)
-{
-	
-}
-
 function clearChatlist() 
 {
     let chatlist = document.querySelector('.chatlist');
@@ -199,4 +209,37 @@ function clearChatlist()
     while (chatlist.firstChild) {
         chatlist.removeChild(chatlist.firstChild);
     }
+}
+
+function searchByOtherNickname(nickname)
+{
+	console.log(nickname);
+	
+	if (stompClient && stompClient.connected)
+	{
+		if (nickname.trim() === '')
+		{
+			// 검색어가 비어 있으면 요청을 보내지 않는다.
+			// 대신 기존에 가져온 내가 참여한 채팅방 전체 목록이 사라지기 때문에 다시 호출
+			stompClient.send('/pub/chat/DMChat/loadDMChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);
+       		return;
+		}
+		
+		stompClient.send('/pub/chat/DMChat/searchByOtherNickname/' + myUserNum, {}, nickname);
+	}
+}
+
+function searchResultByOtherNicknameDMChat(data)
+{
+	if (data == null)
+		return;
+	
+	// 기존에 있는 채팅방 리스트를 삭제
+	clearChatlist();
+	
+	let jsonData = JSON.parse(data.body);
+	
+	jsonData.forEach(item => {
+		createDMChatroomThumbnail(item.chatroom_num, item.title, item.inputdate, item.message);
+	});
 }
