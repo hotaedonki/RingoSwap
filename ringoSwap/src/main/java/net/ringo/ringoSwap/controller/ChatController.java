@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -89,8 +92,11 @@ public class ChatController
 		ArrayList<OpenChatroomInfo> openChatrooms = new ArrayList<>();
 		
 		// 언어 필터 관련해서 값이 있으면
-		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja")))
+		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja"))){
 			openChatrooms = service.searchChatroomByLang(navi, lang_category);
+			model.addAttribute("langCategory", lang_category);
+			log.debug("{}", lang_category);
+		}
 		else
 			openChatrooms = service.getAllOpenchatrooms(navi);
 		
@@ -104,6 +110,29 @@ public class ChatController
 		model.addAttribute("userNum", userNum);
 		
 		return "/chat/openChatMain";
+	}
+	
+	@ResponseBody
+	@GetMapping("chatMainPrint")
+	public HashMap<String, Object> chatMainPrint(String lang_category
+					, @RequestParam(name="page", defaultValue ="1" ) int page){
+		HashMap<String, Object> map =new HashMap<>();			//return용 hashmap 변수
+		PageNavigator navi = service.chatRoomPageNavigator(pagePerGroup, countPerPage, page);
+		
+		
+		ArrayList<OpenChatroomInfo> openChatrooms = new ArrayList<>();
+		
+		// 언어 필터 관련해서 값이 있으면
+		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja")))
+			openChatrooms = service.searchChatroomByLang(navi, lang_category);
+		else
+			openChatrooms = service.getAllOpenchatrooms(navi);
+
+		map.put("navi", navi);
+		map.put("openChatrooms", openChatrooms);
+		log.debug("채팅룸 네비-해시맵 {}", map);
+		
+		return map;
 	}
 	
 	@GetMapping(PathHandler.DMCHATWITHROOMID)
@@ -311,11 +340,19 @@ public class ChatController
 	}
 	
 	@ResponseBody
-	@PostMapping("allUserNickname")
-	public List<Map<String, Object>> allUserNickname(int chatroom_num) {
-		List<Map<String, Object>> nicknamesAndUserNums = mService.getAllUserNumsAndNicknamesByChatroomNum(chatroom_num);
-		log.debug("닉네임 가져오는지 : {} ", nicknamesAndUserNums);
-		return nicknamesAndUserNums;
+	@PostMapping("allUserBasicDetails")
+	public List<Map<String, Object>> allUserBasicDetails(int chatroom_num) {
+	    List<Map<String, Object>> nicknamesAndUserNums = mService.getAllUserDetailsByChatroomNum(chatroom_num);
+	    log.debug("닉네임 가져오는지 : {} ", nicknamesAndUserNums);
+	    return nicknamesAndUserNums;
+	}
+	
+	@ResponseBody
+	@PostMapping("allUserNicknameSendMessage")
+	public List<Map<String, Object>> allUserNicknameSendMessage(int chatroom_num) {
+	    List<Map<String, Object>> nicknamesAndUserNums = mService.getAllUserNumsAndNicknamesByChatroomNum(chatroom_num);
+	    log.debug("닉네임 가져오는지 : {} ", nicknamesAndUserNums);
+	    return nicknamesAndUserNums;
 	}
 	
 	@MessageMapping(PathHandler.MM_OPENCHATROOMMESSAGE)
@@ -698,4 +735,53 @@ public class ChatController
 
         log.info("headAccessor : {}", headerAccessor);
 	}
+	
+	@ResponseBody
+	@PostMapping("outChatRoom")
+	public ResponseEntity<Map<String, Object>> outChatRoom(@RequestBody Map<String, Integer> requestData, HttpServletRequest request) {
+	    Map<String, Object> response = new HashMap<>();
+	    log.debug("방 나가기 되냐0 : {}", response);
+	    try {
+	        int chatroomNum = requestData.get("chatroom_num");
+	        int userNum = requestData.get("user_num");
+	        
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("chatroomNum", chatroomNum);
+	        params.put("userNum", userNum);
+	        service.leaveChatroom(params);
+	        
+	        response.put("success", true);
+	        response.put("message", "Successfully left the chatroom.");
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "Error leaving the chatroom: " + e.getMessage());
+	    }
+	    return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@PostMapping("deleteRoom")
+	public ResponseEntity<Map<String, Object>> deleteRoom(@RequestParam int chatroomNum) {
+	    Map<String, Object> response = new HashMap<>();
+	    log.debug("방 삭제 번호 : {}", chatroomNum);
+	    try {
+	        // 1. ringo_chatroom에서 ringo_chatroom_link에 참조되지 않는 방 번호를 가져옵니다.
+	        List<Integer> unlinkedChatrooms = service.getEmptyChatrooms();
+	        log.debug("방 삭제 되는지 : {}", unlinkedChatrooms);
+	        
+	        if (unlinkedChatrooms.contains(chatroomNum)) {
+	            service.deleteChatroom(chatroomNum);
+	            response.put("success", true);
+	            response.put("message", "Chatroom deleted successfully.");
+	        } else {
+	            response.put("success", false);
+	            response.put("message", "Chatroom is linked or does not exist.");
+	        }
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "Error deleting the chatroom: " + e.getMessage());
+	        log.debug("방 삭제 되는지 : {}", e.getMessage());
+	    }
+	    return new ResponseEntity<>(response, HttpStatus.OK);
+	} 
 }

@@ -2,6 +2,7 @@ package net.ringo.ringoSwap.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
@@ -284,6 +285,19 @@ public class ChatServiceImple implements ChatService
 	}
 
 	@Override
+	public int leaveChatroom(Map<String, Object> params) {
+		return dao.leaveChatroom(params);	
+	}
+
+	@Override
+	public List<Integer> getEmptyChatrooms() {
+		return 	dao.getEmptyChatrooms();
+	}
+
+	@Override
+	public void deleteChatroom(int chatroomNum) {
+		dao.deleteChatroom(chatroomNum);
+	}
 	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByNickname(Map<String, Object> params) 
 	{
 		return dao.getChatroomThumbnailsByNickname(params);

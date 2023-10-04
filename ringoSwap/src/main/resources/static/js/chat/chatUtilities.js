@@ -301,5 +301,6 @@ $(document).ready(function() {
     $(document).on('click', '.unfollow_button-chat', followDelete);
     $(document).on('click', '#toggleChatList', toggleChatList);
     $(document).on('click', '#toggleParticipants', toggleParticipants);
+    printChatWithNavigation(1);
     showChatRoomCapacity();
 });

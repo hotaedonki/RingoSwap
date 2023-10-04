@@ -3,9 +3,13 @@ let userNum;
 let subscriptionForUpdateChatroom;	// 방 정보 업데이트 이벤트를 구독할 때 구독 정보를 저장하는 객체
 
 $(document).ready(function()
-{
+{	
 	init();
 	connect();
+	const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('refresh') === '1') {
+        window.location.href = '../chat/openChatMain';
+    }
 });
 
 window.addEventListener('beforeunload', function(event) 
@@ -114,6 +118,9 @@ function createChatRoom()
 			{
 				alert("새 채팅방 생성 실패");
 				return;
+			} else {
+				$('#modal1').modal('hide');
+				location.reload();
 			}
 		},
 		error: function(e) 
@@ -121,6 +128,8 @@ function createChatRoom()
 			alert(JSON.stringify(e));
 		}
 	});
+	
+	
 }
 
 function loadJoinedChatroomListRealTime(data)
@@ -221,3 +230,71 @@ function searchResultByTitle(data)
 	});
 }
 
+function printChatWithNavigation(pageNumber){
+	let lang = $('.langCategory').val();
+	$.ajax({
+		url:"chatMainPrint",
+		type:"get",
+		data:{lang_category : lang, page:pageNumber},
+		dataType:'json',
+		success:function(res){
+			$('.chat-main-printer').html('');
+			
+            let chatroomList = res.openChatrooms;
+
+			chatroomList.forEach(room =>{
+				$('.chat-main-printer').append(`
+				<tr>
+					<td><input type="hidden" id="${room.chatroom_num}"
+						value="${room.chatroom_num}">
+						<p >${room.lang_category}</p></td>
+					<td>
+						<a href="/ringo/chat/openChatRoomEnter?chatroom_num=${room.chatroom_num}">
+							${room.title}
+						</a> 
+					<td>
+						<p>${room.currentHeadCount} / ${room.capacity}</p></td>
+					<td>
+						<p>${room.nickname}</p>
+					</td>
+				</tr>
+				`);
+			})
+            // Pagination 처리 부분
+            let paginationHtml = '';
+            let navi = res.navi; 
+			
+			
+			//채팅방 규격에 맞도록 navi 규격 조정(14 -> 7)
+			if(navi.currentPage < 4 && navi.totalRecordsCount > 35){
+				navi.endPageGroup = 5;
+			}else if(navi.totalRecordsCount % 7 < 1){
+				navi.endPageGroup = (navi.totalRecordsCount / 7);
+			}else {
+				navi.endPageGroup = (navi.totalRecordsCount / 7) + 1;
+			}
+
+			console.log('네비게이션 갯수 : '+navi.totalRecordsCount);
+
+			paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(0)">&laquo;</a></li>';
+			paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(' + (navi.currentPage - 1) + ')">&lt;</a></li>';
+            
+            for (let i = navi.startPageGroup; i <= navi.endPageGroup; i++) {
+                if (i === navi.currentPage) {
+                    paginationHtml += '<li class="page-item active"><a class="page-link" href="#" onclick="printChatWithNavigation(' + i + ')">' + i + '</a></li>';
+                } else {
+                    paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(' + i + ')">' + i + '</a></li>';
+                }
+            }
+            
+            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(' + (navi.currentPage + 1) + ')">&gt;</a></li>';
+            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(' + (navi.totalPageCount) + ')">&raquo;</a></li>';
+
+
+            $('.pagination').html(paginationHtml);
+		},
+        error: function(e) {
+            console.log("error");
+        }
+	})
+}

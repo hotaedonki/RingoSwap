@@ -98,8 +98,9 @@ public interface MemberDAO
 	public String getEncodedPasswordByUserNum(int user_num);
 	// 유저넘으로 멤버값 가져오기
 	public Member memberSearchByNum(int user_num);
-	public List<Map<String, Object>> getAllUserNumsAndNicknamesByChatroomNum(int chatroom_num);
+	public List<Map<String, Object>> getAllUserDetailsByChatroomNum(int chatroom_num);
 
 	// 회원가입시 생성된 회원번호를 기반으로 ringo_game_setting테이블에 insert하는 메서드
 	public int memberGameSettingInsert(int user_num);
+	public List<Map<String, Object>> getAllUserNumsAndNicknamesByChatroomNum(int chatroom_num);
 }

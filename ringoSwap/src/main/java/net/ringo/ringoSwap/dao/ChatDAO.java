@@ -2,6 +2,7 @@ package net.ringo.ringoSwap.dao;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -80,6 +81,11 @@ public interface ChatDAO
 
 	public ArrayList<ChatroomThumbnail> getDMChatroomThumbnails(int userNum);
 
+	public int leaveChatroom(Map<String, Object> params);
+
+	public List<Integer> getEmptyChatrooms();
+
+	public void deleteChatroom(int chatroomNum);
 	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByNickname(Map<String, Object> params);
 	
 	//현재 존재하는 모든 채팅방 갯수를 리턴하는 메서드

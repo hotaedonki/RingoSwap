@@ -13,7 +13,9 @@ $(document).ready(function()
 {
 	init();
 	connect();
-	
+	$(document).on('click', '#return-to-chat-main', returnToChatMain);
+    $(document).on('click', '#out-chat-room', outChatRoom);
+    
 	const emojiArea = $("#msg_input").emojioneArea({
 		pickerPosition: "top",
 	});
@@ -184,6 +186,8 @@ function onConnected()
 	stompClient.subscribe('/sub/chat/openChatMain/searchByTitle/' + myUserNum, searchResultByTitle);
 
 	// 채팅방에 입장할 때 사용자의 닉네임 로드
+	loadAllBasicDetailsForChatroom(chatroomNum);
+	console.log(chatroomNum);
     loadAllNicknamesForChatroom(chatroomNum);
 }
 
@@ -208,13 +212,36 @@ function setNicknamesForExistingMessages(userCache) {
     scrollDown();
 }
 
-
-function loadAllNicknamesForChatroom(chatroomNum) {
+function loadAllBasicDetailsForChatroom(chatroomNum) {
+	console.log(chatroomNum);
     $.ajax({
-        url: 'allUserNickname',
+        url: 'allUserBasicDetails',
         type: 'post',
         data: { chatroom_num: chatroomNum },
         success: function(data) {
+			console.log(data);
+            data.forEach(user => {
+                userCache[user.USER_NUM] = {
+                    nickname: user.NICKNAME,
+                    user_id: user.USER_ID
+                };
+                addParticipantToParticipantsList(user);
+            });
+        },
+        error: function(error) {
+            console.error("Error fetching basic user details:", error);
+        }
+    });
+}
+
+function loadAllNicknamesForChatroom(chatroomNum) {
+	console.log(chatroomNum);
+    $.ajax({
+        url: 'allUserNicknameSendMessage',
+        type: 'post',
+        data: { chatroom_num: chatroomNum },
+        success: function(data) {
+			console.log(data);
             data.forEach(user => {
                 userCache[user.USER_NUM] = {
                     nickname: user.NICKNAME,
@@ -427,4 +454,54 @@ function searchResultByTitle(data)
 	jsonData.forEach(item => {
 		createChatroomThumbnail(item.chatroom_num, item.title, item.inputdate, item.message);
 	});
+}
+
+function returnToChatMain() {
+	window.location.href = '../chat/openChatMain';
+}
+
+function outChatRoom() {
+    const dataToSend = {
+        chatroom_num: chatroomNum,
+        user_num: myUserNum
+    };
+	
+	console.log(dataToSend);
+    $.ajax({
+        url: 'outChatRoom',
+        type: 'POST',
+        data: JSON.stringify(dataToSend), 
+        contentType: 'application/json',  
+        dataType: 'json', 
+        success: function(response) {
+            if (response.success) {
+				confirm("Do you want to delete the room?")
+                checkAndDeleteEmptyChatroom(chatroomNum);
+                window.location.href = '../chat/openChatMain?refresh=1';
+            } else {
+                alert('Error leaving the chatroom: ' + response.message);
+            }
+        },
+        error: function(error) {
+            console.error("Error leaving chatroom:", error);
+        }
+    });
+}
+
+function checkAndDeleteEmptyChatroom(chatroomNum) {
+	$.ajax({
+		url:'deleteRoom'
+		, type: 'post'
+		, data: { chatroomNum: chatroomNum }
+		, success: function(response) {
+			if (response.success) {
+				
+            } else {
+                confirm('Error delete the chatroom: ' + response.message);
+            }
+		},
+		error: function(error) {
+			 console.error("Error delete chatroom:", error);
+		}
+	})
 }

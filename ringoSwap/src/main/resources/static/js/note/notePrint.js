@@ -329,8 +329,8 @@ function loadPage(pageNumber) {
             let navi = res.navi;
 
 			
-            
-            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(' + (navi.currentPage - 1) + ')">&laquo;</a></li>';
+            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(0)">&laquo;</a></li>';
+            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(' + (navi.currentPage - 1) + ')">&lt;</a></li>';
   
             
             for (let i = navi.startPageGroup; i <= navi.endPageGroup; i++) {
@@ -341,7 +341,8 @@ function loadPage(pageNumber) {
                 }
             }
             
-            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(' + (navi.currentPage + 1) + ')">&raquo;</a></li>';
+            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(' + (navi.currentPage + 1) + ')">&gt;</a></li>';
+            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(' + (navi.totalPageCount) + ')">&raquo;</a></li>';
 
 
             $('.pagination').html(paginationHtml);
