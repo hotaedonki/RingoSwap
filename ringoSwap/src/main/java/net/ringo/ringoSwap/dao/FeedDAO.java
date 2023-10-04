@@ -81,6 +81,8 @@ public interface FeedDAO
 	int feedDeleteByUser(HashMap<String, Object> map);
 	//해당 댓글의 작성자인지 확인한 후 해당 댓글을 삭제하는 메서드
 	int replyDeleteOne(HashMap<String, Object> map);
+	//삭제실행전 자신의 피드가 맞는지 확인하는 메서드
+	int feedSearch(HashMap<String, Integer> map);
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 	
 	//---------------[기타 기능]----------------->>>>>>>>>>>>>>>>>>>

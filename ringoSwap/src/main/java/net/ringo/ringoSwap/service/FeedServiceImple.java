@@ -202,7 +202,15 @@ public class FeedServiceImple implements FeedService{
 		
 		return dao.replyDeleteOne(map);
 	}
-	
+
+	//삭제기능 실행 전 해당 피드가 자신의 피드인지 확인하는 메서드
+	@Override
+	public int feedSearch(int feed_num, int user_num) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("feed_num", feed_num);
+		map.put("user_num", user_num);
+		return dao.feedSearch(map);
+	}
 
 	//----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 	

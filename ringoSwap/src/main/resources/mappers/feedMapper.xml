@@ -236,6 +236,13 @@
 	<!-- 태그 관련 기능 끝 -->
 
 	<!-- 삭제 관련 기능 시작 -->
+	<!-- 삭제기능 실행전 자신의 피드가 맞는지 확인하는 select문 -->
+	<select id="feedSearch" parameterType="java.util.HashMap">
+	select count(*)
+	from ringo_feed
+	where feed_num = #{feed_num}
+		and user_num = #{user_num}
+	</select>
 	<!-- feed_num과 user_num을 기반으로 피드의 작성자가 맞는지 확인하면서 작성자가 맞다면 해당 피드를 삭제하는 delete문 -->
 	<delete id="feedDeleteByUser" parameterType="java.util.HashMap">
 		delete ringo_feed
