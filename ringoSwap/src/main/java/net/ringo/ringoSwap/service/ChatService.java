@@ -64,4 +64,8 @@ public interface ChatService
 	public DM_Chatroom getDMChatroomByUserNums(Map<String, Object> userNums);
 	// DM 채팅방 정보를 내 유저 번호와 고유 번호로 조회하여 가져온다.
 	public DM_Chatroom getDMChatroomByDMChatroomNumAnduserNum(Map<String, Object> params);
+	// DM 채팅방 번호들을 유저 번호로 가져온다.
+	public ArrayList<Integer> loadDMChatRoomNumsByUserNum(int userNum);
+	// 자신이 참가한 DM 채팅방 목록을 가쟈온다
+	public ArrayList<ChatroomThumbnail> getDMChatroomThumbnails(int userNum);
 }

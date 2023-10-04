@@ -28,9 +28,9 @@
 <script th:src="@{/js/jQuery-3.7.0.js}"></script>
 </head>
 <body>
-	<input type="hidden" id="chatroom" th:value="${chatroom}">
-	<input type="hidden" id="myChatroomLink" th:value="${myChatroomLink}">
-	<input type="hidden" id="chatLinks" th:value="${chatLinks}">
+	<input th:type="hidden" th:id="myAcc" th:value="${myAcc}">
+	<input th:type="hidden" th:id="otherAcc" th:value="${otherAcc}">
+	<input th:type="hidden" th:id="dmChatroom" th:value="${dmChatroom}">
 
 	<nav class="sidebar close">
 		<header>
@@ -240,8 +240,7 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
 	<script th:src="@{/js/chat/chatUtilities.js}"></script>
-	<script th:src="@{/js/chat/openChatRoom.js}"></script>
-
+	<script th:src="@{/js/chat/dmChat.js}"></script>
 
 </body>
 </html>

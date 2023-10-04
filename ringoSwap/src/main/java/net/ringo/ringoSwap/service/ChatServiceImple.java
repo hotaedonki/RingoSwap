@@ -266,4 +266,15 @@ public class ChatServiceImple implements ChatService
 	public DM_Chatroom getDMChatroomByDMChatroomNumAnduserNum(Map<String, Object> params) {
 		return dao.getDMChatroomByDMChatroomNumAnduserNum(params);
 	}
+
+	@Override
+	public ArrayList<Integer> loadDMChatRoomNumsByUserNum(int userNum) {
+		return dao.loadDMChatRoomNumsByUserNum(userNum);
+	}
+
+	@Override
+	public ArrayList<ChatroomThumbnail> getDMChatroomThumbnails(int userNum) 
+	{
+		return dao.getDMChatroomThumbnails(userNum);
+	}
 }
