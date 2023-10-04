@@ -319,9 +319,9 @@ function feedDelete(){
         url: "feedDeleteOne",
         type: "post",
         data: {feed_num : feed_num},
-        dataType:'json',
-        success:function(res){
-			if(res === "0") {
+        dataType:'text',
+        success:function(msg){
+			if(msg === "notMyFeed") {
 				alert("본인이 작성한 글만 삭제할 수 있습니다.")
 			} else { 
 			}

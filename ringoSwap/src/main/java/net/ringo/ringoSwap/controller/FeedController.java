@@ -474,6 +474,12 @@ public class FeedController {
 		String resultMsg = ""; // 메서드 결과값에 따라 삭제여부를 기록하여 메서드 종료시 리턴되는 변수
 		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
 
+		int result = service.feedSearch(feed_num, user_num);
+		log.debug("결과 {}",result);
+		if(result == 0) {
+			resultMsg = "notMyFeed";
+			return resultMsg;
+		}
 		/*
 		 * 피드를 삭제하기 전 먼저 해당 피드에 사진이 있는지 검색하고, 사진이 없다면 resultMsg에 "피드 내 사진 없음"을 입력 후
 		 * 진행합니다. 사진이 존재할경우, resultMsg에 "피드 내 사진 존재"를 입력후 해당 사진파일들의 삭제작업을 진행합니다.
