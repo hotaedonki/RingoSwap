@@ -34,8 +34,7 @@
 	<nav class="sidebar close">
 		<header>
 			<div class="image-text logo-area">
-				<span class="image"> <img th:src="@{../img/로고.png}"
-					alt="">
+				<span class="image"> <img th:src="@{../img/로고.png}" alt="">
 				</span>
 
 				<div class="text logo-text">
@@ -85,9 +84,9 @@
 					</a></li>
 					<li class="">
 						<div sec:authorize="isAuthenticated()">
-							<a th:href="@{/member/myPage}"> 
-							<span id="profileImagePlaceholder" data-tooltip="프로필 사진으로 이동합니다."></span>
-            				<span class="text nav-text">Profile</span>
+							<a th:href="@{/member/myPage}"> <span
+								id="profileImagePlaceholder" data-tooltip="프로필 사진으로 이동합니다."></span>
+								<span class="text nav-text">Profile</span>
 							</a>
 						</div>
 					</li>
@@ -150,8 +149,11 @@
 			</div>
 		</div>
 		<div class="game-option-area">
-			<div class="row set-rule justify-content-center">
-				<div class="col-8 text-center">Set Rules</div>
+			<div class="row set-rule d-flex justify-content-center align-content-center">
+			    <div class="col-8 d-flex justify-content-between align-items-center">
+			        <span class="text-center w-100">Set Rules</span>
+			        <button type="button" class="btn btn-primary btn-sm game-log-button" data-bs-toggle="modal" data-bs-target="#gameLogModal">Log</button>
+			    </div>
 			</div>
 			<div class="row justify-content-center mt-3">
 				<div class="col-4 text-start">Select WordList</div>
@@ -171,26 +173,23 @@
 				<div class="col-4 text-start">Number of Questions</div>
 				<div class="col-4 text-end">
 					<button type="button" class="btn btn-primary btn-sm"
-						data-bs-toggle="modal" data-bs-target="#countOfItemsModal">Total</button>
+						data-bs-toggle="modal" data-bs-target="#countOfItemsModal"></button>
 				</div>
 			</div>
-			<div class="row justify-content-center more-option mt-3" style="display: none;">
-				<div class="col-4 text-start">
-					Match Pronuntation				
-				</div>
+			<div class="row justify-content-center more-option mt-3"
+				style="display: none;">
+				<div class="col-4 text-start">Match Pronuntation</div>
 				<div class="col-4 text-end">
 					<div class="form-check form-switch d-inline-block">
-						<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+						<input class="form-check-input ms-4" type="checkbox"
+							id="flexSwitchCheckDefault">
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="log-card">
-			<h4>게임로그 목록</h4>
-		</div>
 	</section>
-	
-	
+
+
 	<!-- 게임 종료 모달 -->
 	<div class="modal fade" id="confirmModal" tabindex="-1"
 		aria-labelledby="confirmModalLabel" aria-hidden="true">
@@ -211,7 +210,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- 다시하기 모달 -->
 	<div class="modal fade" id="retryModal" tabindex="-1"
 		aria-labelledby="retryModalLabel" aria-hidden="true">
@@ -231,7 +230,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- 종료 후 메인으로 돌아가기 모달 -->
 	<div class="modal fade" id="returnToMainModal" tabindex="-1"
 		aria-labelledby="returnToMainModalLabel" aria-hidden="true">
@@ -248,6 +247,27 @@
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">No</button>
 					<button type="button" class="btn btn-primary return-to-game-main">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Game Log Modal -->
+	<div class="modal fade" id="gameLogModal" tabindex="-1"
+		aria-labelledby="gameLogModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="gameLogModalLabel">Game Log</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<!-- Game Logs will be appended here using the JavaScript function -->
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
