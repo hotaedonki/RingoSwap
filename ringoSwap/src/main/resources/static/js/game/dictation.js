@@ -211,6 +211,9 @@ function dictationAnswerPrint(){
         console.log(JSON.stringify({wrongWordList : wrongWord}));
 		wrongInsert(wrongWord);
 	}
+
+	//틀린것 풀기 모달에 category 삽입
+	$('.do-retry').attr('data-game-category', 'dictation');
 	
 	let score = (rightWord.length / wordList.length) * 100;
 	let Gcategory = "mcq";

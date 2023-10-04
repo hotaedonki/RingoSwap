@@ -243,6 +243,9 @@ function gameAnswerPrint(){
 		wrongInsert(wrongWord);
 	}
 
+	//틀린것 풀기 모달에 category 삽입
+	$('.do-retry').attr('data-game-category', 'MCQ');
+
 	let score = (rightWord.length / wordList.length) * 100;
 	let Gcategory = "mcq";
 	let rightLength = rightWord.length;

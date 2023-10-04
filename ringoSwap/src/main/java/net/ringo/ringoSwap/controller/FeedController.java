@@ -38,6 +38,7 @@ import com.google.gson.reflect.TypeToken;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.domain.Feed;
+import net.ringo.ringoSwap.domain.FeedNotify;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.MemberFollow;
@@ -535,25 +536,15 @@ public class FeedController {
 	// ----------------[삭제 관련 기능 종료]----------->>>>>>>>>>>>
 	
 	//<<<<<<<<<<<<--------------[ 피드알림 기능 ]--------------------
-	@MessageMapping("/feed/feedMainNotifyLike")
-	@SendTo("sub/feed/feedMainNotifyLike/state/{nickName}{feedLike}")
-	public String feedNotifyLike(@DestinationVariable String nickName
-			, @DestinationVariable int feedLike
-			, @Payload Feed feed) {
-		// payload 체크
-		if (feed == null){
-			log.debug("enterUser - Payload 확인!");
-			return "접속 정보를 가져오는데 실패하였습니다";
-		}
-		//nickname 받아오기
-		String nickname = memberService.getNicknameByUserNum(feed.getUser_num());
+	@ResponseBody
+	@PostMapping("feedNotifyPrint")
+	public ArrayList<FeedNotify> feedNotifyPrint(@AuthenticationPrincipal UserDetails user) {
+		ArrayList<FeedNotify> notifyList = new ArrayList<>();
+		int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
+		log.debug(" UID값 {}",user_num);
+		notifyList = service.feedNotifySearchByUserNum(user_num);
+		log.debug("알람목록 {}",notifyList);
 		
-		if (nickname == null || nickname == "")
-		{
-			log.debug("유저이름 정보를 가져오는데 실패하였습니다");
-			return "유저이름 정보를 가져오는데 실패하였습니다";
-		}
-		
-		return nickname+"님이 내 피드에 좋아요를 남겼습니다.";
+		return notifyList;
 	}
 }
