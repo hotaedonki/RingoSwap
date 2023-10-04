@@ -3,9 +3,13 @@ let userNum;
 let subscriptionForUpdateChatroom;	// 방 정보 업데이트 이벤트를 구독할 때 구독 정보를 저장하는 객체
 
 $(document).ready(function()
-{
+{	
 	init();
 	connect();
+	const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('refresh') === '1') {
+        window.location.href = '../chat/openChatMain';
+    }
 });
 
 window.addEventListener('beforeunload', function(event) 
@@ -114,6 +118,9 @@ function createChatRoom()
 			{
 				alert("새 채팅방 생성 실패");
 				return;
+			} else {
+				$('#modal1').modal('hide');
+				location.reload();
 			}
 		},
 		error: function(e) 
@@ -121,6 +128,8 @@ function createChatRoom()
 			alert(JSON.stringify(e));
 		}
 	});
+	
+	
 }
 
 function loadJoinedChatroomListRealTime(data)

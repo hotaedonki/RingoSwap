@@ -1,6 +1,7 @@
 package net.ringo.ringoSwap.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.socket.WebSocketSession;
@@ -68,4 +69,10 @@ public interface ChatService
 	public ArrayList<Integer> loadDMChatRoomNumsByUserNum(int userNum);
 	// 자신이 참가한 DM 채팅방 목록을 가쟈온다
 	public ArrayList<ChatroomThumbnail> getDMChatroomThumbnails(int userNum);
+	//방 나가기
+	public int leaveChatroom(Map<String, Object> params);
+	//방 인원 체크
+	public List<Integer> getEmptyChatrooms();
+
+	public void deleteChatroom(int chatroomNum);
 }

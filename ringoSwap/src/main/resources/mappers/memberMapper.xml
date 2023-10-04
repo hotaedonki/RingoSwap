@@ -274,6 +274,13 @@
 		where nickname = #{nickname}
 	</select>
 	
+	<select id="getAllUserDetailsByChatroomNum" parameterType="int" resultType="map">
+	    SELECT DISTINCT m.nickname, c.user_num, m.user_id
+	    FROM ringo_chatroom_link c
+	    JOIN ringo_member_with_mypage m ON c.user_num = m.user_num
+	    WHERE c.chatroom_num = #{chatroomNum}
+	</select>
+	
 	<select id="getAllUserNumsAndNicknamesByChatroomNum" parameterType="int" resultType="map">
 	    SELECT DISTINCT m.nickname, c.user_num, m.user_id, TO_CHAR(c.inputdate, 'YYYY-MM-DD HH24:MI:SS') AS formatted_inputdate
 	    FROM ringo_chat_common c

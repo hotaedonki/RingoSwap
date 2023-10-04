@@ -2,6 +2,7 @@ package net.ringo.ringoSwap.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -276,5 +277,22 @@ public class ChatServiceImple implements ChatService
 	public ArrayList<ChatroomThumbnail> getDMChatroomThumbnails(int userNum) 
 	{
 		return dao.getDMChatroomThumbnails(userNum);
+	}
+
+	@Override
+	public int leaveChatroom(Map<String, Object> params) {
+		return dao.leaveChatroom(params);	
+	}
+
+	@Override
+	public List<Integer> getEmptyChatrooms() {
+		return 	dao.getEmptyChatrooms();
+	}
+
+	@Override
+	public void deleteChatroom(int chatroomNum) {
+		log.debug("방 삭제 임플 : {}", chatroomNum);
+		dao.deleteChatroom(chatroomNum);
+		
 	}
 }

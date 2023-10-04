@@ -432,4 +432,21 @@
 		where
 			user_num1 = #{userNum} or user_num2 = #{userNum}
     </select>
+    
+    <delete id="leaveChatroom" parameterType="map">
+    	delete from ringo_chatroom_link
+        where user_num = #{userNum}
+        and chatroom_num = #{chatroomNum}
+	</delete>
+	
+	<select id="getEmptyChatrooms" resultType="int">
+	    SELECT chatroom_num 
+	    FROM ringo_chatroom 
+	    WHERE chatroom_num NOT IN (SELECT DISTINCT chatroom_num FROM ringo_chatroom_link)
+	</select>
+	
+	<delete id="deleteChatroom">
+	    delete from ringo_chatroom
+	    where chatroom_num = #{chatroomNum}
+	</delete>
 </mapper>

@@ -291,6 +291,10 @@ public class MemberServiceImple implements MemberService
 		return dao.memberSearchByNum(user_num);
 	}
 	@Override
+	public List<Map<String, Object>> getAllUserDetailsByChatroomNum(int chatroom_num) {
+		return dao.getAllUserDetailsByChatroomNum(chatroom_num);
+	}
+	@Override
 	public List<Map<String, Object>> getAllUserNumsAndNicknamesByChatroomNum(int chatroom_num) {
 		return dao.getAllUserNumsAndNicknamesByChatroomNum(chatroom_num);
 	}

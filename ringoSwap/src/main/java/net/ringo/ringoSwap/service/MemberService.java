@@ -94,5 +94,7 @@ public interface MemberService
 
 	public int nicknameCheck(String nickname);
 	
+	public List<Map<String, Object>> getAllUserDetailsByChatroomNum(int chatroom_num);
+
 	public List<Map<String, Object>> getAllUserNumsAndNicknamesByChatroomNum(int chatroom_num);
 }
