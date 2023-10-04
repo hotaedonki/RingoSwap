@@ -165,45 +165,6 @@ function gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength){
     })
 }
 
-
-let interval; // setInterval을 저장하는 변수
-
-function startProgressBar(game) {
-    const progressBarContainer = document.querySelector(".timeCount");
-    progressBarContainer.innerHTML = '';  // 기존 프로그레스 바 제거
-
-    // 새로운 프로그레스 바 생성 및 추가
-    const progressBarHTML = `
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-    `;
-    progressBarContainer.innerHTML = progressBarHTML;
-
-    const progressBar = progressBarContainer.querySelector(".progress-bar");
-
-    clearInterval(interval); // 현재 실행 중인 interval이 있다면 중지
-
-    const totalTime = 10 * 1000;
-    const updateInterval = 100;
-    const incrementValue = (100 / (totalTime/updateInterval));
-    let currentProgress = 0;
-
-    interval = setInterval(() => {
-        currentProgress += incrementValue;
-        if (currentProgress > 100) {
-            currentProgress = 100;
-            clearInterval(interval);
-        }
-        progressBar.setAttribute("aria-valuenow", currentProgress);
-        progressBar.style.width = `${currentProgress}%`;
-        if (currentProgress >= 100) {
-			if(game === "dictation") {
-            	nextQuestionPrint(); // 강제로 다음 문제로 넘기기
-            } else {
-				checkAnswer();
-			}
-        }
-        
-    }, updateInterval);
+function tryIncorrectQuestion(){
+    
 }
-
-
