@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.ringo.ringoSwap.domain.Feed;
+import net.ringo.ringoSwap.domain.FeedNotify;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.Reply;
@@ -77,4 +78,7 @@ public interface FeedService {
 	public String findUserIdByNickname(String nickname);
 	//피드 댓글개수
 	public int replyCountByFeedNum(int feed_num);
+
+	//피드알림 목록을 호출하는 메서드
+	public ArrayList<FeedNotify> feedNotifySearchByUserNum(int user_num);
 }
