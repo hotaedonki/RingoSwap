@@ -9,7 +9,7 @@ let fileNum = 0;         //게임용 사용 단어장의 파일번호를 저장�
 
 function confirmExit() {	
 	const currentGame = getCurrentGame();
-	
+	$('#confirmModal').modal('hide');
 	console.log(currentGame);
 		if(currentGame === 'MCQ' || currentGame === 'dictation') {
 			$(`.${currentGame}-container`).remove();
@@ -20,7 +20,7 @@ function confirmExit() {
             history.pushState({ url: 'http://localhost:8888/ringo/game/gameMain' }, '', `?category=dictation`);
             console.log(history);
 		}
-    $('#confirmModal').modal('hide');
+
 }
 
 function getCurrentGame() {

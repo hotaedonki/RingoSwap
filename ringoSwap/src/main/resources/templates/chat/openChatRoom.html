@@ -80,10 +80,6 @@
 							</a>
 						</div>
 					</li>
-
-					<li class=""><a th:href="@{/notification/notificationMain}">
-							<i class='bx bx-bell icon'></i> <span class="text nav-text">Notifications</span>
-					</a></li>
 					<li class="">
 						<div sec:authorize="isAuthenticated()">
 							<a th:href="@{/member/myPage}"> <span
@@ -127,12 +123,11 @@
 					<div
 						class="card-header d-flex justify-content-between align-items-center">
 						<!-- 좌측 버튼 추가 -->
-						<button id="toggleChatList" class="btn btn-sm btn-primary">Toggle
-							Chat List</button>
+						<button id="toggleChatList" class="btn btn-sm btn-primary">Hide Chat List</button>
 						<!-- 중앙 텍스트 -->
 						<span>Chat Room</span>
 						<!-- 우측 버튼 추가 -->
-						<button id="toggleParticipants" class="btn btn-sm btn-primary">Toggle
+						<button id="toggleParticipants" class="btn btn-sm btn-primary">Hide
 							Participants</button>
 					</div>
 					<!-- chatbox -->

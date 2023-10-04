@@ -501,6 +501,7 @@ function printNote() {
 	            const fileNum = getUrlParam('file');
 	            const fileType = getUrlParam('type');
 	            console.log(fileOpenUrl(fileNum, fileType));
+	            
 	        });
 	    }
 	});

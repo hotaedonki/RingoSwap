@@ -72,15 +72,21 @@ function renderFeeds(res, newLoad) {
 	
 	feeds.forEach(feed => {
 		feedPhotoPrint(feed.feed_num);
-	     let likeButtonClass = likeCheck[feed.feed_num] === 1 ? "bi-heart-fill" : "bi-heart";
-	     let replyCountForThisFeed = replyCount[feed.feed_num] || 0;
+	    let likeButtonClass = likeCheck[feed.feed_num] === 1 ? "bi-heart-fill" : "bi-heart";
+	    let replyCountForThisFeed = replyCount[feed.feed_num] || 0;
 		 //해시태그에 css적용
-		 let styledContent = hashtagHighlightAndClick(feed.contents);
+		let styledContent = hashtagHighlightAndClick(feed.contents);
+		 
+		let current_date = new Date();
+		let comment_date = new Date(feed.inputdate);
+		let time_diff_str = timeDifference(current_date, comment_date);
+
 		$('.feed-display-area .col-12').append(`
             <div class="card feed-card main-card" data-feed-num="${feed.feed_num}">
                 <div class="card-header feed-header"> 
                 	<img src="../member/memberProfilePrint?user_id=${feed.user_id}" data-user-name="${feed.nickname}" alt="Poster Image" class="posterImage showOffcanvasWithUserData"> 
                     <span class="feedUser showOffcanvasWithUserData" data-user-name="${feed.nickname}">${feed.nickname}</span>
+                    <span class="time-diff">${time_diff_str}</span>
                     <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-1 me-2" data-feed-num="${feed.feed_num}">삭제</button>
                 </div>
                 <div class="card-body">

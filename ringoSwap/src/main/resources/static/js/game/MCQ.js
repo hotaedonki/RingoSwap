@@ -216,7 +216,7 @@ function checkAnswer(chosenAnswer) {		//답안을 클릭했을때 발생하는 �
 	}else {
 		// 다음 문제 로드
 		gameQuestionPrint();
-		startProgressBar();
+		startProgressBar("MCQ");
 	}
 }
 function gameAnswerPrint() {

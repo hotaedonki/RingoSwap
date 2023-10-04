@@ -191,7 +191,7 @@ function nextQuestionPrint(){
         dictationResultScreen();
     }else {
         dictationQuestionPrint();
-        startProgressBar();
+        startProgressBar("dictation");
     }
 }
 function dictationAnswerPrint() {

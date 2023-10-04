@@ -260,3 +260,57 @@ main {
 	z-index:9999;
 }
 
+/* 전체 카드 스타일 */
+.notification-card {
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+/* 카드 헤더 스타일 */
+.notification-card .card-header {
+    background-color: #f7f7f7;
+    font-weight: bold;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* 알림 리스트 아이템 스타일 */
+.notification-card .list-group-item {
+    border: none;
+    padding: 10px 15px;
+    transition: background-color 0.3s;
+}
+
+.notification-card .list-group-item:hover {
+    background-color: #f5f5f5;
+}
+
+/* 좋아요와 댓글 아이콘 (font-awesome 사용) */
+.notification-card .like-icon {
+    color: #f47373;
+    margin-right: 5px;
+}
+
+.notification-card .comment-icon {
+    color: #3498db;
+    margin-right: 5px;
+}
+
+/* 사용자 닉네임 및 피드 링크 스타일 */
+.notification-card .otherUser, .notification-card .myFeedNotify {
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+    text-decoration: none;
+}
+
+.notification-card .otherUser:hover, .notification-card .myFeedNotify:hover {
+    text-decoration: underline;
+}
+
+.time-diff {
+	position : absolute;
+	right: 10px;
+	top: 40px;
+	font-size: 12px;
+}
