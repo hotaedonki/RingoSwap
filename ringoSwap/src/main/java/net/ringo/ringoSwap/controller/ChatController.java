@@ -89,8 +89,11 @@ public class ChatController
 		ArrayList<OpenChatroomInfo> openChatrooms = new ArrayList<>();
 		
 		// 언어 필터 관련해서 값이 있으면
-		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja")))
+		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja"))){
 			openChatrooms = service.searchChatroomByLang(navi, lang_category);
+			model.addAttribute("langCategory", lang_category);
+			log.debug("{}", lang_category);
+		}
 		else
 			openChatrooms = service.getAllOpenchatrooms(navi);
 		
@@ -104,6 +107,29 @@ public class ChatController
 		model.addAttribute("userNum", userNum);
 		
 		return "/chat/openChatMain";
+	}
+	
+	@ResponseBody
+	@GetMapping("chatMainPrint")
+	public HashMap<String, Object> chatMainPrint(String lang_category
+					, @RequestParam(name="page", defaultValue ="1" ) int page){
+		HashMap<String, Object> map =new HashMap<>();			//return용 hashmap 변수
+		PageNavigator navi = service.chatRoomPageNavigator(pagePerGroup, countPerPage, page);
+		
+		
+		ArrayList<OpenChatroomInfo> openChatrooms = new ArrayList<>();
+		
+		// 언어 필터 관련해서 값이 있으면
+		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja")))
+			openChatrooms = service.searchChatroomByLang(navi, lang_category);
+		else
+			openChatrooms = service.getAllOpenchatrooms(navi);
+
+		map.put("navi", navi);
+		map.put("openChatrooms", openChatrooms);
+		log.debug("채팅룸 네비-해시맵 {}", map);
+		
+		return map;
 	}
 	
 	@GetMapping(PathHandler.DMCHATWITHROOMID)
