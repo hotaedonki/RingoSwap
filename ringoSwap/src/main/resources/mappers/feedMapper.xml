@@ -324,6 +324,7 @@
 		, inputdate
 	from FeedNotify
 	where notify_user is not null
+		and notify_user != #{user_num}
 	order by inputdate desc
 	</select>
 

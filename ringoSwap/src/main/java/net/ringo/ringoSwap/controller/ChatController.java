@@ -36,6 +36,7 @@ import net.ringo.ringoSwap.domain.ChatCommon;
 import net.ringo.ringoSwap.domain.Chatroom;
 import net.ringo.ringoSwap.domain.ChatroomLink;
 import net.ringo.ringoSwap.domain.DM_Chatroom;
+import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
 import net.ringo.ringoSwap.domain.custom.OpenChatroomInfo;
 import net.ringo.ringoSwap.enums.webService.MessageType;
@@ -98,7 +99,7 @@ public class ChatController
 	@GetMapping(PathHandler.DMCHATWITHROOMID)
 	public String dmChat(@RequestParam("dmRoomId") int dmRoomId, @AuthenticationPrincipal UserDetails user, Model model)
 	{
-		log.debug("go DM Chat Main After Create Room . . .");
+		log.debug("go DM Chat . . .");
 	    
 		if (user == null || user.getUsername() == null || user.getUsername().length() <= 0)
 		{
@@ -123,10 +124,28 @@ public class ChatController
 		if (dmChatroom == null)
 		{
 			log.debug("dmChatroom의 정보를 찾을 수 없습니다.");
+			return "memberView/home";
 		}
 		
-	    log.debug("dmRoomId - {}", dmRoomId);
-	    model.addAttribute("dmRoomId", dmRoomId);
+		Member myAcc = mService.memberSearchByNum(userNum);
+		Member otherAcc = null;
+		
+		if (dmChatroom.getUser_num1() != userNum)
+			otherAcc = mService.memberSearchByNum(dmChatroom.getUser_num1());
+		else if (dmChatroom.getUser_num2() != userNum)
+			otherAcc = mService.memberSearchByNum(dmChatroom.getUser_num2());
+		
+		if (myAcc == null || otherAcc == null)
+		{
+			log.debug("myAcc or otherAcc is NULL!");
+			return "memberView/home";
+		}
+		
+		log.debug("dmChatroom - {}", dmChatroom);
+		log.debug("myAcc - {}", myAcc);
+	    model.addAttribute("dmChatroom", dmChatroom);
+	    model.addAttribute("myAcc", myAcc);
+	    model.addAttribute("otherAcc", otherAcc);
 	    return "chat/dmChat";
 	}
 	
@@ -142,6 +161,19 @@ public class ChatController
 		
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(chatroomThumbnails);
+	}
+	
+	@MessageMapping(PathHandler.MM_LOADJOINEDDMCHATROOMLISTREALTIME)
+	@SendTo(PathHandler.ST_lOADJOINEDDMCHATROOMLISTREALTIME)
+	public String loadJoinedDMChatroomListRealTime(@DestinationVariable int DMRoomNum, int userNum)  throws Exception
+	{
+		log.debug("load Joined DM Chatroom List RealTime . . .");
+		log.debug("DMroom_num : {}", DMRoomNum);
+		log.debug("userNum : {}", userNum);
+		
+		ArrayList<ChatroomThumbnail> DMChatroomThumbnails = service.getDMChatroomThumbnails(userNum);
+		ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(DMChatroomThumbnails);
 	}
 	
 	@ResponseBody
@@ -304,6 +336,17 @@ public class ChatController
 
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(chatroomNums);
+	}
+	
+	@MessageMapping(PathHandler.MM_LOADDMCHATROOMNUMSBYUSERNUM)
+	@SendTo(PathHandler.ST_LOADDMCHATROOMNUMSBYUSERNUM)
+	public String loadDMChatRoomNumsByUserNum(@DestinationVariable int userNum) throws Exception
+	{
+		log.debug("load DM chat room nums by usernum . . .");
+		
+		ArrayList<Integer> DMChatroomNums = service.loadDMChatRoomNumsByUserNum(userNum);
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(DMChatroomNums);
 	}
 	
 	@ResponseBody

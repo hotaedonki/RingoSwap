@@ -74,4 +74,8 @@ public interface ChatDAO
 	public DM_Chatroom getDMChatroomByUserNums(Map<String, Object> userNums);
 
 	public DM_Chatroom getDMChatroomByDMChatroomNumAnduserNum(Map<String, Object> params);
+
+	public ArrayList<Integer> loadDMChatRoomNumsByUserNum(int userNum);
+
+	public ArrayList<ChatroomThumbnail> getDMChatroomThumbnails(int userNum);
 }

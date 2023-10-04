@@ -54,18 +54,17 @@ public class Member implements UserDetails
 	@Override
 	public String toString()
 	{
-		return String.format
-				("{%d} : user_num {%s} : user_id {%s} : password {%s} : nickname {%s} : first_name \n"
-				+ "{%s} : last_name {%s} : gender {%s} : birth_date {%s} : email {%s} : native_lang {%s} : target_lang \n"
-				+ "{%s} : original_profile {%s} : saved_profile {%s} : introduction {%s} : mbti \n"
-				+ "{%d} : point {%d} : cash {%s} : rewrite_time {%s} : role_name \n"
-				+ "{%s} : ranking_open {%s} : email_open {%s} : follow_open {%s} : gps_open {%s} : trans_lang \n"
-				+ "{%b} : enabled \n"
-				+ "{%d} : fr_count {%d} : fe_count {%s} : tag_list, {%s} : tagList \n, original_background : {%s}, saved_background : {%s}"
-						, user_num, user_id, password, nickname, first_name, last_name, gender, birth_date, email, native_lang, target_lang
-						, original_profile, saved_profile, introduction, mbti, point, cash, rewrite_time, role_name
-						, ranking_open, email_open, follow_open, gps_open, trans_lang, enabled, fr_count, fe_count, tag_list, tagList
-						, original_background, saved_background);
+		return String.format("user_num : {%d} / user_id : {%s} / password : {%s} / nickname : {%s} / first_name : {%s} "
+				+ "/ last_name : {%s} / gender : {%s} / birth_date : {%s} / email : {%s} / native_lang : {%s} "
+				+ "/ target_lang : {%s} / original_profile : {%s} / saved_profile : {%s} / original_background : {%s} "
+				+ "/ saved_background : {%s} / introduction : {%s} / mbti : {%s} / point : {%d} / cash : {%d} "
+				+ "/ rewrite_time : {%s} / role_name : {%s} / ranking_open : {%s} / email_open : {%s} "
+				+ "/ follow_open : {%s} / gps_open : {%s} / trans_lang : {%s} / enabled : {%b} "
+				+ "/ fr_count : {%d} / fe_count : {%d} / tag_list : {%s} / tagList : {%s}", user_num, user_id, password,
+				nickname, first_name, last_name, gender, birth_date, email, native_lang, target_lang, original_profile,
+				saved_profile, original_background, saved_background, introduction, mbti, point, cash, rewrite_time,
+				role_name, ranking_open, email_open, follow_open, gps_open, trans_lang, enabled, fr_count, fe_count,
+				tag_list, tagList);
 	}
 	
 	@Override

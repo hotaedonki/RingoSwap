@@ -1,6 +1,7 @@
 //게임기능에 활용하는 전역변수 목록
 let wordList = [];      //게임용 단어목록 저장을 위한 전역변수 배열
 let answerList =[];     //게임용 각 질문당 정답여부를 기록하는 전역변수 배열
+let answer = null;	//각 객관식 문제의 정답을 저장하는 전역변수.
 let printSet = 'title';   //게임용 질문의 형식을 지정하는 전역변수
 let pronShow = false;    //게임용 발음부를 보일지 여부를 지정하는 전역변수
 let wrongType = false;   //게임용 오답노트인지를 체크하는 전역변수
@@ -165,7 +166,27 @@ function gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength){
     })
 }
 
-
+function tryIncorrectQuestion(){
+    let category = $('.do-retry').data('game-category');
+    if(category === 'MCQ'){
+        if(wordList.length <=4){
+            alert('객관식 게임을 진행하기에는 오답의 갯수가 너무 적습니다.');
+            $('.btn-close').click();
+            returnToGameMain();
+            return;
+        }
+        playMCQ('play');
+    }else {
+        if(wordList.length < 1){
+            alert('오답이 존재하지 않습니다.');
+            $('.btn-close').click();
+            returnToGameMain();
+            return;
+        }
+        playDictation('play');
+    }
+    $('.btn-close').click();
+}
 let interval; // setInterval을 저장하는 변수
 
 function startProgressBar(game) {
@@ -196,16 +217,12 @@ function startProgressBar(game) {
         progressBar.setAttribute("aria-valuenow", currentProgress);
         progressBar.style.width = `${currentProgress}%`;
         if (currentProgress >= 100) {
-			if(game === "dictation") {
-				console.log(game);
-            	nextQuestionPrint(); // 강제로 다음 문제로 넘기기
+         if(game === "dictation") {
+               nextQuestionPrint(); // 강제로 다음 문제로 넘기기
             } else {
-				console.log(game);
-				checkAnswer();
-			}
+            checkAnswer();
+         }
         }
         
     }, updateInterval);
 }
-
-
