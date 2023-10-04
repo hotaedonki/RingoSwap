@@ -277,4 +277,10 @@ public class ChatServiceImple implements ChatService
 	{
 		return dao.getDMChatroomThumbnails(userNum);
 	}
+
+	@Override
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByNickname(Map<String, Object> params) 
+	{
+		return dao.getChatroomThumbnailsByNickname(params);
+	}
 }

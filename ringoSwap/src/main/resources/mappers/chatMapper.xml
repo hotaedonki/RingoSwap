@@ -432,4 +432,33 @@
 		where
 			user_num1 = #{userNum} or user_num2 = #{userNum}
     </select>
+    
+    <!-- 내가 참여한 DM 채팅방 중에서 상대방의 닉네임을 검색할 시 일치한 DM 채팅방들을 가져온다 -->
+    <select id="getChatroomThumbnailsByNickname" parameterType="java.util.Map" resultType="net.ringo.ringoSwap.domain.custom.ChatroomThumbnail">
+	    WITH LatestMessage AS (
+	        SELECT 
+	            chatroom_num,
+	            MAX(inputdate) AS latest_date
+	        FROM 
+	            ringo_chat_common
+	        GROUP BY 
+	            chatroom_num
+	    )
+	    SELECT 
+	        dm.dm_chatroom_num AS chatroom_num,
+	        m.nickname AS title,
+	        COALESCE(TO_CHAR(cc.inputdate, 'YYYY-MM-DD HH24:MI:SS'), TO_CHAR(dm.modifie_date, 'YYYY-MM-DD HH24:MI:SS')) AS inputdate,
+	        COALESCE(cc.message, '대화를 시작하세요') AS message
+	    FROM 
+	        ringo_dm_chatroom dm
+	    JOIN 
+	        ringo_member m ON (m.user_num = dm.user_num1 OR m.user_num = dm.user_num2) AND m.user_num != #{userNum}
+	    LEFT JOIN 
+	        LatestMessage lm ON dm.dm_chatroom_num = lm.chatroom_num
+	    LEFT JOIN 
+	        ringo_chat_common cc ON lm.chatroom_num = cc.chatroom_num AND lm.latest_date = cc.inputdate
+	    WHERE 
+	        (dm.user_num1 = #{userNum} OR dm.user_num2 = #{userNum})
+	        AND m.nickname LIKE #{nickname}
+    </select>
 </mapper>
