@@ -255,14 +255,22 @@ function printChatWithNavigation(pageNumber){
             let paginationHtml = '';
             let navi = res.navi; 
 			
-			console.log('네비게이션 시작 : '+navi.startPageGroup);
-			console.log('네비게이션 현재 : '+navi.currentPage);
-			console.log('네비게이션 종료 : '+navi.endPageGroup);
+			
+			//채팅방 규격에 맞도록 navi 규격 조정(14 -> 7)
+			if(navi.currentPage < 4 && navi.totalRecordsCount > 35){
+				navi.endPageGroup = 5;
+			}else if(navi.totalRecordsCount % 7 < 1){
+				navi.endPageGroup = (navi.totalRecordsCount / 7);
+			}else {
+				navi.endPageGroup = (navi.totalRecordsCount / 7) + 1;
+			}
 
-			paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(' + (navi.startPageGroup) + ')">&laquo;</a></li>';
+			console.log('네비게이션 갯수 : '+navi.totalRecordsCount);
+
+			paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(0)">&laquo;</a></li>';
 			paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(' + (navi.currentPage - 1) + ')">&lt;</a></li>';
             
-            for (let i = navi.startPageGroup; i <= navi.endPageGroup+1; i++) {
+            for (let i = navi.startPageGroup; i <= navi.endPageGroup; i++) {
                 if (i === navi.currentPage) {
                     paginationHtml += '<li class="page-item active"><a class="page-link" href="#" onclick="printChatWithNavigation(' + i + ')">' + i + '</a></li>';
                 } else {
@@ -271,7 +279,7 @@ function printChatWithNavigation(pageNumber){
             }
             
             paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(' + (navi.currentPage + 1) + ')">&gt;</a></li>';
-            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(' + (navi.endPageGroup + 1) + ')">&raquo;</a></li>';
+            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(' + (navi.totalPageCount) + ')">&raquo;</a></li>';
 
 
             $('.pagination').html(paginationHtml);

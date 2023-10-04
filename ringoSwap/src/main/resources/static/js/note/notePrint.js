@@ -327,8 +327,9 @@ function loadPage(pageNumber) {
             // Pagination 처리 부분
             let paginationHtml = '';
             let navi = res.navi;
+
 			
-            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(' + (navi.startPageGroup) + ')">&laquo;</a></li>';
+            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(0)">&laquo;</a></li>';
             paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(' + (navi.currentPage - 1) + ')">&lt;</a></li>';
   
             
@@ -341,7 +342,7 @@ function loadPage(pageNumber) {
             }
             
             paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(' + (navi.currentPage + 1) + ')">&gt;</a></li>';
-            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(' + (navi.endPageGroup + 1) + ')">&raquo;</a></li>';
+            paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="loadPage(' + (navi.totalPageCount) + ')">&raquo;</a></li>';
 
 
             $('.pagination').html(paginationHtml);
