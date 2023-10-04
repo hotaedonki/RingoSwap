@@ -1,6 +1,5 @@
 let index = 0;		//전역변수
-let answer = null;	//각 객관식 문제의 정답을 저장하는 전역변수.
-function playMCQ() {
+function playMCQ(incorrect) {
     //history API기능을 위한 url변수
     const currentUrl = window.location.href;
     const newUrl = 'http://localhost:8888/ringo/game/gameMain?category=MCQ';
@@ -47,7 +46,12 @@ function playMCQ() {
 	if(currentUrl !== newUrl){
 		history.pushState({ category:'MCQ', url: newUrl }, '', `?category=MCQ`);
 	}
-	gameQuestionSave();
+	if(incorrect === 'play'){
+		$('.MCQ-result-container').remove();
+		incorrectSave();
+	}else {
+		gameQuestionSave();
+	}
 	startProgressBar("MCQ");
 	
 }
@@ -139,6 +143,15 @@ function gameQuestionSave(){
         }
     })
 }
+function incorrectSave(){
+	index = 0;      //index변수 초기화
+	answer = null;	//answer변수 초기화
+	answerList = [];	//변수 초기화
+	fileNum = -10;	//파일번호 설정
+	$('#totalNum').text(wordList.length);      //문제 갯수 총합 출력
+	
+	gameQuestionPrint();
+}
 function gameQuestionPrint(){	//gameQuestionSave함수로 저장한 단어목록을 게임형식에 맞게 문제로 변환하여 출력하는 함수
 	let word = wordList[index];
 	$('#currentNum').text(index + 1);
@@ -188,6 +201,8 @@ function chosenAnswer() {
 function checkAnswer(chosenAnswer) {		//답안을 클릭했을때 발생하는 함수
 	if(chosenAnswer === answer){
 		answerList[index] = {kotae:true, answer: chosenAnswer};
+	}else if(chosenAnswer === undefined){
+		answerList[index] = {kotae:false, answer: "Time out incorrect"};
 	}else {
 		answerList[index] = {kotae:false, answer: chosenAnswer};
 	}
@@ -257,8 +272,10 @@ function gameAnswerPrint() {
 
 	//틀린것 풀기 모달에 category 삽입
 	$('.do-retry').attr('data-game-category', 'MCQ');
+	console.log(wordList);
 
 	let score = (rightWord.length / wordList.length) * 100;
+	wordList = wrongWord;	//오답 다시 플레이용 전역변수 재설정
 	let Gcategory = "mcq";
 	let rightLength = rightWord.length;
 	let gameLength = wordList.length;

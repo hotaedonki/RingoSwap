@@ -1,6 +1,7 @@
 //게임기능에 활용하는 전역변수 목록
 let wordList = [];      //게임용 단어목록 저장을 위한 전역변수 배열
 let answerList =[];     //게임용 각 질문당 정답여부를 기록하는 전역변수 배열
+let answer = null;	//각 객관식 문제의 정답을 저장하는 전역변수.
 let printSet = 'title';   //게임용 질문의 형식을 지정하는 전역변수
 let pronShow = false;    //게임용 발음부를 보일지 여부를 지정하는 전역변수
 let wrongType = false;   //게임용 오답노트인지를 체크하는 전역변수
@@ -166,5 +167,62 @@ function gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength){
 }
 
 function tryIncorrectQuestion(){
-    
+    let category = $('.do-retry').data('game-category');
+    if(category === 'MCQ'){
+        if(wordList.length <=4){
+            alert('객관식 게임을 진행하기에는 오답의 갯수가 너무 적습니다.');
+            $('.btn-close').click();
+            returnToGameMain();
+            return;
+        }
+        playMCQ('play');
+    }else {
+        if(wordList.length < 1){
+            alert('오답이 존재하지 않습니다.');
+            $('.btn-close').click();
+            returnToGameMain();
+            return;
+        }
+        playDictation('play');
+    }
+    $('.btn-close').click();
+}
+let interval; // setInterval을 저장하는 변수
+
+function startProgressBar(game) {
+    const progressBarContainer = document.querySelector(".timeCount");
+    progressBarContainer.innerHTML = '';  // 기존 프로그레스 바 제거
+
+    // 새로운 프로그레스 바 생성 및 추가
+    const progressBarHTML = `
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+    `;
+    progressBarContainer.innerHTML = progressBarHTML;
+
+    const progressBar = progressBarContainer.querySelector(".progress-bar");
+
+    clearInterval(interval); // 현재 실행 중인 interval이 있다면 중지
+
+    const totalTime = 10 * 1000;
+    const updateInterval = 100;
+    const incrementValue = (100 / (totalTime/updateInterval));
+    let currentProgress = 0;
+
+    interval = setInterval(() => {
+        currentProgress += incrementValue;
+        if (currentProgress > 100) {
+            currentProgress = 100;
+            clearInterval(interval);
+        }
+        progressBar.setAttribute("aria-valuenow", currentProgress);
+        progressBar.style.width = `${currentProgress}%`;
+        if (currentProgress >= 100) {
+         if(game === "dictation") {
+               nextQuestionPrint(); // 강제로 다음 문제로 넘기기
+            } else {
+            checkAnswer();
+         }
+        }
+        
+    }, updateInterval);
 }

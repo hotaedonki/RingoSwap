@@ -1,6 +1,6 @@
 let count = 0;          //게임용 단어목록 순서를 저장하는 전역변수
 
-function playDictation() {
+function playDictation(incorrect) {
     //history API기능을 위한 url변수
     const currentUrl = window.location.href;
     const newUrl = 'http://localhost:8888/ringo/game/gameMain?category=dictation';
@@ -40,8 +40,13 @@ function playDictation() {
         if(currentUrl !== newUrl){
             history.pushState({ category:'dictation', url: newUrl }, '', `?category=dictation`);
         }
-
-        dictationQuestionSave();
+        
+        if(incorrect === 'play'){
+            $('.dictation-result-container').remove();
+            incorrectDictationSave();
+        }else {
+            dictationQuestionSave();
+        }
         $(document).on('click', '#button-addon2', nextQuestionPrint);
 
 		startProgressBar("dictation");
@@ -49,8 +54,8 @@ function playDictation() {
 
 function dictationResultScreen() {
     //정답갯수, 오답갯수를 변수 2개에 정의
-    let trueCount = answerList.filter(value => value === true).length;
-    let falseCount = answerList.filter(value => value === false).length;
+    let trueCount = answerList.filter(value => value.kotae === true).length;
+    let falseCount = answerList.filter(value => value.kotae === false).length;
 	let score = (trueCount / answerList.length) * 100;
 
 	const dictationResultHTML = `
@@ -119,6 +124,7 @@ function dictationQuestionSave(){
             wordList = res.wordList;
             console.log(wordList);
             count = 0;      //count변수 초기화
+			answerList = [];	//변수 초기화
 			fileNum = res.setting.file_num;	//파일번호 설정
             $('#totalNum').text(res.wordList.length);      //문제 갯수 총합 출력
         
@@ -129,6 +135,16 @@ function dictationQuestionSave(){
         }
     })
 }
+
+function incorrectDictationSave(){
+    count = 0;      //count변수 초기화
+    answerList = [];	//변수 초기화
+    fileNum = -10;	//파일번호 설정
+    $('#totalNum').text(wordList.length);      //문제 갯수 총합 출력
+
+    dictationQuestionPrint();
+}
+
 //저장한 전역변수를 순서대로 출력
 function dictationQuestionPrint(){
     let word = wordList[count];
@@ -158,10 +174,12 @@ function nextQuestionPrint(){
         correct = wordList[count].word;
     }
 
-    if(answer != correct){
-        answerList[count] = false;
-    }else{
-        answerList[count] = true;
+    if(answer === correct){
+        answerList[count] = {kotae:true, answer: answer};
+    }else if(answer === undefined){
+        answerList[count] = {kotae:true, answer : "Time out incorrect"};
+    }else {
+        answerList[count] = {kotae:false, answer: answer};
     }
     console.log(count+'번째', answerList[count]);
     $('.form-control').val('');
@@ -231,6 +249,7 @@ function dictationAnswerPrint() {
 	$('.do-retry').attr('data-game-category', 'dictation');
 
     let score = (rightWord.length / wordList.length) * 100;
+	wordList = wrongWord;	//오답 다시 플레이용 전역변수 재설정
     let Gcategory = "dictation"; // 수정: mcq에서 dictation으로 변경
     let rightLength = rightWord.length;
     let gameLength = wordList.length;
