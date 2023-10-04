@@ -81,6 +81,26 @@ function connect()
 		return false;
 	}
 	
+	// 메시지 보내는 버튼에 이벤트 연결
+    document.getElementById("msg_submit").addEventListener("click", function() 
+    {
+		const chatCommon = 
+		{
+			type: 'TALK', // 메시지 타입
+			chat_num: "", // 채팅 번호
+			user_num: myUserNum, // 사용자 번호
+			dm_chatroom_num: DMRoomNum, // 채팅방 번호
+			message: document.getElementById("msg_input").value, //emojioneAreaInstance.getText().trim(), // 메시지 내용
+			inputdate: "", // 입력 날짜
+			origin_file: "", // 원본 파일
+			saved_file: "", // 저장된 파일
+			photo_size: 0 // 사진 크기
+		};
+			
+        stompClient.send('/pub/chat/DMChat/dmMessage/' + DMRoomNum, {}, JSON.stringify(chatCommon));
+        //emojioneAreaInstance.setText('');
+    });
+	
 	// 검색 관련 이벤트 추가
     $('#searchInput').on('keyup', function() {
         searchByOtherNickname($(this).val());
@@ -108,8 +128,9 @@ function onConnected()
 {
 	// 입장, 퇴장 관련 메시지를 받는 이벤트
 	stompClient.subscribe('/sub/chat/DMChat/message/state/' + DMRoomNum, onMessageForState);
-	// 메시지를 받는 이벤트 => /sub/chat/DMChatRoom/message/채팅방번호 로 구독한다
-	stompClient.subscribe('/sub/chat/DMChat/message/' + DMRoomNum, onMessageReceived);
+	
+	// 메시지를 받는 이벤트 => /sub/chat/DMChatRoom/dmMessage/채팅방번호 로 구독한다
+	stompClient.subscribe('/sub/chat/DMChat/dmMessage/' + DMRoomNum, onMessageReceived);
 	
 	// 자신이 참가한 채팅방의 번호들을 자신의 고유번호로 가져오는 것을 요청
 	stompClient.send('/pub/chat/DMChat/loadDMChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);

@@ -373,6 +373,24 @@ public class ChatController
 		return dbChat;
 	}
 	
+	@MessageMapping(PathHandler.MM_DMCHATROOMMESSAGE)
+	@SendTo(PathHandler.ST_DMCHATROOMMESSAGE)
+	public ChatCommon dmMessage(@DestinationVariable int DMRoomNum, @Payload ChatCommon chat)
+	{
+		log.info("chat : {}", chat.toString());
+		
+		// 채팅을 보낼때 DB에 저장된 후에 다시 돌아옴.
+		ChatCommon dbChat = service.insertDMChatCommonAndGetDMChatCommon(chat);
+		log.info("dbchat : {}", dbChat);
+		if (dbChat == null)
+		{
+			log.debug("dbChat이 존재하지 않습니다!");
+			return null;
+		}
+		
+		return dbChat;
+	}
+	
 	@MessageMapping(PathHandler.MM_LOADCHATROOMNUMSBYUSERNUM)
 	@SendTo(PathHandler.ST_LOADCHATROOMNUMSBYUSERNUM)
 	public String loadChatRoomNumsByUserNum(@DestinationVariable int userNum) throws Exception
