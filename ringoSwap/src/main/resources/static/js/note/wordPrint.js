@@ -208,7 +208,6 @@ function handleAddButtonClick() {
             file_num: file_num_saver
         }).done(function(response) {
             // Toast 메시지 표시
-            alert(response);
             const toast = `
             <div class="toast toast-center show" role="alert" aria-live="assertive" aria-atomic="true">
               <div class="toast-header">

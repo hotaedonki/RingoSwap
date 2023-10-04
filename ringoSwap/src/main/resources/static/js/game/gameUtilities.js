@@ -8,7 +8,7 @@ let fileNum = 0;         //게임용 사용 단어장의 파일번호를 저장�
 
 function confirmExit() {	
 	const currentGame = getCurrentGame();
-	
+	$('#confirmModal').modal('hide');
 	console.log(currentGame);
 		if(currentGame === 'MCQ' || currentGame === 'dictation') {
 			$(`.${currentGame}-container`).remove();
@@ -19,7 +19,7 @@ function confirmExit() {
             history.pushState({ url: 'http://localhost:8888/ringo/game/gameMain' }, '', `?category=dictation`);
             console.log(history);
 		}
-    $('#confirmModal').modal('hide');
+
 }
 
 function getCurrentGame() {
@@ -197,8 +197,10 @@ function startProgressBar(game) {
         progressBar.style.width = `${currentProgress}%`;
         if (currentProgress >= 100) {
 			if(game === "dictation") {
+				console.log(game);
             	nextQuestionPrint(); // 강제로 다음 문제로 넘기기
             } else {
+				console.log(game);
 				checkAnswer();
 			}
         }

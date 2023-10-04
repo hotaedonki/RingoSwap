@@ -20,7 +20,7 @@ $(document).ready(function () {
 	//플래시카드에서 정답 출력
 	$(document).on('click', '.flashCards-question-box', clickCard);
 	//게임을 중단하고 결과보기
-	$('.confirm-exit').on('click', confirmExit);
+	$(document).on('click', '.confirm-exit', confirmExit);
 	
 	//전체선택
 	$(document).on('click', '.select-all', selectAll);
