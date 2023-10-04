@@ -80,6 +80,8 @@ public interface ChatDAO
 
 	public ArrayList<ChatroomThumbnail> getDMChatroomThumbnails(int userNum);
 
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByNickname(Map<String, Object> params);
+	
 	//현재 존재하는 모든 채팅방 갯수를 리턴하는 메서드
 	public int chatRoomSelectTotal();
 }

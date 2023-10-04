@@ -283,6 +283,12 @@ public class ChatServiceImple implements ChatService
 		return dao.getDMChatroomThumbnails(userNum);
 	}
 
+	@Override
+	public ArrayList<ChatroomThumbnail> getChatroomThumbnailsByNickname(Map<String, Object> params) 
+	{
+		return dao.getChatroomThumbnailsByNickname(params);
+	}
+
 	//네비게이터를 채팅룸에 맞게 정의하는 메서드
 	@Override
 	public PageNavigator chatRoomPageNavigator(int pagePerGroup, int countPerPage, int page) {

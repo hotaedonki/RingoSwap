@@ -436,6 +436,30 @@ public class ChatController
 		return mapper.writeValueAsString(chatroomThumbnails);
 	}
 	
+	// 내가 참가한 DM 채팅방 목록들 중에 상대방 이름과 일치한 목록을 보여줌
+	@MessageMapping(PathHandler.MM_SEARCHBYOTHERNICKNAME)
+	@SendTo(PathHandler.ST_SEARCHBYOTHERNICKNAME)
+	public String searchByOtherNickname(@DestinationVariable int userNum, String nickname) throws Exception
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		
+		if (nickname == null || nickname.trim().isEmpty()) 
+		{
+	        // 검색어가 비어 있을 경우의 처리
+	        return mapper.writeValueAsString("empty nickname");
+	    }
+		
+		Map<String, Object> params = new HashMap<>();
+		
+		params.put("userNum", userNum);
+		// 와일드 카드 검사를 위해 '%' 추가
+		params.put("nickname", "%" + nickname + "%");
+		
+		ArrayList<ChatroomThumbnail> chatroomThumbnails = service.getChatroomThumbnailsByNickname(params);
+		
+		return mapper.writeValueAsString(chatroomThumbnails);
+	}
+	
 	// DM 채팅방을 만들기 전에 일회성 토큰을 먼저 발행하여 악성 유저가 주소를 아용하여 방을 계속 만들지 못하도록 방지한다. 그리고 RequestBody를 사용하여 json이 알맞은 데이터 타입으로 변환하게끔 한다.
 	@PostMapping(PathHandler.GETCREDFORMAKEDMCHATROOM)
 	public ResponseEntity<Map<String, String>> getCredForMakeDMChatroom(@RequestBody Map<String, String> request, @AuthenticationPrincipal UserDetails user)

@@ -128,7 +128,7 @@ function handleAddButtonClick() {
       const meaning = $(this).data('mean');  // 원본 의미 데이터 참조
 	  const description = $(this).find('.description').text();
 	  currentWordNum = $(this).data('word-num');
-
+		console.log(word, pronunciation, meaning, description)
 	  console.log(currentWordNum + "수정번호 받아오기");
 	   originalWordList = $(".wordList").html();
         const wordCard = `
@@ -305,8 +305,8 @@ function handleAddButtonClick() {
 	
 	function updateWordCard(wordInfo) {
 	    $("#word-input").val(wordInfo.word);
-	    $("#meaning-input").val(wordInfo.meaning);
-	    $("#pronunciation-input").val(wordInfo.pronunciation);
+	    $("#meaning-input").val(wordInfo.mean);
+	    $("#pronunciation-input").val(wordInfo.pron);
 	    $("#description-input").val(wordInfo.description);
 	    currentWordNum = wordInfo.word_num;  // 현재 단어 번호 업데이트
 	}

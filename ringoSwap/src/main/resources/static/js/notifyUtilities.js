@@ -28,9 +28,9 @@ function notificationPrint(){
 				    `);
 				}else{
 				    $('.notification-card').append(`
-				    <li class="list-grp-item">
+				    <li class="list-group-item">
 				        <i class="bi bi-chat"></i>
-				        <span class="otherouUser showOffcanvasWithUserData" data-user-name="${notify.nickname}">${notify.nickname}</span>님이
+				        <span class="otherUser showOffcanvasWithUserData" data-user-name="${notify.nickname}">${notify.nickname}</span>님이
 				        <span class="myFeedNotify" data-feed-num="${notify.feed_num}">당신의 피드</span>에
 				        댓글을 남겼습니다.
 				        <span class="noti-date">${time_diff_str}</span>
