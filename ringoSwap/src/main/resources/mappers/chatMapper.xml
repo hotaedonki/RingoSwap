@@ -33,7 +33,7 @@
 			)
 			values
 			(
-				ringo_dm_chatroom_seq.nextval
+				ringo_chatroom_seq.nextval
 				, #{user_num1}
 				, #{user_num2}
 			)

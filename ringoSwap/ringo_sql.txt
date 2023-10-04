@@ -346,9 +346,6 @@ CREATE TABLE ringo_dm_chatroom
     , totalsize			number              default 10000000
 );
 
--- DM 채팅 전용 시퀀스
-CREATE SEQUENCE ringo_dm_chatroom_seq;
-
 CREATE TABLE ringo_chatroom_link
 (
 	user_num		number,
