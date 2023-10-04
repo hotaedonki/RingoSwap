@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import net.ringo.ringoSwap.domain.DM_Chatroom;
 import net.ringo.ringoSwap.domain.custom.ChatroomThumbnail;
 import net.ringo.ringoSwap.domain.custom.OpenChatroomInfo;
 import net.ringo.ringoSwap.enums.webService.MessageType;
+import net.ringo.ringoSwap.util.PageNavigator;
 
 /*
 	채팅 서비스 클래스 : 여기서 사용되는 findAllRoom, createRoom,findRoomById 등은 사실상 DB와 연결되는 순간 DAO로 넘어가야 합니다.
@@ -219,16 +221,19 @@ public class ChatServiceImple implements ChatService
 
 	// 오픈 채팅방 정보를 언어 필터 기준으로 가져온다.
 	@Override
-	public ArrayList<OpenChatroomInfo> searchChatroomByLang(String lang_category) 
+	public ArrayList<OpenChatroomInfo> searchChatroomByLang(PageNavigator navi, String lang_category) 
 	{
-		return dao.searchChatroomByLang(lang_category);
+		RowBounds rb = new RowBounds(navi.getStartRecord(), navi.getCountPerPage());
+		
+		return dao.searchChatroomByLang(lang_category, rb);
 	}
 
 	@Override
-	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms() 
+	public ArrayList<OpenChatroomInfo> getAllOpenchatrooms(PageNavigator navi) 
 	{
-		// TODO Auto-generated method stub
-		return dao.getAllOpenchatrooms();
+		RowBounds rb = new RowBounds(navi.getStartRecord(), navi.getCountPerPage());
+		
+		return dao.getAllOpenchatrooms(rb);
 	}
 
 	@Override
@@ -276,5 +281,15 @@ public class ChatServiceImple implements ChatService
 	public ArrayList<ChatroomThumbnail> getDMChatroomThumbnails(int userNum) 
 	{
 		return dao.getDMChatroomThumbnails(userNum);
+	}
+
+	//네비게이터를 채팅룸에 맞게 정의하는 메서드
+	@Override
+	public PageNavigator chatRoomPageNavigator(int pagePerGroup, int countPerPage, int page) {
+		int total = dao.chatRoomSelectTotal();	//현재 존재하는 모든 채팅방의 갯수를 int값으로 출력
+		
+		PageNavigator navi = new PageNavigator(pagePerGroup, countPerPage, page, total);
+		
+		return navi;
 	}
 }
