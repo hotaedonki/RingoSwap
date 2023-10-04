@@ -298,4 +298,28 @@ public class ChatServiceImple implements ChatService
 		
 		return navi;
 	}
+
+	@Override
+	public ChatCommon insertDMChatCommonAndGetDMChatCommon(ChatCommon chat) 
+	{
+		int isSuccessedSaveChat = dao.insertDMChatCommon(chat);
+        
+        if (isSuccessedSaveChat <= 0)
+        {
+        	log.debug("DB에 ChatCommon 저장 실패");
+        	return null;
+        }
+        
+        ChatCommon dbChat = dao.getChatCommonLatest();
+        
+        if (dbChat == null)
+        {
+        	log.debug("dbChat 불러오기 실패");
+        	return null;
+        }
+        
+        dbChat.setType(MessageType.TALK);
+        
+        return dbChat;
+	}
 }

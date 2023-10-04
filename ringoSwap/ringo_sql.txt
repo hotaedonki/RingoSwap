@@ -361,6 +361,7 @@ CREATE TABLE ringo_chat_common (
 	chat_num				number			primary key,
 	user_num				number,
 	chatroom_num		number,
+	dm_chatroom_num number,
 	origin_file				varchar2(100),
 	saved_file				varchar2(100),
 	photo_size			number				default 0,			--파일 객체 용량, 기본 10MB

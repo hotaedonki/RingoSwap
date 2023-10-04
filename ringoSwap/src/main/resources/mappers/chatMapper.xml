@@ -73,7 +73,27 @@
 				, #{origin_file}
 				, #{saved_file}
 			)
-
+	</insert>
+	
+	<insert id="insertDMChatCommon" parameterType="ChatCommon">
+			insert into ringo_chat_common
+			(
+				chat_num
+				, user_num
+				, dm_chatroom_num
+				, message
+				, origin_file
+				, saved_file
+			)
+			values
+			(
+				ringo_chat_common_seq.nextval
+				, #{user_num}
+				, #{dm_chatroom_num}
+				, #{message}
+				, #{origin_file}
+				, #{saved_file}
+			)
 	</insert>
 	
 	<!-- 메시지들을 DB에서 삭제함 -->
