@@ -209,6 +209,7 @@
 	</div>
 
 
+<<<<<<< HEAD
 	<!-- New Room modal -->
 	<div class="modal fade" id="modal1" data-bs-backdrop="static"
 		data-bs-keyboard="false" tabindex="-1">
@@ -262,5 +263,95 @@
 	<script th:src="@{/js/chat/openChatMain.js}"></script>
 	<script th:src="@{/js/chat/chatUtilities.js}"></script>
 
+=======
+    <!-- New Room modal -->
+    <div class="modal fade" id="modal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Chatting Room</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            <div class="modal-body">
+                <table class="create_room_box">
+                    <tr>
+                        <th>title</th>
+                        <td><input type="text" placeholder="15자 이내로 입력해주세요" id="title"></td>
+                    </tr>
+                    <tr>
+                        <th>language</th>
+                        <td>
+                            <select autofocus id="lang_category">
+                                <option selected value="ko">Korean</option>
+                                <option value="en">English</option>
+                                <option value="ja">Japanese</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>capacity</th>
+                        <td>
+                            <select autofocus id="capacity">
+                                <option value="10" checked>10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                            </select>
+                        </td>
+                    </tr>
+<!--                <tr>
+                        <th>use voice</th>
+                        <td>
+                            <label><input type="radio" name="voice_use" value="yes"> yes &nbsp;</label>
+                            <label><input type="radio" name="voice_use" value="no"> no</label>
+                        </td>
+                    </tr>-->
+                    <!-- 태그 전용 박스 주석 -->
+                    <!--
+                    <tr class="tag_box">
+                        <th>tag</th>
+                        <td>
+                            <label><input type="checkbox" name="tag" value="trip"> 여행</label>
+                            <label><input type="checkbox" name="tag" value="book"> 책</label>
+                            <label><input type="checkbox" name="tag" value="animal"> 동물</label>
+                            <label><input type="checkbox" name="tag" value="Celebrity"> 연예인</label>
+                            <br>
+                            <label><input type="checkbox" name="tag" value="study"> 공부</label>
+                            <label><input type="checkbox" name="tag" value="movie"> 영화</label>
+                            <label><input type="checkbox" name="tag" value="tvdrama"> 드라마</label>
+                            <label><input type="checkbox" name="tag" value="exercise"> 운동</label>
+                        </td>
+                    </tr>
+                    -->
+                </table>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" id="createRoom" class="btn btn-primary" onclick="createChatRoom()">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	  <script>
+	  document.addEventListener("DOMContentLoaded", function() {
+	      const toggleButton = document.querySelector('.toggle_btn');
+	      const leftSide = document.querySelector('.leftside');
+	        
+	      toggleButton.addEventListener('click', function() {
+	        if (leftSide.style.display === 'none') {
+	            leftSide.style.display = 'block';
+	        } else {
+	            leftSide.style.display = 'none';
+	        }
+	      });
+	    });
+	  </script>
+	
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/chat/chatUtilities.js}"></script>
+    <script th:src="@{/js/memberView/sidebar.js}"></script>
+>>>>>>> 098db5f87503812954a5ac409e9a2828fe9565fa
 </body>
 </html>
