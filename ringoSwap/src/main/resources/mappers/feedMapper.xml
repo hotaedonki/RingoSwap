@@ -282,5 +282,49 @@
 	    from ringo_reply
 	    where feed_num = #{feed_num}
 	</select>
+	
+	<!-- 내 피드에 달린 좋아요, 댓글알림을 최신순으로 검색하는 select문 -->
+	<select id="feedNotifySearchByUserNum" resultType="FeedNotify">
+	with FeedNotify as(
+		<!-- 좋아요 알림부 -->
+		select F.feed_num
+			, F.user_num as feed_user
+			, L.user_num as notify_user
+			, M.nickname
+			, null as reply_content
+			, 'like' as notify_type
+			, L.inputdate
+		from ringo_feed F
+		left join
+			ringo_feed_like L ON F.feed_num = L.feed_num
+		left join
+			ringo_member M ON L.user_num = M.user_num
+		where F.user_num = #{user_num}
+
+		UNION ALL
+		<!-- 댓글알림부 -->
+		select F.feed_num
+			, F.user_num as feed_user
+			, R.user_num as notify_user
+			, M.nickname
+			, R.contents as reply_content
+			, 'reply' as notify_type
+			, R.inputdate
+		from ringo_feed F
+		left join
+			ringo_reply R ON F.feed_num = R.feed_num
+		left join
+			ringo_member M ON R.user_num = M.user_num
+		where F.user_num = #{user_num}
+	)
+	select feed_num, feed_user
+		, notify_user, nickname
+		, reply_content
+		, notify_type
+		, inputdate
+	from FeedNotify
+	where notify_user is not null
+	order by inputdate desc
+	</select>
 
 </mapper>

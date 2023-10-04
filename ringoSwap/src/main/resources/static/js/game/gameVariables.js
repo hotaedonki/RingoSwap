@@ -84,6 +84,7 @@ function clickEventFunction(){
 	$(document).on('click', '.form-update', gameSettingUpdate);
 	$(document).on('click', '.questionNum-update', questionNumUpdate);
 	$(document).on('click', '#flexSwitchCheckDefault', matchUseUpdate);
+	$(document).on('click', '.do-retry', tryIncorrectQuestion);
 }
 
 function enterEventFunction(){

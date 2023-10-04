@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import net.ringo.ringoSwap.domain.Feed;
+import net.ringo.ringoSwap.domain.FeedNotify;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.Reply;
@@ -87,5 +88,8 @@ public interface FeedDAO
 	Member memberInformationByNickname(String nickname);
 	//
 	int replyCountByFeedNum(int feed_num);
+	
+	//user_num매개변수로 해당 사용자의 피드알림 목록을 검색해 리턴하는 메서드
+	ArrayList<FeedNotify> feedNotifySearchByUserNum(int user_num);
 	
 }

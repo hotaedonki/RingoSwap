@@ -220,11 +220,15 @@ function dictationAnswerPrint() {
     console.log(wrongType);
     if (wrongType) {
         console.log(rightWord);
+
         wrongDelete(rightWord);
     } else {
         console.log(JSON.stringify({ wrongWordList: wrongWord }));
         wrongInsert(wrongWord);
     }
+
+	//틀린것 풀기 모달에 category 삽입
+	$('.do-retry').attr('data-game-category', 'dictation');
 
     let score = (rightWord.length / wordList.length) * 100;
     let Gcategory = "dictation"; // 수정: mcq에서 dictation으로 변경
