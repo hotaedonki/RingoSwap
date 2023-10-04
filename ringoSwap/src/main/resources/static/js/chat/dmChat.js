@@ -172,17 +172,18 @@ function loadJoinedDMChatroomListRealTime(data)
 	
 	console.log(jsonData);
 	
-	
 	// 기존에 있는 채팅방 리스트를 삭제
 	clearChatlist();
 	
-	
 	jsonData.forEach(item => {
-		createChatroomThumbnail(item.chatroom_num, item.title, item.inputdate, item.message);
+		createDMChatroomThumbnail(item.chatroom_num, item.title, item.inputdate, item.message);
 	});
-	
-	
-	
+}
+
+function moveToDMChatroom(dmRoomId) 
+{
+    // chatroom 페이지로 이동하면서 chatroom_num을 파라미터로 전달
+    window.location.href = "/ringo/chat/dmChat?dmRoomId=" + dmRoomId;
 }
 
 function searchResultByTitleDMChat(data)
