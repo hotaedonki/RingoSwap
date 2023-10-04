@@ -253,6 +253,12 @@ function adjustChatBoxAreaWidth() {
     }
 }
 
+function showChatRoomCapacity(chatlinkCount){
+    let count = $('.participant-nickname').length;
+    $('.capasity-count').text(`
+        (${count}/10)
+    `);
+}
 
 $(document).ready(function() {
 	$(document).on('click', '.showOffcanvasWithUserData', showOffcanvasWithUserDataChat);
@@ -261,4 +267,5 @@ $(document).ready(function() {
     $(document).on('click', '.unfollow_button-chat', followDelete);
     $(document).on('click', '#toggleChatList', toggleChatList);
     $(document).on('click', '#toggleParticipants', toggleParticipants);
+    showChatRoomCapacity();
 });

@@ -35,7 +35,7 @@ function followerSearch(){
                 console.log(followerList);
                 followerList.forEach(follower => {
                     $('.followerBox').append(`
-                    <div>
+                    <div class="d-flex justify-content-between align-items-center">
                     <span class="showOffcanvasWithUserData" data-user-name="${follower.follower_name}">
                         <img src="../member/memberProfilePrint?user_id=${follower.follower_id}" style="width:25px; height:25px; border-radius:12px;" alt="Profile Picture" />
                         <span >${follower.follower_name}</span>

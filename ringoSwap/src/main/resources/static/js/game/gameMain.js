@@ -389,10 +389,14 @@ function gameLogPrint(){
                 console.log('비었다');
                 return;
             }
+
+            // 최근 7개만
+            const recentLogs = logList.slice(0, 7);
+
             // Clear the modal body first
             $('#gameLogModal .modal-body').empty();
 
-            logList.forEach(log => {
+            recentLogs.forEach(log => {
                 let point = log.point;
                 if(log.point >= 1){
                     point = '+'+log.point;
@@ -418,3 +422,4 @@ function gameLogPrint(){
         }
     })
 }
+

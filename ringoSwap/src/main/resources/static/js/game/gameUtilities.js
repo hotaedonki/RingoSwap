@@ -164,3 +164,7 @@ function gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength){
         }
     })
 }
+
+function tryIncorrectQuestion(){
+    
+}

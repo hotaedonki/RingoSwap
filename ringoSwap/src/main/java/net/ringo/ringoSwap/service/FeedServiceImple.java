@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.FeedDAO;
 import net.ringo.ringoSwap.domain.Feed;
+import net.ringo.ringoSwap.domain.FeedNotify;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.Reply;
@@ -222,5 +223,10 @@ public class FeedServiceImple implements FeedService{
 	public int replyCountByFeedNum(int feed_num) {
 		return dao.replyCountByFeedNum(feed_num);
 	}
-	
+
+	//피드알림 목록을 호출하는 메서드
+	@Override
+	public ArrayList<FeedNotify> feedNotifySearchByUserNum(int user_num){
+		return dao.feedNotifySearchByUserNum(user_num);
+	}
 }

@@ -48,6 +48,7 @@ function playMCQ() {
 		history.pushState({ category:'MCQ', url: newUrl }, '', `?category=MCQ`);
 	}
 	gameQuestionSave();
+	startProgressBar("MCQ");
 	
 }
 
@@ -195,43 +196,54 @@ function checkAnswer(chosenAnswer) {		//답안을 클릭했을때 발생하는 �
 	if(index >= wordList.length){
 		// 모든 문제를 완료한 경우 결과 화면 표시
 		alert('모든 문제를 풀었습니다.');
+		clearInterval(interval);
 		MCQResultScreen();
 	}else {
 		// 다음 문제 로드
 		gameQuestionPrint();
+		startProgressBar();
 	}
 }
-function gameAnswerPrint(){
+function gameAnswerPrint() {
     let cnt = 0;
-	let rightWord = [];			//오답노트에서 답을 맞춘 오답들을 삭제하는데 사용하는 배열 변수
-    let wrongWord = [];         //오답노트에 기재할 오답들을 기록하는 배열 변수
+    let rightWord = [];
+    let wrongWord = [];
+    
     wordList.forEach(word => {
-        $('.vertical-line').append(`
-            <div class="col-12 show-MCQ-result-word" id="answer${cnt}" style="width : 50%">
-                <i class="bi bi-pen></i>
-                <span class="MCQ-result-word">${word.word} | </span>
-                <span class="MCQ-result-pronunciation">${word.pron} | </span>
-                <span class="MCQ-result-mean">${word.mean}</span>
+        let questionHTML = `
+            <div class="col-6 mb-3">
+                <div class="question-block">
+                    <h5><i class="bi bi-pen"></i> Question ${cnt + 1}</h5>
+                    <span class="MCQ-result-word">단어 : ${word.word} | </span>
+	                <span class="MCQ-result-pronunciation"> 발음 : ${word.pron} | </span>
+	                <span class="MCQ-result-mean"> 정답 : ${word.mean}</span>
+                </div>
             </div>
-        `);
-		$(`#answer${cnt}`).append(`
-			<span class="MCQ-answer">정답 : ${answerList[cnt].answer}</span>
-		`);
-        if(answerList[cnt].kotae){
-            $(`#answer${cnt}`).append(`
-                <i class="bi bi-circle blue"></i>
-            `);
+        `;
+
+        let answerHTML = `
+            <div class="col-6 mb-3">
+                <div class="answer-block">
+                    <h5>Answer ${cnt + 1}</h5>
+                    <span>정답 : ${answerList[cnt].answer}</span>
+                    ${answerList[cnt].kotae ? '<i class="bi bi-circle blue"></i>' : '<i class="bi bi-x red"></i>'}
+                </div>
+            </div>
+        `;
+
+
+        $('.vertical-line').append(questionHTML + answerHTML);
+        
+        if (answerList[cnt].kotae) {
             rightWord.push(wordList[cnt]);
-			console.log(rightWord);
-        }else{
-            $(`#answer${cnt}`).append(`
-                <i class="bi bi-x red"></i>
-            `);
+        } else {
             wrongWord.push(wordList[cnt]);
         }
-        cnt++
+
+        cnt++;
     });
-    if(!pronShow){
+
+    if (!pronShow) {
         $('.dictation-result-pronunciation').hide();
     }
     console.log(wrongType);
@@ -243,6 +255,9 @@ function gameAnswerPrint(){
 		wrongInsert(wrongWord);
 	}
 
+	//틀린것 풀기 모달에 category 삽입
+	$('.do-retry').attr('data-game-category', 'MCQ');
+
 	let score = (rightWord.length / wordList.length) * 100;
 	let Gcategory = "mcq";
 	let rightLength = rightWord.length;
@@ -250,3 +265,4 @@ function gameAnswerPrint(){
 	console.log("정답률 : "+score);
 	gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength);
 }
+
