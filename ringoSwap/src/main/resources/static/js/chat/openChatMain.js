@@ -275,6 +275,9 @@ function printChatWithNavigation(pageNumber){
 			}
 
 			console.log('네비게이션 갯수 : '+navi.totalRecordsCount);
+			console.log('네비게이션 갯수 : '+navi.startPageGroup);
+			console.log('네비게이션 갯수 : '+navi.endPageGroup);
+			console.log('네비게이션 갯수 : '+(navi.currentPage - navi.totalPageCount));
 
 			paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(0)">&laquo;</a></li>';
 			paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(' + (navi.currentPage - 1) + ')">&lt;</a></li>';
