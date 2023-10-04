@@ -62,3 +62,7 @@ a {
 	height: 100%;
 }
 
+.followerBox, .followBox {
+	padding: 30px;
+}
+
