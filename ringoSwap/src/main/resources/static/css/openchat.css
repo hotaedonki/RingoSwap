@@ -1,232 +1,52 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Open Sans', sans-serif;
-}
-body {
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(#f0f5f4 0%, #f0f5f4 130px);
-}
-
 .container {
-  max-width: 100%;
-  height: calc(100vh);
-  display: flex;
-  margin-right: 0px;
-  margin-left: 50px;
+    margin-left: 60px;    
 }
-/* 채팅 목록 */
-.container .leftside {
-  position: relative;
-  flex: 1;
-  background: #fff;
-  border: 1px rgba(0, 0, 0, 0.06) solid;
+.d-center {
+	display: flex;
+	justify-content: center;
+	align-content: center;
 }
-.container .leftside.active {
-  width: 0;
-}
-/* 채팅창 */
-.container .rightside {
-  position: relative;
-  flex: 3;
-  background: #f8f6f6;
-}
-.container .rightside::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.06;
-}
-.container .rightside.active {
-  width: 100%;
-}
-.header {
-  position: relative;
-  width: 100%;
-  height: 70px;
-  background: #f1f3f3;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 15px;
-}
-.userimg {
-  position: relative; 
-  width: 40px;
-  height: 40px;
-  overflow: hidden;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.cover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.nav_icons {
-  display: flex;
-}
-.nav_icons li {
-  display: flex;
-  list-style: none;
-  cursor: pointer;
-  color: #51585c;
-  font-size: 1.5em;
-  margin-left: 22px;
-}
-.search_chat {
-  position: relative;
-  width: 100%;
-  height: 50px;
-  display: flex;
-  background-color: #faf2f2ec;
-  justify-content: center;
-  align-items: center;
-  padding: 0 15px;
-}
-.search_chat div {
-  width: 100%;
-}
-.search_chat div input {
-  width: 100%;
-  outline: none;
-  border: none;
-  background: #fff;
-  padding: 6px;
-  height: 38px;
-  border-radius: 30px;
-  font-size: 14px;
-  padding-left: 40px;
-}
-.search_chat div input::placeholder {
-  color: #bbb;
-}
-.search_chat div ion-icon {
-  position: absolute;
-  left: 30px;
-  top:14px;
-  font-size: 1.2em;
-}
-.chatlist {
-  position: relative;
-  height: calc(100% - 110px);
-  overflow-y: auto;
-}
-.chatlist .block {
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  cursor: pointer;
-}
-.chatlist .block.active {
-  background: #ebebeb;
-}
-.chatlist .block:hover {
-  background: #ebebeb;
-}
-.chatlist .block .imgbx {
-  position: relative;
-  min-width: 45px;
-  height: 45px;
-  overflow: hidden;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-.chatlist .block .details { 
-  position: relative;
-  width: 100%;
-}
-.chatlist .block .details .listHead {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-}
-.chatlist .block .details .listHead h4 {
-  font-size: 1em;
-  font-weight: 600;
-  color: #111;
-}
-.chatlist .block .details .listHead .time {
-  font-size: 0.75em;
-  color: #aaa;
-}
-.chatlist .block.unread .details .listHead .time {
 
+.card {
+	height: 95vh;
+	margin-top: 15px;
 }
-.message_p {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+
+i, .participant-item, .profile-pic, .user-info {
+ cursor: pointer;    
 }
-.message_p p {
-  color: #aaa;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  font-size: 0.9em;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.message_p b {
-  background: #f7402f;
-  color: #fff;
-  min-width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.75em;
-}
-.imgText {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.imgText h4 {
-  font-weight: 400;
-  line-height: 1.2em;
-  margin-left: 15px;
-}
-.imgText h4 span {
-  font-size: 0.8em;
-  color: #555;
-}
+
 /* chat box */
 .chatbox {
   position: relative;
   width: 100%;
   height: calc(100% - 140px);
-  padding: 50px;
+  padding: 20px 50px;
   overflow-y: auto;
 }
+
+.profile-pic, .participant-profile-pic {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
 .chat {
   position: relative;
   display: flex;
   width: 100%;
   margin: 5px 0;
 }
+
 .chat p {
   position: relative;
   right: 0;
   text-align: right;
-  max-width: 65%;
+  width: auto;
   padding: 12px;
-  background: #e2f4f0;
+  background-color: rgb(108, 195, 213);
+  color: white;
   border-radius: 10px;
   font-size: 0.9em;
 }
@@ -237,7 +57,7 @@ body {
   right: -12px;
   width: 20px;
   height: 20px;
-  background: linear-gradient(135deg,#e2f4f0 0%, #e2f4f0 50%, transparent 50%, transparent);
+  background: linear-gradient(135deg,#6cc3d5 0%, #6cc3d5 50%, transparent 50%, transparent);
 }
 .chat p span {
   display: block;
@@ -247,15 +67,16 @@ body {
 }
 .outcoming {
   justify-content: flex-end;
-  margin: 15px 0;
-
+  left:30px;
 }
 .incoming {
   justify-content: flex-start;
   margin-bottom: 2px;
+  right:30px;
 }
 .incoming p {
-  background: #fff;
+  background-color: rgb(120, 194, 173);
+  color: white;
   text-align: left;
 }
 .chat.incoming p::before {
@@ -265,30 +86,27 @@ body {
   left: -12px;
   width: 20px;
   height: 20px;
-  background: linear-gradient(225deg,#fff 0%, #fff 50%, transparent 50%, transparent);
+  background: linear-gradient(225deg,#78c2ad 0%, #78c2ad 50%, transparent 50%, transparent);
 }
-.chatbox {
+
+.chatbox, .chat-box {
   list-style-type: none; 
+  border-radius: 0px;
 }
-.chatbox_input {
-  position: relative;
-  width: 100%;
-  height: 60px;
-  background: #fbf8f8;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+
+.chat-list-area{
+    border-radius: 6px 0 0 6px;
+    border-right: 0;
 }
-.chatbox_input ion-icon {
-  cursor: pointer;
-  font-size: 1.8em;
-  color: #51585c;
-  margin: 7px;
+
+.chat-room-list-area, .participants-area {
+    border-radius: 0 6px 6px 0;
 }
-.chatbox_input ion-icon:nth-child(1) {
-  
+
+.participants-area {
+    border-left: 0;
 }
+
 .chatbox_input input {
   position: relative;
   width: 90%;
@@ -299,158 +117,58 @@ body {
   border-radius: 30px;
   font-size: 1em;
 }
-.btn-group {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-#dm_btn {
-  margin: 5px;
-  padding: 8px;
-  font-size: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
-#openchat_btn {
-  margin: 5px;
-  padding: 8px;
-  font-size: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
-#msg_submit {
-  font-size: 13px;
+
+.chatroom-block:hover {
+    background-color: #f2f2f2;
 }
 
-.right.header {
-    display: flex;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    min-height: 100px;
-    background: #222327;
-  }
-
-  .chatroom_list_box {
-    padding: 5%;
-    margin-top: 10px;
-    font-size: 17px;
-    position: relative;
-    width: 100%;
-  }
-  .chatroom_list_table {
-    background-color: #fdfafa;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    border-top: 1px solid #51585c;
-    border-collapse: collapse;
-  }
-  .chatroom_list_table td {
-	position: relative;
-    border-bottom: 1px solid #51585c;
-    padding: 10px;
-    text-align: center;
-    justify-content: center;
-  }
-  .chatroom_list_table .text_align_left {
-    text-align: left;
-  }
-  .chatroom_list_thead {
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    background-color: #cdf1ea;
-  }
-  .chatroom_list_thead th {
-    text-align: center;
-    border-bottom: 1px solid #51585c;
-    padding: 10px;
-  }
-  .toggle_btn {
-    position: absolute;
-    background-color: #cdf1ea;
-    left: 30px;  /* 가장 왼쪽에 위치 */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.7em;
-    border-radius: 0.3em;
-    padding: 2px;
-    cursor: pointer;
-}
-.page_box {
-    margin: 30px;
-}
-/* create new room */
-.create_room_body {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(#f0f5f4 0%, #f0f5f4 130px);
-}
-.create_room_box th{
-    text-align: left;
-    padding-right: 5px;
-}
-.create_room_box td{
-    padding: 10px;
-}
-.btn_div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.chatroom-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 5px;
 }
 
-.page_box {
-  display: flex;
-  position: relative;
-  text-align: center;
-  justify-content: center;
-}
-.pagination {
-  position: absolute;
-  justify-content: space-around;
+.chatroom-time {
+    font-size: 0.8em;
+    color: #888;
+    margin-left: auto; 
 }
 
-/* openchat 참가자 목록 */
-.container .participants_list_box {
-  position: relative; /* 상대 위치 지정 */
-  flex-direction: column;
-  text-align: flex-start;
-  background: #fff;
-  width: 12em;
-}
-.voice_participation {
-  position: absolute; /* 절대 위치 지정 */
-  bottom: 0;  /* 하단에 위치 */
-  left: 50%;  /* 가로 방향 중앙에 위치 */
-  transform: translateX(-50%);  /* 정확히 중앙에 오도록 좌표 조정 */
-  background-color: #fff;
-  padding: 20px;
-}
-#voice_request {
-  font-size: 13px;
-} 
-
-.toggle {
-  margin-top: 20px;
-  position: absolute;
-  background-color: #cdf1ea;
-  top: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.7em;
-  border-radius: 0.3em;
-  padding: 2px;
-  cursor: pointer;
+.chatroom-message {
+    font-size: 1em;
+    color: #555;
+    margin-top: 5px;
 }
 
-.chat_member {
-	font-size: 14px;
-	margin-left: 8px;
+.listHead {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.emojionearea {
+    width: calc(100% - 80px);
+    height: 38px;
+    min-height: 38px;    
+    max-height: 38px;
+    margin-left: 20px;
+}
+
+
+.input-group {
+    flex-wrap: nowrap;
+}
+
+.bi-image {
+    font-size: 28px;
+}
+
+.nickname-label {
+    font-weight: bold; 
+    color: #333; 
+    margin-right: 5px; 
+}
+.message-date {
+    font-size: 0.7em; 
+    color: #888; 
 }

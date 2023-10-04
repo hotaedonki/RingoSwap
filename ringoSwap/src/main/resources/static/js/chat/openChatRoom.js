@@ -223,8 +223,6 @@ function loadAllNicknamesForChatroom(chatroomNum) {
                 };
                 addParticipantToParticipantsList(user);
             });
-            
-            showChatRoomCapacity();
         setNicknamesForExistingMessages(userCache);
         },
         error: function(error) {
