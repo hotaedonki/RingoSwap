@@ -18,7 +18,6 @@ CREATE TABLE ringo_member (
 	original_background	varchar2(100) default '기본사진2.jpg',		--사용자 배경사진 실제 파일이름
 	saved_background	varchar2(100) default '20230909.jpg',		--사용자 배경사진 저장경로에서의 이름
 	introduction			varchar2(1500)	default '자기소개를 적어주세요',								--자기소개
-	mbti						varchar2(5)		check(mbti in('NONE', 'ISFJ', 'ISFP', 'ISTJ', 'ISTP', 'INFJ', 'INFP', 'INTJ', 'INTP', 'ESFJ', 'ESFP', 'ESTJ', 'ESTP', 'ENFJ', 'ENFP', 'ENTJ', 'ENTP')),
 	--mbti 성격 지정, 16개+지정안했을때 전용인 NONE의 17가지로 선택지를 한정함
 	--해당 계정의 유료, 무료재화 보유량에 관한 정보
 	point						number				default 0,				--포인트, 무료재화
@@ -29,10 +28,7 @@ CREATE TABLE ringo_member (
 	--일반사용자 = role_user, VIP사용자 = role_vip, 관리자=role_admin, '탈퇴한 유저는 delete_user로 변경
 	enabled					number(1)			default 1 check(enabled in(0, 1)),	--계정 사용가능 여부, 가능=1, 불가=0
 	--정보공개 여부에 관한 정보
-	ranking_open		char(1)				default 'Y',				--랭킹정보 공개여부
-	email_open			char(1)				default 'Y',				--이메일 공개여부
 	follow_open			char(1)				default 'Y',				--팔로워수 공개여부
-	gps_open				char(1)				default 'Y',				--장소(gps) 공개여부
 	trans_lang				varchar2(8)		default 'ko' check(trans_lang in ('ko', 'ja', 'en'))			--기본 번역언어 설정
 );
 --member전용 시퀸스
@@ -145,21 +141,6 @@ CREATE VIEW ringo_followee_view AS
 	from ringo_member_follow F
 	left join
 		ringo_member M ON F.followee_num = M.user_num;
-
-
---공지관련
---공지 게시글의 정보를 기록하는 테이블
-CREATE TABLE ringo_notification (
-	noti_num					number					primary key,		--공지글 번호
-	admin_num				number					references ringo_member(user_num) on delete cascade,
-	title				varchar2(100)		not null,				--제목
-	contents			varchar2(3000)		NOT NULL,		--내용
-	views				number					default 0,			--조회수
-	inputdate		date					default sysdate,		--작성일
-	modifie_date	date					default sysdate		--수정일
-);
---시퀸스
-CREATE SEQUENCE ringo_notification_seq;
 
 
 --피드 관련
@@ -327,14 +308,6 @@ CREATE TABLE ringo_chatroom (
 	--해당 방의 최대 수용 인원 수.
 );
 
-CREATE TABLE ringo_chatphoto 
-(
-	chatphoto_num		number				primary key,							-- '메시지가 사진인 경우, 해당 사진의 정보(사진 테이블)를 참조'
-	file_size				number				default 10000000,			--파일 객체 용량, 기본 10MB
-	origin_file				varchar2(100),
-	saved_file				varchar2(100)
-);
-
 -- 채팅룸 생성용 시퀀스
 CREATE SEQUENCE ringo_chatroom_seq;
 
@@ -362,50 +335,16 @@ CREATE TABLE ringo_chat_common (
 	user_num				number,
 	chatroom_num		number,
 	dm_chatroom_num number,
-	origin_file				varchar2(100),
-	saved_file				varchar2(100),
-	photo_size			number				default 0,			--파일 객체 용량, 기본 10MB
 	message				varchar2(1000)		NOT NULL,
 	inputdate				timestamp 	default sysdate,
 	constraint fk_user_num			foreign key	(user_num) references ringo_member(user_num) on delete cascade,
 	constraint fk_chatroom_num	foreign key	(chatroom_num) references ringo_chatroom(chatroom_num) on delete cascade,
-	constraint fk_chatphoto_num	foreign key	(chatphoto_num) references ringo_chatphoto(chatphoto_num) on delete cascade
+    constraint fk_dm_chatroom_num foreign key(dm_chatroom_num) REFERENCES ringo_dm_chatroom(dm_chatroom_num) on delete cascade
 );
 
 CREATE SEQUENCE ringo_chat_common_seq;
 
---라이브 방에서 사용하는 채팅 메세지 테이블. 기본적으로 이미지 업로드 기능은 제외하고 메세지와 이모티콘만 보낼 수 있습니다.
-CREATE TABLE ringo_chat_live (
-	live_chat_num	number				primary key,		--라이브채팅 메세지 기본키
-	user_num			number,						--채팅을 입력한 사용자의 계정 번호
-	live_num			number,						--채팅을 입력한 라이브 방 번호
-	message			varchar2(1000)	not null,
-	inputdate			timestamp			default sysdate
-	constraint fk_user_num		foreign key	(user_num) references ringo_member(user_num) on delete cascade,
-	constraint fk_live_num		foreign key	(live_num) references ringo_liveroom(live_num) on delete cascade
-);
-CREATE SEQUENCE ringo_chat_live_seq;
---멀티게임 채팅메세지 테이블
-CREATE TABLE ringo_chat_multi (
-	multi_chat_num		number				primary key,		--멀티게임 채팅 메세지 기본키
-	multi_num				number				not null,				--멀티게임방 번호
-	user_num				number				not null,				--메세지 작성자 계정 번호
-	message				varchar2(1000),							--메세지 내용
-	inputdate		TIMESTAMP		default sysdate,			--메세지 작성일
-	constraint fk_multi_num foreign key (multi_num) references ringo_multiroom(multi_num) on delete cascade,
-	constraint fk_user_num foreign key (user_num) references ringo_member(user_num) on delete cascade
-);
-CREATE SEQUENCE ringo_chat_multi_seq;
---음성 채팅방에서 각 회원이 음성 채팅 서비스가 허용되었는지 여부를 기록하는 테이블.
---일반 사용자는 기본 서비스 비허용 상태이지만 방장은 서비스 허용 상태로 시작하며, 방장은 다른 사용자의 서비스 권한을
---허용으로 변경할 수 있습니다. 
-CREATE TABLE ringo_voice_permission (
-	user_num			number,
-	chatroom_num	number,
-	voice_per			char(1)		default 'N' check(voice_per in ('N', 'Y')),
-	constraint fk_user_num	FOREIGN KEY (user_num) REFERENCES ringo_member(user_num) on delete cascade,
-	constraint fk_chatroom_num foreign key (chatroom_num) references ringo_chatroom(chatroom_num) on delete cascade
-);
+
 
 --노트관련
 --각 메모장 및 단어장을 분류해서 기록하는 폴더를 저장하는 테이블.
@@ -457,7 +396,7 @@ CREATE TABLE ringo_word (
 CREATE SEQUENCE ringo_word_seq;
 --오답노트용 단어 테이블
 CREATE TABLE ringo_word_wrong (
-	word_num		number			primary key,
+	word_num		number			primary key,        --ringo_word 테이블에 기록된 word_num을 그대로 받아, 중복된 오답 단어가 기록되지 않도록 합니다.
 	user_num		number			references ringo_member(user_num) on delete cascade,
 	word				varchar2(100)	not null,		--단어부, 적어야 합니다.
 	pron				    varchar2(100),					--발음부, 적지 않아도 됩니다.
