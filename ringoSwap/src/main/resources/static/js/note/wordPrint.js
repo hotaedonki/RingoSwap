@@ -308,5 +308,5 @@ function handleAddButtonClick() {
 	    $("#meaning-input").val(wordInfo.mean);
 	    $("#pronunciation-input").val(wordInfo.pron);
 	    $("#description-input").val(wordInfo.description);
-	    currentWordNum = wordInfo.word_num;  // 현재 단어 번호 업데이트
+	    currentWordNum = wordInfo.word_num;
 	}

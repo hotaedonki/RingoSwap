@@ -8,6 +8,7 @@ let url;
 let subscriptionForUpdateChatroom;
 let emojioneAreaInstance;
 let userCache = {}; 
+let myTransLang;
 
 $(document).ready(function()
 {
@@ -15,6 +16,7 @@ $(document).ready(function()
 	connect();
 	$(document).on('click', '#return-to-chat-main', returnToChatMain);
     $(document).on('click', '#out-chat-room', outChatRoom);
+    $(document).on('click', '.translate', chatTranslate);
     
 	const emojiArea = $("#msg_input").emojioneArea({
 		pickerPosition: "top",
@@ -213,18 +215,20 @@ function setNicknamesForExistingMessages(userCache) {
 }
 
 function loadAllBasicDetailsForChatroom(chatroomNum) {
-	console.log(chatroomNum);
     $.ajax({
         url: 'allUserBasicDetails',
         type: 'post',
         data: { chatroom_num: chatroomNum },
         success: function(data) {
-			console.log(data);
             data.forEach(user => {
                 userCache[user.USER_NUM] = {
                     nickname: user.NICKNAME,
-                    user_id: user.USER_ID
+                    user_id: user.USER_ID,
+                    trans_lang: user.TRANS_LANG
                 };
+                if(myUserNum == user.USER_NUM){
+					myTransLang = user.TRANS_LANG;
+				}
                 addParticipantToParticipantsList(user);
             });
         },
@@ -234,6 +238,7 @@ function loadAllBasicDetailsForChatroom(chatroomNum) {
     });
 }
 
+
 function loadAllNicknamesForChatroom(chatroomNum) {
 	console.log(chatroomNum);
     $.ajax({
@@ -241,13 +246,18 @@ function loadAllNicknamesForChatroom(chatroomNum) {
         type: 'post',
         data: { chatroom_num: chatroomNum },
         success: function(data) {
-			console.log(data);
             data.forEach(user => {
                 userCache[user.USER_NUM] = {
                     nickname: user.NICKNAME,
                     user_id: user.USER_ID,
-			        inputdate: user.FORMATTED_INPUTDATE
+			        inputdate: user.FORMATTED_INPUTDATE,
+			        trans_lang: user.TRANS_LANG
                 };
+                console.log(userCache);
+                if(myUserNum == user.USER_NUM){
+					myTransLang = user.TRANS_LANG;
+				}
+				console.log(myTransLang);
                 addParticipantToParticipantsList(user);
             });
         setNicknamesForExistingMessages(userCache);
@@ -257,6 +267,7 @@ function loadAllNicknamesForChatroom(chatroomNum) {
         }
     });
 }
+
 function addParticipantToParticipantsList(user) {
     const userNum = user.USER_NUM;
     if (!$(`.participant-item[data-user-num='${userNum}']`).length) {
@@ -343,13 +354,14 @@ function createChatMsgBox(userNum, message, nickname = '', inputdate = '') {
                                                .append($('<span></span>').addClass('message-date').text(inputdate));
     let $profilePicElement = $('<img>').attr('src', profileImageUrl).addClass('profile-pic col-3 me-0 ms-2 pe-0 ps-0 showOffcanvasWithUserData').attr('data-user-name', nickname);
     let $pElementRow = $('<div></div>').addClass('col-9 row');
-    let $pElement = $('<p></p>').addClass('col-12 message-area').text(message);
-
+    let $pElement = $('<p></p>').addClass('col-8 message-area').text(message);
+	let translateBtn = $(`<i class="col-4 bi bi-translate translate"></i>`);
     if (userNum == myUserNum) {
         $liElement.addClass('chat outcoming').append($pElement);
     } else {
         $pElementRow.append($nicknameDateElement)
-                    .append($pElement);
+                    .append($pElement)
+                    .append(translateBtn);
         $contentDiv.append($profilePicElement)
                    .append($pElementRow);
         $liElement.addClass('chat incoming').append($contentDiv);
@@ -505,3 +517,25 @@ function checkAndDeleteEmptyChatroom(chatroomNum) {
 		}
 	})
 }
+
+function chatTranslate() {
+	let text = $(this).closest(".chat-message").find(".message-area");
+	let part = text.text();
+	
+	console.log(part);
+	let targetLang = myTransLang;
+    $.ajax({
+        url: '/ringo/translate/feed',
+        type: 'post',
+        data: { text: part, targetLang: targetLang },
+        dataType: 'text',
+        success: function(translateText) {
+			console.log(translateText);
+            text.text(translateText);
+        },
+        error: function(e) {
+            console.log(e);
+        }
+    });
+}
+
