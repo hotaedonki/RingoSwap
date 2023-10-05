@@ -159,6 +159,10 @@ function feedDetail() {
 			
 		    let likeButtonClass = detail.likeCheck === 1 ? "bi-heart-fill" : "bi-heart";    
 			let styledContent = hashtagHighlightAndClick(detail.feed.contents);
+			
+			let current_date = new Date();
+			let comment_date = new Date(detail.feed.inputdate);
+			let time_diff_str = timeDifference(current_date, comment_date);
              
             $('#feedDetail').append(`
                     <div class="card feed-card" data-feed-num="${detail.feed.feed_num}">
@@ -168,6 +172,7 @@ function feedDetail() {
                         <button id="backToFeed" class="btn btn-link" class="btn btn-link position-absolute top-0 end-0 mt-3 me-8">
                             <i class="bi bi-arrow-return-left returnFeedMain"></i>
                         </button>
+                        <span class="feed-detail-time">${time_diff_str}</span>
                         <button type="button" class="btn btn-outline-danger btn-sm feed-delete-button position-absolute top-0 end-0 mt-3 me-3" data-feed-num="${detail.feed.feed_num}">삭제</button>
                     </div>
                     <div class="card-body">

@@ -314,3 +314,9 @@ main {
 	top: 40px;
 	font-size: 12px;
 }
+
+.feed-detail-time {
+	position: absolute;
+	right: 70px;
+	font-size: 17px;
+}

@@ -402,17 +402,28 @@ function gameLogPrint(){
                     point = '+'+log.point;
                 }
                 $('#gameLogModal .modal-body').append(`
-                <div class="game-log">
-                    <div>
-                        <span class="file-title" data-file-num="${log.file_num}">사용 단어장 : ${log.file_title}</span>
-                        <span class="game-category">게임분류 : ${log.game_category}</span>
-                        <span class="language-category">사용언어 : ${log.lang_category}</span>
-                    </div>
-                    <div>
-                        <span class="score-print" data-game-score="${log.score}">점수 : ${log.score}</span>
-                        <span class="date-print">플레이 시각 : ${log.inputdate}</span>
-                    </div>
-                </div>
+                <div class="game-log p-3 border rounded">
+				    <div class="row mb-2">
+				        <div class="col-md-4">
+				            <span class="file-title" data-file-num="${log.file_num}"><strong>사용 단어장:</strong> ${log.file_title}</span>
+				        </div>
+				        <div class="col-md-4">
+				            <span class="game-category"><strong>게임분류:</strong> ${log.game_category}</span>
+				        </div>
+				        <div class="col-md-4">
+				            <span class="language-category"><strong>사용언어:</strong> ${log.lang_category}</span>
+				        </div>
+				    </div>
+				    <div class="row">
+				        <div class="col-md-6">
+				            <span class="score-print" data-game-score="${log.score}"><strong>점수:</strong> ${log.score}</span>
+				        </div>
+				        <div class="col-md-6">
+				            <span class="date-print"><strong>플레이 시각:</strong> ${log.inputdate}</span>
+				        </div>
+				    </div>
+				</div>
+
                 <br>
                 `);
             });

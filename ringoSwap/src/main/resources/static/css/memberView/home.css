@@ -20,6 +20,8 @@ section {
       display: flex;   
 	  justify-content: center;    
 	  padding: 10px 20px;
+	  background-color: rgba(120, 193, 172, 0.75);  
+	  color: white; 
 }
 
 
