@@ -119,6 +119,7 @@ function handleAddButtonClick() {
        // navigationButtons 제거
        $(".carousel-control-prev").remove();
        $(".carousel-control-next").remove();
+       loadPage(1);
    }
    
    //단어 수정

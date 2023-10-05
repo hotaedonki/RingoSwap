@@ -28,6 +28,7 @@ function createChatroomThumbnail(chatroom_num, title, inputdate, message) {
     // blockDiv 클릭 이벤트 리스너 추가
     $blockDiv.on('click', function() {
         moveToChatroom(chatroom_num);
+
     });
     
 }

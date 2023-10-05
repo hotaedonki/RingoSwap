@@ -309,6 +309,10 @@ public class MemberServiceImple implements MemberService
 	public List<Map<String, Object>> getDMUserMessagesByDMChatroomNum(int dm_chatroom_num) {
 		return dao.getDMUserMessagesByDMChatroomNum(dm_chatroom_num);
 	}
+	@Override
+	public ArrayList<Integer> getAllFollowers() {
+		return dao.getAllFollowers();
+	}
 
 
 }

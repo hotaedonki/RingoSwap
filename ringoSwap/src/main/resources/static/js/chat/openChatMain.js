@@ -1,7 +1,6 @@
 let stompClient;
 let userNum;
 let subscriptionForUpdateChatroom;	// 방 정보 업데이트 이벤트를 구독할 때 구독 정보를 저장하는 객체
-
 $(document).ready(function()
 {	
 	init();
@@ -100,16 +99,10 @@ function createChatRoom()
 		url: 'createOpenChatroom',
 		type: 'post',
 		data: { title: title, lang_category: lang_category, capacity: capacity },
-		success: function(isSuccess) 
+		success: function(new_room_num) 
 		{
-			if (!isSuccess)
-			{
-				alert("새 채팅방 생성 실패");
-				return;
-			} else {
-				$('#modal1').modal('hide');
-				location.reload();
-			}
+			$('#modal1').modal('hide');
+			window.location.href = `../chat/openChatRoomEnter?chatroom_num=` + new_room_num;
 		},
 		error: function(e) 
 		{
@@ -120,7 +113,7 @@ function createChatRoom()
 
 
 function loadJoinedChatroomListRealTime(data)
-{
+{	console.log(data);
 	// 검색중에는 새로운 이벤트가 들어와 내가 참여한 채팅방 리스트를 새로고침하는 것을 막는다.
 	if (document.getElementById('searchInput').value.length > 0)
 	{
@@ -227,9 +220,7 @@ function printChatWithNavigation(pageNumber){
 		dataType:'json',
 		success:function(res){
 			$('.chat-main-printer').html('');
-			
             let chatroomList = res.openChatrooms;
-
 			chatroomList.forEach(room =>{
 				$('.chat-main-printer').append(`
 				<tr>
@@ -251,7 +242,6 @@ function printChatWithNavigation(pageNumber){
             // Pagination 처리 부분
             let paginationHtml = '';
             let navi = res.navi; 
-			
 			
 			//채팅방 규격에 맞도록 navi 규격 조정(14 -> 7)
 			if(navi.currentPage < 4 && navi.totalRecordsCount > 35){
