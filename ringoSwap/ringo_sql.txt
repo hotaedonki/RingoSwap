@@ -127,6 +127,7 @@ CREATE TABLE ringo_member_follow(
 CREATE VIEW ringo_follower_view AS
 	select F.follower_num, F.followee_num
         , F.friend_check
+        , M.user_id as follower_id
 		, M.nickname as follower_name
 		, M.original_profile, M.saved_profile
 	from ringo_member_follow F
@@ -136,6 +137,7 @@ CREATE VIEW ringo_follower_view AS
 CREATE VIEW ringo_followee_view AS
 	select F.follower_num, F.followee_num
         , F.friend_check
+        , M.user_id as followee_id
 		, M.nickname as followee_name
 		, M.original_profile, M.saved_profile
 	from ringo_member_follow F
@@ -335,6 +337,8 @@ CREATE TABLE ringo_chat_common (
 	user_num				number,
 	chatroom_num		number,
 	dm_chatroom_num number,
+	origin_file				varchar2(100),
+	saved_file				varchar2(100),
 	message				varchar2(1000)		NOT NULL,
 	inputdate				timestamp 	default sysdate,
 	constraint fk_user_num			foreign key	(user_num) references ringo_member(user_num) on delete cascade,

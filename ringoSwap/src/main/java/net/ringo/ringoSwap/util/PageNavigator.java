@@ -57,9 +57,8 @@ public class PageNavigator {
 		int naviCount = currentPage - totalPageCount;
 		if(naviCount <= -3 && currentPage > 3) {
 			startPageGroup = (currentPage - 2);
-		}else if(currentPage -totalPageCount >= -2 && currentPage > 4) {
+		}else if(currentPage -totalPageCount >= -2) {
 			startPageGroup = (totalPageCount - 4);
-		}else {
 			//현재 그룹의 첫 페이지가 1보다 작으면 1로 처리
 			startPageGroup = startPageGroup < 1 ? 1 : startPageGroup;
 		}
