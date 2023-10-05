@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.ringo.ringoSwap.dao.MemberDAO;
+import net.ringo.ringoSwap.dao.NoteDAO;
 import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.MemberFollow;
 
@@ -22,6 +23,8 @@ public class MemberServiceImple implements MemberService
 {
 	@Autowired
 	private MemberDAO dao;
+	@Autowired
+	private NoteDAO daoNote;
 	//비밀번호 변수인 password를 암호화하는 메서드를 호출하는 Autowired입니다.
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -36,6 +39,7 @@ public class MemberServiceImple implements MemberService
 		dao.insertMember(m);
 		int user_num = m.getUser_num();
 		log.debug("생성 번호 {}", user_num);
+		int methodResult = dao.directoryDefaultCreate(user_num);
 		return dao.memberGameSettingInsert(user_num);
 	}
 	/*

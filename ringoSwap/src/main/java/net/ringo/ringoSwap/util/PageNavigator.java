@@ -25,7 +25,7 @@ public class PageNavigator {
 		//그룹당 페이지 수, 페이지당 글 수, 현재 페이지, 전체 글 수를 전달받음
 		this.countPerPage = countPerPage;
 		this.pagePerGroup = pagePerGroup;
-		this.totalRecordsCount = totalRecordsCount;
+		this.totalRecordsCount = totalRecordsCount  < 1 ? 1 : totalRecordsCount;
 		
 		//전체 페이지 수
 		totalPageCount = (totalRecordsCount + countPerPage - 1) / countPerPage;
@@ -34,16 +34,15 @@ public class PageNavigator {
 		if (currentPage < 1)	currentPage = 1;
 		//전달된 현재 페이지가 마지막 페이지보다 크면 현재페이지를 마지막 페이지로 지정
 		if (currentPage > totalPageCount)	currentPage = totalPageCount;
-		
+
+		//현재 페이지가 1보다 작으면 1로 처리
+		currentPage = currentPage < 1 ? 1 : currentPage;
 		this.currentPage = currentPage;
 
 		//현재 그룹
 		currentGroup = (currentPage - 1) / pagePerGroup;
-		
 		//현재 그룹의 첫 페이지
 		startPageGroup = currentGroup * pagePerGroup + 1;
-		//현재 그룹의 첫 페이지가 1보다 작으면 1로 처리
-		startPageGroup = startPageGroup < 1 ? 1 : startPageGroup;
 		//현재 그룹의 마지막 페이지
 		endPageGroup = startPageGroup + pagePerGroup - 1;
 		//현재 그룹의 마지막 페이지가 전체 페이지 수보다 작으면 전체페이지 수를 마지막으로.
@@ -58,8 +57,11 @@ public class PageNavigator {
 		int naviCount = currentPage - totalPageCount;
 		if(naviCount <= -3 && currentPage > 3) {
 			startPageGroup = (currentPage - 2);
-		}else if(currentPage -totalPageCount >= -2) {
+		}else if(currentPage -totalPageCount >= -2 && currentPage > 4) {
 			startPageGroup = (totalPageCount - 4);
+		}else {
+			//현재 그룹의 첫 페이지가 1보다 작으면 1로 처리
+			startPageGroup = startPageGroup < 1 ? 1 : startPageGroup;
 		}
 		
 		//페이지 수가 5 이하인 경우

@@ -10,6 +10,7 @@ $(document).ready(function()
     if (urlParams.get('refresh') === '1') {
         window.location.href = '../chat/openChatMain';
     }
+    printChatWithNavigation(1);
 });
 
 window.addEventListener('beforeunload', function(event) 
@@ -218,6 +219,7 @@ function searchResultByTitle(data)
 
 function printChatWithNavigation(pageNumber){
 	let lang = $('.langCategory').val();
+	console.log(`언어${lang}`);
 	$.ajax({
 		url:"chatMainPrint",
 		type:"get",
@@ -265,8 +267,9 @@ function printChatWithNavigation(pageNumber){
 			}
 
 			console.log('네비게이션 갯수 : '+navi.totalRecordsCount);
-			console.log('네비게이션 갯수 : '+navi.startPageGroup);
-			console.log('네비게이션 갯수 : '+navi.endPageGroup);
+			console.log('네비게이션 start : '+navi.startPageGroup);
+			console.log('네비게이션 갯수 : '+navi.currentPage);
+			console.log('네비게이션 end : '+navi.endPageGroup);
 			console.log('네비게이션 갯수 : '+(navi.currentPage - navi.totalPageCount));
 
 			paginationHtml += '<li class="page-item"><a class="page-link" href="#" onclick="printChatWithNavigation(0)">&laquo;</a></li>';

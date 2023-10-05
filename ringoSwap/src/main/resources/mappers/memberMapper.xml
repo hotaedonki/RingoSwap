@@ -8,17 +8,17 @@
 		insert into ringo_member
 			(user_num, user_id, password, nickname
 			, first_name, last_name, gender, birth_date
-			, email, native_lang, target_lang, introduction)
+			, email, native_lang, target_lang
+			<if test="introduction != null">
+			, introduction
+			</if>)
 		values
 			(ringo_member_seq.nextval, #{user_id}, #{password}
 			, #{nickname}, #{first_name}, #{last_name}, #{gender}
 			, #{birth_date}, #{email}, #{native_lang}, #{target_lang}
-			,
 			<!-- 자기소개 값을 입력하지 않은 경우 빈칸으로 대체 --> 
-			<choose>
-            <when test="introduction == null">null</when>
-            <otherwise>#{introduction}</otherwise>
-          </choose>)
+            <if test="introduction != null">, #{introduction}</if>
+            )
           <selectKey resultType="int" keyProperty="user_num" order="AFTER">
           select ringo_member_seq.currval from dual
           </selectKey>
@@ -305,6 +305,10 @@
 	<insert id="memberGameSettingInsert">
 	 insert  into ringo_game_setting(user_num) 
 	 values(#{user_num})
+	</insert>
+	<insert id="directoryDefaultCreate">
+		insert into ringo_directory (dir_num, user_num, dir_name)
+		values(ringo_directory_seq.nextval, #{user_num}, 'DefaultFolder')
 	</insert>
 	
 </mapper>
