@@ -283,36 +283,27 @@
 	</select>
 	
 	<select id="getDMChatroomThumbnails" parameterType="int" resultType="net.ringo.ringoSwap.domain.custom.ChatroomThumbnail">
-    WITH CTE_LatestMessage AS (
-        SELECT 
-            chatroom_num,
-            MAX(inputdate) AS latest_date
-        FROM 
-            ringo_chat_common
-        GROUP BY 
-            chatroom_num
+    WITH LatestMessages AS (
+        SELECT dm_chatroom_num, message, inputdate
+        FROM (
+            SELECT dm_chatroom_num, message, inputdate, ROW_NUMBER() OVER(PARTITION BY dm_chatroom_num ORDER BY inputdate DESC) AS rn
+            FROM ringo_chat_common
+        ) tmp
+        WHERE tmp.rn = 1
     )
-    
-    SELECT 
-        dm.dm_chatroom_num AS chatroom_num,
+    SELECT
+        d.dm_chatroom_num AS chatroom_num,
         CASE
-            WHEN dm.user_num1 = #{user_num} THEN m2.nickname
+            WHEN d.user_num1 = #{user_num} THEN m2.nickname
             ELSE m1.nickname
         END AS title,
-        COALESCE(TO_CHAR(cc.inputdate, 'YYYY-MM-DD HH24:MI:SS'), TO_CHAR(dm.modifie_date, 'YYYY-MM-DD HH24:MI:SS')) AS inputdate,
-        COALESCE(cc.message, '대화를 시작하세요') AS message
-    FROM 
-        ringo_dm_chatroom dm
-    LEFT JOIN 
-        ringo_member m1 ON dm.user_num1 = m1.user_num
-    LEFT JOIN 
-        ringo_member m2 ON dm.user_num2 = m2.user_num
-    LEFT JOIN 
-        CTE_LatestMessage lm ON dm.dm_chatroom_num = lm.chatroom_num
-    LEFT JOIN 
-        ringo_chat_common cc ON lm.chatroom_num = cc.chatroom_num AND lm.latest_date = cc.inputdate
-    WHERE 
-        dm.user_num1 = #{user_num} OR dm.user_num2 = #{user_num}
+        COALESCE(l.message, '대화를 시작하세요') AS message,
+        COALESCE(TO_CHAR(l.inputdate, 'YYYY-MM-DD HH24:MI:SS'), TO_CHAR(d.modifie_date, 'YYYY-MM-DD HH24:MI:SS')) AS inputdate
+    FROM ringo_dm_chatroom d
+    LEFT JOIN ringo_member m1 ON d.user_num1 = m1.user_num
+    LEFT JOIN ringo_member m2 ON d.user_num2 = m2.user_num
+    LEFT JOIN LatestMessages l ON d.dm_chatroom_num = l.dm_chatroom_num
+    WHERE d.user_num1 = #{user_num} OR d.user_num2 = #{user_num}
 	</select>
 	
 	<!-- 내가 참여한 채팅방을 제목 기준으로 검색하여 결과를 가져옴 -->
