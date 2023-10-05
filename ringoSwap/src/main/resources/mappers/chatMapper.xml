@@ -504,9 +504,10 @@
 		values (#{chatroomNum}, #{otherUserNum})
 	</insert>
 	<select id="getChatroomOpacity" resultType="int">
-        SELECT capacity
+        SELECT chatroom_num
         FROM ringo_chatroom
-        WHERE chatroom_num = #{chatroom_num}
+        WHERE capacity = 2
+        	and user_num = #{user_num}
     </select>
 	
 </mapper>

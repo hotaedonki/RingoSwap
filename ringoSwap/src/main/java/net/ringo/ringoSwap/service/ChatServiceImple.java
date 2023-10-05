@@ -332,8 +332,8 @@ public class ChatServiceImple implements ChatService
 	}
 
 	@Override
-	public int getChatroomOpacity(int chatroom_num) {
-		return dao.getChatroomOpacity(chatroom_num);
+	public ArrayList<Integer> getChatroomOpacity(int user_num) {
+		return dao.getChatroomOpacity(user_num);
 	}
 
 

@@ -12,6 +12,7 @@ import net.ringo.ringoSwap.domain.FeedNotify;
 import net.ringo.ringoSwap.domain.FeedPhoto;
 import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.Reply;
+import net.ringo.ringoSwap.util.PageNavigator;
 
 public interface FeedService {
 

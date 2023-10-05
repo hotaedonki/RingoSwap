@@ -57,6 +57,7 @@ public class NoteController
    @ResponseBody
    @PostMapping("dirPrint")
    public ArrayList<Directory> dirPrint(@AuthenticationPrincipal UserDetails user) {
+	      log.debug("폴더 출력, 유저 넘버 : {}", user);
       int user_num = memberService.memberSearchByIdReturnUserNum(user.getUsername());
       log.debug("폴더 출력, 유저 넘버 : {}", user_num);
       ArrayList<Directory> dirList = service.userDirectorySelectAll(user_num);

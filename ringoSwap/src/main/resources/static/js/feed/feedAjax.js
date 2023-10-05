@@ -347,8 +347,8 @@ function followerSearch(){
         data: {nickname : nickname},
         dataType:'json',
         success:function(followerList){
+            $('.followerBox').html('');
             if(followerList){
-                $('.followerBox').html('');
                 followerList.forEach(follower => {
                     $('.followerBox').append(`
                     <div>

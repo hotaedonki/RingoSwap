@@ -231,7 +231,6 @@ function printChatWithNavigation(pageNumber){
             let chatroomList = res.openChatrooms;
 
 			chatroomList.forEach(room =>{
-			if(room.currentHeadCount != room.capacity) {
 				$('.chat-main-printer').append(`
 				<tr>
 					<td><input type="hidden" id="${room.chatroom_num}"
@@ -248,7 +247,6 @@ function printChatWithNavigation(pageNumber){
 					</td>
 				</tr>
 				`);
-				}
 			})
             // Pagination 처리 부분
             let paginationHtml = '';

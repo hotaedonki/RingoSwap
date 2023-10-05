@@ -54,19 +54,20 @@ public class PageNavigator {
 		
         	
 		//현재 페이지를 기준으로 주변 페이지 출력
-		int naviCount = currentPage - totalPageCount;
-		if(naviCount <= -3 && currentPage > 3) {
-			startPageGroup = (currentPage - 2);
-		}else if(currentPage -totalPageCount >= -2) {
-			startPageGroup = (totalPageCount - 4);
-			//현재 그룹의 첫 페이지가 1보다 작으면 1로 처리
-			startPageGroup = startPageGroup < 1 ? 1 : startPageGroup;
-		}
-		
-		//페이지 수가 5 이하인 경우
-		if(currentPage < 4 && totalRecordsCount > 70) endPageGroup = 5;
-		else if(naviCount >= -3 && naviCount <= -2) endPageGroup = (currentPage + 2);
-		else if(totalRecordsCount % 14 == 0) endPageGroup = totalRecordsCount / 14;
+        int naviCount = currentPage - totalPageCount;
+        if(naviCount <= -3 && currentPage > 3) {
+            startPageGroup = (currentPage - 2);
+        }else if(currentPage -totalPageCount >= -2 && currentPage > 4) {
+            startPageGroup = (totalPageCount - 4);
+        }else {
+            //현재 그룹의 첫 페이지가 1보다 작으면 1로 처리
+            startPageGroup = startPageGroup < 1 ? 1 : startPageGroup;
+        }
+
+        //페이지 수가 5 이하인 경우
+        if(currentPage < 4 && totalRecordsCount > 70) endPageGroup = 5;
+        else if(currentPage > 3  && naviCount <= -2) endPageGroup = (startPageGroup + 4);
+        else if(totalRecordsCount % 14 == 0) endPageGroup = totalRecordsCount / 14;
         else endPageGroup = totalRecordsCount / 14 + 1;
 		
 	}

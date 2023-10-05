@@ -93,5 +93,4 @@ public interface FeedDAO
 	
 	//user_num매개변수로 해당 사용자의 피드알림 목록을 검색해 리턴하는 메서드
 	ArrayList<FeedNotify> feedNotifySearchByUserNum(int user_num);
-	
 }

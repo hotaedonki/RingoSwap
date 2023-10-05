@@ -47,6 +47,7 @@ import net.ringo.ringoSwap.domain.Tagstorage;
 import net.ringo.ringoSwap.service.FeedService;
 import net.ringo.ringoSwap.service.MemberService;
 import net.ringo.ringoSwap.util.FileService;
+import net.ringo.ringoSwap.util.PageNavigator;
 
 @Slf4j
 @Controller
@@ -61,6 +62,12 @@ public class FeedController {
 	// Value : properties파일에 있는 걸 가져오기
 	@Value("${spring.servlet.multipart.location}")
 	String uploadPath;
+	//피드 목록의 페이지당 글 수
+	@Value("${user.feed.page}")
+	int countPerPage;
+	//피드 목록의 페이지 이동 링크 수
+	@Value("${user.board.pageGroup}")
+	int pagePerGroup;
 
 	// 피드서비스의 메인페이지로 이동하는 컨트롤러 메서드
 	/*
@@ -378,7 +385,7 @@ public class FeedController {
 		ArrayList<Integer> followerList = memberService.memberByNicknameReturnUserNum(nickname); 
 		log.debug("리스트 {}",followerList);
 		if(followerList.isEmpty()) {		//followerList변수가 비어있음 = 검색된 팔로워가 없는 것이므로 이후 검색 메서드 구동은 스킵한다.
-			ArrayList<MemberFollow> none = null;
+			ArrayList<MemberFollow> none = new ArrayList<>();
 			return none;
 		}
 		
@@ -400,7 +407,7 @@ public class FeedController {
 		HashMap<String, Object> map = new HashMap<>();		//followerArraySearch메서드용 해쉬맵 변수
 		ArrayList<Integer> followeeList = memberService.memberByNicknameReturnUserNum(nickname); 
 		if(followeeList.isEmpty()) {		//followeeList변수가 비어있음 = 검색된 팔로우 회원이 없는 것이므로 이후 검색 메서드 구동은 스킵한다.
-			ArrayList<MemberFollow> none = null;
+			ArrayList<MemberFollow> none = new ArrayList<>();
 			return none;
 		}
 		map.put("follower_num", user_num);

@@ -95,6 +95,6 @@ public interface ChatDAO
 
 	public int insertOtherPerson(Map<String, Object> params);
 
-	public int getChatroomOpacity(int chatroom_num);
+	public ArrayList<Integer> getChatroomOpacity(int user_num);
 
 }

@@ -19,6 +19,7 @@ import net.ringo.ringoSwap.domain.Member;
 import net.ringo.ringoSwap.domain.Reply;
 import net.ringo.ringoSwap.domain.Tagstorage;
 import net.ringo.ringoSwap.util.JsonRead;
+import net.ringo.ringoSwap.util.PageNavigator;
 @Slf4j
 @Service
 public class FeedServiceImple implements FeedService{
@@ -237,4 +238,5 @@ public class FeedServiceImple implements FeedService{
 	public ArrayList<FeedNotify> feedNotifySearchByUserNum(int user_num){
 		return dao.feedNotifySearchByUserNum(user_num);
 	}
+	
 }

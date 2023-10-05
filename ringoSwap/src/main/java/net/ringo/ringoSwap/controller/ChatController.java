@@ -242,11 +242,14 @@ public class ChatController
 		log.debug("create open chat room . . .");
 		chatRoom.setHost_num(mService.memberSearchByIdReturnUserNum(user.getUsername()));
 		
-		log.debug(chatRoom.toString());
+		log.debug("구분구분 "+chatRoom.toString());
 		
-		int isSuccessCreateRoom = service.createOpenChatroom(chatRoom);
 		int otherUserNum = mService.getUserIdByNickname(chatRoom.getTitle());
-		
+		String name = chatRoom.getTitle();
+		name += "(1:1)";
+		chatRoom.setTitle(name);
+		int isSuccessCreateRoom = service.createOpenChatroom(chatRoom);
+		log.debug("DM 테스터 : {} ", isSuccessCreateRoom);
 		Map<String, Object> params = new HashMap<>();
 		params.put("otherUserNum", otherUserNum);
 		params.put("chatroomNum", isSuccessCreateRoom);
@@ -830,9 +833,12 @@ public class ChatController
 	
 	@ResponseBody
 	@PostMapping("checkOpacity")
-	public boolean checkOpacity(int chatroom_num) {
-		int opacity = service.getChatroomOpacity(chatroom_num);
-		log.debug("opacity:{}", opacity);
-	    return opacity == 2;
+	public ArrayList<Integer> checkOpacity(int chatroom_num, @AuthenticationPrincipal UserDetails user) {
+		Map<String, Integer> map = new HashMap<>();
+		int user_num = mService.memberSearchByIdReturnUserNum(user.getUsername());
+		
+		ArrayList<Integer> chatroomNum = service.getChatroomOpacity(user_num);
+		log.debug("chatroomNum:{}", chatroomNum);
+	    return chatroomNum;
 	}
 }

@@ -11,6 +11,7 @@ function initializeEventHandlers() {
 
     initializeEmojiArea();
     initializeDocumentClickHandlers();
+    initializeEnterEventHandler();
     initializeWindowEventHandlers();
 }
 
@@ -47,6 +48,21 @@ function initializeDocumentClickHandlers() {
     $(document).on('show.bs.modal', '.followModalClass', followeeSearch);
     $(document).on('show.bs.modal', '.followerModalClass', followerSearch);
     $(document).on('click', '#message_button', sendDM);
+}
+
+function initializeEnterEventHandler(){
+    $(document).on('keyup', '.searchFollower', function(event){
+		if(event.which == 13){
+			followerSearch();
+		}
+
+	});
+	$(document).on('keyup', '.searchFollow', function(event){
+		if(event.which == 13){
+			followeeSearch();
+		}
+
+	});
 }
 
 function initializeWindowEventHandlers() {
