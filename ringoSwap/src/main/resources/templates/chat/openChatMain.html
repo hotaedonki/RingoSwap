@@ -114,7 +114,6 @@
 				<div class="card border-primary mb-3 chat-room-list-area">
 					<!-- side navbar -->
 					<div class="card-header">
-						<input type="hidden" class="langCategory" th:val="${langCategory}">
 						<div
 							class="header d-flex justify-content-center align-items-center">
 							<nav class="navbar navbar-expand-lg bg-body-tertiary"
@@ -138,6 +137,9 @@
 												data-bs-toggle="dropdown" aria-expanded="false">
 													Language </a>
 												<ul class="dropdown-menu">
+													<li><a class="dropdown-item"
+														th:href="@{/chat/openChatMain}"
+														name="all">All</a></li>
 													<li><a class="dropdown-item"
 														th:href="@{/chat/openChatMain(lang_category='ko')}"
 														name="ko">Korean</a></li>

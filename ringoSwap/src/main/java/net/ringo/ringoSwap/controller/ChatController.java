@@ -54,6 +54,7 @@ import net.ringo.ringoSwap.util.PathHandler;
 @RequiredArgsConstructor
 public class ChatController 
 {	
+	private String langCategory = null;
 	@Autowired
 	ChatService service;
 	
@@ -95,10 +96,15 @@ public class ChatController
 		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja"))){
 			openChatrooms = service.searchChatroomByLang(navi, lang_category);
 			model.addAttribute("langCategory", lang_category);
-			log.debug("{}", lang_category);
+			log.debug("언어코드로 검색 {}", langCategory);
+			langCategory = lang_category;
+			log.debug("언어코드로 검색 {}", lang_category);
+			log.debug("언어코드로 검색 {}", langCategory);
 		}
-		else
+		else {
+			langCategory = null;
 			openChatrooms = service.getAllOpenchatrooms(navi);
+		}
 		
 		// chatRoomNums이 있는 경우(= 한개 이상 링크(ringo_chatroom_link)가 있는 경우) chat room의 정보를 가져온다.
 		if (openChatrooms != null && openChatrooms.size() > 0)
@@ -123,8 +129,8 @@ public class ChatController
 		ArrayList<OpenChatroomInfo> openChatrooms = new ArrayList<>();
 		
 		// 언어 필터 관련해서 값이 있으면
-		if (lang_category != null && (lang_category.equals("ko") || lang_category.equals("en") || lang_category.equals("ja")))
-			openChatrooms = service.searchChatroomByLang(navi, lang_category);
+		if (langCategory != null && (langCategory.equals("ko") || langCategory.equals("en") || langCategory.equals("ja")))
+			openChatrooms = service.searchChatroomByLang(navi, langCategory);
 		else
 			openChatrooms = service.getAllOpenchatrooms(navi);
 
