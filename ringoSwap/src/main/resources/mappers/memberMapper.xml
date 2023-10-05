@@ -287,6 +287,20 @@
 	    JOIN ringo_member m ON c.user_num = m.user_num
 	    WHERE c.chatroom_num = #{chatroomNum}
 	</select>
+	
+	<select id="getDMUserDetailsByDMChatroomNum" parameterType="int" resultType="map">
+	    SELECT DISTINCT m.nickname, dm.user_num1, dm.user_num2, m.user_id, m.trans_lang
+	    FROM ringo_dm_chatroom dm
+	    JOIN ringo_member m ON dm.user_num1 = m.user_num OR dm.user_num2 = m.user_num
+	    WHERE dm.dm_chatroom_num = #{dm_chatroom_num}
+	</select>
+	
+	<select id="getDMUserMessagesByDMChatroomNum" parameterType="int" resultType="map">
+	    SELECT DISTINCT m.nickname, c.user_num, m.user_id, m.trans_lang, TO_CHAR(c.inputdate, 'YYYY-MM-DD HH24:MI:SS') AS formatted_inputdate
+	    FROM ringo_chat_common c
+	    JOIN ringo_member m ON c.user_num = m.user_num
+	    WHERE c.dm_chatroom_num = #{dm_chatroom_num}
+	</select>
 
 	<insert id="memberGameSettingInsert">
 	 insert  into ringo_game_setting(user_num) 

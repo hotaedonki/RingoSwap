@@ -49,20 +49,7 @@ function connect() {
         searchByTitle($(this).val());
     });
 	
-    // DM, OpenChat 버튼 이벤트 연결
-    let $dm_btn = $('#DM_btn');
-    let $openchat_btm = $('#OpenChat_btn');
-	
-    $dm_btn.on('click', function() {
-        $dm_btn.addClass('btn-primary').removeClass('btn-outline-primary');
-        $openchat_btm.addClass('btn-outline-primary').removeClass('btn-primary');
-    });
-    
-    $openchat_btm.on('click', function() {
-        stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + userNum, {}, userNum);
-        $openchat_btm.addClass('btn-primary').removeClass('btn-outline-primary');
-        $dm_btn.addClass('btn-outline-primary').removeClass('btn-primary');
-    });
+
     
     return true;
 }
@@ -128,9 +115,8 @@ function createChatRoom()
 			alert(JSON.stringify(e));
 		}
 	});
-	
-	
 }
+
 
 function loadJoinedChatroomListRealTime(data)
 {
@@ -243,6 +229,7 @@ function printChatWithNavigation(pageNumber){
             let chatroomList = res.openChatrooms;
 
 			chatroomList.forEach(room =>{
+			if(room.currentHeadCount != room.capacity) {
 				$('.chat-main-printer').append(`
 				<tr>
 					<td><input type="hidden" id="${room.chatroom_num}"
@@ -259,6 +246,7 @@ function printChatWithNavigation(pageNumber){
 					</td>
 				</tr>
 				`);
+				}
 			})
             // Pagination 처리 부분
             let paginationHtml = '';

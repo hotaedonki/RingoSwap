@@ -224,12 +224,30 @@ public class ChatController
 		
 		log.debug(chatRoom.toString());
 		
-		boolean isSuccessCreateRoom = service.createOpenChatroom(chatRoom);
+		int isSuccessCreateRoom = service.createOpenChatroom(chatRoom);
+
+		return true;
+	}
+	
+	@ResponseBody
+	@PostMapping("createDMRoom")
+	public Map<String, Object> createDMRoom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
+	{
+		log.debug("create open chat room . . .");
+		chatRoom.setHost_num(mService.memberSearchByIdReturnUserNum(user.getUsername()));
 		
-		if (!isSuccessCreateRoom)
-			log.debug("방 생성 실패!");
+		log.debug(chatRoom.toString());
 		
-		return isSuccessCreateRoom;
+		int isSuccessCreateRoom = service.createOpenChatroom(chatRoom);
+		int otherUserNum = mService.getUserIdByNickname(chatRoom.getTitle());
+		
+		Map<String, Object> params = new HashMap<>();
+		params.put("otherUserNum", otherUserNum);
+		params.put("chatroomNum", isSuccessCreateRoom);
+		
+		int otherUser = service.insertOtherPerson(params);
+		
+		return params;
 	}
 	
 	@GetMapping(PathHandler.OPENCHATROOMENTER)
@@ -253,13 +271,6 @@ public class ChatController
 		ArrayList<ChatroomLink> chatLinks = service.getChatroomLinksByChatroomNum(chatroom.getChatroom_num());
 		log.debug("chat link - {}", chatLinks);
 		
-		// 채팅방 최대 인원수보다 현재 참여 인원수 이상인 경우
-		if (chatroom.getCapacity() <= chatLinks.size())
-		{
-			log.debug("방 수용인원 초과! Chatroom num.{}", chatroom.getChatroom_num());
-			return "chat/openChatMain";
-		}
-		
 		// 내 고유번호 가져오기
 		int myUserNum = mService.memberSearchByIdReturnUserNum(user.getUsername());
 		
@@ -268,6 +279,16 @@ public class ChatController
 			log.debug("User의 고유 번호가 없습니다.");
 			return "chat/openChatMain";
 		}
+		
+		boolean isUserAlreadyInRoom = chatLinks.stream().anyMatch(link -> link.getUser_num() == myUserNum);
+		
+		// 채팅방 최대 인원수보다 현재 참여 인원수 이상인 경우
+		if (!isUserAlreadyInRoom && chatroom.getCapacity() <= chatLinks.size())
+		{
+			log.debug("방 수용인원 초과! Chatroom num.{}", chatroom.getChatroom_num());
+			return "chat/openChatMain";
+		}
+	
 		
 		ChatroomLink chatroomLinkForSearch = new ChatroomLink();
 		chatroomLinkForSearch.setUser_num(myUserNum);
@@ -353,6 +374,22 @@ public class ChatController
 	    List<Map<String, Object>> nicknamesAndUserNums = mService.getAllUserNumsAndNicknamesByChatroomNum(chatroom_num);
 	    log.debug("닉네임 가져오는지 : {} ", nicknamesAndUserNums);
 	    return nicknamesAndUserNums;
+	}
+	
+	@ResponseBody
+	@PostMapping("dmUserBasicDetails")
+	public List<Map<String, Object>> dmUserBasicDetails(int dm_chatroom_num) {
+	    List<Map<String, Object>> userDetails = mService.getDMUserDetailsByDMChatroomNum(dm_chatroom_num);
+	    log.debug("닉네임 가져오는지 : {} ", userDetails);
+	    return userDetails;
+	}
+
+	@ResponseBody
+	@PostMapping("dmUserNicknameSendMessage")
+	public List<Map<String, Object>> dmUserNicknameSendMessage(int dm_chatroom_num) {
+	    List<Map<String, Object>> userMessages = mService.getDMUserMessagesByDMChatroomNum(dm_chatroom_num);
+	    log.debug("메시지 가져오는지 : {} ", userMessages);
+	    return userMessages;
 	}
 	
 	@MessageMapping(PathHandler.MM_OPENCHATROOMMESSAGE)
@@ -784,4 +821,12 @@ public class ChatController
 	    }
 	    return new ResponseEntity<>(response, HttpStatus.OK);
 	} 
+	
+	@ResponseBody
+	@PostMapping("checkOpacity")
+	public boolean checkOpacity(int chatroom_num) {
+		int opacity = service.getChatroomOpacity(chatroom_num);
+		log.debug("opacity:{}", opacity);
+	    return opacity == 2;
+	}
 }

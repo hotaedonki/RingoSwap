@@ -1,71 +1,58 @@
-
-function createChatroomThumbnail(chatroom_num, title, inputdate, message)
-{
-	// chatlist의 div 요소 접근
-    let $chatlist = $('.chatlist');
-
-    // 새로운 block div 요소를 생성
-    let $blockDiv = $('<div>').addClass('block');
-    
-    // details, listHead div 요소를 생성 및 내용 추가
-    let current_date = new Date();
-    let chatroom_date = new Date(inputdate);
-    let time_diff_str = timeDifferenceInChat(current_date, chatroom_date)
-    
-    let $detailsDiv = $('<div>').addClass('details').append(
-        $('<div>').addClass('listHead').append(
-            $('<input>').attr('type', 'hidden').val(chatroom_num),
-            $('<h5>').addClass('chatroom-title').text(title),
-            $('<p>').addClass('time chatroom-time').text(time_diff_str)
-        ),
-        $('<div>').addClass('message_p').append(
-            $('<p>').addClass('chatroom-message').text(message)
-        )
-    );
-    // blockDiv에 detailsDiv 추가 및 chatlist에 blockDiv 추가
-    $blockDiv.append($detailsDiv).appendTo($chatlist);
-	$blockDiv.append('<hr>');
-    // blockDiv 클릭 이벤트 리스너 추가
-    $blockDiv.on('click', function() {
-        moveToChatroom(chatroom_num);
+function checkOpacity(chatroom_num) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'checkOpacity',
+            type: 'post',
+            data: { chatroom_num: chatroom_num },
+            success: function(response) {
+                if(response) {
+                    resolve(true);
+                } else {
+                    reject(false);
+                } 
+            },
+            error: function() {
+            }
+        });
     });
-    
-    //메시지 보낸사람 닉네임받아오기
+}
+function createChatroomThumbnail(chatroom_num, title, inputdate, message) {    
+    checkOpacity(chatroom_num).then(result => {
+        if (result) {
+            title += " (1:1)";
+        }
+    }).finally(() => {
+        // chatlist의 div 요소 접근
+        let $chatlist = $('.chatlist');
+
+        // 새로운 block div 요소를 생성
+        let $blockDiv = $('<div>').addClass('block');
+        
+        // details, listHead div 요소를 생성 및 내용 추가
+        let current_date = new Date();
+        let chatroom_date = new Date(inputdate);
+        let time_diff_str = timeDifferenceInChat(current_date, chatroom_date)
+        
+        let $detailsDiv = $('<div>').addClass('details').append(
+            $('<div>').addClass('listHead').append(
+                $('<input>').attr('type', 'hidden').val(chatroom_num),
+                $('<h5>').addClass('chatroom-title').text(title),
+                $('<p>').addClass('time chatroom-time').text(time_diff_str)
+            ),
+            $('<div>').addClass('message_p').append(
+                $('<p>').addClass('chatroom-message').text(message)
+            )
+        );
+        // blockDiv에 detailsDiv 추가 및 chatlist에 blockDiv 추가
+        $blockDiv.append($detailsDiv).appendTo($chatlist);
+        $blockDiv.append('<hr>');
+        // blockDiv 클릭 이벤트 리스너 추가
+        $blockDiv.on('click', function() {
+            moveToChatroom(chatroom_num);
+        });
+    });
 }
 
-function createDMChatroomThumbnail(chatroom_num, title, inputdate, message)
-{
-	// chatlist의 div 요소 접근
-    let $chatlist = $('.chatlist');
-
-    // 새로운 block div 요소를 생성
-    let $blockDiv = $('<div>').addClass('block');
-    
-    // details, listHead div 요소를 생성 및 내용 추가
-    let current_date = new Date();
-    let chatroom_date = new Date(inputdate);
-    let time_diff_str = timeDifferenceInChat(current_date, chatroom_date)
-    
-    let $detailsDiv = $('<div>').addClass('details').append(
-        $('<div>').addClass('listHead').append(
-            $('<input>').attr('type', 'hidden').val(chatroom_num),
-            $('<h5>').addClass('chatroom-title').text(title),
-            $('<p>').addClass('time chatroom-time').text(time_diff_str)
-        ),
-        $('<div>').addClass('message_p').append(
-            $('<p>').addClass('chatroom-message').text(message)
-        )
-    );
-    // blockDiv에 detailsDiv 추가 및 chatlist에 blockDiv 추가
-    $blockDiv.append($detailsDiv).appendTo($chatlist);
-	$blockDiv.append('<hr>');
-    // blockDiv 클릭 이벤트 리스너 추가
-    $blockDiv.on('click', function() {
-        moveToDMChatroom(chatroom_num);
-    });
-    
-    //메시지 보낸사람 닉네임받아오기
-}
 
 
 function timeDifferenceInChat(current, previous) {

@@ -97,4 +97,8 @@ public interface MemberService
 	public List<Map<String, Object>> getAllUserDetailsByChatroomNum(int chatroom_num);
 
 	public List<Map<String, Object>> getAllUserNumsAndNicknamesByChatroomNum(int chatroom_num);
+
+	public List<Map<String, Object>> getDMUserDetailsByDMChatroomNum(int dm_chatroom_num);
+
+	public List<Map<String, Object>> getDMUserMessagesByDMChatroomNum(int dm_chatroom_num);
 }

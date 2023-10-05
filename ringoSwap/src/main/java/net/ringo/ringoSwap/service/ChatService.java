@@ -20,7 +20,7 @@ public interface ChatService
 
 	public ArrayList<Chatroom> getChatrooms(ArrayList<Integer> chatRoomNums);
 
-	public boolean createOpenChatroom(Chatroom chatRoom);
+	public int createOpenChatroom(Chatroom chatRoom);
 
 	public int createChatroomLink(ChatroomLink chatroomLink);
 
@@ -82,4 +82,9 @@ public interface ChatService
 	public PageNavigator chatRoomPageNavigator(int pagePerGroup, int countPerPage, int page);
 	// ChatCommon 저장 후, 성공적으로 저장하면 다시 채팅방에 전달하기 위해 ChatCommon을 반환
 	public ChatCommon insertDMChatCommonAndGetDMChatCommon(ChatCommon chat);
+
+	public int insertOtherPerson(Map<String, Object> params);
+
+	public int getChatroomOpacity(int chatroom_num);
+
 }

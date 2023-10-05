@@ -92,4 +92,9 @@ public interface ChatDAO
 	public int chatRoomSelectTotal();
 
 	public int insertDMChatCommon(ChatCommon chat);
+
+	public int insertOtherPerson(Map<String, Object> params);
+
+	public int getChatroomOpacity(int chatroom_num);
+
 }

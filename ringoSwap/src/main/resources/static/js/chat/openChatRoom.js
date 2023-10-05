@@ -132,20 +132,7 @@ function connect()
         searchByTitle($(this).val());
     });
     
-    // DM, OpenChat 버튼 이벤트 연결
-	let $dm_btn = $('#DM_btn');
-    let $openchat_btm = $('#OpenChat_btn');
-	
-	$dm_btn.on('click', function() {
-        $dm_btn.addClass('btn-primary').removeClass('btn-outline-primary');
-        $openchat_btm.addClass('btn-outline-primary').removeClass('btn-primary');
-    });
-    
-    $openchat_btm.on('click', function() {
-        stompClient.send('/pub/chat/openChatMain/loadChatRoomNumsByUserNum/' + myUserNum, {}, myUserNum);
-        $openchat_btm.addClass('btn-primary').removeClass('btn-outline-primary');
-        $dm_btn.addClass('btn-outline-primary').removeClass('btn-primary');
-    });
+
 	
     return true;
 }
@@ -189,7 +176,6 @@ function onConnected()
 
 	// 채팅방에 입장할 때 사용자의 닉네임 로드
 	loadAllBasicDetailsForChatroom(chatroomNum);
-	console.log(chatroomNum);
     loadAllNicknamesForChatroom(chatroomNum);
 }
 
@@ -199,7 +185,7 @@ function setNicknamesForExistingMessages(userCache) {
     chatMessages.forEach(chatMessage => {
         const userNum = chatMessage.getAttribute('data-user-num');
         const messageContent = chatMessage.querySelector('p').textContent;
-
+		
         // userCache에서 사용자 정보를 조회
         const userDetails = userCache[userNum] || {};
         const nickname = userDetails.nickname || 'Unknown';

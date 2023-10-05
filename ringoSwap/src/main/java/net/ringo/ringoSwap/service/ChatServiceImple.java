@@ -60,40 +60,29 @@ public class ChatServiceImple implements ChatService
 		return dao.getChatrooms(chatRoomNums);
 	}
 
-	@Override
-	public boolean createOpenChatroom(Chatroom chatRoom) 
+	public int createOpenChatroom(Chatroom chatRoom) 
 	{
-		// tranction 구조
-		// 해당 메서드안에서 DB처리를 여러개 완료
-		// = 해당 메서드가 하나의 작업공간이 된다
-		int isCreatedChatroom = dao.createOpenChatroom(chatRoom);
-		
-		// 0 이하인 경우 채팅방 생성 실패
-		if (isCreatedChatroom <= 0)
-		{	
-			return false;
-		}
-		
-		// chatroom_num의 최대값을 불러옴. 최대값이 가장 최근에 만들어진(= 지금 만들어진 글)이기 때문에 이 값을 저장함
-		int maxChatroomNum = dao.getMaxChatroomNum();
-		
-		ChatroomLink chatroomlink = new ChatroomLink();
-		
-		chatroomlink.setChatroom_num(maxChatroomNum);
-		// 방장의 고유 번호 저장
-		chatroomlink.setUser_num(chatRoom.getHost_num());
-		
-		int isCreatedChatroomlink = dao.createChatroomLink(chatroomlink);
-		
-		// 0 이하인 경우 채팅방 링크(유저가 참가한 채팅방을 표시하기 위한 링크 전용 테이블) 생성 실패
-		if (isCreatedChatroomlink <= 0)
-		{	
-			log.debug("채팅방 링크 생성 실패");
-			return false;
-		}
+	    int isCreatedChatroom = dao.createOpenChatroom(chatRoom);
+	    if (isCreatedChatroom <= 0)
+	    {	
+	        return -1; // 실패했을 때 -1 반환
+	    }
+			
+	    int maxChatroomNum = dao.getMaxChatroomNum();
+	    ChatroomLink chatroomlink = new ChatroomLink();
+	    chatroomlink.setChatroom_num(maxChatroomNum);
+	    chatroomlink.setUser_num(chatRoom.getHost_num());
+	    
+	    int isCreatedChatroomlink = dao.createChatroomLink(chatroomlink);
+	    if (isCreatedChatroomlink <= 0)
+	    {	
+	        log.debug("채팅방 링크 생성 실패");
+	        return -1; // 실패했을 때 -1 반환
+	    }
 				
-		return true;
+	    return maxChatroomNum; // 성공적으로 생성되면 chatroom_num 반환
 	}
+
 
 	// 채팅방 링크를 DB에 저장한다.
 	@Override
@@ -336,4 +325,16 @@ public class ChatServiceImple implements ChatService
         
         return dbChat;
 	}
+
+	@Override
+	public int insertOtherPerson(Map<String, Object> params) {
+		return dao.insertOtherPerson(params);
+	}
+
+	@Override
+	public int getChatroomOpacity(int chatroom_num) {
+		return dao.getChatroomOpacity(chatroom_num);
+	}
+
+
 }

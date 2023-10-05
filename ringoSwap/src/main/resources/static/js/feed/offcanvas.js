@@ -83,3 +83,20 @@ function followCheck(nickname){
         }
     });
 }
+
+function sendDM() {
+    const targetBaseURL = `../chat/openChatRoomEnter?chatroom_num=`;
+    $.ajax({
+        url: "../chat/createDMRoom",
+        type: 'post',
+        data: { title: nickname, lang_category: "ko", capacity: 2 },
+        success: function(response) {
+            const chatroomNum = response.chatroomNum;
+            const targetURL = `${targetBaseURL}${chatroomNum}&nickname=${encodeURIComponent(nickname)}`;
+            window.location.href = targetURL;
+        }, 
+        error: function(e) {
+            console.log(e);
+        }
+    });
+}

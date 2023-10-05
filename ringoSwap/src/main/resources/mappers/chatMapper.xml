@@ -4,7 +4,7 @@
 
 <mapper namespace="net.ringo.ringoSwap.dao.ChatDAO">
 	<!-- 오픈 채팅방 만들기 -->
-	<insert id="createOpenChatroom" parameterType="Chatroom">
+	<insert id="createOpenChatroom" parameterType="Chatroom" >
 		insert into ringo_chatroom
 			(
 				chatroom_num
@@ -492,7 +492,19 @@
 	
 	<!-- 현재 존재하는 모든 채팅방 갯수를 리턴하는 select문 -->
 	<select id="chatRoomSelectTotal">
-	select count(*)
-	from ringo_chatroom
+		select count(*)
+		from ringo_chatroom
 	</select>
+	
+	<insert id="insertOtherPerson" parameterType="Map">
+		insert into ringo_chatroom_link (chatroom_num, user_num)
+		values (#{chatroomNum}, #{otherUserNum})
+	</insert>
+	<select id="getChatroomOpacity" resultType="int">
+        SELECT capacity
+        FROM ringo_chatroom
+        WHERE chatroom_num = #{chatroom_num}
+    </select>
+	
 </mapper>
+

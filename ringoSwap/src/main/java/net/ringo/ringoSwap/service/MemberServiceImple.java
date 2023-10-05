@@ -298,6 +298,15 @@ public class MemberServiceImple implements MemberService
 	public List<Map<String, Object>> getAllUserNumsAndNicknamesByChatroomNum(int chatroom_num) {
 		return dao.getAllUserNumsAndNicknamesByChatroomNum(chatroom_num);
 	}
+	@Override
+	public List<Map<String, Object>> getDMUserDetailsByDMChatroomNum(int dm_chatroom_num) {
+		
+		return dao.getDMUserDetailsByDMChatroomNum(dm_chatroom_num);
+	}
+	@Override
+	public List<Map<String, Object>> getDMUserMessagesByDMChatroomNum(int dm_chatroom_num) {
+		return dao.getDMUserMessagesByDMChatroomNum(dm_chatroom_num);
+	}
 
 
 }

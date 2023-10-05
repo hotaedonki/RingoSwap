@@ -90,13 +90,6 @@
 			<div class="col-3 pe-0">
 				<div class="card border-primary mb-3 chat-list-area">
 					<div class="card-header">
-						<!-- DM & OpenChat Buttons -->
-						<div class="mb-2 d-center mb-3">
-							<button type="button" class="btn btn-primary me-2" th:id="DM_btn">DM</button>
-							<button type="button" class="btn btn-outline-primary ms-2"
-								th:id="OpenChat_btn">Open Chat</button>
-						</div>
-
 						<!-- Search Bar -->
 						<div class="mt-2 d-flex align-items-center position-relative">
 						    <input type="text" class="form-control" placeholder="Search chat title" id="searchInput">
@@ -168,7 +161,7 @@
 								</tr>
 							</thead>
 							<tbody class="chat-main-printer">
-								<tr th:each="room : ${openChatrooms}" >
+								<tr th:each="room : ${openChatrooms}" th:if="${room.currentHeadCount != room.capacity}" >
 									<td><input th:type="hidden" th:id="${room.chatroom_num}"
 										th:value="${room.chatroom_num}">
 										<p th:text="${room.lang_category}"></p></td>
@@ -220,21 +213,21 @@
 				<div class="modal-body">
 					<table class="create_room_box">
 						<tr>
-							<th>title</th>
-							<td><input type="text" placeholder="15자 이내로 입력해주세요"
+							<th class="text-dark">Title</th>
+							<td><input type="text" class="form-control ms-3" placeholder="Please enter within 15 characters."
 								id="title"></td>
 						</tr>
 						<tr>
-							<th>language</th>
-							<td><select autofocus id="lang_category">
+							<th class="text-dark">Language</th>
+							<td><select autofocus id="lang_category" class="form-select ms-3">
 									<option selected value="ko">Korean</option>
 									<option value="en">English</option>
 									<option value="ja">Japanese</option>
 							</select></td>
 						</tr>
 						<tr>
-							<th>capacity</th>
-							<td><select autofocus id="capacity">
+							<th class="text-dark">Capacity</th>
+							<td><select autofocus id="capacity" class="form-select ms-3">
 									<option value="10" checked>10</option>
 									<option value="15">15</option>
 									<option value="20">20</option>
@@ -257,8 +250,8 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
-	<script th:src="@{/js/chat/openChatMain.js}"></script>
 	<script th:src="@{/js/chat/chatUtilities.js}"></script>
+	<script th:src="@{/js/chat/openChatMain.js}"></script>
 
 </body>
 </html>
