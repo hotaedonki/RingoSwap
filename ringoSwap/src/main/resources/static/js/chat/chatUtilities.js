@@ -28,19 +28,16 @@ function createChatroomThumbnail(chatroom_num, title, inputdate, message) {
         // 새로운 block div 요소를 생성
         let $blockDiv = $('<div>').addClass('block');
         
-        // details, listHead div 요소를 생성 및 내용 추가
-        let current_date = new Date();
-        let chatroom_date = new Date(inputdate);
-        let time_diff_str = timeDifferenceInChat(current_date, chatroom_date)
-        
+
         let $detailsDiv = $('<div>').addClass('details').append(
             $('<div>').addClass('listHead').append(
                 $('<input>').attr('type', 'hidden').val(chatroom_num),
-                $('<h5>').addClass('chatroom-title').text(title),
-                $('<p>').addClass('time chatroom-time').text(time_diff_str)
+                $('<h5>').addClass('chatroom-title').text(title)
+                
             ),
             $('<div>').addClass('message_p').append(
-                $('<p>').addClass('chatroom-message').text(message)
+                $('<p>').addClass('chatroom-message').text(message),
+                $('<p>').addClass('time chatroom-time').text(inputdate)
             )
         );
         // blockDiv에 detailsDiv 추가 및 chatlist에 blockDiv 추가

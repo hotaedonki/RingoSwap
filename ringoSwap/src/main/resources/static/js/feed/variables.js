@@ -32,8 +32,8 @@ function initializeDocumentClickHandlers() {
     $(document).on('click', '#backToFeed', returnFeedMain);
     $(document).on('click', '.feed-delete-button', feedDelete);
     $(document).on('click', '.reply-delete-btn', replyDelete);
-    $(document).on('click', '.follower-btn', followerSearch);
-    $(document).on('click', '.follow-btn', followeeSearch);
+    $(document).on('input', '.searchFollower', followerSearch);
+    $(document).on('input', '.searchFollow', followeeSearch);
     $(document).on('click', '.insert-nested-reply', insertNestedReply);
     $(document).on('click', '.write-nested-reply', writeNestedReply);
     $(document).on('input', '.follow-search-input', followSearchInput);

@@ -315,7 +315,8 @@ function wordListUpdate(){
 		type:'post',
 		data:{file_num : num, select : select},
 		success:function(res){
-			console.log('성공');
+			$('#wordlistModal').hide();
+			$('.modal-backdrop').hide();
 		},
 		error:function(e){
 			console.error(e);
@@ -332,7 +333,8 @@ function gameSettingUpdate(){
 		type:'post',
 		data:{form_type : form, pron_show : pron, order_type : order, description_show: description},
 		success:function(res){
-			console.log('성공');
+			$('#formModal').hide();
+			$('.modal-backdrop').hide();
 		},
 		error:function(e){
 			console.error(e);
@@ -354,7 +356,8 @@ function questionNumUpdate(){
 		type:'post',
 		data:{question_num : num},
 		success:function(res){
-			console.log('성공');
+			$('#countOfItemsModal').hide();
+			$('.modal-backdrop').hide();
 		},
 		error:function(e){
 			console.error(e);

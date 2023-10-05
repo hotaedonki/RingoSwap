@@ -223,7 +223,7 @@ public class ChatController
 	
 	@ResponseBody
 	@PostMapping(PathHandler.CREATEOPENCHATROOM)
-	public boolean createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
+	public int createOpenChatroom(Chatroom chatRoom, @AuthenticationPrincipal UserDetails user)
 	{
 		log.debug("create open chat room . . .");
 		chatRoom.setHost_num(mService.memberSearchByIdReturnUserNum(user.getUsername()));
@@ -232,7 +232,7 @@ public class ChatController
 		
 		int isSuccessCreateRoom = service.createOpenChatroom(chatRoom);
 
-		return true;
+		return isSuccessCreateRoom;
 	}
 	
 	@ResponseBody

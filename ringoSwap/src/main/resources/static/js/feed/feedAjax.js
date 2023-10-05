@@ -339,14 +339,14 @@ function feedDelete(){
 }
 
 function followerSearch(){
-    let nickname = $('.justify-content-center .searchFollower').val();
-    console.log("팔로우 닉네임 : ", nickname)
+    let nickname = $('.searchFollower').val();
     $.ajax({
         url: "followerSearch",
         type: "post",
-        data: {nickname : nickname},
+        data: requestData,
         dataType:'json',
         success:function(followerList){
+			console.log(followerList);
             if(followerList){
                 $('.followerBox').html('');
                 followerList.forEach(follower => {
