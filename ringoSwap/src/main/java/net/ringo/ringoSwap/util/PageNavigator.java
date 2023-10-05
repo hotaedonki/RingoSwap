@@ -55,15 +55,16 @@ public class PageNavigator {
 		
         	
 		//현재 페이지를 기준으로 주변 페이지 출력
-		if(currentPage - totalPageCount <= -3 && currentPage > 3) {
+		int naviCount = currentPage - totalPageCount;
+		if(naviCount <= -3 && currentPage > 3) {
 			startPageGroup = (currentPage - 2);
-			endPageGroup = (startPageGroup + 3);
 		}else if(currentPage -totalPageCount >= -2) {
 			startPageGroup = (totalPageCount - 4);
 		}
 		
 		//페이지 수가 5 이하인 경우
 		if(currentPage < 4 && totalRecordsCount > 70) endPageGroup = 5;
+		else if(naviCount >= -3 && naviCount <= -2) endPageGroup = (currentPage + 2);
 		else if(totalRecordsCount % 14 == 0) endPageGroup = totalRecordsCount / 14;
         else endPageGroup = totalRecordsCount / 14 + 1;
 		

@@ -268,6 +268,8 @@ function printChatWithNavigation(pageNumber){
 			//채팅방 규격에 맞도록 navi 규격 조정(14 -> 7)
 			if(navi.currentPage < 4 && navi.totalRecordsCount > 35){
 				navi.endPageGroup = 5;
+			}else if(navi.currentPage - navi.totalPageCount >= -3 && navi.currentPage - navi.totalPageCount <= -2){
+				navi.endPageGroup = (navi.currentPage + 2);
 			}else if(navi.totalRecordsCount % 7 < 1){
 				navi.endPageGroup = (navi.totalRecordsCount / 7);
 			}else {
