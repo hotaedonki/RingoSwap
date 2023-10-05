@@ -21,6 +21,8 @@ function createChatroomThumbnail(chatroom_num, title, inputdate, message) {
         if (result) {
             title += " (1:1)";
         }
+    }).catch(error =>{
+        console.log("checkOpacity에서 오류 발생 : ", error);
     }).finally(() => {
         // chatlist의 div 요소 접근
         let $chatlist = $('.chatlist');

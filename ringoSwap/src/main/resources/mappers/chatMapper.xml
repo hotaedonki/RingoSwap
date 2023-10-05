@@ -361,6 +361,7 @@
 	        ringo_chatroom c
 	    INNER JOIN 
 	        ringo_member m ON c.host_num = m.user_num
+        WHERE c.capacity != 2
 	    ORDER BY 
 	        c.modifie_date DESC
 	</select>
@@ -386,6 +387,7 @@
 	        ringo_member m ON c.host_num = m.user_num
 	    WHERE
             c.lang_category = #{lang_category}
+            AND c.capacity != 2
 	    ORDER BY 
 	        c.modifie_date DESC
 	</select>
@@ -494,6 +496,7 @@
 	<select id="chatRoomSelectTotal">
 		select count(*)
 		from ringo_chatroom
+		where capacity != 2
 	</select>
 	
 	<insert id="insertOtherPerson" parameterType="Map">
