@@ -148,6 +148,7 @@
 	<select id="gameLogSearchByUserNum" resultType="GameLog">
 	select * from ringo_game_log
 	where user_num = #{user_num}
+	order by inputdate desc
 	</select>
 	<!-- 입력받은 게임로그 정보를 DB에 입력하는 insert문 -->
 	<insert id="gameLogInsert" parameterType="GameLog">

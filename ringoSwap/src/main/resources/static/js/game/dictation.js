@@ -249,10 +249,11 @@ function dictationAnswerPrint() {
 	$('.do-retry').attr('data-game-category', 'dictation');
 
     let score = (rightWord.length / wordList.length) * 100;
-	wordList = wrongWord;	//오답 다시 플레이용 전역변수 재설정
-    let Gcategory = "dictation"; // 수정: mcq에서 dictation으로 변경
     let rightLength = rightWord.length;
     let gameLength = wordList.length;
+	wordList = wrongWord;	//오답 다시 플레이용 전역변수 재설정
+    let Gcategory = "dictation"; // 수정: mcq에서 dictation으로 변경
     console.log("정답률 : " + score);
+	console.log("문제길이 : "+gameLength);
     gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength);
 }

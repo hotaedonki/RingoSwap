@@ -275,11 +275,12 @@ function gameAnswerPrint() {
 	console.log(wordList);
 
 	let score = (rightWord.length / wordList.length) * 100;
-	wordList = wrongWord;	//오답 다시 플레이용 전역변수 재설정
 	let Gcategory = "mcq";
 	let rightLength = rightWord.length;
 	let gameLength = wordList.length;
 	console.log("정답률 : "+score);
+	console.log("문제길이 : "+gameLength);
+	wordList = wrongWord;	//오답 다시 플레이용 전역변수 재설정
 	gameLogInsert(score, Gcategory, fileNum, rightLength, gameLength);
 }
 
