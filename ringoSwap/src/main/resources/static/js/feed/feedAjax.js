@@ -477,7 +477,7 @@ function friendPrint(){
             friendList.forEach(friend =>{
                 $('.friend-list').append(`
                 <li class="list-group-item open-chatbox showOffcanvasWithUserData" data-user-name="${friend.followee_name}">
-                    <img src="../member/memberProfilePrint?user_id=${friend.followee_id}" alt="Profile Picture" style="width:25px; height:25px; border-radius:12px;" />
+                    <img src="/ringo/member/memberProfilePrint?user_id=${friend.followee_id}" alt="Profile Picture" style="width:25px; height:25px; border-radius:12px;" />
                     <span data-nickname="${friend.followee_name}">${friend.followee_name}</span>
                 </li>
                 `);

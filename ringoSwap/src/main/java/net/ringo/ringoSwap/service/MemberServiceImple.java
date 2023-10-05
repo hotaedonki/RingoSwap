@@ -23,8 +23,6 @@ public class MemberServiceImple implements MemberService
 {
 	@Autowired
 	private MemberDAO dao;
-	@Autowired
-	private NoteDAO daoNote;
 	//비밀번호 변수인 password를 암호화하는 메서드를 호출하는 Autowired입니다.
 	@Autowired
 	private PasswordEncoder passwordEncoder;
