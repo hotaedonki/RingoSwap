@@ -461,6 +461,7 @@
 	<delete id="deleteChatroom">
 	    delete from ringo_chatroom
 	    where chatroom_num = #{chatroomNum}
+	    
 	</delete>
     <!-- 내가 참여한 DM 채팅방 중에서 상대방의 닉네임을 검색할 시 일치한 DM 채팅방들을 가져온다 -->
     <select id="getChatroomThumbnailsByNickname" parameterType="java.util.Map" resultType="net.ringo.ringoSwap.domain.custom.ChatroomThumbnail">

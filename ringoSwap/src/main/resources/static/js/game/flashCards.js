@@ -16,7 +16,7 @@ function playFlashCards() {
 					<span id="currentNum">1</span>/<span id="totalNum">50</span> 
 			    </div>
 				<div class="col-3 update-cards d-flex flex-row-reverse">
-					<button type="button" class="btn btn-primary btn-sm">Update</button>
+
 				</div>
 			</div>
 			<div class="row d-flex justify-content-center">

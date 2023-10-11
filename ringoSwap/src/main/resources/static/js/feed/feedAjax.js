@@ -343,7 +343,7 @@ function followerSearch(){
     $.ajax({
         url: "followerSearch",
         type: "post",
-        data: requestData,
+        data: {nickname : nickname},
         dataType:'json',
         success:function(followerList){
             $('.followerBox').html('');

@@ -203,7 +203,7 @@ public class ChatController
 		log.debug("chatroom : {}", chatroom_num);
 		log.debug("userNum : {}", userNum);
 		ArrayList<ChatroomThumbnail> chatroomThumbnails = service.getChatroomThumbnails(userNum);
-		
+		log.debug("userNum : {}", chatroomThumbnails);
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(chatroomThumbnails);
 	}

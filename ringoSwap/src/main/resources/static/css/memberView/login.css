@@ -165,4 +165,6 @@ h2 {
 	cursor: pointer;
 }
 
-
+#newPassword, #confirmNewPassword {
+	min-width: 350px;
+}

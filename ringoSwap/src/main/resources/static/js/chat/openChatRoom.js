@@ -492,11 +492,7 @@ function checkAndDeleteEmptyChatroom(chatroomNum) {
 		, type: 'post'
 		, data: { chatroomNum: chatroomNum }
 		, success: function(response) {
-			if (response.success) {
-				
-            } else {
-                confirm('Error delete the chatroom: ' + response.message);
-            }
+			
 		},
 		error: function(error) {
 			 console.error("Error delete chatroom:", error);
