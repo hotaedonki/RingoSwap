@@ -21,7 +21,7 @@ public class GameLog{
 	public String toString()
 	{
 		return String.format("gamelog_num : {%d} / user_num : {%d} / file_num : {%d} / file_title : {%s} / "
-				+ "game_category : {%s} / lang_category : {%s} / score : {%d} / point : {%d} / inputdate : {%s}"
+				+ "game_category : {%s} / lang_category : {%s} / score : {%f} / point : {%d} / inputdate : {%s}"
 				,gamelog_num, user_num, file_num, file_title, game_category, lang_category, score, point, inputdate);
 	}
 }

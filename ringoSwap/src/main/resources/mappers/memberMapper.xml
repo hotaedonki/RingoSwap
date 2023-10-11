@@ -8,14 +8,14 @@
 		insert into ringo_member
 			(user_num, user_id, password, nickname
 			, first_name, last_name, gender, birth_date
-			, email, native_lang, target_lang
+			, email, native_lang, target_lang, trans_lang
 			<if test="introduction != null">
 			, introduction
 			</if>)
 		values
 			(ringo_member_seq.nextval, #{user_id}, #{password}
 			, #{nickname}, #{first_name}, #{last_name}, #{gender}
-			, #{birth_date}, #{email}, #{native_lang}, #{target_lang}
+			, #{birth_date}, #{email}, #{native_lang}, #{target_lang}, #{native_lang}
 			<!-- 자기소개 값을 입력하지 않은 경우 빈칸으로 대체 --> 
             <if test="introduction != null">, #{introduction}</if>
             )

@@ -120,11 +120,13 @@ function nextCard() {
 	    alert("끝!");
         returnToGameMain();
         return;
-    }
-    // 카드를 다시 앞면으로 변경
-    $('.flashCards-inner').removeClass('flipped');
-    $('.flashCards-inner').css('transform', 'rotateY(0deg)');
+    }else{
+	    // 카드를 다시 앞면으로 변경
+	    $('.flashCards-inner').removeClass('flipped');
+	    $('.flashCards-inner').css('transform', '');
+	}
 
     //다음 word정보를 카드에 출력
-    flashCardsQuestionPrint();
+    setTimeout(flashCardsQuestionPrint, 500);
+    
 }
